@@ -13,6 +13,7 @@ using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
+using TreeView = UnityEditor.IMGUI.Controls.TreeView;
 
 namespace Hierarchy2
 {
@@ -1762,7 +1763,7 @@ namespace Hierarchy2
                 get { return TreeView.DefaultStyles.boldLabel; }
             }
 
-            internal static GUIStyle TreeLabel = new GUIStyle(TreeView.DefaultStyles.label)
+            internal static GUIStyle TreeLabel = new(TreeView.DefaultStyles.label)
             {
                 richText = true,
                 normal = new GUIStyleState() {textColor = Color.white}
