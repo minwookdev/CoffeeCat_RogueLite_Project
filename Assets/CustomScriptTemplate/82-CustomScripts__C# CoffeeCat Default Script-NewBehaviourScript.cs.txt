@@ -1,0 +1,12 @@
+/// CODER	      :		
+/// MODIFIED DATE : 
+/// IMPLEMENTATION: 
+using UnityEngine;
+
+/// NOTE:
+///
+namespace CoffeeCat {
+	public class #SCRIPTNAME# : MonoBehaviour {
+	
+	}
+}

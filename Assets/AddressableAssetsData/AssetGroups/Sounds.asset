@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Sounds
+  m_EditorClassIdentifier: 
+  m_GroupName: Sounds
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 71f111f5ac670cf43b17f818428b6c17
+  m_SerializeEntries:
+  - m_GUID: a69b7d199185bdb4eb20ccc78cfdbc8b
+    m_Address: birdsongloop16s
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 925903351b0880d47a2c68bdfd8c486b
+    m_Address: song18
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1831be3bd8f9a9649b9a9b634e00d38e
+    m_Address: coin3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 61a1ba4f03347024dba5139fbb8c4828
+    m_Address: coin2
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b71ad45cd953a3d469b6795ebe7a6ea7
+    m_Address: coin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5ed59c197b30a6f4e98c355416f5842e, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: b1917f7806538044cab807ef2463f1cb, type: 2}
+    - {fileID: 11400000, guid: 512188e2c660a494fa7801eb42e35e87, type: 2}
