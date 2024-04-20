@@ -26,6 +26,8 @@ namespace CoffeeCat {
         protected SpriteRenderer sprite = null;
         [TitleGroup("Models", order: 1), SerializeField] 
         protected SpriteRenderer[] sprites = null;
+        [TitleGroup("Models", order: 1), SerializeField] 
+        public bool isDefaultSpriteFlipX = false;
         // Default Sprite Renderer Direction is Right 
 
         [TitleGroup("Movement", order: 2), SerializeField] 
@@ -37,7 +39,6 @@ namespace CoffeeCat {
         protected MonsterStat stat = null;
         protected Collider2D bodyCollider = null;
         protected Rigidbody2D rigidBody = null;
-        private bool isDefaultSpriteFlipX = false;
         private float originAnimationSpeed = 0f;
 
         protected virtual void Initialize() {

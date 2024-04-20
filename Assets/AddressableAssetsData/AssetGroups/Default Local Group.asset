@@ -21,14 +21,27 @@ MonoBehaviour:
     m_Address: TestAddressablesObject
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7737dbb3bece6674fbf1fb0bd97515d9
     m_Address: TilesGuide
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1862ee16f9005d542a8920b99b84fcde
     m_Address: Player
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6302ae2ec96724442b087b403f853576
+    m_Address: Assets/Prefabs/Effects/skill_selector_fireball.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3985049eb5994ee46ba0e4f28de5e699
+    m_Address: Assets/Prefabs/Effects/skill_selector_lightning.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5ed59c197b30a6f4e98c355416f5842e, type: 2}
   m_SchemaSet:
