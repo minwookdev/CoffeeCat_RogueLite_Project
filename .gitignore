@@ -59,7 +59,4 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Custom
-*.vsconfig
-*.DotSettings
 *.cd
-.idea/
