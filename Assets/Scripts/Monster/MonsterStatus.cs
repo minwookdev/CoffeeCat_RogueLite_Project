@@ -19,7 +19,7 @@ namespace CoffeeCat {
             customStatLoadKey = (customStatLoadKey.Equals(string.Empty)) ? gameObject.name : customStatLoadKey;
             var monsterStatsDataDictionary = DataManager.Instance.MonsterStats.DataDictionary;
             if (!monsterStatsDataDictionary.TryGetValue(customStatLoadKey, out MonsterStat result)) {
-                CatLog.ELog($"Not Found Monster Stat Data. Key: {customStatLoadKey}");
+                CatLog.WLog($"Not Found Monster Stat Data. Key: {customStatLoadKey}");
                 return;
             }
 

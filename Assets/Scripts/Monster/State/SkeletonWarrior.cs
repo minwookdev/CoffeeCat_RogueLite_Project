@@ -2,6 +2,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
+using DG.Tweening;
 using UniRx;
 
 namespace CoffeeCat {
@@ -14,7 +15,9 @@ namespace CoffeeCat {
 		[TitleGroup("Attack", order: 3), SerializeField] private float attackCancelledSqrDistance = 10f;
 		[TitleGroup("Attack", order: 3), SerializeField] private float dashAttackSpeed = 5f;
 		[TitleGroup("Attack", order: 3), SerializeField] private float linearDrag = 3f;
-		[TitleGroup("Attack", order: 3), SerializeField] private Effector dashEffector = null;
+		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashReadyParticle1 = null;
+		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashReadyParticle2 = null;
+		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashPrticle = null;
 		
 		//Fields
 		private bool isMoveDirectionRight = false;
@@ -114,8 +117,7 @@ namespace CoffeeCat {
 			
 			// Get Direction And Apply Dash Dust Particle With Play
 			isMoveDirectionRight = Math2DHelper.GetDirectionIsRight(normalizedMoveDirection);
-			dashEffector.Play(EffectPlayOptions.Custom(isSetFlipFromDirection: true, isSetPivotFromDirection: true, 
-			                                           direction: GetParticleFixedDirection(isMoveDirectionRight)));
+			PlayDashReadyParticle(isMoveDirectionRight);
 			isPreviousMoveDirectionValue = isMoveDirectionRight;
 		}
 
@@ -139,29 +141,27 @@ namespace CoffeeCat {
 				if (isPreviousMoveDirectionValue == isMoveDirectionRight) 
 					return;
 				
-				// Update flip / pivot when Changed Move Direction
-				// Get Particle System Fixed Direction
-				var particleFixedDirection = GetParticleFixedDirection(isMoveDirectionRight);
-				
 				// Set Sprite/ParticleSystems Flip and Pivot
 				SetFlipX(isMoveDirectionRight);
-				dashEffector.SetAllParticlesPivot(particleFixedDirection);
-				dashEffector.SetAllParticlesFlip(particleFixedDirection);
+				PlayDashReadyParticle(isMoveDirectionRight);
 					
 				isPreviousMoveDirectionValue = isMoveDirectionRight;
 				return;
 			}
 
-			// Dash Attack Start
-			isDashAttackStart = true;
-
-			// Check Velocity after AddForced
+			// Ready to Dash Attack
+			if (!isDashAttackStart) {
+				isDashAttackStart = true;
+				PlayDashParticle();
+			}
+			
+			// Check Velocity after AddForced 
 			if (!isDashAttacked) {
 				return;
 			}
 
 			var velocity = rigidBody.velocity.sqrMagnitude;
-			if (velocity > 2f) {
+			if (velocity >= 12f) {
 				return;
 			}
 			
@@ -183,8 +183,8 @@ namespace CoffeeCat {
 			currentAttackSeconds = 0f;
 			isDashAttackStart = false;
 			isDashAttacked = false;
-			dashEffector.Stop(false);
 			RestoreAnimationSpeed();
+			StopDashParticle();
 		}
 		
 		#endregion
@@ -193,6 +193,36 @@ namespace CoffeeCat {
 
 		private Effector.ParticleFixedDirection GetParticleFixedDirection(bool isDirectionRight) {
 			return (isDirectionRight) ? Effector.ParticleFixedDirection.Right : Effector.ParticleFixedDirection.Left;
+		}
+
+		private void PlayDashReadyParticle(bool isDirectionRight) {
+			dashPrticle.Stop();
+			dashReadyParticle1.Stop();
+			// dashReadyParticle2.Stop();
+			var module1Pos = isDirectionRight ? new Vector3(0f, -0.65f, 0f) : new Vector3(0f, 0.65f, 0f);
+			var module2Pos = isDirectionRight ? new Vector3(0f, -0.25f, 0f) : new Vector3(0f, 0.25f, 0f);
+			var rotation = isDirectionRight ? new Vector3(0f, -90f, 0f) : new Vector3(0f, 90f, 0f);
+			var module1 = dashReadyParticle1.shape;
+			var module2 = dashReadyParticle2.shape;
+			module1.rotation = rotation;
+			module2.rotation = rotation;
+			module1.position = module1Pos;
+			module2.position = module2Pos;
+			
+			dashReadyParticle1.Play();
+			// dashReadyParticle2.Play();
+		}
+
+		private void PlayDashParticle() {
+			dashReadyParticle1.Stop();
+			// dashReadyParticle2.Stop();
+			dashPrticle.Play();
+		}
+		
+		private void StopDashParticle() {
+			dashReadyParticle1.Stop();
+			// dashReadyParticle2.Stop();
+			dashPrticle.Stop();
 		}
 		
 		#endregion

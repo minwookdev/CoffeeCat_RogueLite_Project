@@ -195,6 +195,8 @@ namespace RandomDungeonWithBluePrint {
                     RoomData = new BattleRoomData(this, battleRoomEntity);
                     break;
                 case RoomType.PlayerSpawnRoom:
+                    RoomData = new PlayerSpawnRoomData(this);
+                    break;
                 case RoomType.ShopRoom:
                 case RoomType.BossRoom:
                 case RoomType.RewardRoom:
@@ -205,6 +207,8 @@ namespace RandomDungeonWithBluePrint {
                 default:
                     throw new ArgumentOutOfRangeException(nameof(roomType), roomType, null);
             }
+            
+            RoomData.Initialize();
 
             void PrintConvertingErrorLog() {
                 CatLog.ELog("RoomDataEntity Converting Error !");

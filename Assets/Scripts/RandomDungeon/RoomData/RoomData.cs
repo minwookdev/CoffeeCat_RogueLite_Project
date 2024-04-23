@@ -65,8 +65,7 @@ namespace CoffeeCat.RogueLite {
 		private int MaxSpawnCount = 0;
 		private float EndureSeconds = 0f;
 		
-		public BattleRoomData(Room room, BattleRoomDataEntity entity) : 
-			base(room, RoomType.MonsterSpawnRoom, entity.Rarity) {
+		public BattleRoomData(Room room, BattleRoomDataEntity entity) : base(room, RoomType.MonsterSpawnRoom, entity.Rarity) {
 			SpawnPositions = GetMonsterSpawnPositions(room, tileRadius: 0.5f);
 			roomCenterPos = room.FloorRectInt.center;
 			MaxSpawnCount = entity.MaxSpawnMonster;
@@ -256,6 +255,17 @@ namespace CoffeeCat.RogueLite {
 		private Vector2 GetRandomPos() {
 			int index = UnityRandom.Range(0, SpawnPositions.Length);
 			return SpawnPositions[index];
+		}
+	}
+
+	public class PlayerSpawnRoomData : RoomData
+	{
+		public PlayerSpawnRoomData(Room room) : base(room, RoomType.PlayerSpawnRoom) {
+			// Spawn Init Skill Selector Prefabs
+		}
+
+		public override void Initialize() {
+			base.Initialize();
 		}
 	}
 
