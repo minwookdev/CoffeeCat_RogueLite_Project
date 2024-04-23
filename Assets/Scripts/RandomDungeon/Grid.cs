@@ -9,7 +9,7 @@ namespace RandomDungeonWithBluePrint
     {
         public Vector2Int Size => new Vector2Int(grid.First().Count, grid.Count);
         private readonly List<List<int>> grid = new List<List<int>>();
-        public int this[int x, int y] => grid[y][x];
+        public int this[int x, int y] => grid[y][x]; // Getter
 
         public void Build(Vector2Int size, List<Room> rooms, List<Vector2Int> branches, List<Gate> gates)
         {

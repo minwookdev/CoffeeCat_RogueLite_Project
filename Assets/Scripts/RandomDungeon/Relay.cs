@@ -2,6 +2,7 @@
 
 namespace RandomDungeonWithBluePrint
 {
+    // Room이 존재하지 않는 Section에 좌표를 찍어 길의 연결부위를 만듦
     public class Relay
     {
         public int Section { get; set; }

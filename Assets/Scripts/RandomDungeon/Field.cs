@@ -17,9 +17,9 @@ namespace RandomDungeonWithBluePrint
     {
         public int MaxRoomNum;
         public Vector2Int Size;
-        public List<Section> Sections;       // 맵 내부에 보이지 않는 구획
+        public List<Section> Sections;
         public List<Connection> Connections; 
-        public List<Vector2Int> Branches;    // 복도
+        public List<Vector2Int> Branches;
         public List<Gate> Gates;
 
         public List<Vector2Int> doorPoint;
@@ -64,13 +64,15 @@ namespace RandomDungeonWithBluePrint
             return Sections.Where(s => section != s && section.AdjoinWith(s));
         }
 
-        // section에 인접하고, 어느 곳이든지 Connection 연결되어 있는 Section을 찾음
+        // section에 인접하고, 어느 곳이든지 Connection 연결되어 있는 Section들을 찾아 리스트로 반환
         public IEnumerable<Section> GetSectionsAdjoinWithRoute(Section section)
         {
             return GetSectionsAdjoinWith(section).Where(s => Connections.Any(c => c.ConnectedAny(s.Index)));
+            // return GetSectionsAdjoinWith(section).Where(s => !IsIsolatedSection(s));
         }
 
         // section주변에 Connection이 있는 Section이 존재하는지
+        // 인접한 Section을 찾아서 그 중 하나라도 Connection이 존재한다면 True
         public bool ExistConnectedSectionAround(Section section)
         {
             return GetSectionsAdjoinWith(section).Any(s => !IsIsolatedSection(s));
