@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,7 @@ using PathFindGrid = CoffeeCat.Pathfinding2D.Grid;
 
 namespace RandomDungeonWithBluePrint
 {
+    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
     public class RandomMapGenerator : MonoBehaviour
     {
         [Serializable]
@@ -48,14 +50,13 @@ namespace RandomDungeonWithBluePrint
 
         private void Awake()
         {
+            // 난수 생성 시드값으로 초기화
             UnityRandom.InitState(seed);
             
-            // Add Event to Generate Button
             generateButton.onClick.AddListener(() =>
             {
                 onDisposeMapBefore.Invoke();
                 
-                //Create(Raffle());
                 ExecuteGenerate();
                 DisplayRoomType();
                 DisplayMonsterSpawnPoint();
@@ -65,8 +66,10 @@ namespace RandomDungeonWithBluePrint
 
             // 초기 맵 생성 실행
             ExecuteGenerate();
+            return;
 
-            void ExecuteGenerate() {
+            void ExecuteGenerate()
+            {
                 var targetFieldBluePrint = (DefinitiveBluePrint) ? DefinitiveBluePrint : Raffle().BluePrint;
                 Create(targetFieldBluePrint);
             }

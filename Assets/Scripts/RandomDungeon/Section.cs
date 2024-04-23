@@ -1,19 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoffeeCat;
 using UnityEngine;
 
 namespace RandomDungeonWithBluePrint
 {
+    [SuppressMessage("ReSharper", "FieldCanBeMadeReadOnly.Global")]
     public class Section
     {
-        public int Index;
-        public RectInt Rect;
-        public Room Room;
-        public Relay Relay;
-        public Vector2Int MinRoomSize;
-        public int MakeRoomWeight;
-        public bool RoomIndispensable;
+        public int Index;               // Section의 인덱스
+        public RectInt Rect;            // Section의 사이즈(x,y,width,height)
+        public Room Room;               // Section 안의 Room
+        public Relay Relay;             // 길의 연결부위
+        public Vector2Int MinRoomSize;  // Section의 최소 사이즈
+        public int MakeRoomWeight;      // Room 생성 가중치
+        public bool RoomIndispensable;  // Room 생성 필수 여부
 
         public int Width => Rect.width;
         public int Height => Rect.height;
@@ -37,13 +39,11 @@ namespace RandomDungeonWithBluePrint
             return Rect.AdjoiningWithDirection(other.Rect);
         }
 
-        // 인접한 section인지?
         public bool AdjoinWith(Section other)
         {
             return AdjoiningWithDirection(other) != Constants.Direction.Error;
         }
 
-        // other 방향 Edge
         public Vector2Int GetEdge(Section other, Vector2Int initial = default)
         {
             return Rect.GetEdge(AdjoiningWithDirection(other), initial);

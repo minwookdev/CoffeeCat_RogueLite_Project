@@ -236,6 +236,7 @@ MonoBehaviour:
       width: 15
       height: 15
     minRoomSize: {x: 0, y: 0}
+  isConnectionOnlyExistRoom: 0
   connections:
   - fromIndex: 11
     toIndex: 12
@@ -269,3 +270,11 @@ MonoBehaviour:
     toIndex: 45
   - fromIndex: 45
     toIndex: 46
+  MinRewardRoomCount: 1
+  MaxRewardRoomCount: 1
+  MinShopRoomCount: 1
+  MaxShopRoomCount: 1
+  MinBattleRoomCount: 0
+  MaxBattleRoomCount: 1
+  battleRoomEntities: []
+  battleRoomEntitiesWeights: 

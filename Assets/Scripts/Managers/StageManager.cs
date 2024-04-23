@@ -47,7 +47,7 @@ namespace CoffeeCat
                 return;
             }
             
-            // Ä«¸Ş¶ó ¾÷µ¥ÀÌÆ®´Â Ä«¸Ş¶ó¿¡¼­ !
+            // ì¹´ë©”ë¼ ì—…ë°ì´íŠ¸ëŠ” ì¹´ë©”ë¼ì—ì„œ !
             CameraMovementUpdate();
         }
 
@@ -89,7 +89,7 @@ namespace CoffeeCat
         public void DespawnGates() => ObjectPoolManager.Instance.DespawnAll("dungeon_door");
 
         public void SetPlayersRoom(Room enteredRoom) {
-            // ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ¹æÀ» Á¤ÀÇÇÏ´Â º¯¼ö°¡ µ¤Çô¾º¿öÁö´Â °ÍÀ» Ã¼Å©
+            // í˜„ì¬ í”Œë ˆì´ì–´ì˜ ë°©ì„ ì •ì˜í•˜ëŠ” ë³€ìˆ˜ê°€ ë®í˜€ì”Œì›Œì§€ëŠ” ê²ƒì„ ì²´í¬
             if (playerCurrentRoom != null) {
                 CatLog.WLog("Overriding Players CurrentRoom !");
             }
@@ -98,7 +98,7 @@ namespace CoffeeCat
         }
 
         public void ClearPlayersRoom(Room leavesRoom) {
-            // ÇöÀç ÇÃ·¹ÀÌ¾îÀÇ ¹æ°ú ³ª°¡·Á´Â ¹æÀÌ ÀÏÄ¡ÇÏ´ÂÁö È®ÀÎ
+            // í˜„ì¬ í”Œë ˆì´ì–´ì˜ ë°©ê³¼ ë‚˜ê°€ë ¤ëŠ” ë°©ì´ ì¼ì¹˜í•˜ëŠ”ì§€ í™•ì¸
             if (!ReferenceEquals(playerCurrentRoom, leavesRoom)) {
                 CatLog.ELog("Player Leaves Room Check Error !");
                 return;
