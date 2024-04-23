@@ -260,12 +260,28 @@ namespace CoffeeCat.RogueLite {
 
 	public class PlayerSpawnRoomData : RoomData
 	{
+		private readonly string key1 = "skill_selector_fireball";
+		private readonly string key2 = "skill_selector_lightning";
+		
 		public PlayerSpawnRoomData(Room room) : base(room, RoomType.PlayerSpawnRoom) {
 			// Spawn Init Skill Selector Prefabs
+			var playerSpawnPosition = room.Rect.center;
+			var skillPrefab1Position = playerSpawnPosition.x -= 3f;
+			var skillPrefab2Position = playerSpawnPosition.x += 3f;
+			Preloader.Process(key1);
+			Preloader.Process(key2);
 		}
 
 		public override void Initialize() {
 			base.Initialize();
+		}
+
+		public override void EnteredPlayer() {
+			base.EnteredPlayer();
+		}
+
+		public override void LeavesPlayer() {
+			base.LeavesPlayer();
 		}
 	}
 

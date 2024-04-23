@@ -33,12 +33,12 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6302ae2ec96724442b087b403f853576
-    m_Address: Assets/Prefabs/Effects/skill_selector_fireball.prefab
+    m_Address: skill_selector_fireball
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3985049eb5994ee46ba0e4f28de5e699
-    m_Address: Assets/Prefabs/Effects/skill_selector_lightning.prefab
+    m_Address: skill_selector_lightning
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

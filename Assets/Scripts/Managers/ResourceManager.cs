@@ -155,12 +155,12 @@ namespace CoffeeCat.FrameWork {
         /// <param name="isMultipleSceneAllowedResources"></param>
         /// <param name="onCompleted"></param>
         public void AddressablesAsyncLoad<T>(string key, bool isMultipleSceneAllowedResources, Action<T> onCompleted) where T : UnityObject {
-            // Dictionary¿¡ ÀÌ¹Ì ·ÎµåµÇ°Å³ª ¿äÃ»µÈ Resource°¡ Á¸ÀçÇÑ´Ù¸é
+            // Dictionaryì— ì´ë¯¸ ë¡œë“œë˜ê±°ë‚˜ ìš”ì²­ëœ Resourceê°€ ì¡´ì¬í•œë‹¤ë©´
             if (TryGetResourceInDictionaryAsync<T>(key, onCompleted)) {
                 return;
             }
 
-            // ¿¡¼ÂÀÌ ·ÎµåÁßÀÎ »óÅÂ¸¦ Á¤ÀÇÇÏ±â À§ÇØ Dictionary¿¡ ¹Ì¸® Ãß°¡ (ºñµ¿±â ·Îµå Àü ·ÎµåÁßÀÎ ¸®¼Ò½ºÀÓÀ» Á¤ÀÇÇÏ±â À§ÇÔ)
+            // ì—ì…‹ì´ ë¡œë“œì¤‘ì¸ ìƒíƒœë¥¼ ì •ì˜í•˜ê¸° ìœ„í•´ Dictionaryì— ë¯¸ë¦¬ ì¶”ê°€ (ë¹„ë™ê¸° ë¡œë“œ ì „ ë¡œë“œì¤‘ì¸ ë¦¬ì†ŒìŠ¤ì„ì„ ì •ì˜í•˜ê¸° ìœ„í•¨)
             var resourceInfo = ResourceManager.ResourceInformation.New(isMultipleSceneAllowedResources);
             resourcesDict.Add(key, resourceInfo);
             Addressables.LoadAssetAsync<T>(key).Completed += (AsyncOperationHandle<T> operationHandle) => {
@@ -194,16 +194,16 @@ namespace CoffeeCat.FrameWork {
         /// <param name="isMultipleSceenAllowedResources"></param>
         /// <returns></returns>
         public T AddressablesSyncLoad<T>(string key, bool isMultipleSceenAllowedResources) where T : UnityObject {
-            // DictionaryÀÌ¹Ì ·ÎµåµÈ Resource¸¦ ¹İÈ¯
+            // Dictionaryì´ë¯¸ ë¡œë“œëœ Resourceë¥¼ ë°˜í™˜
             if (TryGetResourceInDictionarySync<T>(key, out T resource)) {
                 return resource;
             }
 
-            // Addressables¸¦ ÅëÇÑ ¿¡¼Â ·Îµå ¿äÃ»
+            // Addressablesë¥¼ í†µí•œ ì—ì…‹ ë¡œë“œ ìš”ì²­
             resourcesDict.Add(key, ResourceManager.ResourceInformation.New(isMultipleSceenAllowedResources));
             var resourceInfo = resourcesDict[key];
             var asyncOperationHandle = Addressables.LoadAssetAsync<T>(key);
-            T result = asyncOperationHandle.WaitForCompletion(); // °á°ú¸¦ ¹ŞÀ» ¶§ ±îÁö µ¿±â¹æ½ÄÀ¸·Î ´ë±â
+            T result = asyncOperationHandle.WaitForCompletion(); // ê²°ê³¼ë¥¼ ë°›ì„ ë•Œ ê¹Œì§€ ë™ê¸°ë°©ì‹ìœ¼ë¡œ ëŒ€ê¸°
             if (asyncOperationHandle.Status != AsyncOperationStatus.Succeeded) {
                 resourceInfo.SetStatusFailed();
                 CatLog.ELog("Addressables AssetSyncLoad Failed.");
@@ -271,7 +271,7 @@ namespace CoffeeCat.FrameWork {
         #region SEARCH_DICTIONARY
 
         /// <summary>
-        /// Resource Dictionary¿¡¼­ ·ÎµåµÈ ¸®¼Ò½º¸¦ Ã£°í °á°ú¸¦ ¹İÈ¯. (AsyncÀü¿ë)
+        /// Resource Dictionaryì—ì„œ ë¡œë“œëœ ë¦¬ì†ŒìŠ¤ë¥¼ ì°¾ê³  ê²°ê³¼ë¥¼ ë°˜í™˜. (Asyncì „ìš©)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
@@ -310,7 +310,7 @@ namespace CoffeeCat.FrameWork {
         }
 
         /// <summary>
-        /// Resource Dictionary¿¡¼­ ·ÎµåµÈ ¸®¼Ò½º¸¦ Ã£°í °á°ú¸¦ ¹İÈ¯. (SyncÀü¿ë)
+        /// Resource Dictionaryì—ì„œ ë¡œë“œëœ ë¦¬ì†ŒìŠ¤ë¥¼ ì°¾ê³  ê²°ê³¼ë¥¼ ë°˜í™˜. (Syncì „ìš©)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
@@ -356,7 +356,7 @@ namespace CoffeeCat.FrameWork {
         #region CHECK_DUPLICATES
 
         /// <summary>
-        /// ¸¶Áö¸· Resource DictionaryÃß°¡ ÀÌÈÄ nÃÊ°£ ´ë±â ÈÄ ´õ ÀÌ»ó Ãß°¡µÇ´Â ¿ä¼Ò°¡ ¾ø´Ù¸é Dictionary³»ºÎ Áßº¹ ¿ä¼Ò °Ë»ç
+        /// ë§ˆì§€ë§‰ Resource Dictionaryì¶”ê°€ ì´í›„ nì´ˆê°„ ëŒ€ê¸° í›„ ë” ì´ìƒ ì¶”ê°€ë˜ëŠ” ìš”ì†Œê°€ ì—†ë‹¤ë©´ Dictionaryë‚´ë¶€ ì¤‘ë³µ ìš”ì†Œ ê²€ì‚¬
         /// </summary>
         private void CheckDuplicatesInDictionary(float waitSeconds = 2f) {
 #if UNITY_EDITOR
@@ -377,9 +377,9 @@ namespace CoffeeCat.FrameWork {
             //    .Select(_ => resourcesDict)
             //    .TakeUntilDestroy(this)
             //    .Subscribe(dictionary => {
-            //        // Resource Dictionary¿¡ ¿ä¼Ò°¡ Ãß°¡µÊ
+            //        // Resource Dictionaryì— ìš”ì†Œê°€ ì¶”ê°€ë¨
             //        if (previousCheckedDictioanryCount > resourcesDict.Count) {
-            //            //// Dictionary¸¦ ¼øÈ¸ÇÏ¸ç Áßº¹µÇ´Â ResourceNameÀ» Ã¼Å©
+            //            //// Dictionaryë¥¼ ìˆœíšŒí•˜ë©° ì¤‘ë³µë˜ëŠ” ResourceNameì„ ì²´í¬
             //            //foreach (var keyValuePair in resourcesDict) {
             //            //    //strList.Add(keyValuePair.Value.Resource.name);
             //            //    string resourceName = keyValuePair.Value.ResourceName;
@@ -393,7 +393,7 @@ namespace CoffeeCat.FrameWork {
             //            //
             //            //strList.Clear();
             //
-            //            // µ¿ÀÏÇÑ Resource NameÀ» °¡Áø Value°¡ Á¸ÀçÇÏ´ÂÁö Ã¼Å©
+            //            // ë™ì¼í•œ Resource Nameì„ ê°€ì§„ Valueê°€ ì¡´ì¬í•˜ëŠ”ì§€ ì²´í¬
             //            isExistDuplicateResourceInDictionary = dictionary.Values.GroupBy(x => x.ResourceName).Any(g => g.Count() > 1);
             //            if (isExistDuplicateResourceInDictionary) {
             //                CatLog.ELog("Checked Duplicate Loaded Resources.");
@@ -429,7 +429,7 @@ namespace CoffeeCat.FrameWork {
                     //    previousCheckedDictioanryCount = dict.Count;
                     //}
 
-                    // Resource Dictionary¿¡ ¿ä¼Ò°¡ Ãß°¡µÈ °æ¿ì (ÃÑ ¿ä¼Ò°¡ 1°³ ÀÌ»ó)
+                    // Resource Dictionaryì— ìš”ì†Œê°€ ì¶”ê°€ëœ ê²½ìš° (ì´ ìš”ì†Œê°€ 1ê°œ ì´ìƒ)
                     if (previousCheckedDictioanryCount < dict.Count && dict.Count > 1) {
                         this.UpdateAsObservable()
                         .Skip(TimeSpan.Zero)
