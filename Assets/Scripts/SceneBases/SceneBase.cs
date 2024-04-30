@@ -25,7 +25,7 @@ namespace CoffeeCat.FrameWork {
 
         [Title("AUDIO CLIPS")]
         public StringAudioClipDictionary AudioClipDictionary = null;
-        List<AudioClip> clips = new List<AudioClip>();
+        private List<AudioClip> clips = new List<AudioClip>();
         
         // 임시적 TargetFrameRate
         [ReadOnly] public int TargetFrameRate = 60;
