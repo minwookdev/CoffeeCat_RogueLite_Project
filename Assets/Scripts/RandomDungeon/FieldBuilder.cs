@@ -2,12 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net.NetworkInformation;
 using UnityEngine;
 using CoffeeCat;
 using CoffeeCat.Utils;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 namespace RandomDungeonWithBluePrint
@@ -172,18 +169,29 @@ namespace RandomDungeonWithBluePrint
             MakeAdditionalBranch(field, bluePrint);
             
             // Check All Connections Completed =========================================================================
+            // 1. Grouping Sections (Connected Sections Group)
+            // 2. Find Nearest Connected Group
             var sections = field.Sections;
             var connections = field.Connections;
-            for (int i = 0; i < sections.Count; i++)
+            List<Connection> visitedConnections = new();
+            List<Section> visitedSections = new();
+            var roomExistSections = sections.Where(s => s.ExistRoom).ToArray();
+            for (int i = 0; i < roomExistSections.Length; i++)
             {
-                var otherSections = sections.Where(s => s != sections[i]).ToList();
-                for (int j = 0; j < otherSections.Count; j++)
+                // var destSections = roomExistSections.Where(s => s != self).ToList();
+                /*for (int j = 0; j < destSections.Count; j++)
                 {
-                    IsConnectedToTargetSection(sections[i], otherSections[j]);
-                }
+                    IsConnectedToTargetSection(destSections[j]);
+                }*/
+                var roomExistSection = roomExistSections[i];
+                IsConnectedToTargetSection(roomExistSection);
+                visitedConnections.Clear();
+                visitedSections.Clear();
+                
+                // 무한루프 돌지는 않는지 체크해보기
+                // Print Visited List's
             }
             // Remove Invalid Connections [ Relay <-> Relay Connection ] ===============================================
-
             // Get Relay <-> Relay Connections
             var r2rConnections = connections.Where(c => !GetSection(c.To).ExistRoom && !GetSection(c.From).ExistRoom).ToList();
             var removeTargetConnection = FindMatchedConnection();
@@ -235,9 +243,25 @@ namespace RandomDungeonWithBluePrint
                     /*CatLog.Log("RoomToRelay Connections : From: " + roomToRelayConnections[i].From.ToString() + " -> To: " + roomToRelayConnections[i].To.ToString());*/
                 }
             }
-            void IsConnectedToTargetSection(Section startSection, Section targetSection)
+            void IsConnectedToTargetSection(Section startSection)
             {
-                var startSectionConnections = connections.Where(c => c.To == startSection.Index || c.From == startSection.Index).ToList();
+                visitedSections.Add(startSection);
+                var startSectionConnections = connections
+                                              .Where(c => c.To == startSection.Index || c.From == startSection.Index)
+                                              .Where(c => !visitedConnections.Contains(c))
+                                              .ToList();
+
+                if (!startSectionConnections.Any())
+                {
+                    return;
+                }
+
+                for (int i = 0; i < startSectionConnections.Count; i++)
+                {
+                    int targetIndex = startSection.Index == startSectionConnections[i].To ? startSectionConnections[i].From : startSectionConnections[i].To;
+                    visitedConnections.Add(startSectionConnections[i]);
+                    IsConnectedToTargetSection(GetSection(targetIndex));
+                }
             }
             // =========================================================================================================
         }
