@@ -158,25 +158,13 @@ namespace RandomDungeonWithBluePrint
             MakeAdditionalBranch(field, bluePrint);
             
             // BluePrint의 Section중 Room이 존재하는 Section만 Connection을 정의
-            if (bluePrint.IsConnectionOnlyExistRoom)
+            if (bluePrint.IsConnectionOnlyExistRoom) 
             {
-                var roomExistIndex =
-                    field.Sections.Where(section => section.ExistRoom)
-                         .Select(section => section.Index)
-                         .ToArray();
-                field.Connections = field.Connections.Where(connection =>
-                                                                    roomExistIndex.Contains(connection.From) &&
-                                                                    roomExistIndex.Contains(connection.To))
-                                             .Select(c => new Connection() { From = c.From, To = c.To })
-                                             .ToList();
-                
-                // From 과 To 중에 하나만 Room이 존재하지 않는 경우만 지워버리면 되지 않을까?
+
             }
-
-
-            field.Branches = field.Connections.SelectMany(c => Join(field.GetSection(c.From), field.GetSection(c.To), field.Gates)).ToList();
             
-            // MakeBranches내부에서 Joint의 Connected 변수를 변경하여 최종 연결상태를 정의하기 때문에 여기서 호출
+            // Connection을 통해 Branch 생성
+            field.Branches = field.Connections.SelectMany(c => Join(field.GetSection(c.From), field.GetSection(c.To), field.Gates)).ToList();
             field.Rooms.ForEach(room => room.ExceptJointTilesInWallDictionary());
         }
 
