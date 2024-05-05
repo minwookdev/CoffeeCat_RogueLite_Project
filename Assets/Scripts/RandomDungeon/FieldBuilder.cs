@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using UnityEngine;
 using CoffeeCat;
 using CoffeeCat.Utils;
@@ -168,6 +169,10 @@ namespace RandomDungeonWithBluePrint
             ComplementAllConnection(field);
             MakeAdditionalBranch(field, bluePrint);
             
+            // Start Process ===========================================================================================
+            StringBuilder sb = new();
+            sb.Clear();
+            sb.Append("Branch Process Report \n");
             // Check All Connections Completed =========================================================================
             // 1. Grouping Sections (Connected Sections Group)
             // 2. Find Nearest Connected Group
@@ -175,22 +180,78 @@ namespace RandomDungeonWithBluePrint
             var connections = field.Connections;
             List<Connection> visitedConnections = new();
             List<Section> visitedSections = new();
+            Dictionary<Section, Section[]> visitedDictionary = new();
             var roomExistSections = sections.Where(s => s.ExistRoom).ToArray();
+            sb.Append($"Room Exist SectionCount(Check Count): {roomExistSections.Length.ToString()} \n");
             for (int i = 0; i < roomExistSections.Length; i++)
             {
-                // var destSections = roomExistSections.Where(s => s != self).ToList();
-                /*for (int j = 0; j < destSections.Count; j++)
-                {
-                    IsConnectedToTargetSection(destSections[j]);
-                }*/
-                var roomExistSection = roomExistSections[i];
-                IsConnectedToTargetSection(roomExistSection);
                 visitedConnections.Clear();
                 visitedSections.Clear();
                 
-                // 무한루프 돌지는 않는지 체크해보기
-                // Print Visited List's
+                var roomExistSection = roomExistSections[i];
+                IsConnectedToTargetSection(roomExistSection);
+                /*visitedSections.Remove(roomExistSection); // Ignore Start Section*/
+                
+                // ** 무한루프 체크 **
+                visitedDictionary.Add(roomExistSection, visitedSections.ToArray());
+                sb.Append($"Start Section {roomExistSection.Index.ToString()}, Visited Section Count: {visitedSections.Count.ToString()} \n");
             }
+
+            // Make Section Group List
+            List<Section[]> sectionGroupList = new();
+            if (visitedDictionary.Any()) {
+                sectionGroupList.Add(visitedDictionary.First().Value);
+                foreach (var value in visitedDictionary.Select(pair => pair.Value)) {
+                    for (int i = 0; i < sectionGroupList.Count; i++) {
+                        // Matching Group
+                        bool isMissMatched = value.Length != sectionGroupList[i].Length;
+                        if (!isMissMatched) {
+                            for (int j = 0; j < sectionGroupList[i].Length; j++) {
+                                var targetSection = sectionGroupList[i][j];
+                                var find = value.SingleOrDefault(s => s == targetSection);
+                                if (find != null) 
+                                    continue;
+                                isMissMatched = true;
+                                break;
+                            }
+                        }
+
+                        if (isMissMatched) {
+                            // Last Index (Add New Group)
+                            if (i != sectionGroupList.Count - 1) 
+                                continue;
+                            sectionGroupList.Add(value);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            
+            bool isMatchedAllVisitedCount = sectionGroupList.Count == 1;
+            if (isMatchedAllVisitedCount) {
+                sb.Append("Is Connected All Sections \n");
+                sb.Append("Process Ended. \n");
+                CatLog.Log(sb.ToString());
+            }
+            else {
+                sb.Append("Is Not Connected All Sections ! \n");
+                sb.Append($"Section is Splited By - {sectionGroupList.Count.ToString()} \n");
+                for (var i = 0; i < sectionGroupList.Count; i++) {
+                    var sectionGroup = sectionGroupList[i];
+                    sb.Append($"=== Group: {sectionGroup.Length.ToString()} === \n");
+                    sb.Append("=== Connected Information === \n");
+                    for (int j = 0; j < sectionGroup.Length; j++) {
+                        var section = sectionGroup[j];
+                        sb.Append($"{section.Index.ToString()}, ");
+                    }
+                    sb.Append('\n');
+                }
+
+                sb.Append("Process Ended. \n");
+                CatLog.WLog(sb.ToString());
+            }
+            
             // Remove Invalid Connections [ Relay <-> Relay Connection ] ===============================================
             // Get Relay <-> Relay Connections
             var r2rConnections = connections.Where(c => !GetSection(c.To).ExistRoom && !GetSection(c.From).ExistRoom).ToList();
@@ -243,24 +304,24 @@ namespace RandomDungeonWithBluePrint
                     /*CatLog.Log("RoomToRelay Connections : From: " + roomToRelayConnections[i].From.ToString() + " -> To: " + roomToRelayConnections[i].To.ToString());*/
                 }
             }
-            void IsConnectedToTargetSection(Section startSection)
-            {
-                visitedSections.Add(startSection);
-                var startSectionConnections = connections
-                                              .Where(c => c.To == startSection.Index || c.From == startSection.Index)
-                                              .Where(c => !visitedConnections.Contains(c))
+            void IsConnectedToTargetSection(Section visitSection) {
+                visitedSections.Add(visitSection);
+                var visitSectionConnections = connections
+                                              .Where(c => c.To == visitSection.Index || c.From == visitSection.Index)
                                               .ToList();
-
-                if (!startSectionConnections.Any())
-                {
+                if (!visitSectionConnections.Any())
                     return;
-                }
 
-                for (int i = 0; i < startSectionConnections.Count; i++)
-                {
-                    int targetIndex = startSection.Index == startSectionConnections[i].To ? startSectionConnections[i].From : startSectionConnections[i].To;
-                    visitedConnections.Add(startSectionConnections[i]);
-                    IsConnectedToTargetSection(GetSection(targetIndex));
+                foreach (var connection in visitSectionConnections) {
+                    if (visitedConnections.Contains(connection))
+                        continue;
+                    visitedConnections.Add(connection);
+                    
+                    int nextSectionIndex = visitSection.Index == connection.To ? connection.From : connection.To;
+                    var nextSection = GetSection(nextSectionIndex);
+                    if (visitedSections.Contains(nextSection))
+                        continue;
+                    IsConnectedToTargetSection(nextSection);
                 }
             }
             // =========================================================================================================
