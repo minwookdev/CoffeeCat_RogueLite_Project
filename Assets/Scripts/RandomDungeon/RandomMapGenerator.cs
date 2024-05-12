@@ -10,6 +10,8 @@ using CoffeeCat;
 using CoffeeCat.FrameWork;
 using CoffeeCat.RogueLite;
 using CoffeeCat.Utils;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityRandom = UnityEngine.Random;
 using PathFindGrid = CoffeeCat.Pathfinding2D.Grid;
 

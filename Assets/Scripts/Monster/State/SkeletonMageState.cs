@@ -4,18 +4,32 @@ using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.Defines;
 using CoffeeCat.Utils;
 
-namespace CoffeeCat {
-    public class SkeletonMageState : MonsterState {
+namespace CoffeeCat
+{
+    public class SkeletonMageState : MonsterState
+    {
         // Attack
-        [TitleGroup("Attack", order: 3), SerializeField] private float attackAbleSqrDistance = 5f;
-        [TitleGroup("Attack", order: 3), SerializeField] private float attackAbleDistanceMultiplier = 1.5f;
-        [TitleGroup("Attack", order: 3), SerializeField] private float attackStateTime = 2f;
-        [TitleGroup("Attack", order: 3), SerializeField, PropertyRange(0f, "attackStateTime")] 
+        [TitleGroup("Attack", order: 3), SerializeField]
+        private float attackAbleSqrDistance = 5f;
+
+        [TitleGroup("Attack", order: 3), SerializeField]
+        private float attackAbleDistanceMultiplier = 1.5f;
+
+        [TitleGroup("Attack", order: 3), SerializeField]
+        private float attackStateTime = 2f;
+
+        [TitleGroup("Attack", order: 3), SerializeField, PropertyRange(0f, "attackStateTime")]
         private float projectileSpawnSecondsInAttackStateTime = 1.5f;
-        [TitleGroup("Attack", order: 3), SerializeField] private float AttackintervalAfterProjectileSpawn = 0.65f;
-        [TitleGroup("Attack", order: 3), SerializeField] private AddressablesKey projectileKey;
-        [TitleGroup("Attack", order: 3), SerializeField] private Transform spawnPointSocketTr = null;
-        
+
+        [TitleGroup("Attack", order: 3), SerializeField]
+        private float AttackintervalAfterProjectileSpawn = 0.65f;
+
+        [TitleGroup("Attack", order: 3), SerializeField]
+        private AddressablesKey projectileKey;
+
+        [TitleGroup("Attack", order: 3), SerializeField]
+        private Transform spawnPointSocketTr = null;
+
         // Fields
         private bool isAttacked = false;
         private bool isArrivalToPlayer = false;
@@ -23,7 +37,7 @@ namespace CoffeeCat {
         private float currentIntervalTime = 0f;
         private Vector2 normalizedMoveDirection = Vector2.zero;
         private readonly int animStateHash = Animator.StringToHash("AnimState");
-        
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -39,7 +53,8 @@ namespace CoffeeCat {
         }
 
         // ReSharper disable Unity.PerformanceAnalysis
-        protected override void OnUpdateIdleState() {
+        protected override void OnUpdateIdleState()
+        {
             if (RogueLiteManager.Instance.IsPlayerNotExistOrDeath())
                 return;
             StateChange(EnumMonsterState.Tracking);
@@ -47,7 +62,6 @@ namespace CoffeeCat {
 
         protected override void OnExitIdleState()
         {
-            
         }
 
         #endregion
@@ -59,27 +73,30 @@ namespace CoffeeCat {
             anim.SetInteger(animStateHash, 1);
         }
 
-        protected override void OnUpdateTrackingState() {
+        protected override void OnUpdateTrackingState()
+        {
             // Check Player Not Exist Or Death
-            if (!RogueLiteManager.Instance.IsPlayerExistAndAlive()) {
+            if (!RogueLiteManager.Instance.IsPlayerExistAndAlive())
+            {
                 StateChange(EnumMonsterState.Idle);
                 return;
             }
 
-            if (currentIntervalTime > 0f) {
+            if (currentIntervalTime > 0f)
+            {
                 currentIntervalTime -= Time.deltaTime;
                 return;
             }
 
             // Get Direction to Player Position
             isArrivalToPlayer = TrackPlayerToCertainDistance(attackAbleSqrDistance, out normalizedMoveDirection);
-            
+
             // Set Flip SpriteRenderer
             bool isDirectionRight = Math2DHelper.GetDirectionIsRight(normalizedMoveDirection);
             SetFlipX(isDirectionRight);
-            
+
             // Check Can be Attack Player
-            if (!isArrivalToPlayer) 
+            if (!isArrivalToPlayer)
                 return;
             StateChange(EnumMonsterState.Attack);
         }
@@ -107,57 +124,63 @@ namespace CoffeeCat {
 
         protected override void OnUpdateDeathState()
         {
-            
         }
 
         protected override void OnExitDeathState()
         {
-            
         }
 
         #endregion
 
         #region ATTACK
 
-        protected override void OnEnterAttackState() {
+        protected override void OnEnterAttackState()
+        {
             anim.SetInteger(animStateHash, 3);
         }
 
-        protected override void OnUpdateAttackState() {
+        protected override void OnUpdateAttackState()
+        {
             // Increase Attack Time
             currentAttackStateTime += Time.deltaTime;
-            if (currentAttackStateTime < projectileSpawnSecondsInAttackStateTime) {
+            if (currentAttackStateTime < projectileSpawnSecondsInAttackStateTime)
+            {
                 return;
             }
 
             // Spawn Projectile
-            if (!isAttacked) {
+            if (!isAttacked)
+            {
                 SpawnProjectile();
                 isAttacked = true;
             }
 
             // Arrival Max Attack Time
-            if (currentAttackStateTime >= attackStateTime) {
+            if (currentAttackStateTime >= attackStateTime)
+            {
                 return;
             }
-            
+
             // State to Tracking
             StateChange(EnumMonsterState.Tracking);
         }
 
-        protected override void OnExitAttackState() {
+        protected override void OnExitAttackState()
+        {
             currentAttackStateTime = 0f;
             isAttacked = false;
         }
 
         #endregion
 
-        private void SpawnProjectile() {
+        private void SpawnProjectile()
+        {
             // Failed to Attack
-            if (!IsPlayerInAttackRange(out Vector2 playerPosition)) {
+            if (!IsPlayerInAttackRange(out Vector2 playerPosition))
+            {
                 return;
             }
-            
+
             // Success to Attack
             currentIntervalTime = AttackintervalAfterProjectileSpawn;
             // TODO: This Logic To Static Utils
@@ -168,13 +191,14 @@ namespace CoffeeCat {
             Quaternion lookAtTargetRotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
             // Spawn Projectile
-            var spawnedProjectile = 
+            var spawnedProjectile =
                 ObjectPoolManager.Instance.Spawn<MonsterProjectile>(projectileKey.ToStringEx(), spawnPoint,
-                    lookAtTargetRotation);
+                                                                    lookAtTargetRotation);
             spawnedProjectile.Initialize(stat);
         }
 
-        private bool IsPlayerInAttackRange(out Vector2 playerPosition) {
+        private bool IsPlayerInAttackRange(out Vector2 playerPosition)
+        {
             playerPosition = RogueLiteManager.Instance.SpawnedPlayerPosition;
             var sqrDistance = Math2DHelper.GetDirection(tr.position, playerPosition).sqrMagnitude;
             return sqrDistance <= (attackAbleSqrDistance * attackAbleDistanceMultiplier);

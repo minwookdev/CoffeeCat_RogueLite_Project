@@ -198,7 +198,8 @@ namespace CoffeeCat.RogueLite {
 		private void OnCleared() {
 			IsCleared = true;
 			IsLocked = true;
-			
+			StageManager.Instance.InvokeEventClearedRoomEvent(RoomType);
+
 			// 방에 남아있는 모든 몬스터 처치
 			// 몬스터 스폰 시 List또는 Queue에 담아두는 방식을 사용 !
 			// 또는 조건에 따라 ObjectPoolManager.DisableAll 메서드를 사용

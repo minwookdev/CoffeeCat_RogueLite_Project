@@ -38,6 +38,7 @@ namespace CoffeeCat
         [Title("Events")]
         [SerializeField] private UnityEvent<RoomType> OnRoomEntering = null;
         [SerializeField] private UnityEvent<RoomType> OnRoomFirstEntering = null;
+        [SerializeField] private UnityEvent<RoomType> OnClearedRoom = null;
         [SerializeField] private UnityEvent OnMonsterKilled = null;
         [SerializeField] private UnityEvent OnPlayerKilled = null;
 
@@ -108,14 +109,20 @@ namespace CoffeeCat
         }
 
         #region Events
-
+        
         public void InvokeEventMonsterKilledEvent(MonsterStatus key) => OnMonsterKilled?.Invoke();
 
         public void InvokeEventPlayerKilledEvent(Player key) => OnPlayerKilled?.Invoke();
 
+        public void InvokeEventClearedRoomEvent(RoomType roomType) => OnClearedRoom?.Invoke(roomType);
+        
         public void InvokeRoomEnteringEvent(RoomType roomType) => OnRoomEntering?.Invoke(roomType);
 
         public void InvokeRoomEnteringFirstEvent(RoomType roomType) => OnRoomFirstEntering?.Invoke(roomType);
+
+        public void AddListenerRoomEnteringEvent(UnityAction<RoomType> action) => OnRoomEntering.AddListener(action);
+
+        public void AddListenerClearedRoomEvent(UnityAction<RoomType> action) => OnClearedRoom.AddListener(action);
 
         #endregion
     }
