@@ -66,11 +66,11 @@ namespace CoffeeCat.FrameWork {
                 clips.Add(clip);
             });
 
-            this.UpdateAsObservable()
+            /*this.UpdateAsObservable()
                 .Skip(0)
                 .TakeUntilDestroy(this)
                 .Subscribe(_ => {
-                    if (Input.GetKeyDown(KeyCode.A)) {
+                    /*if (Input.GetKeyDown(KeyCode.A)) {
                         SoundManager.Instance.PlayBgm("song18");
                         SoundManager.Instance.PlayAmbient("birdsongloop16s");
                         //SoundManager.Instance.RegistCustomChannel("Coin", clips[0]);
@@ -90,9 +90,9 @@ namespace CoffeeCat.FrameWork {
                     if (Input.GetKeyDown(KeyCode.R)) {
                         //SoundManager.Instance.PlaySE(clips[Random.Range(0, clips.Count)], .3f);
                         //SoundManager.Instance.ReleaseCustomChannel("Coin");
-                    }
+                    }#1#
                 })
-                .AddTo(this);
+                .AddTo(this);*/
 
             if (IsSetupDamageText) {
                 DamageTextManager.Instance.Setup(damageTextCanvas, uiCamera);
