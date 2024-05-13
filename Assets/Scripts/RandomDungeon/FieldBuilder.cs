@@ -6,6 +6,8 @@ using System.Text;
 using UnityEngine;
 using CoffeeCat;
 using CoffeeCat.Utils;
+using HarmonyLib;
+using Unity.VisualScripting;
 using Random = UnityEngine.Random;
 
 namespace RandomDungeonWithBluePrint
@@ -163,94 +165,102 @@ namespace RandomDungeonWithBluePrint
             
             }*/
             
-            // 모든 Room이 있는 Section을 연결
+            // Initialize Connections
+            var sections = field.Sections;
+            var connections = field.Connections;
             field.Connections = new List<Connection>();
+            
+            // 모든 Room이 있는 Section을 연결 (Default Make Connection)
             ExtendConnections(field);
             ComplementAllConnection(field);
             MakeAdditionalBranch(field, bluePrint);
             
-            // Start Process ===========================================================================================
-            StringBuilder sb = new();
-            sb.Clear();
-            sb.Append("Branch Process Report \n");
-            // Check All Connections Completed =========================================================================
-            // 1. Grouping Sections (Connected Sections Group)
-            // 2. Find Nearest Connected Group
-            var sections = field.Sections;
-            var connections = field.Connections;
-            List<Connection> visitedConnections = new();
-            List<Section> visitedSections = new();
-            Dictionary<Section, Section[]> visitedDictionary = new();
-            var roomExistSections = sections.Where(s => s.ExistRoom).ToArray();
-            sb.Append($"Room Exist SectionCount(Check Count): {roomExistSections.Length.ToString()} \n");
-            for (int i = 0; i < roomExistSections.Length; i++)
-            {
-                visitedConnections.Clear();
-                visitedSections.Clear();
-                
-                var roomExistSection = roomExistSections[i];
-                IsConnectedToTargetSection(roomExistSection);
-                /*visitedSections.Remove(roomExistSection); // Ignore Start Section*/
-                
-                // ** 무한루프 체크 **
-                visitedDictionary.Add(roomExistSection, visitedSections.ToArray());
-                sb.Append($"Start Section {roomExistSection.Index.ToString()}, Visited Section Count: {visitedSections.Count.ToString()} \n");
-            }
+            bool isMatchedAllVisitedCount = IsAllSectionConnected(true, out var groupList);
+            
+            // 한 칸씩 전진해봐서 점점 가까워지는 노드를 재귀적으로 선택하게하면 각도를 계산하지 않아도 괜찮다 !
+            // 각도를 계산하면 더 정확하게 연결할 수 있지만, 노드가 많아지면 연산량이 많아진다
+            // 위 방법은 깍 Group끼리 근접한 Section이 없을 때만 재귀적탐색 방법을 사용한다
+            // 우선은 각 Group에서 근접한 다른 Group으로 바로 연결될 수 있는지 체크한다
 
-            // Make Section Group List
-            List<Section[]> sectionGroupList = new();
-            if (visitedDictionary.Any()) {
-                sectionGroupList.Add(visitedDictionary.First().Value);
-                foreach (var value in visitedDictionary.Select(pair => pair.Value)) {
-                    for (int i = 0; i < sectionGroupList.Count; i++) {
-                        // Matching Group
-                        bool isMissMatched = value.Length != sectionGroupList[i].Length;
-                        if (!isMissMatched) {
-                            for (int j = 0; j < sectionGroupList[i].Length; j++) {
-                                var targetSection = sectionGroupList[i][j];
-                                var find = value.SingleOrDefault(s => s == targetSection);
-                                if (find != null) 
-                                    continue;
-                                isMissMatched = true;
+            // 1# Group과 Group간에 바로 근접한 Section으로 연결될 수 있는지 체크 (다른 Group에 Connection이 있어야한다는 전제)
+            // 2# 재귀적으로 Connection을 놓는 탐색방법으로 최종적으로 연결될 수 있는지 체크
+            if (!isMatchedAllVisitedCount) {
+                var groupsCount = groupList.Count; // TODO: Matched Nearest Section Groups Or Check Reorderable Groups When Loop's End 
+                while (groupsCount != 1) {
+                    var group1Sections = groupList[0];
+                    var group2Sections = groupList[1];
+                    bool isConnectSuccessed = false;
+
+                    // Find Nearest Section
+                    for (int i = 0; i < group1Sections.Length; i++) {
+                        var group1Section = group1Sections[i];
+                        var adJoinSections = field.GetSectionsAdjoinWith(group1Section).ToArray();
+                        var adjoinGroup2Sections = adJoinSections.Where(s => group2Sections.Contains(s)).ToArray();
+                        for (int j = 0; j < adjoinGroup2Sections.Length; j++) {
+                            var group2Section = adjoinGroup2Sections[j];
+                            if (!field.IsConnectable(group1Section, group2Section)) {
+                                continue;
+                            }
+                            // Finded Connectable Nearest Group2 Section
+                            var connection = new Connection() { From = group1Section.Index, To = group2Section.Index };
+                            field.Connections.Add(connection);
+                            isConnectSuccessed = true;
+                            break;
+                        }
+
+                        // Check Connect Successed
+                        if (isConnectSuccessed) {
+                            break;
+                        }
+                    }
+
+                    // Is Failed To Nearest Connection -> Shortest Connectable Recursive Search
+                    if (!isConnectSuccessed) {
+                        var s2sDistanceDtoList = new List<S2SDistance>();
+                        for (int i = 0; i < group1Sections.Length; i++) {
+                            for (int j = 0; j < group2Sections.Length; j++) {
+                                var group1Section = group1Sections[i];
+                                var group2Section = group2Sections[j];
+                                var distance = field.GetDistanceBySection(group1Section, group2Section);
+                                s2sDistanceDtoList.Add(new S2SDistance() { s1 = group1Section, s2 = group2Section, distance = distance });
+                            }
+                        }
+                        
+                        // s2sDistanceDtoList를 오름차 순 distance로 정렬
+                        var orderByDistance = s2sDistanceDtoList.OrderBy(d => d.distance).ToArray();
+                        var virtualVisitedSections = new List<Section>();
+                        for (int i = 0; i < orderByDistance.Length; i++) {
+                            virtualVisitedSections.Clear();
+                            isConnectSuccessed = IsConnetableToTargetSectionRecursive(virtualVisitedSections, orderByDistance[i].s1, orderByDistance[i].s2);
+                            if (isConnectSuccessed) {
                                 break;
                             }
                         }
-
-                        if (isMissMatched) {
-                            // Last Index (Add New Group)
-                            if (i != sectionGroupList.Count - 1) 
-                                continue;
-                            sectionGroupList.Add(value);
+                        
+                        if (!isConnectSuccessed) {
+                            CatLog.ELog("Group Section Connection Failed !");
+                            break;
                         }
+                        
+                        // Add Connection From Virtual Visited Connection
+                        for (int i = 0; i < virtualVisitedSections.Count - 1; i++) {
+                            var currentSection = virtualVisitedSections[i];
+                            var nextSection = virtualVisitedSections[i + 1];
+                            var newConnection = new Connection() { From = currentSection.Index, To = nextSection.Index };
+                            field.Connections.Add(newConnection);
+                        }
+                    }
+                    
+                    // Find Way To Recursive
+                    // Update Section Group List
+                    isMatchedAllVisitedCount = IsAllSectionConnected(false, out groupList);
+                    if (isMatchedAllVisitedCount)
                         break;
-                    }
+                    groupsCount = groupList.Count;
                 }
             }
-
             
-            bool isMatchedAllVisitedCount = sectionGroupList.Count == 1;
-            if (isMatchedAllVisitedCount) {
-                sb.Append("Is Connected All Sections \n");
-                sb.Append("Process Ended. \n");
-                CatLog.Log(sb.ToString());
-            }
-            else {
-                sb.Append("Is Not Connected All Sections ! \n");
-                sb.Append($"Section is Splited By - {sectionGroupList.Count.ToString()} \n");
-                for (var i = 0; i < sectionGroupList.Count; i++) {
-                    var sectionGroup = sectionGroupList[i];
-                    sb.Append($"=== Group: {sectionGroup.Length.ToString()} === \n");
-                    sb.Append("=== Connected Information === \n");
-                    for (int j = 0; j < sectionGroup.Length; j++) {
-                        var section = sectionGroup[j];
-                        sb.Append($"{section.Index.ToString()}, ");
-                    }
-                    sb.Append('\n');
-                }
-
-                sb.Append("Process Ended. \n");
-                CatLog.WLog(sb.ToString());
-            }
+            // !! 예외처리 필요한 부분 체크
             
             // Remove Invalid Connections [ Relay <-> Relay Connection ] ===============================================
             // Get Relay <-> Relay Connections
@@ -304,27 +314,146 @@ namespace RandomDungeonWithBluePrint
                     /*CatLog.Log("RoomToRelay Connections : From: " + roomToRelayConnections[i].From.ToString() + " -> To: " + roomToRelayConnections[i].To.ToString());*/
                 }
             }
-            void IsConnectedToTargetSection(Section visitSection) {
-                visitedSections.Add(visitSection);
-                var visitSectionConnections = connections
-                                              .Where(c => c.To == visitSection.Index || c.From == visitSection.Index)
-                                              .ToList();
-                if (!visitSectionConnections.Any())
-                    return;
-
-                foreach (var connection in visitSectionConnections) {
-                    if (visitedConnections.Contains(connection))
-                        continue;
-                    visitedConnections.Add(connection);
-                    
-                    int nextSectionIndex = visitSection.Index == connection.To ? connection.From : connection.To;
-                    var nextSection = GetSection(nextSectionIndex);
-                    if (visitedSections.Contains(nextSection))
-                        continue;
-                    IsConnectedToTargetSection(nextSection);
+            bool IsConnetableToTargetSectionRecursive(List<Section> originList, Section startSection, Section targetSection) {
+                var copyList = originList.ToList();
+                copyList.Add(startSection);
+                var adJoinSections = field.GetSectionsAdjoinWith(startSection)
+                                          .Where(s => !copyList.Contains(s) && field.IsConnectable(s, targetSection))
+                                          .OrderBy(s => field.GetDistanceBySection(s, targetSection))
+                                          .ToArray();
+                if (adJoinSections.Contains(targetSection)) {
+                    copyList.Add(targetSection);
+                    originList.Clear();
+                    originList.AddRange(copyList);
+                    return true;
                 }
+
+                for (int i = 0; i < adJoinSections.Length; i++) {
+                    var newStartSection = adJoinSections[i];
+                    var result = IsConnetableToTargetSectionRecursive(copyList, newStartSection, targetSection);
+                    if (result) {
+                        return true;
+                    }
+                }
+
+                return false;
             }
-            // =========================================================================================================
+
+            bool IsAllSectionConnected(bool isLogging, out List<Section[]> sectionGroupList) {
+                StringBuilder sb = isLogging ? null : new StringBuilder();
+                sb?.Clear();
+                sb?.Append("Branch Process Report \n");
+                // Check All Connections Completed =========================================================================
+                // 1. Grouping Sections (Connected Sections Group)
+                // 2. Find Nearest Connected Group
+                List<Connection> visitedConnections = new();
+                List<Section> visitedSections = new();
+                Dictionary<Section, Section[]> visitedDictionary = new();
+                var roomExistSections = sections.Where(s => s.ExistRoom).ToArray();
+                sb?.Append($"Room Exist SectionCount(Check Count): {roomExistSections.Length.ToString()} \n");
+                for (int i = 0; i < roomExistSections.Length; i++) {
+                    visitedConnections.Clear();
+                    visitedSections.Clear();
+
+                    var roomExistSection = roomExistSections[i];
+                    IsConnectedToTargetSection(roomExistSection);
+                    /*visitedSections.Remove(roomExistSection); // Ignore Start Section*/
+
+                    // ** 무한루프 체크 **
+                    visitedDictionary.Add(roomExistSection, visitedSections.ToArray());
+                    sb?.Append($"Start Section {roomExistSection.Index.ToString()}, Visited Section Count: {visitedSections.Count.ToString()} \n");
+                }
+
+                // Make Section Group List
+                sectionGroupList = new();
+                if (visitedDictionary.Any()) {
+                    sectionGroupList.Add(visitedDictionary.First().Value);
+                    foreach (var value in visitedDictionary.Select(pair => pair.Value)) {
+                        for (int i = 0; i < sectionGroupList.Count; i++) {
+                            // Matching Group
+                            bool isMissMatched = value.Length != sectionGroupList[i].Length;
+                            if (!isMissMatched) {
+                                for (int j = 0; j < sectionGroupList[i].Length; j++) {
+                                    var targetSection = sectionGroupList[i][j];
+                                    var find = value.SingleOrDefault(s => s == targetSection);
+                                    if (find != null)
+                                        continue;
+                                    isMissMatched = true;
+                                    break;
+                                }
+                            }
+
+                            if (isMissMatched) {
+                                if (i != sectionGroupList.Count - 1)
+                                    continue;
+                                // If you browse the Group List all the way through but cannot find it, add it to the Group List
+                                sectionGroupList.Add(value);
+                            }
+
+                            // Find Matched Section Group -> Break
+                            break;
+                        }
+                    }
+                }
+                // Print Group Section Report ==========================================================================
+                bool isConnectedAllSections = sectionGroupList.Count == 1;
+                if (isLogging) {
+                    if (isConnectedAllSections) {
+                        sb.Append("Is Connected All Sections \n");
+                        sb.Append("Process Ended. \n");
+                        CatLog.Log(sb.ToString());
+                    }
+                    else {
+                        sb.Append("Is Not Connected All Sections ! \n");
+                        sb.Append($"Section is Splited By - {sectionGroupList.Count.ToString()} \n");
+                        for (var i = 0; i < sectionGroupList.Count; i++) {
+                            var sectionGroup = sectionGroupList[i];
+                            sb.Append($"=== Group: {sectionGroup.Length.ToString()} === \n");
+                            sb.Append("=== Connected Information === \n");
+                            for (int j = 0; j < sectionGroup.Length; j++) {
+                                var section = sectionGroup[j];
+                                sb.Append($"{section.Index.ToString()}, ");
+                            }
+
+                            sb.Append('\n');
+                        }
+
+                        sb.Append("Process Ended. \n");
+                        CatLog.WLog(sb.ToString());
+                    }
+                }
+                return isConnectedAllSections;
+                // Inner Methods
+                void IsConnectedToTargetSection(Section visitSection) {
+                    visitedSections.Add(visitSection);
+                    var visitSectionConnections = connections
+                                                  .Where(c => c.To == visitSection.Index ||
+                                                              c.From == visitSection.Index)
+                                                  .ToList();
+                    if (!visitSectionConnections.Any())
+                        return;
+
+                    foreach (var connection in visitSectionConnections) {
+                        if (visitedConnections.Contains(connection))
+                            continue;
+                        visitedConnections.Add(connection);
+
+                        int nextSectionIndex =
+                            visitSection.Index == connection.To ? connection.From : connection.To;
+                        var nextSection = GetSection(nextSectionIndex);
+                        if (visitedSections.Contains(nextSection))
+                            continue;
+                        IsConnectedToTargetSection(nextSection);
+                    }
+                }
+                // =========================================================================================================
+            }
+        }
+        
+        // float배열에서 가장 길이가 짧은 대상을 찾아서 반환 Linq
+        private static float FindShortest(float[] distances)
+        {
+            return distances.Min();
         }
 
         private static void ExtendConnections(Field field)
@@ -409,7 +538,7 @@ namespace RandomDungeonWithBluePrint
 
         private static Section GetAdjoinedSection(Field field, Section target)
         {
-            var adjoinedSections = field.GetSectionsAdjoinWithRoute(target).ToList();
+            var adjoinedSections = field.GetSectionsAdjoinWithConnected(target).ToList();
             return adjoinedSections[Random.Range(0, adjoinedSections.Count)];
         }
 
@@ -541,6 +670,12 @@ namespace RandomDungeonWithBluePrint
                     sectionIndexes.RemoveAt(i);
                 }
             }
+        }
+
+        public class S2SDistance {
+            public Section s1;
+            public Section s2;
+            public float distance;
         }
     }
 }

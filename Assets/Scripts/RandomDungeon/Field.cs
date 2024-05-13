@@ -65,7 +65,7 @@ namespace RandomDungeonWithBluePrint
         }
 
         // section에 인접하고, 어느 곳이든지 Connection 연결되어 있는 Section들을 찾아 리스트로 반환
-        public IEnumerable<Section> GetSectionsAdjoinWithRoute(Section section)
+        public IEnumerable<Section> GetSectionsAdjoinWithConnected(Section section)
         {
             return GetSectionsAdjoinWith(section).Where(s => Connections.Any(c => c.ConnectedAny(s.Index)));
             // return GetSectionsAdjoinWith(section).Where(s => !IsIsolatedSection(s));
@@ -91,6 +91,22 @@ namespace RandomDungeonWithBluePrint
 
             result = sections.FirstOrDefault()?.Room;
             return result != null;
+        }
+        
+        public bool IsConnectable(Section a, Section b)
+        {
+            if (a == null || b == null) return false;
+            if (a == b) return false;
+            if (!a.AdjoinWith(b)) return false;
+            if (Connected(a, b)) return false;
+            if (!a.ExistUnconnectedJoints(a.AdjoiningWithDirection(b))) return false;
+            if (!b.ExistUnconnectedJoints(b.AdjoiningWithDirection(a))) return false;
+            return true;
+        }
+        
+        public float GetDistanceBySection(Section a, Section b)
+        {
+            return Vector2.Distance(a.Rect.center, b.Rect.center);
         }
     }
 }
