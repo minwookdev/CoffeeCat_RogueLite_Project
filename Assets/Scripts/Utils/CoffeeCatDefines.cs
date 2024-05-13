@@ -17,6 +17,14 @@ namespace CoffeeCat.Utils.Defines {
                 _                                                => throw new ArgumentOutOfRangeException(nameof(key), key, null)
             };
         }
+        
+        public static string ToStringEx(this PlayerAddressablesKey key) {
+            return key switch {
+                PlayerAddressablesKey.NONE                      => "",
+                PlayerAddressablesKey.PlayerAttack_01_Pink      => "PlayerAttack_01_Pink",
+                _                                               => throw new ArgumentOutOfRangeException(nameof(key), key, null)
+            };
+        }
     }
 
     public static class Constants {
@@ -40,6 +48,12 @@ namespace CoffeeCat.Utils.Defines {
         Skeleton_Mage_Projectile_Default,
         Skeleton_Mage_Projectile_Skill,
         GroupSpawnPositions,
+    }
+
+    public enum PlayerAddressablesKey
+    {
+        NONE,
+        PlayerAttack_01_Pink,
     }
 
     public enum Layer {

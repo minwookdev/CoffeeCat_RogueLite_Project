@@ -11,7 +11,7 @@ namespace CoffeeCat.FrameWork {
 		public Vector3 SpawnedPlayerPosition => SpawnedPlayer.Tr.position;
 
 		// Fields
-		private const string playerKey = "Player";
+		private const string playerKey = "01_FlowerMagician";
 
 		protected override void Initialize() {
 			base.Initialize();
@@ -34,8 +34,8 @@ namespace CoffeeCat.FrameWork {
 			ObjectPoolManager.Instance.Despawn(SpawnedPlayer.gameObject);
 		}
 
-		public bool IsPlayerExistAndAlive() => SpawnedPlayer && SpawnedPlayer.State != PlayerState.Dead;
+		public bool IsPlayerExistAndAlive() => SpawnedPlayer && !SpawnedPlayer.IsDead();
 
-		public bool IsPlayerNotExistOrDeath() => !SpawnedPlayer || SpawnedPlayer.State == PlayerState.Dead;
+		public bool IsPlayerNotExistOrDeath() => !SpawnedPlayer || SpawnedPlayer.IsDead();
 	}
 }

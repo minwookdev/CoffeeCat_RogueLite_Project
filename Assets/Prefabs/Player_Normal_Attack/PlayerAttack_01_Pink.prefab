@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1605916673081281649}
   - component: {fileID: 9070647098036679845}
   m_Layer: 0
-  m_Name: NormalAttack
+  m_Name: PlayerAttack_01_Pink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,7 +224,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.9836678, b: 0.5518868, a: 1}
+      maxColor: {r: 0.8396226, g: 0.2891153, b: 0.5653657, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4558,7 +4558,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 6.91591, g: 8, b: 2.7547169, a: 1}
+      maxColor: {r: 4.131186, g: 2.3189204, b: 2.760535, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

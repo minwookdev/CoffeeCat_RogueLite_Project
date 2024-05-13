@@ -40,14 +40,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1305159281282759405}
-  - component: {fileID: 8385506078983158632}
+  - component: {fileID: 3277307538316965365}
+  - component: {fileID: 7360086901526505623}
   - component: {fileID: 1305159281282759406}
   - component: {fileID: 1305159281282759407}
   - component: {fileID: 1305159281282759404}
   - component: {fileID: 6863063650883928876}
   - component: {fileID: 4854793041281363723}
   m_Layer: 7
-  m_Name: Player
+  m_Name: 01_FlowerMagician
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -71,7 +72,7 @@ Transform:
   - {fileID: 1549725742660526811}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8385506078983158632
+--- !u!114 &3277307538316965365
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -80,12 +81,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1305159281282759402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 854aea5b681b0d64aa7213c197f954cf, type: 3}
+  m_Script: {fileID: 11500000, guid: 94a4c283ca63dae4aa378ff67290986a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tr: {fileID: 1305159281282759405}
   moveSpeed: 5
   projectilePoint: {fileID: 1303632491375746209}
+  normalAttackProjectile: 1
+  attackDelay: 0.5
+  attackRange: 3.5
+  projectileSpeed: 5
+--- !u!114 &7360086901526505623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305159281282759402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 438bdb7a018e0c54dbc763fc4b765f3a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  State: 0
 --- !u!33 &1305159281282759406
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -171,7 +189,7 @@ MonoBehaviour:
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
   _animationName: 
-  loop: 1
+  loop: 0
   timeScale: 1
 --- !u!50 &6863063650883928876
 Rigidbody2D:
