@@ -6,6 +6,8 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UniRx;
 using DG.Tweening;
+using UniRx.Triggers;
+using UnityEngine.PlayerLoop;
 using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
@@ -14,10 +16,12 @@ namespace CoffeeCat
     {
         [Title("Movement")]
         [SerializeField] protected Transform tr = null;
+
         [SerializeField] protected float moveSpeed = 0;
 
         [Title("Attack")]
         [SerializeField] protected Transform projectilePoint = null;
+
         [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
         [SerializeField] protected float attackDelay = 0.5f;
         [SerializeField] protected float attackRange = 3.5f;
@@ -27,7 +31,6 @@ namespace CoffeeCat
         private bool hasFiredProjectile = false;
         private Rigidbody2D rigid = null;
 
-        // Properties
         public Transform Tr => tr;
 
         private void Start()
@@ -43,17 +46,18 @@ namespace CoffeeCat
         private void Initialize()
         {
             rigid = GetComponent<Rigidbody2D>();
-            
+
             LoadResources();
             NormalAttack();
-            
+
             StageManager.Instance.AddListenerRoomEnteringEvent(PlayerEnteredRoom);
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
         }
 
         private void LoadResources()
         {
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(),
+                                                                                    true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
@@ -62,12 +66,25 @@ namespace CoffeeCat
             var hor = Input.GetAxisRaw("Horizontal");
             var ver = Input.GetAxisRaw("Vertical");
 
-            rigid.velocity = new Vector3(hor, ver) * moveSpeed;
+            rigid.velocity = new Vector2(hor, ver) * moveSpeed;
 
-            if (rigid.velocity.x > 0)
-                transform.localScale = new Vector3(2f, transform.lossyScale.y, transform.lossyScale.z);
-            else if (rigid.velocity.x < 0)
-                transform.localScale = new Vector3(-2f, transform.lossyScale.y, transform.lossyScale.z);
+            if (isPlayerInBattle)
+                return;
+
+            if (rigid.velocity != Vector2.zero)
+                SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
+        }
+
+        private void SwitchingPlayerDirection(bool isSwitching)
+        {
+            // Default Direction is Right
+            // isSwitching : true -> Left, false -> Right
+            var lossyScale = tr.lossyScale;
+            tr.localScale = isSwitching switch
+            {
+                true  => new Vector3(-2f, lossyScale.y, lossyScale.z),
+                false => new Vector3(2f, lossyScale.y, lossyScale.z)
+            };
         }
 
         private void NormalAttack()
@@ -76,41 +93,47 @@ namespace CoffeeCat
                       .Where(_ => isPlayerInBattle)
                       .Subscribe(_ =>
                       {
-                          var monsters =
-                              Physics2D.OverlapCircleAll(Tr.position, attackRange, 1 << LayerMask.NameToLayer("Monster"));
+                          var targetMonster = FindNearestMonster();
+                          if (targetMonster == null) return;
 
-                          if (monsters.Length <= 0)
-                              return;
-                    
-                          var target = monsters[0].transform;
-                          var shortestDistance = Vector2.Distance(Tr.position, target.position);
+                          var a = (tr.position - targetMonster.position).normalized;
+                          if (a != Vector3.zero)
+                              SwitchingPlayerDirection(a.x > 0 ? true : false);
 
-                          for (int i = 1; i < monsters.Length; i++)
-                          {
-                              var distance = Vector2.Distance(Tr.position, monsters[i].transform.position);
-                        
-                              if (distance < shortestDistance)
-                                  target = monsters[i].transform;
-
-                              i++;
-                          }
+                          var direction = (targetMonster.position - projectilePoint.position).normalized;
+                          var spawnObj =
+                              ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
+                                                               projectilePoint.position);
+                          var projectile = spawnObj.GetComponent<PlayerProjectile>();
+                          projectile.SetStat(10f, projectileSpeed, direction);
+                          projectile.Fire();
                           
-                          var direction = (target.position - projectilePoint.position).normalized;
-                          var projectile = ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(), projectilePoint.position);
-
-                          // TODO : 딜레이 주고 느낌 보기
                           hasFiredProjectile = true;
-                          projectile.transform.DOMove(direction * 10f, projectileSpeed)
-                                    .SetRelative().SetSpeedBased().SetEase(Ease.Linear)
-                                    .OnStart(() =>
-                                    {
-                                        hasFiredProjectile = false;
-                                    })
-                                    .OnComplete(() =>
-                                    {
-                                        ObjectPoolManager.Instance.Despawn(projectile);
-                                    });
                       }).AddTo(this);
+
+            Transform FindNearestMonster()
+            {
+                var monsters =
+                    Physics2D.OverlapCircleAll(Tr.position, attackRange, 1 << LayerMask.NameToLayer("Monster"));
+
+                if (monsters.Length <= 0)
+                    return null;
+
+                var target = monsters[0].transform;
+                var shortestDistance = Vector2.Distance(Tr.position, target.position);
+
+                for (int i = 1; i < monsters.Length; i++)
+                {
+                    var distance = Vector2.Distance(Tr.position, monsters[i].transform.position);
+
+                    if (distance < shortestDistance)
+                        target = monsters[i].transform;
+
+                    i++;
+                }
+
+                return target;
+            }
         }
 
         /*private void OnDrawGizmos()
@@ -161,6 +184,11 @@ namespace CoffeeCat
         public bool IsAttacking()
         {
             return hasFiredProjectile;
+        }
+
+        public void FinishAttack()
+        {
+            hasFiredProjectile = false;
         }
 
         // TODO : Stat 만들고 이거 완성해

@@ -7,6 +7,7 @@ namespace CoffeeCat
     public class FlowerMagicianState : PlayerState
     {
         // TODO : 주황색 밑줄이 너무 많아ㅜ 어케 좀 해바
+        // TODO : Spine 공부
         
         protected override void Start()
         {
@@ -62,7 +63,6 @@ namespace CoffeeCat
 
         protected override void Enter_AttackState()
         {
-            // AddAnimation
             anim.AnimationState.SetAnimation(1, animAttack, false).TimeScale = 1.5f;
         }
 
@@ -80,7 +80,7 @@ namespace CoffeeCat
         protected override void Exit_AttackState()
         {
             anim.AnimationState.ClearTrack(1);
-            // anim.ClearState();
+            player.FinishAttack();
         }
 
         #endregion
