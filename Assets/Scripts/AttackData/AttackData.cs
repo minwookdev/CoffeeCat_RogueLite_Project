@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// NOTE: ³Ê¹« ¸¹ÀÌ ÇÔ¼ö·Î ºüÁ®ÀÖ´Â°Å ¼öÁ¤. ÇÔ¼ö È£Ãâµµ °øÂ¥´Â ¾Æ´Ï¶ó±¸ ÇÔ´Ï´Ù..
 namespace CoffeeCat.Datas {
     // Keep Less Than 16Byte
     public struct AttackData {
@@ -12,48 +11,48 @@ namespace CoffeeCat.Datas {
                 CalculatedDamage = 0f, IsCritical = false
             };
 
-            // Ä¡¸íÅ¸ ¹ß»ı °è»ê
+            // ì¹˜ëª…íƒ€ ë°œìƒ ê³„ì‚°
             attackData.IsCritical = (attackerStat.CriticalChance - defenderStat.CriticalResist) >= Random.Range(1f, 100f);
 
-            // ÃÖ¼Ò ~ ÃÖ´ë µ¥¹ÌÁö ¹üÀ§ ³» »êÃâ
+            // ìµœì†Œ ~ ìµœëŒ€ ë°ë¯¸ì§€ ë²”ìœ„ ë‚´ ì‚°ì¶œ
             attackData.CalculatedDamage = Random.Range(attackerStat.MinDamage, attackerStat.MaxDamage);
 
-            // Ä¡¸íÅ¸ ¹ß»ı ½Ã µ¥¹ÌÁö¿¡ Ä¡¸íÅ¸ ¹èÀ² Àû¿ë
+            // ì¹˜ëª…íƒ€ ë°œìƒ ì‹œ ë°ë¯¸ì§€ì— ì¹˜ëª…íƒ€ ë°°ìœ¨ ì ìš©
             attackData.CalculatedDamage *= (attackData.IsCritical) ? attackerStat.CriticalDamageMultiplier : 1f;
 
-            // ¹æ¾îÀÚ ¹æ¾î ¼öÄ¡ ¹× °üÅë·Â ¼öÄ¡ °è»ê
+            // ë°©ì–´ì ë°©ì–´ ìˆ˜ì¹˜ ë° ê´€í†µë ¥ ìˆ˜ì¹˜ ê³„ì‚°
             float penetratedArmorValue = defenderStat.Defence - attackerStat.Penetration;
             penetratedArmorValue = (penetratedArmorValue < 0f) ? 0f : penetratedArmorValue;
             attackData.CalculatedDamage -= penetratedArmorValue;
 
-            // ¸¶ÀÌ³Ê½º µ¥¹ÌÁö º¸Á¤
+            // ë§ˆì´ë„ˆìŠ¤ ë°ë¯¸ì§€ ë³´ì •
             attackData.CalculatedDamage = (attackData.CalculatedDamage < 0f) ? 0f : attackData.CalculatedDamage;
             return attackData;
         }
 
         public static AttackData GetMonsterSkillAttackData(MonsterStat attackerStat, MonsterSkillStat attackerSkillStat, TempPlayerStat defenderStat) {
             var attackData = new AttackData() { 
-                CalculatedDamage= 0f, IsCritical = false
+                CalculatedDamage= 20f, IsCritical = false
             };
 
-            // Ä¡¸íÅ¸ ¹ß»ı °è»ê
+            // ì¹˜ëª…íƒ€ ë°œìƒ ê³„ì‚°
             attackData.IsCritical = (attackerStat.CriticalChance - defenderStat.CriticalResist) >= Random.Range(1f, 100f);
 
-            // ÃÖ¼Ò ~ ÃÖ´ë µ¥¹ÌÁö ¹üÀ§ ³» »êÃâ
+            // ìµœì†Œ ~ ìµœëŒ€ ë°ë¯¸ì§€ ë²”ìœ„ ë‚´ ì‚°ì¶œ
             attackData.CalculatedDamage = Random.Range(attackerStat.MinDamage, attackerStat.MaxDamage);
 
-            // *½ºÅ³ µ¥¹ÌÁö ¹èÀ² °ø½Ä Àû¿ë
+            // *ìŠ¤í‚¬ ë°ë¯¸ì§€ ë°°ìœ¨ ê³µì‹ ì ìš©
             attackData.CalculatedDamage = attackerSkillStat.Damage + (attackData.CalculatedDamage * attackerSkillStat.Ratio);
 
-            // Ä¡¸íÅ¸ ¹ß»ı ½Ã µ¥¹ÌÁö¿¡ Ä¡¸íÅ¸ ¹èÀ² Àû¿ë
+            // ì¹˜ëª…íƒ€ ë°œìƒ ì‹œ ë°ë¯¸ì§€ì— ì¹˜ëª…íƒ€ ë°°ìœ¨ ì ìš©
             attackData.CalculatedDamage *= (attackData.IsCritical) ? attackerStat.CriticalDamageMultiplier : 1f;
 
-            // ¹æ¾îÀÚ ¹æ¾î ¼öÄ¡ ¹× °üÅë·Â ¼öÄ¡ °è»ê
+            // ë°©ì–´ì ë°©ì–´ ìˆ˜ì¹˜ ë° ê´€í†µë ¥ ìˆ˜ì¹˜ ê³„ì‚°
             float penetratedArmorValue = defenderStat.Defence - attackerStat.Penetration;
             penetratedArmorValue = (penetratedArmorValue < 0f) ? 0f : penetratedArmorValue;
             attackData.CalculatedDamage -= penetratedArmorValue;
 
-            // ¸¶ÀÌ³Ê½º µ¥¹ÌÁö º¸Á¤
+            // ë§ˆì´ë„ˆìŠ¤ ë°ë¯¸ì§€ ë³´ì •
             attackData.CalculatedDamage = (attackData.CalculatedDamage < 0f) ? 0f : attackData.CalculatedDamage;
             return attackData;
         }
@@ -68,20 +67,20 @@ namespace CoffeeCat.Datas {
 #if UNITY_EDITOR
         #region DAMAGE_FORMULA
         private void IsCriticalCalc(float attackerCritChangeValue, float defenderCritResistValue) {
-            IsCritical = (attackerCritChangeValue - defenderCritResistValue) >= Random.Range(1f, 100f); // ÀúÇ×À» °è»êÇÑ Ä¡¸íÅ¸ ¹ß»ı Ã¼Å©
+            IsCritical = (attackerCritChangeValue - defenderCritResistValue) >= Random.Range(1f, 100f); // ì €í•­ì„ ê³„ì‚°í•œ ì¹˜ëª…íƒ€ ë°œìƒ ì²´í¬
         }
 
         private void CalcDamageInRange(float attackerMinDamageValue, float attackerMaxDamageValue) {
-            CalculatedDamage = Random.Range(attackerMinDamageValue, attackerMaxDamageValue); // (ÃÖ¼Ò~ÃÖ´ë)¹üÀ§ ³» µ¥¹ÌÁö ¼öÄ¡ ±¸ÇÔ
+            CalculatedDamage = Random.Range(attackerMinDamageValue, attackerMaxDamageValue); // (ìµœì†Œ~ìµœëŒ€)ë²”ìœ„ ë‚´ ë°ë¯¸ì§€ ìˆ˜ì¹˜ êµ¬í•¨
         }
 
         private void CalcCriticalMultiplier(float attackerCriticalChangeValue) {
-            CalculatedDamage = CalculatedDamage * ((IsCritical) ? attackerCriticalChangeValue : 1f); // Ä¡¸íÅ¸ À¯¹«¿¡ µû¸¥ Ä¡¸íÅ¸ ½Â¼ö °è»ê
+            CalculatedDamage = CalculatedDamage * ((IsCritical) ? attackerCriticalChangeValue : 1f); // ì¹˜ëª…íƒ€ ìœ ë¬´ì— ë”°ë¥¸ ì¹˜ëª…íƒ€ ìŠ¹ìˆ˜ ê³„ì‚°
         }
 
         private void CalcArmorAndPenetration(float attackerPenetrationValue, float defenderArmorValue) {
-            float penetratedArmorValue = (defenderArmorValue - attackerPenetrationValue) < 0f ? 0f : defenderArmorValue; // 1) °üÅë·Â ¼öÄ¡¸¸Å­ ¹æ¾î ¼öÄ¡ Â÷°¨
-            CalculatedDamage = CalculatedDamage - penetratedArmorValue;                                                  // 2) µ¥¹ÌÁö ¼öÄ¡¿¡¼­ °üÅë·Â Àû¿ëµÈ ¹æ¾î·Â ¼öÄ¡¸¸Å­ Â÷°¨
+            float penetratedArmorValue = (defenderArmorValue - attackerPenetrationValue) < 0f ? 0f : defenderArmorValue; // 1) ê´€í†µë ¥ ìˆ˜ì¹˜ë§Œí¼ ë°©ì–´ ìˆ˜ì¹˜ ì°¨ê°
+            CalculatedDamage = CalculatedDamage - penetratedArmorValue;                                                  // 2) ë°ë¯¸ì§€ ìˆ˜ì¹˜ì—ì„œ ê´€í†µë ¥ ì ìš©ëœ ë°©ì–´ë ¥ ìˆ˜ì¹˜ë§Œí¼ ì°¨ê°
         }
 
         private void CalcDamageBySkillRatio(float attackerSkillDefaultDamageValue, float attackerSkillRatioValue) {

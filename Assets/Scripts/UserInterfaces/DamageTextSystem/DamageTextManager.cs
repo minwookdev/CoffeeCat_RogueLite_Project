@@ -27,7 +27,7 @@ namespace CoffeeCat {
         }
 
         /// <summary>
-        /// ¾À ÁøÀÔ ÈÄ ¹İµå½Ã ÇÑ¹ø È£ÃâÇØ¾ß DamageText±â´É »ç¿ë °¡´É
+        /// ì”¬ ì§„ì… í›„ ë°˜ë“œì‹œ í•œë²ˆ í˜¸ì¶œí•´ì•¼ DamageTextê¸°ëŠ¥ ì‚¬ìš© ê°€ëŠ¥
         /// </summary>
         /// <param name="textRenderCanvas"></param>
         /// <param name="damageTextParent"></param>
@@ -65,7 +65,7 @@ namespace CoffeeCat {
         }
 
         /// <summary>
-        /// ¾À Á¤¸®µÉ ¶§ È£Ãâ (ÇöÀç ¾À Á¤º¸ ÇØÁ¦)
+        /// ì”¬ ì •ë¦¬ë  ë•Œ í˜¸ì¶œ (í˜„ì¬ ì”¬ ì •ë³´ í•´ì œ)
         /// </summary>
         /// <param name="sceneName"></param>
         private void Clear(SceneName sceneName) {

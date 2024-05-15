@@ -403,7 +403,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: clip_skeleton_mage_death
+  m_Name: clip_death
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
