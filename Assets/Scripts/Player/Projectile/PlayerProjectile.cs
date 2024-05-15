@@ -11,6 +11,8 @@ namespace CoffeeCat
         private Transform tr = null;
         
         // TODO : 공격 타입 추가
+        // TODO : 몬스터 충돌 시 Despawn
+        
         private float damage = 0;
         private float speed = 0;
         private Vector3 direction = Vector3.zero;

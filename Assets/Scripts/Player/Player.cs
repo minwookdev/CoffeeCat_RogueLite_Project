@@ -136,6 +136,14 @@ namespace CoffeeCat
             }
         }
 
+        private void Hit()
+        {
+            // 몬스터와 닿았을 때 Hit 판정?
+            // 몬스터 Projectile과 충돌
+            // 대미지 계산 후 HP 감소
+            
+        }
+
         /*private void OnDrawGizmos()
         {
             Gizmos.color = Color.white;
