@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
+using EMonsterState = CoffeeCat.MonsterState.EnumMonsterState;
 
 namespace CoffeeCat {
     public class MonsterStatus : MonoBehaviour {
@@ -30,19 +32,48 @@ namespace CoffeeCat {
             state.SetStat(CurrentStat);
         }
 
-        private void Damaged(in AttackData attackData) {
+        /*private void Update() {
+            if (Input.GetKeyDown(KeyCode.P)) {
+                var testAttackData = new AttackData() { CalculatedDamage = 20f };
+                OnDamaged(testAttackData);
+            }
+        }*/
+
+        public void OnDamaged(in AttackData attackData, Vector2 collisionPoint = default, float knockBackForce = 0f) {
+            if (state.State == EMonsterState.Death)
+                return;
+            
+            // KnockBack Process
+            Vector2 knockBackDirection = Vector2.zero;
+            if (collisionPoint != default && knockBackForce > 0f) {
+                knockBackDirection = (Vector2)transform.position - collisionPoint;
+                knockBackDirection.Normalize();
+                state.AddForceToDirection(knockBackDirection, knockBackForce);
+            }
+            
+            // Damage Process
             float finalCalculatedDamageCount = attackData.CalculatedDamage;
             float tempHealthPoint = CurrentStat.HP - finalCalculatedDamageCount;
             if (tempHealthPoint < 0f) {
                 CurrentStat.HP = 0f;
-
-                // Set Monster Death
+                state.OnDeath();
             }
             else {
                 CurrentStat.HP = tempHealthPoint;
+                state.OnTakeDamage();
             }
 
-            //int floatingDamgeCount = Mathf.RoundToInt(damageCount);
+            int floatingCount = Mathf.RoundToInt(finalCalculatedDamageCount);
+            CatLog.Log($"damage count: {floatingCount.ToString()}");
+
+            /*if (knockBackDirection != Vector2.zero) {
+                DamageTextManager.Instance.OnReflectingText(floatingCount, transform.position, knockBackDirection);   
+            }
+            else {
+                Vector2 flaotingStartPos = transform.position;
+                flaotingStartPos.y += 1f;
+                DamageTextManager.Instance.OnFloatingText(floatingCount, transform.position);
+            }*/
         }
 
         private void Attack(in AttackData attackData) {

@@ -88,6 +88,7 @@ MonoBehaviour:
   - {fileID: 1395606766852402249}
   - {fileID: 8526929189839575205}
   isDefaultSpriteFlipX: 0
+  deathAnimDuration: 0.81666666
   moveSpeed: 4
   attackAbleSqrDistance: 10
   attackAbleDistanceMultiplier: 3

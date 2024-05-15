@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
@@ -31,6 +32,12 @@ namespace CoffeeCat {
 		protected override void Initialize() {
 			base.Initialize();
 			rigidBody.drag = linearDrag;
+			deathTimerObservable = Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
+			                                 .DoOnSubscribe(() => { /*CatLog.Log("DoOnSubscribe");*/ })
+			                                 .Skip(0)
+			                                 .TakeUntilDisable(this)
+			                                 .Publish()
+			                                 .RefCount();
 		}
 
 		protected override void OnActivated() {
@@ -94,7 +101,9 @@ namespace CoffeeCat {
 		#region DEATH
 
 		protected override void OnEnterDeathState() {
-			base.OnEnterDeathState();
+			anim.SetInteger(animHash, 2);
+			deathTimerObservable?.Subscribe(_ => { Despawn(); })
+			                    .AddTo(this);
 		}
 
 		protected override void OnUpdateDeathState() {

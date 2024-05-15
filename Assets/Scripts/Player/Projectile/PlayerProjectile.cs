@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using DG.Tweening;
 using UnityEngine;
@@ -40,5 +42,21 @@ namespace CoffeeCat
             speed = projectileSpeed;
             direction = fireDirection;
         }
+
+        // Attack Monster Sample
+        /*private void OnCollisionEnter2D(Collision2D other) 
+        {
+            if (!other.gameObject.TryGetComponent(out MonsterStatus status)) 
+                return;
+            var testAttackData = new AttackData() { CalculatedDamage = 10 }; // Do Not Use Like This !!
+            status.OnDamaged(testAttackData, other.GetContact(0).point);     // Use Contact Point
+        }*/
+
+        /*private void OnTriggerEnter2D(Collider2D other) {
+            if (!other.gameObject.TryGetComponent(out MonsterStatus status)) 
+                return;
+            var testAttackData = new AttackData() { CalculatedDamage = damage }; // Do Not Use Like This !!
+            status.OnDamaged(testAttackData, tr.position);                       // Use Projectile Position When Collision
+        }*/
     }
 }

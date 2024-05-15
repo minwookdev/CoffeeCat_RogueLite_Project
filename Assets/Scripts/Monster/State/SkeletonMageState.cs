@@ -1,8 +1,10 @@
+using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.Defines;
 using CoffeeCat.Utils;
+using UniRx;
 
 namespace CoffeeCat
 {
@@ -41,6 +43,12 @@ namespace CoffeeCat
         protected override void Initialize()
         {
             base.Initialize();
+            deathTimerObservable = Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
+                                             .DoOnSubscribe(() => { /*CatLog.Log("DoOnSubscribe");*/ })
+                                             .Skip(0)
+                                             .TakeUntilDisable(this)
+                                             .Publish()
+                                             .RefCount();
         }
 
         protected override void OnActivated() => StateChange(EnumMonsterState.Idle);
@@ -117,9 +125,10 @@ namespace CoffeeCat
 
         #region DEATH
 
-        protected override void OnEnterDeathState()
-        {
+        protected override void OnEnterDeathState() {
             anim.SetInteger(animStateHash, 2);
+            deathTimerObservable?.Subscribe(_ => { Despawn(); })
+                                .AddTo(this);
         }
 
         protected override void OnUpdateDeathState()

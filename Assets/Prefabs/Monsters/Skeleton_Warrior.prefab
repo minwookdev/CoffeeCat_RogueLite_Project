@@ -257,6 +257,7 @@ MonoBehaviour:
   - {fileID: 4235725238525127421}
   - {fileID: 992003376628216518}
   isDefaultSpriteFlipX: 0
+  deathAnimDuration: 0.81666666
   moveSpeed: 2.5
   sqrDistanceToAttack: 1.5
   attackStateAnimationSpeedRatio: 2

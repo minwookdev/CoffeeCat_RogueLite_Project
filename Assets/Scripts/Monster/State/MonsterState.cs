@@ -6,6 +6,10 @@ using Sirenix.OdinInspector;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
+#if UNITY_EDITOR    
+using UnityEditor;
+using UnityEditor.Animations;
+#endif
 
 namespace CoffeeCat {
     public class MonsterState : MonoBehaviour {
@@ -19,17 +23,21 @@ namespace CoffeeCat {
             Death,
         }
         
+        // Order 0
         [TitleGroup("State", order: 0), ShowInInspector, ReadOnly] 
         public EnumMonsterState State { get; private set; } = EnumMonsterState.None;
         
-        [TitleGroup("Models", order: 1), SerializeField] 
+        // Order 1
+        [TitleGroup("Models & Animation", order: 1), SerializeField]
         protected SpriteRenderer sprite = null;
-        [TitleGroup("Models", order: 1), SerializeField] 
+        [TitleGroup("Models & Animation", order: 1), SerializeField]
         protected SpriteRenderer[] sprites = null;
-        [TitleGroup("Models", order: 1), SerializeField] 
-        public bool isDefaultSpriteFlipX = false;
-        // Default Sprite Renderer Direction is Right 
-
+        [TitleGroup("Models & Animation", order: 1)]
+        public bool isDefaultSpriteFlipX = false; // Default Sprite Renderer Direction is Right 
+        [TitleGroup("Models & Animation", order: 1), ReadOnly]
+        public float deathAnimDuration = 0f;
+        
+        // Order 2
         [TitleGroup("Movement", order: 2), SerializeField] 
         protected float moveSpeed = 8f;
 
@@ -40,6 +48,7 @@ namespace CoffeeCat {
         protected Collider2D bodyCollider = null;
         protected Rigidbody2D rigidBody = null;
         private float originAnimationSpeed = 0f;
+        protected IObservable<long> deathTimerObservable = null;
 
         protected virtual void Initialize() {
             tr = GetComponent<Transform>();
@@ -105,7 +114,6 @@ namespace CoffeeCat {
             }
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
         protected void StateChange(EnumMonsterState targetState, float delaySeconds = 0f) {
             if (delaySeconds <= 0) {
                 Execute();
@@ -222,6 +230,10 @@ namespace CoffeeCat {
         protected void RestoreAnimationSpeed() => anim.speed = originAnimationSpeed;
 
         public virtual void OnTakeDamage() { }
+
+        public virtual void OnDeath() {
+            StateChange(EnumMonsterState.Death);
+        }
         
         /// <summary>
         /// Returns the direction and arrival status of the monster from the current monster's location to the player.
@@ -245,8 +257,69 @@ namespace CoffeeCat {
         
         protected void SetVelocity(Vector2 direction, float speed) => rigidBody.velocity = direction * speed;
 
+        public void AddForceToDirection(Vector2 direction, float forceValue) {
+            rigidBody.AddForce(direction * forceValue, ForceMode2D.Force);
+        }
+        
         protected void SetVelocityZero() => rigidBody.velocity = Vector2.zero;
 
+        protected void Despawn() {
+            if (ObjectPoolManager.IsExist) {
+                if (ObjectPoolManager.Instance.IsExistInPoolDictionary(gameObject.name)) {
+                    ObjectPoolManager.Instance.Despawn(gameObject);
+                    return;
+                }
+            }
+            Destroy(gameObject);
+        }
+
+        #endregion
+        
+        #region Editor
+
+        [Button("Bake Animation Data", ButtonSizes.Medium), PropertySpace(10), PropertyOrder(99)]
+        public void BakeAnimationData() {
+#if UNITY_EDITOR
+            // Try Get Animation Controller 
+            if (TryGetComponent(out Animator animator) == false) {
+                CatLog.ELog("Failed To Get Animator Component !");
+                return;
+            }
+            var animatorController = animator.runtimeAnimatorController as AnimatorController;
+            if (animatorController == null) {
+                CatLog.ELog("Animator does not have an AnimatorController.");
+                return;
+            }
+
+            // Loop through each layer in the Animator Controller For Find Death Animation
+            bool isFindDeathAnimation = false;
+            foreach (AnimatorControllerLayer layer in animatorController.layers) {
+                // Loop through each state in the layer
+                foreach (ChildAnimatorState state in layer.stateMachine.states) {
+                    // Get the Motion associated with the state
+                    Motion motion = state.state.motion;
+
+                    // If the Motion is an AnimationClip, we can access its details
+                    if (motion is AnimationClip clip) {
+                        // Logging Animation Info's
+                        /*CatLog.Log("Animation Clip Name: " + clip.name);
+                        CatLog.Log("Animation Clip Length: " + clip.length);*/
+
+                        // You can add more details you want to retrieve here
+                        if (clip.name != "clip_death") 
+                            continue;
+                        deathAnimDuration = clip.length;
+                        isFindDeathAnimation = true;
+                    }
+                }
+            }
+
+            if (!isFindDeathAnimation) {
+                CatLog.ELog($"Failed To Find DeathAnimation In AnimatorController. name: {gameObject.name}");
+            }
+#endif
+        }
+        
         #endregion
     }
 }

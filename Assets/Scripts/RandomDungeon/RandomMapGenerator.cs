@@ -61,7 +61,7 @@ namespace RandomDungeonWithBluePrint
                 
                 ExecuteGenerate();
                 DisplayRoomType();
-                DisplayMonsterSpawnPoint();
+                /*DisplayMonsterSpawnPoint();*/
                 
                 onGeneratedMapCompleted?.Invoke(field);
             });
@@ -84,7 +84,7 @@ namespace RandomDungeonWithBluePrint
                 // UnityEvent에서 Manager에 접근할 가능성이 있기 때문에 Awake에서 호출을 피하기 위함
                 onGeneratedMapCompleted?.Invoke(field);
                 DisplayRoomType();
-                DisplayMonsterSpawnPoint();
+                /*DisplayMonsterSpawnPoint();*/
             }
             
             // Generate PathFind Grid
@@ -92,11 +92,11 @@ namespace RandomDungeonWithBluePrint
                 pathFindGrid.CreateGridDictionary(this);
             }
 
-            var gatePoints = field.Gates.Select(gate => gate.Position);
+            /*var gatePoints = field.Gates.Select(gate => gate.Position);
             foreach (var point in gatePoints) {
                 Vector2 spawnPoint = new Vector2(point.x, point.y);
                 ObjectPoolManager.Instance.Spawn<Transform>("Guide_Circle2D", spawnPoint);
-            }
+            }*/
         }
         
         private void Create(BluePrintWithWeight bluePrintWeight) {

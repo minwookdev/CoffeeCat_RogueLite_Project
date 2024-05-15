@@ -105,6 +105,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1176587554426099300, guid: a78e8c072a5c5aa4eab51cbca99c0b08, type: 3}
+      propertyPath: deathAnimDuration
+      value: 1.0833334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176587554426099300, guid: a78e8c072a5c5aa4eab51cbca99c0b08, type: 3}
       propertyPath: sprites.Array.size
       value: 2
       objectReference: {fileID: 0}
