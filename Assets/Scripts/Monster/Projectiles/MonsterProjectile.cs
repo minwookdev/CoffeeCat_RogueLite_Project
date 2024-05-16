@@ -6,7 +6,7 @@ using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 
-// NOTE: ½Ã°£¿¡ µû¶ó º¯È­ÇÏ´Â ¿©·¯ ActiveTypeÀ» °¡Áú ¼ö ÀÖµµ·Ï ±â´É È®Àå
+// NOTE: ì‹œê°„ì— ë”°ë¼ ë³€í™”í•˜ëŠ” ì—¬ëŸ¬ ActiveTypeì„ ê°€ì§ˆ ìˆ˜ ìˆë„ë¡ ê¸°ëŠ¥ í™•ì¥
 namespace CoffeeCat {
     public class MonsterProjectile : Projectile {
         public enum ActiveType {
@@ -51,7 +51,7 @@ namespace CoffeeCat {
             SetBaseComponents();
             statData = monsterStatData;
 
-            // Despawn ¿¹¾à
+            // Despawn ì˜ˆì•½
             if (maxLifeTime != -1f) {
                 ObjectPoolManager.Instance.Despawn(this.gameObject, maxLifeTime);
             }
@@ -126,14 +126,14 @@ namespace CoffeeCat {
         }
 
         protected virtual void OnTriggerEnterWithPlayer(Collider2D playerCollider) {
-            if (playerCollider.TryGetComponent(out TempPlayer player) == false) {
+            if (playerCollider.TryGetComponent(out PlayerStatus player) == false) {
                 return;
             }
 
             // Get Attack Angle
-            Vector2 collisionPoint = playerCollider.ClosestPoint(tr.position);
+            /*Vector2 collisionPoint = playerCollider.ClosestPoint(tr.position);
             Vector2 collisionDirection = Math2DHelper.GetNormalizedDirection(collisionPoint, player.transform.position);
-            DamageToPlayer(player, collisionPoint, collisionDirection);
+            DamageToPlayer(player, collisionPoint, collisionDirection);*/
         }
 
         protected virtual void OnCollisionEnterWithTargetLayer(Collision2D collision) {
@@ -146,14 +146,14 @@ namespace CoffeeCat {
 
         #region DAMAGING
 
-        protected virtual void DamageToPlayer(TempPlayer player, Vector2 collisionPoint, Vector2 collisionDirection) {
+        protected virtual void DamageToPlayer(PlayerStatus player, Vector2 collisionPoint, Vector2 collisionDirection) {
             if (this.statData == null) {
                 CatLog.ELog("Monster Stat Data is Null.");
                 return;
             }
 
-            var attackData = AttackData.GetMonsterAttackData(statData, player.Stats);
-            player.OnDamaged(attackData, collisionPoint, collisionDirection);
+            /*var attackData = DamageData.GetDamageData(statData, player.Stats);*/
+            /*player.OnDamaged(attackData, collisionPoint, collisionDirection);*/
             ObjectPoolManager.Instance.Despawn(this.gameObject);
         }
 

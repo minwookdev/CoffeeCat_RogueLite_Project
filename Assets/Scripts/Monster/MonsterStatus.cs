@@ -32,27 +32,26 @@ namespace CoffeeCat {
             state.SetStat(CurrentStat);
         }
 
-        /*private void Update() {
-            if (Input.GetKeyDown(KeyCode.P)) {
-                var testAttackData = new AttackData() { CalculatedDamage = 20f };
-                OnDamaged(testAttackData);
-            }
-        }*/
+        private void Update() {
+            if (!Input.GetKeyDown(KeyCode.P)) return;
+            var testAttackData = new DamageData() { CalculatedDamage = 20f };
+            OnDamaged(testAttackData, true);
+        }
 
-        public void OnDamaged(in AttackData attackData, Vector2 collisionPoint = default, float knockBackForce = 0f) {
+        public void OnDamaged(in DamageData data, bool useDamageText, Vector2 collisionPoint = default, float force = 0f) {
             if (state.State == EMonsterState.Death)
                 return;
             
             // KnockBack Process
             Vector2 knockBackDirection = Vector2.zero;
-            if (collisionPoint != default && knockBackForce > 0f) {
+            if (collisionPoint != default && force > 0f) {
                 knockBackDirection = (Vector2)transform.position - collisionPoint;
                 knockBackDirection.Normalize();
-                state.AddForceToDirection(knockBackDirection, knockBackForce);
+                state.AddForceToDirection(knockBackDirection, force);
             }
             
             // Damage Process
-            float finalCalculatedDamageCount = attackData.CalculatedDamage;
+            float finalCalculatedDamageCount = data.CalculatedDamage;
             float tempHealthPoint = CurrentStat.HP - finalCalculatedDamageCount;
             if (tempHealthPoint < 0f) {
                 CurrentStat.HP = 0f;
@@ -63,20 +62,23 @@ namespace CoffeeCat {
                 state.OnTakeDamage();
             }
 
+            if (!useDamageText)
+                return;
+            
             int floatingCount = Mathf.RoundToInt(finalCalculatedDamageCount);
             CatLog.Log($"damage count: {floatingCount.ToString()}");
 
-            /*if (knockBackDirection != Vector2.zero) {
-                DamageTextManager.Instance.OnReflectingText(floatingCount, transform.position, knockBackDirection);   
+            if (knockBackDirection != Vector2.zero) {
+                DamageTextManager.Instance.OnReflectingText(floatingCount, collisionPoint, knockBackDirection);   
             }
             else {
                 Vector2 flaotingStartPos = transform.position;
-                flaotingStartPos.y += 1f;
+                flaotingStartPos.y += 1.2f;
                 DamageTextManager.Instance.OnFloatingText(floatingCount, transform.position);
-            }*/
+            }
         }
 
-        private void Attack(in AttackData attackData) {
+        private void Attack(in DamageData damageData) {
 
         }
     }
