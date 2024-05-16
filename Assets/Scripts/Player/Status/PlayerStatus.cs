@@ -6,12 +6,23 @@ namespace CoffeeCat
 {
     public class PlayerStatus : MonoBehaviour
     {
-        // 임시
-        public float hp = 100;
-        public float maxHp = 100;
-        public float attack = 10;
-        public float defense = 5;
+        // 기본 스탯
+        public float hp = 0;
+        public float maxHp = 0;
+        public float defense = 0;
+        public float moveSpeed = 0;
+        public float invincibleTime = 0;
         
-        // TODO : move, attack 관련 변수들 여기로 옮기기
+        // 발사체 스탯
+        public float attackDelay = 0;
+        public float attackRange = 0;
+        public float projectileSpeed = 0;
+        
+        // 공격력 스탯
+        public float attackPower = 0;
+        public float criticalChance = 0;
+        public float criticalResistance = 0;
+        public float criticalDamageMultiplier = 0;
+        public float penetration = 0;
     }
 }

@@ -1,0 +1,17 @@
+﻿[
+  {
+    "Index": 0.0,
+    "Name": "FlowerMagician",
+    "HealthPoint": 100.0,
+    "Defense": 5.0,
+    "MoveSpeed": 5.0,
+    "InvincibleTime": 0.5,
+    "AttackDelay": 0.5,
+    "AttackRange": 3.5,
+    "ProjectileSpeed": 5.0,
+    "AttackPower": 10.0,
+    "CriticalChance": 0.03,
+    "CriticalResistance": 0.0,
+    "Penetration": 0.0
+  }
+]

@@ -5,7 +5,29 @@ namespace CoffeeCat.Datas {
     public struct AttackData {
         public float CalculatedDamage; // 4B
         public bool IsCritical;        // 1B
+        
+        public static AttackData GetMonsterCollisionData(MonsterStat attackerStat, TempPlayerStat defenderStat) 
+        {
+            var attackData = new AttackData()
+            {
+                CalculatedDamage = 0f, IsCritical = false
+            };
 
+            // 단순 충돌 대미지니까 치명타 발생 X
+
+            // 최소 ~ 최대 데미지 범위 내 산출
+            attackData.CalculatedDamage = Random.Range(attackerStat.MinDamage, attackerStat.MaxDamage);
+
+            // 방어자 방어 수치 및 관통력 수치 계산
+            float penetratedArmorValue = defenderStat.Defence - attackerStat.Penetration;
+            penetratedArmorValue = (penetratedArmorValue < 0f) ? 0f : penetratedArmorValue;
+            attackData.CalculatedDamage -= penetratedArmorValue;
+
+            // 마이너스 데미지 보정
+            attackData.CalculatedDamage = (attackData.CalculatedDamage < 0f) ? 0f : attackData.CalculatedDamage;
+            return attackData;
+        }
+        
         public static AttackData GetMonsterAttackData(MonsterStat attackerStat, TempPlayerStat defenderStat) {
             var attackData = new AttackData() {
                 CalculatedDamage = 0f, IsCritical = false

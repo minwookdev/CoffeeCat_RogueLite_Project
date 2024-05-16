@@ -105,6 +105,7 @@ namespace CoffeeCat
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
                                                                projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerProjectile>();
+                          // TODO : 대미지 계산에 필요한 정보 넘겨주기
                           projectile.SetStat(10f, projectileSpeed, direction);
                           projectile.Fire();
                           
@@ -138,10 +139,24 @@ namespace CoffeeCat
 
         private void Hit()
         {
-            // 몬스터와 닿았을 때 Hit 판정?
-            // 몬스터 Projectile과 충돌
-            // 대미지 계산 후 HP 감소
             
+            // 
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            // 충돌 판정
+            // 대미지를 입히는 충돌체 : 몬스터 / 몬스터 스킬, 몬스터 Projectile
+            // 몬스터 : 현재 스킬 발동중이 아니라면
+            // 몬스터 스킬 : 현재 스킬 발동중이라면 (대쉬 등)
+            
+            // 충돌이 일어남
+            // 대상 판별 : 어떻게? 충돌체의 태그로 판별?
+            // OnTriggerEnter2D로 충돌 판정
+            
+            if (!other.gameObject.TryGetComponent(out MonsterStatus status))
+                return;
+
         }
 
         /*private void OnDrawGizmos()
