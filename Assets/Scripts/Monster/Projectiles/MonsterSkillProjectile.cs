@@ -5,7 +5,7 @@ using CoffeeCat.Datas;
 using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 
-// NOTE: °¢Á¾ ÀÌº¥Æ®(Ãæµ¹, µ¥¹ÌÁö, ½Ã°£°æ°ú)¿¡ µû¶ó Ãß°¡ÀûÀÎ Åõ»çÃ¼¸¦ »ı¼ºÇÏ´Â AfterTask ±¸Çö
+// NOTE: ê°ì¢… ì´ë²¤íŠ¸(ì¶©ëŒ, ë°ë¯¸ì§€, ì‹œê°„ê²½ê³¼)ì— ë”°ë¼ ì¶”ê°€ì ì¸ íˆ¬ì‚¬ì²´ë¥¼ ìƒì„±í•˜ëŠ” AfterTask êµ¬í˜„
 namespace CoffeeCat {
     public class MonsterSkillProjectile : MonsterProjectile {
         [Title("Skill Projectile Datas")]
@@ -30,7 +30,7 @@ namespace CoffeeCat {
 
             public ActiveCondition Cond { get; private set; } = ActiveCondition.NONE;
             
-            // Ãß°¡ÀûÀÎ Åõ»çÃ¼ »ı¼º Å°
+            // ì¶”ê°€ì ì¸ íˆ¬ì‚¬ì²´ ìƒì„± í‚¤
             //[SerializeField] private ProjectileSkillKey Key = ProjectileSkillKey.NONE;
 
             public void Active() {
@@ -86,14 +86,14 @@ namespace CoffeeCat {
 
         #region DAMAGED
 
-        protected override void DamageToPlayer(TempPlayer player, Vector2 collisionPoint, Vector2 collisionDirection) {
+        protected override void DamageToPlayer(PlayerStatus player, Vector2 collisionPoint, Vector2 collisionDirection) {
             if (statData == null || skillData == null) {
                 CatLog.ELog("Monster Projectiles Stat or Skill Data is Null.");
                 return;
             }
 
-            var attackData = AttackData.GetMonsterSkillAttackData(statData, skillData, player.Stats);
-            player.OnDamaged(attackData, collisionPoint, collisionDirection);
+            /*var attackData = DamageData.GetDamageData(statData, skillData, player.Stats);
+            player.OnDamaged(attackData, collisionPoint, collisionDirection);*/
             ObjectPoolManager.Instance.Despawn(this.gameObject);
         }
 

@@ -82,8 +82,8 @@ namespace CoffeeCat {
 
         public void OnFloatingText(string damageCountStr, Vector2 startPosition) {
             var spawnedDamageText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity, textsParentRectTr);
-            Vector2 playPosition = UIHelper.WorldPositionToCanvasAnchoredPosition(mainCamera, startPosition, targetCanvas.GetComponent<RectTransform>());
-            spawnedDamageText.OnFloating(playPosition, damageCountStr);
+            spawnedDamageText.OnFloating(startPosition, damageCountStr);
+            /*Vector2 playPosition = UIHelper.WorldPositionToCanvasAnchoredPosition(mainCamera, startPosition, targetCanvas.GetComponent<RectTransform>());*/
         }
 
         public void OnReflectingText(float damageCount, Vector2 startPosition, Vector2 direction) {
