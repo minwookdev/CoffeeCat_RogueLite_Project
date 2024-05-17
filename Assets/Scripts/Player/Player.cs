@@ -135,7 +135,7 @@ namespace CoffeeCat
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
                                                                projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerProjectile>();
-                          projectile.AttackData = ProjectileDamageData.GetData(status);
+                          projectile.AttackData = new ProjectileDamageData(status);
                           projectile.Fire(direction, status.ProjectileSpeed, projectilePoint.position);
 
                           hasFiredProjectile = true;
