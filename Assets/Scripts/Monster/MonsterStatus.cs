@@ -73,8 +73,8 @@ namespace CoffeeCat {
             }
             else {
                 Vector2 flaotingStartPos = transform.position;
-                flaotingStartPos.y += 1.2f;
-                DamageTextManager.Instance.OnFloatingText(floatingCount, transform.position);
+                flaotingStartPos.y += 1.5f;
+                DamageTextManager.Instance.OnFloatingText(floatingCount, flaotingStartPos);
             }
         }
 
