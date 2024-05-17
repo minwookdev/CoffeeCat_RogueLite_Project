@@ -136,7 +136,7 @@ namespace CoffeeCat
                                                                projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerProjectile>();
                           projectile.AttackData = ProjectileDamageData.GetData(status);
-                          projectile.Fire(direction, status.ProjectileSpeed);
+                          projectile.Fire(direction, status.ProjectileSpeed, projectilePoint.position);
 
                           hasFiredProjectile = true;
                       }).AddTo(this);
