@@ -66,7 +66,7 @@ namespace CoffeeCat {
                 return;
             
             int floatingCount = Mathf.RoundToInt(finalCalculatedDamageCount);
-            CatLog.Log($"damage count: {floatingCount.ToString()}");
+            // CatLog.Log($"damage count: {floatingCount.ToString()}");
 
             if (knockBackDirection != Vector2.zero) {
                 DamageTextManager.Instance.OnReflectingText(floatingCount, collisionPoint, knockBackDirection);   
