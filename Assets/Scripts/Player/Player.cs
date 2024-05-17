@@ -135,8 +135,8 @@ namespace CoffeeCat
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
                                                                projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerProjectile>();
-                          projectile.AttackData = new ProjectileDamageData(status);
-                          projectile.Fire(direction, status.ProjectileSpeed);
+                          projectile.AttackData = ProjectileDamageData.GetData(status);
+                          projectile.Fire(direction, status.ProjectileSpeed, projectilePoint.position);
 
                           hasFiredProjectile = true;
                       }).AddTo(this);
@@ -183,17 +183,18 @@ namespace CoffeeCat
             status.CurrentHp -= damageData.CalculatedDamage;
         }
 
-        private void OnTriggerEnter2D(Collider2D other) {
+        private void OnTriggerEnter2D(Collider2D other)
+        {
             // 충돌 판정
             // 대미지를 입히는 충돌체 : 몬스터 / 몬스터 스킬, 몬스터 Projectile
             // 몬스터 : 현재 스킬 발동중이 아니라면
             // 몬스터 스킬 : 현재 스킬 발동중이라면 (대쉬 등)
 
             // Monster와 충돌
-            if (!other.gameObject.TryGetComponent(out MonsterStatus monsterStatus)) 
-                return;
-            var damageData = DamageData.GetData(monsterStatus.CurrentStat, status);
-            Hit(damageData);
+            if (other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
+            {
+                // status.OnDamaged();
+            }
         }
 
         /*private void OnDrawGizmos()

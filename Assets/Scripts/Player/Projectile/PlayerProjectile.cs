@@ -13,41 +13,37 @@ namespace CoffeeCat
     public class PlayerProjectile : MonoBehaviour
     {
         private Transform tr = null;
-        private Tweener fireProjectileTween = null;
-        
+
         public ProjectileDamageData AttackData { get; set; } = null;
 
         private void Awake()
         {
             tr = GetComponent<Transform>();
         }
-        
-        public void Fire(Vector3 direction, float speed)
+
+        public void Fire(Vector3 direction, float speed, Vector3 startPos)
         {
+            tr.DORewind();
             tr.DOMove(direction * 10f, speed)
-                      .SetRelative().SetSpeedBased().SetEase(Ease.Linear).SetDelay(0.1f)
-                      .OnComplete(() =>
-                      {
-                          // TODO : 이거 이상해
-                          ObjectPoolManager.Instance.Despawn(gameObject);
-                      }).Restart();
+              .SetRelative().SetSpeedBased().SetEase(Ease.Linear).SetDelay(0.1f).From(startPos)
+              .OnComplete(() => ObjectPoolManager.Instance.Despawn(gameObject));
         }
 
         // Attack Monster Sample
-        private void OnTriggerEnter2D(Collider2D other) 
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.gameObject.TryGetComponent(out MonsterStatus monsterStat)) 
+            if (!other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
                 return;
-            
+
             var damageData =
-                DamageData.GetData(AttackData, monsterStat.CurrentStat); // Do Not Use Like This !!
-            monsterStat.OnDamaged(damageData, true);      // Use Contact Point
+                DamageData.GetDamageData(AttackData, monsterStat.CurrentStat); // Do Not Use Like This !!
+            monsterStat.OnDamaged(damageData, true);                           // Use Contact Point
 
             ObjectPoolManager.Instance.Despawn(gameObject);
         }
 
         /*private void OnTriggerEnter2D(Collider2D other) {
-            if (!other.gameObject.TryGetComponent(out MonsterStatus status)) 
+            if (!other.gameObject.TryGetComponent(out MonsterStatus status))
                 return;
             var testAttackData = new AttackData() { CalculatedDamage = damage }; // Do Not Use Like This !!
             status.OnDamaged(testAttackData, tr.position);                       // Use Projectile Position When Collision
