@@ -14,7 +14,7 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(ProjectileDamageData attacker, PlayerStatus defender)
+        public static DamageData GetData(ProjectileDamageData attacker, PlayerStatus defender)
         {
             var damageData = new DamageData();
 
@@ -47,7 +47,7 @@ namespace CoffeeCat.Datas {
         /// <param name="skillStat"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(MonsterStat attacker, PlayerStatus defender)
+        public static DamageData GetData(MonsterStat attacker, PlayerStatus defender)
         {
             var damageData = new DamageData();
 
@@ -80,7 +80,7 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(ProjectileDamageData attacker, MonsterStat defender)
+        public static DamageData GetData(ProjectileDamageData attacker, MonsterStat defender)
         {
             var damageData = new DamageData();
 
@@ -112,7 +112,7 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(PlayerStatus attacker, MonsterStat defender)
+        public static DamageData GetData(PlayerStatus attacker, MonsterStat defender)
         {
             var damageData = new DamageData();
 

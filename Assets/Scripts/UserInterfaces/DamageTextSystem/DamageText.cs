@@ -10,7 +10,7 @@ namespace CoffeeCat.UI {
         public Transform Tr { get; private set; }
         private TextMeshPro damageTmp = null;
         private Color originColor = Color.white;
-        private readonly float defaultMoveDistance = 3f;
+        private readonly float defaultMoveDistance = 1.5f;
         
         // 1. Change Damage Text ui -> world GameObject
         // 2. SetAsSibling
