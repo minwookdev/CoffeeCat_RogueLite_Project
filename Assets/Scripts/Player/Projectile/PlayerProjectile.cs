@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using DG.Tweening;
@@ -8,49 +9,42 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
+    // TODO : 공격타입?
     public class PlayerProjectile : MonoBehaviour
     {
         private Transform tr = null;
+        private Tweener fireProjectileTween = null;
         
-        // TODO : 공격 타입 추가
-        // TODO : 몬스터 충돌 시 Despawn
-        
-        private float damage = 0;
-        private float speed = 0;
-        private Vector3 direction = Vector3.zero;
-        
-        public float Damage => damage;
-        
+        public ProjectileDamageData AttackData { get; set; } = null;
+
         private void Awake()
         {
             tr = GetComponent<Transform>();
         }
         
-        public void Fire()
+        public void Fire(Vector3 direction, float speed)
         {
             tr.DOMove(direction * 10f, speed)
                       .SetRelative().SetSpeedBased().SetEase(Ease.Linear).SetDelay(0.1f)
                       .OnComplete(() =>
                       {
+                          // TODO : 이거 이상해
                           ObjectPoolManager.Instance.Despawn(gameObject);
-                      });
-        }
-        
-        public void SetStat(float playerAttack, float projectileSpeed, Vector3 fireDirection)
-        {
-            damage = playerAttack;
-            speed = projectileSpeed;
-            direction = fireDirection;
+                      }).Restart();
         }
 
         // Attack Monster Sample
-        /*private void OnCollisionEnter2D(Collision2D other) 
+        private void OnTriggerEnter2D(Collider2D other) 
         {
-            if (!other.gameObject.TryGetComponent(out MonsterStatus status)) 
+            if (!other.gameObject.TryGetComponent(out MonsterStatus monsterStat)) 
                 return;
-            var testAttackData = new AttackData() { CalculatedDamage = 10 }; // Do Not Use Like This !!
-            status.OnDamaged(testAttackData, other.GetContact(0).point);     // Use Contact Point
-        }*/
+            
+            var damageData =
+                DamageData.GetDamageData(AttackData, monsterStat.CurrentStat); // Do Not Use Like This !!
+            monsterStat.OnDamaged(damageData, true);      // Use Contact Point
+
+            ObjectPoolManager.Instance.Despawn(gameObject);
+        }
 
         /*private void OnTriggerEnter2D(Collider2D other) {
             if (!other.gameObject.TryGetComponent(out MonsterStatus status)) 

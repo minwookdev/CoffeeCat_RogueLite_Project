@@ -84,13 +84,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a4c283ca63dae4aa378ff67290986a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tr: {fileID: 1305159281282759405}
-  moveSpeed: 5
-  projectilePoint: {fileID: 1303632491375746209}
   normalAttackProjectile: 1
-  attackDelay: 0.5
-  attackRange: 3.5
-  projectileSpeed: 5
+  tr: {fileID: 1305159281282759405}
+  projectilePoint: {fileID: 1303632491375746209}
 --- !u!114 &7360086901526505623
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +128,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6f6a875aac9d66a40b86530fd8c2cc01, type: 2}
+  - {fileID: 2100000, guid: 1cfbe8b1841399145a5e997a40c94413, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -188,7 +184,7 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: 
+  _animationName: Stun
   loop: 1
   timeScale: 1
 --- !u!50 &6863063650883928876

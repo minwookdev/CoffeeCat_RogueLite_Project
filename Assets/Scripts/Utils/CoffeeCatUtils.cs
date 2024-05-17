@@ -11,7 +11,7 @@ namespace CoffeeCat.Utils {
         }
 
         /// <summary>
-        /// LayerMask¿¡ ´ÜÀÏ ·¹ÀÌ¾î¸¸ µî·ÏµÇ¾îÀÖÀ» °æ¿ì¸¸ ÀÛµ¿
+        /// LayerMaskì— ë‹¨ì¼ ë ˆì´ì–´ë§Œ ë“±ë¡ë˜ì–´ìˆì„ ê²½ìš°ë§Œ ì‘ë™
         /// </summary>
         /// <param name="layerMask"></param>
         /// <returns></returns>
@@ -21,17 +21,17 @@ namespace CoffeeCat.Utils {
     }
 
     /// <summary>
-    /// 2D ÁÂÇ¥°è °ü·Ã ±â´É
+    /// 2D ì¢Œí‘œê³„ ê´€ë ¨ ê¸°ëŠ¥
     /// </summary>
     public static class Math2DHelper {
         public static bool IsFront(Transform tr1, Transform tr2) {
             return false;
-            // º¤ÅÍÀÇ ³»Àû »ç¿ëÇØ¼­ Æ¯Á¤ ¿ÀºêÁ§Æ®°¡ ¾Õ¿¡ÀÖ´ÂÁö µÚ¿¡ÀÖ´ÂÁö ÆÇº°ÇÏ´Â ÇÔ¼ö
+            // ë²¡í„°ì˜ ë‚´ì  ì‚¬ìš©í•´ì„œ íŠ¹ì • ì˜¤ë¸Œì íŠ¸ê°€ ì•ì—ìˆëŠ”ì§€ ë’¤ì—ìˆëŠ”ì§€ íŒë³„í•˜ëŠ” í•¨ìˆ˜
         }
 
         public static bool IsLeft(Transform tr1, Transform tr2) {
             return false;
-            // º¤ÅÍÀÇ ¿ÜÀûÀ» È°¿ëÇØ¼­ Æ¯Á¤ ¿ÀºêÁ§Æ®°¡ ¿ŞÂÊ¿¡ÀÖ´ÂÁö ¿À¸¥ÂÊ¿¡ÀÖ´ÂÁö ÆÇº°ÇÏ´Â ÇÔ¼ö
+            // ë²¡í„°ì˜ ì™¸ì ì„ í™œìš©í•´ì„œ íŠ¹ì • ì˜¤ë¸Œì íŠ¸ê°€ ì™¼ìª½ì—ìˆëŠ”ì§€ ì˜¤ë¥¸ìª½ì—ìˆëŠ”ì§€ íŒë³„í•˜ëŠ” í•¨ìˆ˜
         }
 
         public static Vector2 GetNormalizedDirection(Vector2 from, Vector2 to) {
@@ -41,7 +41,7 @@ namespace CoffeeCat.Utils {
         public static Vector2 GetDirection(Vector2 from, Vector2 to) => to - from;
 
         /// <summary>
-        /// QuaternionÀ¸·Î ¹İÈ¯
+        /// Quaternionìœ¼ë¡œ ë°˜í™˜
         /// </summary>
         /// <param name="direction"></param>
         /// <param name="offsetDegreeValue"></param>
@@ -52,7 +52,7 @@ namespace CoffeeCat.Utils {
         }
 
         /// <summary>
-        /// Degree·Î ¹İÈ¯
+        /// Degreeë¡œ ë°˜í™˜
         /// </summary>
         /// <param name="direction"></param>
         /// <param name="offsetDegreeValue"></param>
@@ -62,7 +62,7 @@ namespace CoffeeCat.Utils {
         }
 
         /// <summary>
-        /// »ç¿ë±İÁö (GetPointByDirectionÀ» »ç¿ëÇÕ´Ï´Ù)
+        /// ì‚¬ìš©ê¸ˆì§€ (GetPointByDirectionì„ ì‚¬ìš©í•©ë‹ˆë‹¤)
         /// </summary>
         /// <param name="originVec2"></param>
         /// <param name="directionVec2"></param>
@@ -74,7 +74,7 @@ namespace CoffeeCat.Utils {
         }
 
         /// <summary>
-        /// »ç¿ë±İÁö (GetPointByDirectionÀ» »ç¿ëÇÕ´Ï´Ù)
+        /// ì‚¬ìš©ê¸ˆì§€ (GetPointByDirectionì„ ì‚¬ìš©í•©ë‹ˆë‹¤)
         /// </summary>
         /// <param name="startPoint"></param>
         /// <param name="direction"></param>
@@ -99,7 +99,7 @@ namespace CoffeeCat.Utils {
         }
 
         /// <summary>
-        /// Rect ¹üÀ§³» Á¸ÀçÇÏ´ÂÁö ¹İÈ¯
+        /// Rect ë²”ìœ„ë‚´ ì¡´ì¬í•˜ëŠ”ì§€ ë°˜í™˜
         /// </summary>
         /// <param name="rect"></param>
         /// <param name="position"></param>
@@ -135,16 +135,16 @@ namespace CoffeeCat.Utils {
     }
 
     /// <summary>
-    /// UIÁÂÇ¥ °ü·Ã ±â´É (class¸í ¼öÁ¤)
+    /// UIì¢Œí‘œ ê´€ë ¨ ê¸°ëŠ¥ (classëª… ìˆ˜ì •)
     /// </summary>
     public static class UIHelper {
         /// <summary>
-        /// WorldÁÂÇ¥¿¡¼­ Canvas°ø°£ RectTransformÁÂÇ¥·Î º¯È¯
+        /// Worldì¢Œí‘œì—ì„œ Canvasê³µê°„ RectTransformì¢Œí‘œë¡œ ë³€í™˜
         /// </summary>
         /// <param name="worldPosition">Target World Position</param>
         /// <param name="rectTransform"></param>
-        /// <param name="targetCamera">World PositionÀ» ºñÃß°í ÀÖ´Â Camera</param>
-        /// <param name="uiCanvasCamera">RectTransformÀÇ Canvas¿Í ¿¬°áµÈ Ä«¸Ş¶ó (¾ø´Ù¸é ºñ¿öµÒ)</param>
+        /// <param name="targetCamera">World Positionì„ ë¹„ì¶”ê³  ìˆëŠ” Camera</param>
+        /// <param name="uiCanvasCamera">RectTransformì˜ Canvasì™€ ì—°ê²°ëœ ì¹´ë©”ë¼ (ì—†ë‹¤ë©´ ë¹„ì›Œë‘ )</param>
         /// <returns></returns>
         public static Vector2 ConvertWorldToCanvasPosition(Vector3 worldPosition, RectTransform rectTransform,
                                                            Camera targetCamera, Camera uiCanvasCamera = null) {

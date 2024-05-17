@@ -1,7 +1,9 @@
 using UnityEngine;
 
 namespace CoffeeCat.Datas {
-    public struct DamageData {         // Keep Less Than 16Byte
+    public struct DamageData
+    {
+        // Keep Less Than 16Byte
         public float CalculatedDamage; // 4B
         public bool IsCritical;        // 1B
         // TODO: +- 값 보정
@@ -12,11 +14,12 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(ProjectileDamageData attacker, PlayerStatExample defender) {
+        public static DamageData GetDamageData(ProjectileDamageData attacker, PlayerStatus defender)
+        {
             var damageData = new DamageData();
 
             // 치명타 발생 계산
-            damageData.IsCritical = (attacker.CriticalChance - defender.CriticalResist) >= Random.Range(1f, 100f);
+            damageData.IsCritical = (attacker.CriticalChance - defender.CriticalResistance) >= Random.Range(1f, 100f);
 
             // 최소 ~ 최대 데미지 범위 내 산출
             /*damageData.CalculatedDamage = Random.Range(attackerStat.MinDamage, attackerStat.MaxDamage);*/
@@ -44,14 +47,16 @@ namespace CoffeeCat.Datas {
         /// <param name="skillStat"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(MonsterStat attacker, PlayerStatExample defender) {
+        public static DamageData GetDamageData(MonsterStat attacker, PlayerStatus defender)
+        {
             var damageData = new DamageData();
 
             // 치명타 발생 계산
-            damageData.IsCritical = (attacker.CriticalChance - defender.CriticalResist) >= Random.Range(1f, 100f);
+            damageData.IsCritical = (attacker.CriticalChance - defender.CriticalResistance) >= Random.Range(1f, 100f);
 
             // 최소 ~ 최대 데미지 범위 내 산출
-            damageData.CalculatedDamage = Random.Range(attacker.Damage - (attacker.Damage * attacker.DamageDeviation), attacker.Damage + (attacker.Damage * attacker.DamageDeviation));
+            damageData.CalculatedDamage = Random.Range(attacker.Damage - (attacker.Damage * attacker.DamageDeviation),
+                                                       attacker.Damage + (attacker.Damage * attacker.DamageDeviation));
 
             // *스킬 데미지 배율 공식 적용
             /*damageData.CalculatedDamage = data.SkillDamage + (data.Damage * data.SkillCoefficient);*/
@@ -75,7 +80,8 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(ProjectileDamageData attacker, MonsterStat defender) {
+        public static DamageData GetDamageData(ProjectileDamageData attacker, MonsterStat defender)
+        {
             var damageData = new DamageData();
 
             // 치명타 발생 계산
@@ -106,14 +112,16 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetDamageData(PlayerStatExample attacker, MonsterStat defender) {
+        public static DamageData GetDamageData(PlayerStatus attacker, MonsterStat defender)
+        {
             var damageData = new DamageData();
 
             // 치명타 발생 계산
             damageData.IsCritical = (attacker.CriticalChance - defender.CriticalResist) >= Random.Range(1f, 100f);
 
             // 최소 ~ 최대 데미지 범위 내 산출
-            damageData.CalculatedDamage = Random.Range(attacker.Damage - (attacker.Damage * attacker.DamageDeviation), attacker.Damage + (attacker.Damage * attacker.DamageDeviation));
+            damageData.CalculatedDamage = Random.Range(attacker.AttackPower - (attacker.AttackPower * attacker.DamageDeviation),
+                                                       attacker.AttackPower + (attacker.AttackPower * attacker.DamageDeviation));
 
             // *스킬 데미지 배율 공식 적용
             /*damageData.CalculatedDamage = data.SkillDamage + (data.Damage * data.SkillCoefficient);*/
@@ -130,31 +138,6 @@ namespace CoffeeCat.Datas {
             damageData.CalculatedDamage = (damageData.CalculatedDamage < 0f) ? 0f : damageData.CalculatedDamage;
             return damageData;
         }
-        
-#if UNITY_EDITOR
-        #region DAMAGE_FORMULA
-        private void IsCriticalCalc(float attackerCritChangeValue, float defenderCritResistValue) {
-            IsCritical = (attackerCritChangeValue - defenderCritResistValue) >= Random.Range(1f, 100f); // 저항을 계산한 치명타 발생 체크
-        }
-
-        private void CalcDamageInRange(float attackerMinDamageValue, float attackerMaxDamageValue) {
-            CalculatedDamage = Random.Range(attackerMinDamageValue, attackerMaxDamageValue); // (최소~최대)범위 내 데미지 수치 구함
-        }
-
-        private void CalcCriticalMultiplier(float attackerCriticalChangeValue) {
-            CalculatedDamage = CalculatedDamage * ((IsCritical) ? attackerCriticalChangeValue : 1f); // 치명타 유무에 따른 치명타 승수 계산
-        }
-
-        private void CalcArmorAndPenetration(float attackerPenetrationValue, float defenderArmorValue) {
-            float penetratedArmorValue = (defenderArmorValue - attackerPenetrationValue) < 0f ? 0f : defenderArmorValue; // 1) 관통력 수치만큼 방어 수치 차감
-            CalculatedDamage = CalculatedDamage - penetratedArmorValue;                                                  // 2) 데미지 수치에서 관통력 적용된 방어력 수치만큼 차감
-        }
-
-        private void CalcDamageBySkillRatio(float attackerSkillDefaultDamageValue, float attackerSkillRatioValue) {
-            CalculatedDamage = attackerSkillDefaultDamageValue + (CalculatedDamage * attackerSkillRatioValue); // attackerSkillRatioValue = 0f(0%) ~ 1f(100%)
-        }
-        #endregion
-#endif
     }
 
     [System.Serializable]
@@ -166,10 +149,10 @@ namespace CoffeeCat.Datas {
         public float SkillDamage = 100f;
         public float SkillCoefficient = 1f;
 
-        public static ProjectileDamageData GetData(PlayerStatExample stat) {
+        public static ProjectileDamageData GetData(PlayerStatus stat) {
             var data = new ProjectileDamageData();
             // 최소 ~ 최대 데미지 범위 내 산출
-            data.Damage = Random.Range(stat.Damage - (stat.Damage * stat.DamageDeviation), stat.Damage + (stat.Damage * stat.DamageDeviation));
+            data.Damage = Random.Range(stat.AttackPower - (stat.AttackPower * stat.DamageDeviation), stat.AttackPower + (stat.AttackPower * stat.DamageDeviation));
             data.CriticalChance = stat.CriticalChance;
             data.CriticalMultiplier = stat.CriticalMultiplier;
             data.Penetration = stat.Penetration;

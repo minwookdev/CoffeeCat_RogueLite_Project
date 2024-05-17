@@ -1,52 +1,77 @@
 using System;
-using Spine.Unity;
+using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UniRx;
-using DG.Tweening;
-using UniRx.Triggers;
-using UnityEngine.PlayerLoop;
 using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
 {
     public class Player : MonoBehaviour
     {
-        [Title("Movement")]
-        [SerializeField] protected Transform tr = null;
-
-        [SerializeField] protected float moveSpeed = 0;
+        [Title("Status")]
+        [ShowInInspector] private PlayerStatus status;
 
         [Title("Attack")]
+        [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
+
+        [Title("Transform")]
+        [SerializeField] protected Transform tr = null;
+
         [SerializeField] protected Transform projectilePoint = null;
 
-        [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
-        [SerializeField] protected float attackDelay = 0.5f;
-        [SerializeField] protected float attackRange = 3.5f;
-        [SerializeField] protected float projectileSpeed = 5.0f;
-
+        private Rigidbody2D rigid = null;
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
-        private Rigidbody2D rigid = null;
+        private bool isPlayerDamaged = false;
 
         public Transform Tr => tr;
+        public PlayerStatus Status => status;
 
         private void Start()
         {
+            rigid = GetComponent<Rigidbody2D>();
             Initialize();
         }
+
+        private float time = 0;
+        private bool isInvincible = false;
 
         private void Update()
         {
             Movement();
+
+            // test
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                if (isInvincible)
+                    return;
+
+                isPlayerDamaged = true;
+                isInvincible = true;
+            }
+
+            if (isInvincible)
+            {
+                time += Time.deltaTime;
+                if (time >= status.InvincibleTime)
+                {
+                    isInvincible = false;
+                    time = 0;
+                }
+            }
+        }
+
+        public void FinishHitAnimation()
+        {
+            isPlayerDamaged = false;
         }
 
         private void Initialize()
         {
-            rigid = GetComponent<Rigidbody2D>();
-
+            SetStatus();
             LoadResources();
             NormalAttack();
 
@@ -61,12 +86,17 @@ namespace CoffeeCat
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
+        private void SetStatus()
+        {
+            status = new PlayerStatus(StageManager.Instance.LoadPlayerStatus(0));
+        }
+
         private void Movement()
         {
             var hor = Input.GetAxisRaw("Horizontal");
             var ver = Input.GetAxisRaw("Vertical");
 
-            rigid.velocity = new Vector2(hor, ver) * moveSpeed;
+            rigid.velocity = new Vector2(hor, ver) * status.MoveSpeed;
 
             if (isPlayerInBattle)
                 return;
@@ -89,7 +119,7 @@ namespace CoffeeCat
 
         private void NormalAttack()
         {
-            Observable.Interval(TimeSpan.FromSeconds(attackDelay))
+            Observable.Interval(TimeSpan.FromSeconds(status.AttackDelay))
                       .Where(_ => isPlayerInBattle)
                       .Subscribe(_ =>
                       {
@@ -105,17 +135,16 @@ namespace CoffeeCat
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
                                                                projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerProjectile>();
-                          // TODO : 대미지 계산에 필요한 정보 넘겨주기
-                          projectile.SetStat(10f, projectileSpeed, direction);
-                          projectile.Fire();
-                          
+                          projectile.AttackData = ProjectileDamageData.GetData(status);
+                          projectile.Fire(direction, status.ProjectileSpeed);
+
                           hasFiredProjectile = true;
                       }).AddTo(this);
 
             Transform FindNearestMonster()
             {
                 var monsters =
-                    Physics2D.OverlapCircleAll(Tr.position, attackRange, 1 << LayerMask.NameToLayer("Monster"));
+                    Physics2D.OverlapCircleAll(Tr.position, status.AttackRange, 1 << LayerMask.NameToLayer("Monster"));
 
                 if (monsters.Length <= 0)
                     return null;
@@ -137,10 +166,21 @@ namespace CoffeeCat
             }
         }
 
-        private void Hit()
+        private void Hit(DamageData damageData)
         {
-            
-            // 
+            if (isPlayerDamaged)
+                return;
+
+            isPlayerDamaged = true;
+
+            if (status.CurrentHp <= 0)
+            {
+                status.CurrentHp = 0;
+                // Dead state로 변경
+            }
+
+            isPlayerDamaged = true;
+            status.CurrentHp -= damageData.CalculatedDamage;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -149,14 +189,12 @@ namespace CoffeeCat
             // 대미지를 입히는 충돌체 : 몬스터 / 몬스터 스킬, 몬스터 Projectile
             // 몬스터 : 현재 스킬 발동중이 아니라면
             // 몬스터 스킬 : 현재 스킬 발동중이라면 (대쉬 등)
-            
-            // 충돌이 일어남
-            // 대상 판별 : 어떻게? 충돌체의 태그로 판별?
-            // OnTriggerEnter2D로 충돌 판정
-            
-            if (!other.gameObject.TryGetComponent(out MonsterStatus status))
-                return;
 
+            // Monster와 충돌
+            if (other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
+            {
+                // status.OnDamaged();
+            }
         }
 
         /*private void OnDrawGizmos()
@@ -212,6 +250,11 @@ namespace CoffeeCat
         public void FinishAttack()
         {
             hasFiredProjectile = false;
+        }
+
+        public bool IsDamaged()
+        {
+            return isPlayerDamaged;
         }
 
         // TODO : Stat 만들고 이거 완성해
