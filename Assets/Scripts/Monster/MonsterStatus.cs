@@ -66,15 +66,15 @@ namespace CoffeeCat {
                 return;
             
             int floatingCount = Mathf.RoundToInt(finalCalculatedDamageCount);
-            CatLog.Log($"damage count: {floatingCount.ToString()}");
+            // CatLog.Log($"damage count: {floatingCount.ToString()}");
 
             if (knockBackDirection != Vector2.zero) {
                 DamageTextManager.Instance.OnReflectingText(floatingCount, collisionPoint, knockBackDirection);   
             }
             else {
                 Vector2 flaotingStartPos = transform.position;
-                flaotingStartPos.y += 1.2f;
-                DamageTextManager.Instance.OnFloatingText(floatingCount, transform.position);
+                flaotingStartPos.y += 1.5f;
+                DamageTextManager.Instance.OnFloatingText(floatingCount, flaotingStartPos);
             }
         }
 
