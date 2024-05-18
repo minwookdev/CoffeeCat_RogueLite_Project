@@ -36,8 +36,8 @@ namespace CoffeeCat
                 return;
 
             var damageData =
-                DamageData.GetDamageData(AttackData, monsterStat.CurrentStat); // Do Not Use Like This !!
-            monsterStat.OnDamaged(damageData, true);                           // Use Contact Point
+                DamageData.GetData(AttackData, monsterStat.CurrentStat);
+            monsterStat.OnDamaged(damageData, true, tr.position, 5f);
 
             ObjectPoolManager.Instance.Despawn(gameObject);
         }

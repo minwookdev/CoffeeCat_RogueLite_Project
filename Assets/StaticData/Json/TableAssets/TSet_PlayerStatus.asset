@@ -16,7 +16,7 @@ MonoBehaviour:
   Index: 0
   Name: FlowerMagician
   HealthPoint: 100
-  Defense: 5
+  Defense: 1
   MoveSpeed: 5
   InvincibleTime: 0.5
   AttackDelay: 0.5

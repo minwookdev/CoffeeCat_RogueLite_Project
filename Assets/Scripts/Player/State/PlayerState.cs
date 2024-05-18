@@ -29,6 +29,7 @@ namespace CoffeeCat
         protected readonly string animWalk = "Walk_NoHand";
         protected readonly string animAttack = "Attack_2";
         protected readonly string animHit = "Hit";
+        protected readonly string animDead = "Die_2";
 
         protected virtual void Start()
         {

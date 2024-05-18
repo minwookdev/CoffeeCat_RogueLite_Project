@@ -1,10 +1,12 @@
 using System;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UniRx;
+using UniRx.Triggers;
 using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
@@ -26,6 +28,8 @@ namespace CoffeeCat
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
         private bool isPlayerDamaged = false;
+        private bool isInvincible = false;
+        private bool isDead = false;
 
         public Transform Tr => tr;
         public PlayerStatus Status => status;
@@ -36,9 +40,6 @@ namespace CoffeeCat
             Initialize();
         }
 
-        private float time = 0;
-        private bool isInvincible = false;
-
         private void Update()
         {
             Movement();
@@ -46,27 +47,9 @@ namespace CoffeeCat
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
-                if (isInvincible)
-                    return;
-
-                isPlayerDamaged = true;
-                isInvincible = true;
+                DamageData damageData = new DamageData() { CalculatedDamage = 50 };
+                OnDamaged(damageData);
             }
-
-            if (isInvincible)
-            {
-                time += Time.deltaTime;
-                if (time >= status.InvincibleTime)
-                {
-                    isInvincible = false;
-                    time = 0;
-                }
-            }
-        }
-
-        public void FinishHitAnimation()
-        {
-            isPlayerDamaged = false;
         }
 
         private void Initialize()
@@ -74,6 +57,9 @@ namespace CoffeeCat
             SetStatus();
             LoadResources();
             NormalAttack();
+
+            // test
+            CheckInvincibleTime();
 
             StageManager.Instance.AddListenerRoomEnteringEvent(PlayerEnteredRoom);
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
@@ -93,6 +79,9 @@ namespace CoffeeCat
 
         private void Movement()
         {
+            if (isDead)
+                return;
+            
             var hor = Input.GetAxisRaw("Horizontal");
             var ver = Input.GetAxisRaw("Vertical");
 
@@ -120,6 +109,7 @@ namespace CoffeeCat
         private void NormalAttack()
         {
             Observable.Interval(TimeSpan.FromSeconds(status.AttackDelay))
+                      .Where(_ => !isDead)
                       .Where(_ => isPlayerInBattle)
                       .Subscribe(_ =>
                       {
@@ -166,34 +156,51 @@ namespace CoffeeCat
             }
         }
 
-        private void Hit(DamageData damageData)
+        private void OnDamaged(DamageData damageData)
         {
-            if (isPlayerDamaged)
+            if (isInvincible)
                 return;
 
             isPlayerDamaged = true;
-
+            status.CurrentHp -= damageData.CalculatedDamage;
+            
             if (status.CurrentHp <= 0)
             {
                 status.CurrentHp = 0;
-                // Dead state로 변경
+                OnDead();
             }
+        }
 
-            isPlayerDamaged = true;
-            status.CurrentHp -= damageData.CalculatedDamage;
+        private void OnDead()
+        {
+            isDead = true;
+            rigid.velocity = Vector2.zero;
+        }
+
+        private void CheckInvincibleTime()
+        {
+            this.ObserveEveryValueChanged(_ => isPlayerDamaged)
+                .Skip(TimeSpan.Zero)
+                .Where(_ => isPlayerDamaged)
+                .Select(_ => isInvincible)
+                .Subscribe(_ =>
+                {
+                    isInvincible = true;
+                    Observable.Timer(TimeSpan.FromSeconds(status.InvincibleTime))
+                              .Subscribe(__ => isInvincible = false);
+                }).AddTo(this);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // 충돌 판정
-            // 대미지를 입히는 충돌체 : 몬스터 / 몬스터 스킬, 몬스터 Projectile
-            // 몬스터 : 현재 스킬 발동중이 아니라면
-            // 몬스터 스킬 : 현재 스킬 발동중이라면 (대쉬 등)
+            // TODO : 몬스터 대시 스킬 발동 시 충돌
 
             // Monster와 충돌
             if (other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
             {
-                // status.OnDamaged();
+                var damageData = DamageData.GetData(monsterStat.CurrentStat, status);
+                CatLog.Log($"Player_OnTriggerEnter2D_{monsterStat.name} : {damageData.CalculatedDamage.ToString()}");
+                OnDamaged(damageData);
             }
         }
 
@@ -247,7 +254,7 @@ namespace CoffeeCat
             return hasFiredProjectile;
         }
 
-        public void FinishAttack()
+        public void FinishAttackAnimation()
         {
             hasFiredProjectile = false;
         }
@@ -257,10 +264,15 @@ namespace CoffeeCat
             return isPlayerDamaged;
         }
 
+        public void FinishHitAnimation()
+        {
+            isPlayerDamaged = false;
+        }
+
         // TODO : Stat 만들고 이거 완성해
         public bool IsDead()
         {
-            return false;
+            return isDead;
         }
     }
 }

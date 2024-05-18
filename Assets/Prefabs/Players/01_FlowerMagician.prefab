@@ -184,7 +184,7 @@ MonoBehaviour:
     materialsInsideMask: []
     materialsOutsideMask: []
   disableRenderingOnOverride: 1
-  _animationName: Stun
+  _animationName: 
   loop: 1
   timeScale: 1
 --- !u!50 &6863063650883928876

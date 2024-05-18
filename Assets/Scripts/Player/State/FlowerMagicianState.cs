@@ -1,26 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using CoffeeCat.Utils;
+using Spine;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace CoffeeCat
 {
     public class FlowerMagicianState : PlayerState
     {
+        private TrackEntry currentTrack = null;
+
         protected override void Start()
         {
             base.Start();
             player = GetComponent<Player_FlowerMagician>();
         }
-        
+
         #region IDLE
 
         protected override void Enter_IdleState()
         {
-            anim.AnimationState.SetAnimation(0, animIdle, true);
+            currentTrack = anim.AnimationState.SetAnimation(0, animIdle, true);
         }
 
         protected override void Update_IdleState()
         {
+            if (player.IsDead())
+                ChangeState(EnumPlayerState.Dead);
             if (player.IsDamaged())
                 ChangeState(EnumPlayerState.Hit);
             if (player.IsAttacking())
@@ -39,11 +46,13 @@ namespace CoffeeCat
 
         protected override void Enter_WalkState()
         {
-            anim.AnimationState.SetAnimation(0, animWalk, true);
+            currentTrack = anim.AnimationState.SetAnimation(0, animWalk, true);
         }
 
         protected override void Update_WalkState()
         {
+            if (player.IsDead())
+                ChangeState(EnumPlayerState.Dead);
             if (player.IsDamaged())
                 ChangeState(EnumPlayerState.Hit);
             if (player.IsAttacking())
@@ -62,23 +71,24 @@ namespace CoffeeCat
 
         protected override void Enter_AttackState()
         {
-            anim.AnimationState.SetAnimation(1, animAttack, false).TimeScale = 1.5f;
-            anim.AnimationState.Complete += delegate
-            {
-                ChangeState(player.IsWalking() ? EnumPlayerState.Walk : EnumPlayerState.Idle);
-            };
+            currentTrack = anim.AnimationState.SetAnimation(1, animAttack, false);
+            currentTrack.TimeScale = 1.5f;
         }
 
         protected override void Update_AttackState()
         {
-            // 공격과 스턴 사이 그 어딘가,,
-            
+            if (player.IsDead())
+                ChangeState(EnumPlayerState.Dead);
+            if (player.IsDamaged())
+                ChangeState(EnumPlayerState.Hit);
+            if (currentTrack.IsComplete)
+                ChangeState(player.IsWalking() ? EnumPlayerState.Walk : EnumPlayerState.Idle);
         }
 
         protected override void Exit_AttackState()
         {
             anim.AnimationState.ClearTrack(1);
-            player.FinishAttack();
+            player.FinishAttackAnimation();
         }
 
         #endregion
@@ -87,20 +97,25 @@ namespace CoffeeCat
 
         protected override void Enter_HitState()
         {
-            anim.AnimationState.SetAnimation(1, animHit, false).TimeScale = 1.3f;
-            anim.AnimationState.Complete += delegate
-            {
-                ChangeState(player.IsWalking() ? EnumPlayerState.Walk : EnumPlayerState.Idle);
-            };
+            currentTrack = anim.AnimationState.SetAnimation(1, animHit, false);
+            currentTrack.TimeScale = 1.3f;
         }
 
         protected override void Update_HitState()
         {
+            if (player.IsDead())
+                ChangeState(EnumPlayerState.Dead);
+
+            if (currentTrack.IsComplete)
+                ChangeState(player.IsWalking() ? EnumPlayerState.Walk : EnumPlayerState.Idle);
+
+            // 스턴이 필요할까?
+            // 다른 연출은 필요없을까?
         }
 
         protected override void Exit_HitState()
         {
-            anim.AnimationState.ClearTrack(1);
+            anim.AnimationState.ClearTrack(currentTrack.TrackIndex);
             player.FinishHitAnimation();
         }
 
@@ -110,14 +125,19 @@ namespace CoffeeCat
 
         protected override void Enter_DeadState()
         {
+            currentTrack = anim.AnimationState.SetAnimation(0, animDead, false);
+            currentTrack.TimeScale = 0.7f;
         }
 
         protected override void Update_DeadState()
         {
+            if (currentTrack.IsComplete)
+                ChangeState(EnumPlayerState.None);
         }
 
         protected override void Exit_DeadState()
         {
+            anim.AnimationState.ClearTracks();
         }
 
         #endregion
