@@ -81,6 +81,9 @@ namespace CoffeeCat {
         }
 
         protected override void OnFixedUpdateTrackingState() {
+            if(isKnockBacking)
+                return;
+            
             // Tracking Player
             SetVelocity(normalizedMoveDirection, moveSpeed);
         }
@@ -161,10 +164,6 @@ namespace CoffeeCat {
         
         public override void OnTakeDamage() {
             /*StateChange(EnumMonsterState.TakeDamage);*/
-        }
-
-        public override void OnDeath() {
-            
         }
     }
 }

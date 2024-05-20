@@ -19,6 +19,7 @@ namespace CoffeeCat {
 		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashReadyParticle1 = null;
 		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashReadyParticle2 = null;
 		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashPrticle = null;
+		[TitleGroup("Attack", order: 3), SerializeField] private Transform dashReadyParticleTr = null;
 		
 		//Fields
 		private bool isMoveDirectionRight = false;
@@ -89,6 +90,8 @@ namespace CoffeeCat {
 		}
 
 		protected override void OnFixedUpdateTrackingState() {
+			if (isKnockBacking)
+				return;
 			SetVelocity(normalizedMoveDirection, moveSpeed);
 		}
 
@@ -207,19 +210,8 @@ namespace CoffeeCat {
 		private void PlayDashReadyParticle(bool isDirectionRight) {
 			dashPrticle.Stop();
 			dashReadyParticle1.Stop();
-			// dashReadyParticle2.Stop();
-			var module1Pos = isDirectionRight ? new Vector3(0f, -0.65f, 0f) : new Vector3(0f, 0.65f, 0f);
-			var module2Pos = isDirectionRight ? new Vector3(0f, -0.25f, 0f) : new Vector3(0f, 0.25f, 0f);
-			var rotation = isDirectionRight ? new Vector3(0f, -90f, 0f) : new Vector3(0f, 90f, 0f);
-			var module1 = dashReadyParticle1.shape;
-			var module2 = dashReadyParticle2.shape;
-			module1.rotation = rotation;
-			module2.rotation = rotation;
-			module1.position = module1Pos;
-			module2.position = module2Pos;
-			
+			dashReadyParticleTr.eulerAngles = isDirectionRight ? new Vector3(-90f, 0f, 0f) : new Vector3(-90f, 180f, 0f);
 			dashReadyParticle1.Play();
-			// dashReadyParticle2.Play();
 		}
 
 		private void PlayDashParticle() {

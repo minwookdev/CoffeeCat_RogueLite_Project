@@ -3,7 +3,7 @@
     {
       "Name": "Skeleton",
       "Desc": "empty",
-      "HP": 100.0,
+      "HP": 20.0,
       "MP": 25.0,
       "MinDamage": 5.0,
       "MaxDamage": 8.0,
@@ -16,7 +16,7 @@
     {
       "Name": "Skeleton_Mage",
       "Desc": "empty",
-      "HP": 80.0,
+      "HP": 10.0,
       "MP": 50.0,
       "MinDamage": 10.0,
       "MaxDamage": 12.0,
@@ -29,7 +29,7 @@
     {
       "Name": "Skeleton_Warrior",
       "Desc": "empty",
-      "HP": 150.0,
+      "HP": 30.0,
       "MP": 10.0,
       "MinDamage": 16.0,
       "MaxDamage": 18.0,

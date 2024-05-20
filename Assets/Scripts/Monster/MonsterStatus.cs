@@ -32,22 +32,20 @@ namespace CoffeeCat {
             state.SetStat(CurrentStat);
         }
 
-        private void Update() {
+        /*private void Update() {
             if (!Input.GetKeyDown(KeyCode.P)) return;
             var testAttackData = new DamageData() { CalculatedDamage = 20f };
             OnDamaged(testAttackData, true);
-        }
+        }*/
 
         public void OnDamaged(in DamageData data, bool useDamageText, Vector2 collisionPoint = default, float force = 0f) {
             if (state.State == EMonsterState.Death)
                 return;
             
-            // KnockBack Process
             Vector2 knockBackDirection = Vector2.zero;
             if (collisionPoint != default && force > 0f) {
                 knockBackDirection = (Vector2)transform.position - collisionPoint;
                 knockBackDirection.Normalize();
-                state.AddForceToDirection(knockBackDirection, force);
             }
             
             // Damage Process
@@ -58,23 +56,27 @@ namespace CoffeeCat {
                 state.OnDeath();
             }
             else {
+                // Decrease Monster Health Point
                 CurrentStat.HP = tempHealthPoint;
                 state.OnTakeDamage();
+                
+                // Start KnockBack Process
+                if (state.IsKnockBackable) {
+                    state.StartKnockBackProcessCoroutine(knockBackDirection, force);
+                }
             }
-
+            
+            // Damage Text Process 
             if (!useDamageText)
                 return;
-            
             int floatingCount = Mathf.RoundToInt(finalCalculatedDamageCount);
-            // CatLog.Log($"damage count: {floatingCount.ToString()}");
-
             if (knockBackDirection != Vector2.zero) {
                 DamageTextManager.Instance.OnReflectingText(floatingCount, collisionPoint, knockBackDirection);   
             }
             else {
-                Vector2 flaotingStartPos = transform.position;
-                flaotingStartPos.y += 1.5f;
-                DamageTextManager.Instance.OnFloatingText(floatingCount, flaotingStartPos);
+                Vector2 textStartPos = collisionPoint == default ? transform.position : collisionPoint;
+                textStartPos.y += 1.25f;
+                DamageTextManager.Instance.OnFloatingText(floatingCount, textStartPos);
             }
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
@@ -26,7 +27,9 @@ namespace CoffeeCat {
         // Order 0
         [TitleGroup("State", order: 0), ShowInInspector, ReadOnly] 
         public EnumMonsterState State { get; private set; } = EnumMonsterState.None;
-        
+        [TitleGroup("State", order: 0), ShowInInspector]
+        public bool IsKnockBackable { get; private set; }  = true;
+
         // Order 1
         [TitleGroup("Models & Animation", order: 1), SerializeField]
         protected SpriteRenderer sprite = null;
@@ -48,7 +51,9 @@ namespace CoffeeCat {
         protected Collider2D bodyCollider = null;
         protected Rigidbody2D rigidBody = null;
         private float originAnimationSpeed = 0f;
+        protected bool isKnockBacking = false;
         protected IObservable<long> deathTimerObservable = null;
+        private Coroutine knockBackCoroutine = null;
 
         protected virtual void Initialize() {
             tr = GetComponent<Transform>();
@@ -256,13 +261,40 @@ namespace CoffeeCat {
         }
         
         protected void SetVelocity(Vector2 direction, float speed) => rigidBody.velocity = direction * speed;
-
-        public void AddForceToDirection(Vector2 direction, float forceValue) {
-            rigidBody.AddForce(direction * forceValue, ForceMode2D.Force);
-        }
         
         protected void SetVelocityZero() => rigidBody.velocity = Vector2.zero;
+        
+        public void AddForceToDirection(Vector2 direction, float forceValue, ForceMode2D mode) {
+            rigidBody.AddForce(direction * forceValue, mode);
+        }
 
+        public void StartKnockBackProcessCoroutine(Vector2 direction, float forceValue) {
+            if (!IsKnockBackable || State == EnumMonsterState.Death/* || isKnockBacking*/)
+                return;
+            
+            StopKnockBackCoroutine();
+            knockBackCoroutine = StartCoroutine(KnockBackCoroutine(direction, forceValue));
+        }
+        
+        private IEnumerator KnockBackCoroutine(Vector2 direction, float forceValue) {
+            SetVelocityZero();
+            AddForceToDirection(direction, forceValue, ForceMode2D.Impulse);
+            isKnockBacking = true;
+            
+            yield return new WaitUntil(() => rigidBody.velocity.magnitude <= 0.3f);
+
+            isKnockBacking = false;
+        }
+        
+        private void StopKnockBackCoroutine() {
+            if (knockBackCoroutine == null) {
+                return;
+            }
+            
+            StopCoroutine(knockBackCoroutine);
+            knockBackCoroutine = null; 
+        }
+        
         protected void Despawn() {
             if (ObjectPoolManager.IsExist) {
                 if (ObjectPoolManager.Instance.IsExistInPoolDictionary(gameObject.name)) {

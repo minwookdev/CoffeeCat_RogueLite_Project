@@ -17,22 +17,26 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 7eeee9a78337ec540a7e435df0116f3f
   m_SerializeEntries:
-  - m_GUID: a9ec95cbffa9e6542ba3746da4d45b0a
-    m_Address: Skeleton
-    m_ReadOnly: 0
-    m_SerializedLabels: []
   - m_GUID: d2b16d8589662b44aa215c986fe29eea
     m_Address: Skeleton_Mage
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6666feff2eac92f44a59013c09e35cd6
     m_Address: GroupSpawnPositions
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 77ca42d2e91b7ba4d8e27e974bfa9198
     m_Address: Skeleton_Warrior
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9ec95cbffa9e6542ba3746da4d45b0a
+    m_Address: Skeleton
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5ed59c197b30a6f4e98c355416f5842e, type: 2}
   m_SchemaSet:

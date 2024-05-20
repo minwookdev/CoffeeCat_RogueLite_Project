@@ -111,7 +111,7 @@ namespace CoffeeCat
 
         protected override void OnFixedUpdateTrackingState()
         {
-            if (isArrivalToPlayer)
+            if (isArrivalToPlayer || isKnockBacking)
                 return;
             SetVelocity(normalizedMoveDirection, moveSpeed);
         }
