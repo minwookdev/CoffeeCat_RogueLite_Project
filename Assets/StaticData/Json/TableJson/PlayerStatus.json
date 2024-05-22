@@ -12,8 +12,8 @@
     "AttackPower": 10.0,
     "CriticalChance": 0.03,
     "CriticalResistance": 0.0,
-    "CriticalMultiplier": 0.0,
-    "DamageDeviation": 0.0,
+    "CriticalMultiplier": 1.5,
+    "DamageDeviation": 0.05,
     "Penetration": 0.0
   }
 ]

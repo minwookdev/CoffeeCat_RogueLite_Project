@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
@@ -7,6 +9,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using Random = System.Random;
 using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
@@ -24,6 +27,7 @@ namespace CoffeeCat
 
         [SerializeField] protected Transform projectilePoint = null;
 
+        private PlayerSkill skill = null;
         private Rigidbody2D rigid = null;
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
@@ -33,6 +37,11 @@ namespace CoffeeCat
 
         public Transform Tr => tr;
         public PlayerStatus Status => status;
+
+        public PlayerSkill Skill
+        {
+            set => skill = value;
+        }
 
         private void Start()
         {
@@ -47,8 +56,7 @@ namespace CoffeeCat
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
-                DamageData damageData = new DamageData() { CalculatedDamage = 50 };
-                OnDamaged(damageData);
+                ObjectPoolManager.Instance.Spawn("testSkill", tr.position);
             }
         }
 
@@ -60,6 +68,7 @@ namespace CoffeeCat
 
             // test
             CheckInvincibleTime();
+            GetSkilled();
 
             StageManager.Instance.AddListenerRoomEnteringEvent(PlayerEnteredRoom);
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
@@ -69,6 +78,10 @@ namespace CoffeeCat
         {
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(),
                                                                                     true);
+            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+
+            // test
+            obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("testSkill", true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
@@ -81,7 +94,7 @@ namespace CoffeeCat
         {
             if (isDead)
                 return;
-            
+
             var hor = Input.GetAxisRaw("Horizontal");
             var ver = Input.GetAxisRaw("Vertical");
 
@@ -156,6 +169,68 @@ namespace CoffeeCat
             }
         }
 
+        private void GetSkilled()
+        {
+            this.ObserveEveryValueChanged(_ => skill)
+                .Where(_ => skill != null)
+                .Skip(TimeSpan.Zero)
+                .Subscribe(_ =>
+                {
+                    // 스킬 슬롯 설정
+                    // 스킬 발동 Observable 설정
+                    SkillAttack();
+                });
+        }
+
+        private void SkillAttack()
+        {
+            Observable.Interval(TimeSpan.FromSeconds(skill.SkillInfo.SkillCoolTime))
+                      .Where(_ => !isDead)
+                      .Where(_ => isPlayerInBattle)
+                      .Subscribe(_ =>
+                      {
+                          // TODO : 몬스터가 없어서 null일 경우 쿨타임은?
+                          // TODO : 몬스터가 죽으면 return
+                          // TODO : 스킬 Projectile 대미지
+                          
+                          
+                            var targets = FindAroundMonsters(skill.SkillInfo.AttackCount);
+                            
+                            if (targets == null)
+                                return;
+                            
+                            foreach (var target in targets)
+                            {
+                                var skill = ObjectPoolManager.Instance.Spawn("testSkill", target);
+                                skill.transform.localPosition = Vector3.zero;
+                            }
+                      }).AddTo(this);
+
+            List<Transform> FindAroundMonsters(int attackCount)
+            {
+                var monsters =
+                    Physics2D.OverlapCircleAll(Tr.position, skill.SkillInfo.SkillRange,
+                                               1 << LayerMask.NameToLayer("Monster")).ToList();
+
+                if (monsters.Count <= 0)
+                    return null;
+
+                if (monsters.Count < attackCount)
+                    attackCount = monsters.Count;
+
+                var targets = new List<Transform>();
+                while (attackCount > 0)
+                {
+                    var monster = monsters[UnityEngine.Random.Range(0, monsters.Count)];
+                    targets.Add(monster.transform);
+                    monsters.Remove(monster);
+                    attackCount--;
+                }
+
+                return targets;
+            }
+        }
+
         private void OnDamaged(DamageData damageData)
         {
             if (isInvincible)
@@ -163,7 +238,7 @@ namespace CoffeeCat
 
             isPlayerDamaged = true;
             status.CurrentHp -= damageData.CalculatedDamage;
-            
+
             if (status.CurrentHp <= 0)
             {
                 status.CurrentHp = 0;

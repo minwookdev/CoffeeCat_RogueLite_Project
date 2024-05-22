@@ -16,6 +16,6 @@ public class Table_PlayerStatus : TableBase<int>
 	public float CriticalChance; // 치명타 확률
 	public float CriticalResistance; // 치명타 저항
 	public float CriticalMultiplier; // 치명타 배율
-	public float DamageDeviation; // 대미지 계수
+	public float DamageDeviation; // 대미지 폭
 	public float Penetration; // 관통력
 }
