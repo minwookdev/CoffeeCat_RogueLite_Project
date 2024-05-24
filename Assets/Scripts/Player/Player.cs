@@ -128,6 +128,9 @@ namespace CoffeeCat
                           if (a != Vector3.zero)
                               SwitchingPlayerDirection(a.x > 0 ? true : false);
 
+                          if (targetMonster.TryGetComponent(out MonsterState state)) {
+                              targetMonster = state.CenterPointTr;
+                          }
                           var direction = (targetMonster.position - projectilePoint.position).normalized;
                           var spawnObj =
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
@@ -227,7 +230,7 @@ namespace CoffeeCat
             if (other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
             {
                 var damageData = DamageData.GetData(monsterStat.CurrentStat, status);
-                CatLog.Log($"Player_OnTriggerEnter2D_{monsterStat.name} : {damageData.CalculatedDamage.ToString()}");
+                /*CatLog.Log($"Player_OnTriggerEnter2D_{monsterStat.name} : {damageData.CalculatedDamage.ToString()}");*/
                 OnDamaged(damageData);
             }
         }
