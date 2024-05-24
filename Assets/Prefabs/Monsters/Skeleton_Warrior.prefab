@@ -316,6 +316,7 @@ Transform:
   - {fileID: 3308947652913714381}
   - {fileID: 1303186914918960674}
   - {fileID: 1073595937020842970}
+  - {fileID: 9127218254482701054}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5739886004326205281
@@ -336,6 +337,7 @@ MonoBehaviour:
   - {fileID: 992003376628216518}
   isDefaultSpriteFlipX: 0
   deathAnimDuration: 0.81666666
+  centerPointTr: {fileID: 9127218254482701054}
   moveSpeed: 2.5
   sqrDistanceToAttack: 1.5
   attackStateAnimationSpeedRatio: 2
@@ -444,6 +446,37 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!1 &8138696678709575833
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9127218254482701054}
+  m_Layer: 11
+  m_Name: center_point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9127218254482701054
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8138696678709575833}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.016, y: 0.428, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4235725239492644405}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7508916526007331069
 PrefabInstance:
   m_ObjectHideFlags: 0
