@@ -18,7 +18,7 @@ namespace CoffeeCat
         {
             if (other.TryGetComponent(out Player player))
             {
-                player.Skill = skillKey;
+                player.GetSkill(skillKey);
                 gameObject.SetActive(false);
             }
         }

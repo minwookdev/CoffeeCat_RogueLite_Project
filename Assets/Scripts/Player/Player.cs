@@ -16,6 +16,7 @@ namespace CoffeeCat
     {
         [Title("Status")]
         [SerializeField] protected PlayerStatusKey playerName = PlayerStatusKey.NONE;
+
         [ShowInInspector, ReadOnly] protected PlayerStatus status;
 
         [Title("Attack")]
@@ -26,7 +27,7 @@ namespace CoffeeCat
 
         [SerializeField] protected Transform projectilePoint = null;
 
-        private PlayerSkillsKey skill = PlayerSkillsKey.NONE;
+        private PlayerSkillEffect skillEffect = null;
         private Rigidbody2D rigid = null;
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
@@ -36,11 +37,6 @@ namespace CoffeeCat
 
         public Transform Tr => tr;
         public PlayerStatus Status => status;
-
-        public PlayerSkillsKey Skill
-        {
-            set => skill = value;
-        }
 
         private void Start()
         {
@@ -67,7 +63,6 @@ namespace CoffeeCat
 
             // test
             CheckInvincibleTime();
-            GetSkilled();
 
             StageManager.Instance.AddListenerRoomEnteringEvent(PlayerEnteredRoom);
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
@@ -128,9 +123,11 @@ namespace CoffeeCat
                           if (a != Vector3.zero)
                               SwitchingPlayerDirection(a.x > 0 ? true : false);
 
-                          if (targetMonster.TryGetComponent(out MonsterState state)) {
+                          if (targetMonster.TryGetComponent(out MonsterState state))
+                          {
                               targetMonster = state.CenterPointTr;
                           }
+
                           var direction = (targetMonster.position - projectilePoint.position).normalized;
                           var spawnObj =
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
@@ -169,11 +166,12 @@ namespace CoffeeCat
 
         private void GetSkilled()
         {
-            this.ObserveEveryValueChanged(_ => skill)
-                .Where(_ => skill != null)
+            this.ObserveEveryValueChanged(_ => skillEffect)
+                .Where(_ => skillEffect != null)
                 .Skip(TimeSpan.Zero)
                 .Subscribe(_ =>
                 {
+                    CatLog.Log("GetSkilled");
                     // 스킬 슬롯 설정
                     SkillAttack();
                 });
@@ -181,10 +179,15 @@ namespace CoffeeCat
 
         private void SkillAttack()
         {
-            if (isDead || !isPlayerInBattle)
-                return;
-            
-            
+            this.ObserveEveryValueChanged(_ => isPlayerInBattle)
+                .Where(_ => isPlayerInBattle)
+                .Where(_ => !isDead)
+                .Skip(TimeSpan.Zero)
+                .Subscribe(_ =>
+                {
+                    CatLog.Log("SKillAttack");
+                    skillEffect.Fire(tr);
+                });
         }
 
         private void OnDamaged(DamageData damageData)
@@ -306,9 +309,18 @@ namespace CoffeeCat
             return isDead;
         }
 
-        public void UpdateSkill(int index) {
+        public void GetSkill(PlayerSkillsKey skillKey)
+        {
+            skillEffect = new PlayerSkillEffect(skillKey);
+            SkillEffectConverter.ConvertSkillEffect(skillEffect);
+            SkillAttack();
+        }
+
+        public void UpdateSkill(int index)
+        {
             // -1 index is Invalid
-            if (index == -1) {
+            if (index == -1)
+            {
                 return;
             }
         }

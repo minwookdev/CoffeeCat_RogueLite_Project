@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CoffeeCat.FrameWork;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using UnityEngine;
 using UniRx;
@@ -13,6 +14,7 @@ namespace CoffeeCat
     {
         protected override void SkillEffect(Transform playerTr)
         {
+            CatLog.Log("SkillEffect");
             Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
                       .Subscribe(_ =>
                       {
@@ -34,7 +36,7 @@ namespace CoffeeCat
                               //                        skill.SkillInfo.SkillCoefficient);
                               
                           }
-                      }).AddTo(this);
+                      }).AddTo(playerTr.gameObject);
 
             List<Transform> FindAroundMonsters(int attackCount)
             {
