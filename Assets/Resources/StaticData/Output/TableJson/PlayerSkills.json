@@ -1,0 +1,38 @@
+﻿[
+  {
+    "Index": 1.0,
+    "SkillKey": "Explosion",
+    "Grade": 1.0,
+    "SkillName": "Explosion",
+    "SkillBaseDamage": 5.0,
+    "SkillCoefficient": 0.2,
+    "SkillRange": 8.0,
+    "SkillCoolTime": 2.0,
+    "AttackCount": 3.0,
+    "": null
+  },
+  {
+    "Index": 2.0,
+    "SkillKey": "Explosion",
+    "Grade": 2.0,
+    "SkillName": "Explosion",
+    "SkillBaseDamage": 5.0,
+    "SkillCoefficient": 0.2,
+    "SkillRange": 8.0,
+    "SkillCoolTime": 2.0,
+    "AttackCount": 5.0,
+    "": null
+  },
+  {
+    "Index": 3.0,
+    "SkillKey": "Explosion",
+    "Grade": 3.0,
+    "SkillName": "Explosion",
+    "SkillBaseDamage": 6.0,
+    "SkillCoefficient": 0.2,
+    "SkillRange": 8.0,
+    "SkillCoolTime": 2.0,
+    "AttackCount": 5.0,
+    "": null
+  }
+]

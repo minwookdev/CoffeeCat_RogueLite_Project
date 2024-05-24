@@ -84,6 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a4c283ca63dae4aa378ff67290986a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: 1
   normalAttackProjectile: 1
   tr: {fileID: 1305159281282759405}
   projectilePoint: {fileID: 1303632491375746209}

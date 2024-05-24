@@ -56,6 +56,20 @@ namespace CoffeeCat.Utils.Defines {
         PlayerAttack_01_Pink,
     }
 
+    public enum PlayerStatusKey
+    {
+        NONE,
+        FlowerMagician = 1,
+    }
+    
+    public enum PlayerSkillsKey
+    {
+        NONE,
+        Explosion = 1,
+        Explosion_2,
+        Explosion_3,
+    }
+
     public enum Layer {
         NONE,
         PLAYER,

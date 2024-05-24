@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 1642701469}
-  playerStatusSet: {fileID: 11400000, guid: d29f43031742585439a24100d9e70778, type: 2}
+  playerStatusSet: {fileID: 11400000, guid: bc6fc6f87cdd1b14bb27dd7f733431e7, type: 2}
   OnRoomEntering:
     m_PersistentCalls:
       m_Calls: []

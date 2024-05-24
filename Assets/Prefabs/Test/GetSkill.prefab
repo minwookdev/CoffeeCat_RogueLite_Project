@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3904401718477011129}
   - component: {fileID: 2860951604504071266}
-  - component: {fileID: 4983558299482334514}
+  - component: {fileID: 3943182800660535144}
   - component: {fileID: 6330714024642203221}
   m_Layer: 0
   m_Name: GetSkill
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4983558299482334514
+--- !u!114 &3943182800660535144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3895837e4dd3acc4faf316412187892f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillInfo: {fileID: 4832096383322115993, guid: c841ade9151f2e8479deff4af3ae33ee, type: 2}
+  skillKey: 1
 --- !u!61 &6330714024642203221
 BoxCollider2D:
   m_ObjectHideFlags: 0

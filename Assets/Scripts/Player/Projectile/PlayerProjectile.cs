@@ -9,44 +9,22 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    // TODO : 공격타입?
     public class PlayerProjectile : MonoBehaviour
     {
-        private Transform tr = null;
+        protected Transform tr = null;
 
         public ProjectileDamageData AttackData { get; set; } = null;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             tr = GetComponent<Transform>();
         }
 
         public void Fire(Vector3 direction, float speed, Vector3 startPos)
         {
-            tr.DORewind();
-            tr.DOMove(direction * 10f, speed)
-              .SetRelative().SetSpeedBased().SetEase(Ease.Linear).SetDelay(0.1f).From(startPos)
-              .OnComplete(() => ObjectPoolManager.Instance.Despawn(gameObject));
+            ProjectilePath(direction, speed, startPos);
         }
 
-        // Attack Monster Sample
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (!other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
-                return;
-
-            var damageData =
-                DamageData.GetData(AttackData, monsterStat.CurrentStat);
-            monsterStat.OnDamaged(damageData, true, tr.position, 10f);
-
-            ObjectPoolManager.Instance.Despawn(gameObject);
-        }
-
-        /*private void OnTriggerEnter2D(Collider2D other) {
-            if (!other.gameObject.TryGetComponent(out MonsterStatus status))
-                return;
-            var testAttackData = new AttackData() { CalculatedDamage = damage }; // Do Not Use Like This !!
-            status.OnDamaged(testAttackData, tr.position);                       // Use Projectile Position When Collision
-        }*/
+        protected virtual void ProjectilePath(Vector3 direction, float speed, Vector3 startPos) { }
     }
 }

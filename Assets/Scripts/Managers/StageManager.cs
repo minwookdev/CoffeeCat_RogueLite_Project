@@ -35,8 +35,6 @@ namespace CoffeeCat
         public int CurrentFloorMonsterKillCount { get; private set; } = 0;
         public int TotalMonsterKilledCount { get; private set; } = 0;
 
-        [SerializeField] private TSet_PlayerStatus playerStatusSet = null;
-        
         [Title("Events")]
         [SerializeField] private UnityEvent<RoomType> OnRoomEntering = null;
         [SerializeField] private UnityEvent<RoomType> OnRoomFirstEntering = null;
@@ -98,11 +96,6 @@ namespace CoffeeCat
             }
             
             playerCurrentRoom = enteredRoom;
-        }
-
-        public Table_PlayerStatus LoadPlayerStatus(int key)
-        {
-            return playerStatusSet[key];
         }
 
         public void ClearPlayersRoom(Room leavesRoom) {
