@@ -4,8 +4,8 @@
 public class Table_PlayerSkills : TableBase<int>
 {
 	public int Index; // 인덱스
-	public string SkillKey; // 프리팹 로드 시 Key
-	public int Grade; // 등급
+	public string SkillKey; // Addresable Key
+	public int Grade; // 스킬 등급
 	public string SkillName; // 스킬 이름
 	public float SkillBaseDamage; // 스킬 대미지
 	public float SkillCoefficient; // 스킬 계수
