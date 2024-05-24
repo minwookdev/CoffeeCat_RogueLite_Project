@@ -49,4 +49,12 @@ namespace CoffeeCat.FrameWork {
             PlayerSkills = Resources.Load<TSet_PlayerSkills>("StaticData/Output/TableAssets/TSet_PlayerSkills");
         }
     }
+
+    public class PlayerSkillSelectData {
+        public string Name;
+        public string Desc;
+        public Sprite Icon;
+        public int Index;
+        public int Type; // 0: Passive, 1: Active
+    }
 }

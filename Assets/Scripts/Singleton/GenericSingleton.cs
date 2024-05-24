@@ -4,7 +4,7 @@ using CoffeeCat.Utils;
 namespace CoffeeCat.FrameWork {
     [DisallowMultipleComponent]
     public class GenericSingleton<T> : MonoBehaviour where T : MonoBehaviour {
-        // Destroy ¿©ºÎ È®ÀÎ¿ë
+        // Destroy ì—¬ë¶€ í™•ì¸ìš©
         private static bool _shuttingDown = false;
         private static object _lock = new object();
         private static T _instance;
@@ -20,8 +20,8 @@ namespace CoffeeCat.FrameWork {
 
         public static T Instance {
             get {
-                // °ÔÀÓ Á¾·á ½Ã Object º¸´Ù ½Ì±ÛÅæÀÇ OnDestroy °¡ ¸ÕÀú ½ÇÇà µÉ ¼öµµ ÀÖ´Ù. 
-                // ÇØ´ç ½Ì±ÛÅæÀ» gameObject.Ondestory() ¿¡¼­´Â »ç¿ëÇÏÁö ¾Ê°Å³ª »ç¿ëÇÑ´Ù¸é null Ã¼Å©¸¦ ÇØÁÖÀÚ
+                // ê²Œì„ ì¢…ë£Œ ì‹œ Object ë³´ë‹¤ ì‹±ê¸€í†¤ì˜ OnDestroy ê°€ ë¨¼ì € ì‹¤í–‰ ë  ìˆ˜ë„ ìˆë‹¤. 
+                // í•´ë‹¹ ì‹±ê¸€í†¤ì„ gameObject.Ondestory() ì—ì„œëŠ” ì‚¬ìš©í•˜ì§€ ì•Šê±°ë‚˜ ì‚¬ìš©í•œë‹¤ë©´ null ì²´í¬ë¥¼ í•´ì£¼ì
                 if (_shuttingDown) {
                     Debug.LogWarning("[Singleton] Instance '" + typeof(T).Name + "' already destroyed. Returning null.");
                     return null;
@@ -30,12 +30,12 @@ namespace CoffeeCat.FrameWork {
                 lock (_lock)    //Thread Safe
                 {
                     if (_instance == null) {
-                        // ÀÎ½ºÅÏ½º Á¸Àç ¿©ºÎ È®ÀÎ
+                        // ì¸ìŠ¤í„´ìŠ¤ ì¡´ì¬ ì—¬ë¶€ í™•ì¸
                         _instance = (T)FindObjectOfType(typeof(T));
 
-                        // ¾ÆÁ÷ »ı¼ºµÇÁö ¾Ê¾Ò´Ù¸é ÀÎ½ºÅÏ½º »ı¼º
+                        // ì•„ì§ ìƒì„±ë˜ì§€ ì•Šì•˜ë‹¤ë©´ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±
                         if (_instance == null) {
-                            // »õ·Î¿î °ÔÀÓ¿ÀºêÁ§Æ®¸¦ ¸¸µé¾î¼­ ½Ì±ÛÅæ Attach
+                            // ìƒˆë¡œìš´ ê²Œì„ì˜¤ë¸Œì íŠ¸ë¥¼ ë§Œë“¤ì–´ì„œ ì‹±ê¸€í†¤ Attach
                             var singletonObject = new GameObject();
                             _instance = singletonObject.AddComponent<T>();
                             singletonObject.name = typeof(T).Name + " (Singleton)";
@@ -54,11 +54,11 @@ namespace CoffeeCat.FrameWork {
             }
         }
 
-        // ºñ ½Ì±ÛÅÏ »ı¼ºÀÚ »ç¿ë ¹æÁö
+        // ë¹„ ì‹±ê¸€í„´ ìƒì„±ì ì‚¬ìš© ë°©ì§€
         protected GenericSingleton() { }
 
         /// <summary>
-        /// ´ëÇü ·ÎÁ÷ ÀÛ¼º ±İÁö
+        /// ëŒ€í˜• ë¡œì§ ì‘ì„± ê¸ˆì§€
         /// </summary>
         protected virtual void Initialize() { }
 

@@ -305,5 +305,12 @@ namespace CoffeeCat
         {
             return isDead;
         }
+
+        public void UpdateSkill(int index) {
+            // -1 index is Invalid
+            if (index == -1) {
+                return;
+            }
+        }
     }
 }
