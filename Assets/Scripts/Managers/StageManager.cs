@@ -108,6 +108,10 @@ namespace CoffeeCat
             playerCurrentRoom = null;
         }
 
+        public void AddSkillToPlayer(int index) {
+            
+        }
+
         #region Events
         
         public void InvokeEventMonsterKilledEvent(MonsterStatus key) => OnMonsterKilled?.Invoke();
