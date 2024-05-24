@@ -3,7 +3,6 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
-using UniRx;
 
 namespace CoffeeCat { 
     public class SkeletonState : MonsterState {
@@ -23,12 +22,6 @@ namespace CoffeeCat {
 
         protected override void Initialize() {
             base.Initialize();
-            deathTimerObservable = Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
-                                             .DoOnSubscribe(() => { /*CatLog.Log("DoOnSubscribe");*/ })
-                                             .Skip(0)
-                                             .TakeUntilDisable(this)
-                                             .Publish()
-                                             .RefCount();
         }
 
         protected override void OnActivated() {
@@ -98,8 +91,7 @@ namespace CoffeeCat {
 
         protected override void OnEnterDeathState() {
             anim.SetInteger(animStateHash, 2);
-            deathTimerObservable?.Subscribe(_ => { Despawn(); })
-                                 .AddTo(this);
+            DespawnOnDeathAnimationCompleted();
         }
 
         protected override void OnUpdateDeathState() {

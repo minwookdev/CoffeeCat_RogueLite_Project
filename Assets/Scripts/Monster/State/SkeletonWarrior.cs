@@ -1,10 +1,10 @@
 using System;
 using UnityEngine;
+using UniRx;
+using DG.Tweening;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
-using DG.Tweening;
-using UniRx;
 
 namespace CoffeeCat {
 	public class SkeletonWarrior : MonsterState {
@@ -33,12 +33,6 @@ namespace CoffeeCat {
 		protected override void Initialize() {
 			base.Initialize();
 			rigidBody.drag = linearDrag;
-			deathTimerObservable = Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
-			                                 .DoOnSubscribe(() => { /*CatLog.Log("DoOnSubscribe");*/ })
-			                                 .Skip(0)
-			                                 .TakeUntilDisable(this)
-			                                 .Publish()
-			                                 .RefCount();
 		}
 
 		protected override void OnActivated() {
@@ -105,8 +99,7 @@ namespace CoffeeCat {
 
 		protected override void OnEnterDeathState() {
 			anim.SetInteger(animHash, 2);
-			deathTimerObservable?.Subscribe(_ => { Despawn(); })
-			                    .AddTo(this);
+			DespawnOnDeathAnimationCompleted();
 		}
 
 		protected override void OnUpdateDeathState() {
