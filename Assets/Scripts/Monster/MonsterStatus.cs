@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.Datas;
@@ -31,13 +30,7 @@ namespace CoffeeCat {
             CurrentStat.CopyValue(originStat);
             state.SetStat(CurrentStat);
         }
-
-        /*private void Update() {
-            if (!Input.GetKeyDown(KeyCode.P)) return;
-            var testAttackData = new DamageData() { CalculatedDamage = 20f };
-            OnDamaged(testAttackData, true);
-        }*/
-
+        
         public void OnDamaged(in DamageData data, bool useDamageText, Vector2 collisionPoint = default, float force = 0f) {
             if (state.State == EMonsterState.Death)
                 return;

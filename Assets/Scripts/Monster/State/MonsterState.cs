@@ -29,6 +29,8 @@ namespace CoffeeCat {
         public EnumMonsterState State { get; private set; } = EnumMonsterState.None;
         [TitleGroup("State", order: 0), ShowInInspector]
         public bool IsKnockBackable { get; private set; }  = true;
+        [TitleGroup("State", order: 0), ShowInInspector]
+        public bool IsDespawnOnDeathAnimationCompleted { get; protected set; } = true;
 
         // Order 1
         [TitleGroup("Models & Animation", order: 1), SerializeField]
@@ -61,6 +63,15 @@ namespace CoffeeCat {
             bodyCollider = GetComponent<Collider2D>();
             rigidBody = GetComponent<Rigidbody2D>();
             originAnimationSpeed = anim.speed;
+
+            if (IsDespawnOnDeathAnimationCompleted) {
+                deathTimerObservable = Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
+                                                 /*.DoOnSubscribe(() => {
+                                                     CatLog.Log("DoOnSubscribe");
+                                                 })*/
+                                                 .Skip(0)
+                                                 .TakeUntilDestroy(this);
+            }
         }
 
         protected virtual void OnActivated() {
@@ -293,6 +304,14 @@ namespace CoffeeCat {
             
             StopCoroutine(knockBackCoroutine);
             knockBackCoroutine = null; 
+        }
+        
+        protected void DespawnOnDeathAnimationCompleted() {
+            if (IsDespawnOnDeathAnimationCompleted) {
+                deathTimerObservable.Subscribe(_ => {
+                    Despawn();
+                }).AddTo(this);
+            }
         }
         
         protected void Despawn() {
