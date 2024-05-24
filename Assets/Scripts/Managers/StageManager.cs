@@ -41,6 +41,8 @@ namespace CoffeeCat
         [SerializeField] private UnityEvent<RoomType> OnClearedRoom = null;
         [SerializeField] private UnityEvent OnMonsterKilled = null;
         [SerializeField] private UnityEvent OnPlayerKilled = null;
+        [SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
+        [SerializeField] private UnityEvent OnSkillSelectCompleted = null;
 
         private void Update()
         {
@@ -108,10 +110,22 @@ namespace CoffeeCat
             playerCurrentRoom = null;
         }
 
-        public void AddSkillToPlayer(int index) {
-            
+        public void EnableInput() {
+            RogueLiteManager.Instance.EnableInput();
         }
-
+        
+        public void DisableInput() {
+            RogueLiteManager.Instance.DisableInput();
+        }
+        
+        public void RestoreTimeScale() {
+            RogueLiteManager.Instance.RestoreTimeScale();
+        }
+        
+        public void TimeScaleZero() {
+            RogueLiteManager.Instance.TimeScaleZero();
+        }
+        
         #region Events
         
         public void InvokeEventMonsterKilledEvent(MonsterStatus key) => OnMonsterKilled?.Invoke();
@@ -127,7 +141,15 @@ namespace CoffeeCat
         public void AddListenerRoomEnteringEvent(UnityAction<RoomType> action) => OnRoomEntering.AddListener(action);
 
         public void AddListenerClearedRoomEvent(UnityAction<RoomType> action) => OnClearedRoom.AddListener(action);
+        
+        public void AddEventToOpeningSkillSelectPanel(UnityAction action) => OnOpeningSkillSelectPanel.AddListener(action);
+        
+        public void AddEventToSkillSelectCompleted(UnityAction action) => OnSkillSelectCompleted.AddListener(action);
 
+        public void InvokeOpeningSkillSelectPanel() => OnOpeningSkillSelectPanel?.Invoke();
+        
+        public void InvokeSkillSelectCompleted() => OnSkillSelectCompleted?.Invoke();
+        
         #endregion
     }
 }

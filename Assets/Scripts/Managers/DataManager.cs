@@ -56,5 +56,13 @@ namespace CoffeeCat.FrameWork {
         public Sprite Icon;
         public int Index;
         public int Type; // 0: Passive, 1: Active
+        
+        public PlayerSkillSelectData(string name, string desc, int index) {
+            Name = name;
+            Desc = desc;
+            Index = index;
+            /*Type = type;*/
+            /*Icon = icon;*/
+        }
     }
 }
