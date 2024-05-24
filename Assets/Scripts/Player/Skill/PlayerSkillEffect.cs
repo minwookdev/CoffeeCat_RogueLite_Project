@@ -10,6 +10,7 @@ namespace CoffeeCat
     public class PlayerSkillEffect : MonoBehaviour
     {
         protected Table_PlayerSkills skillData = null;
+        public Table_PlayerSkills SkillData => skillData;
 
         public PlayerSkillEffect(PlayerSkillsKey skillKey)
         {
@@ -23,15 +24,6 @@ namespace CoffeeCat
             SkillEffect(playerTr);
         }
 
-        private void test(string skillName)
-        {
-            switch (skillName)
-            {
-                case "Explosion":
-                    break;
-            }
-        }
-        
         protected virtual void SkillEffect(Transform playerTr)
         {
             
