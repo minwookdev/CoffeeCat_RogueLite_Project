@@ -3,7 +3,6 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
-using UniRx;
 
 namespace CoffeeCat { 
     public class SkeletonState : MonsterState {

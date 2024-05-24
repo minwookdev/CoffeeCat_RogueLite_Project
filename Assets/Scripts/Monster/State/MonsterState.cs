@@ -54,7 +54,6 @@ namespace CoffeeCat {
         protected Rigidbody2D rigidBody = null;
         private float originAnimationSpeed = 0f;
         protected bool isKnockBacking = false;
-        protected IObservable<long> deathTimerObservable = null;
         private Coroutine knockBackCoroutine = null;
 
         protected virtual void Initialize() {
@@ -63,15 +62,6 @@ namespace CoffeeCat {
             bodyCollider = GetComponent<Collider2D>();
             rigidBody = GetComponent<Rigidbody2D>();
             originAnimationSpeed = anim.speed;
-
-            if (IsDespawnOnDeathAnimationCompleted) {
-                deathTimerObservable = Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
-                                                 /*.DoOnSubscribe(() => {
-                                                     CatLog.Log("DoOnSubscribe");
-                                                 })*/
-                                                 .Skip(0)
-                                                 .TakeUntilDestroy(this);
-            }
         }
 
         protected virtual void OnActivated() {
@@ -308,9 +298,11 @@ namespace CoffeeCat {
         
         protected void DespawnOnDeathAnimationCompleted() {
             if (IsDespawnOnDeathAnimationCompleted) {
-                deathTimerObservable.Subscribe(_ => {
-                    Despawn();
-                }).AddTo(this);
+                Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
+                          .Skip(0)
+                          .TakeUntilDisable(this)
+                          .Subscribe(_ => Despawn())
+                          .AddTo(this);
             }
         }
         
