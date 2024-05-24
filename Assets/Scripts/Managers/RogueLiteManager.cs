@@ -34,6 +34,22 @@ namespace CoffeeCat.FrameWork {
 			ObjectPoolManager.Instance.Despawn(SpawnedPlayer.gameObject);
 		}
 
+		public void DisableInput() {
+			
+		}
+		
+		public void EnableInput() {
+			
+		}
+
+		public void TimeScaleZero() {
+			Time.timeScale = 0f;
+		}
+
+		public void RestoreTimeScale() {
+			Time.timeScale = 1f;
+		}
+
 		public bool IsPlayerExistAndAlive() => SpawnedPlayer && !SpawnedPlayer.IsDead();
 
 		public bool IsPlayerNotExistOrDeath() => !SpawnedPlayer || SpawnedPlayer.IsDead();
