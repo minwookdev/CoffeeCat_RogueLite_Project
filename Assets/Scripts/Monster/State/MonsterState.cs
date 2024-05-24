@@ -41,7 +41,10 @@ namespace CoffeeCat {
         public bool isDefaultSpriteFlipX = false; // Default Sprite Renderer Direction is Right 
         [TitleGroup("Models & Animation", order: 1), ReadOnly]
         public float deathAnimDuration = 0f;
-        
+        [TitleGroup("Models & Animation", order: 1), SerializeField]
+        protected Transform centerPointTr = null;
+        public Transform CenterPointTr => centerPointTr;
+
         // Order 2
         [TitleGroup("Movement", order: 2), SerializeField] 
         protected float moveSpeed = 8f;
