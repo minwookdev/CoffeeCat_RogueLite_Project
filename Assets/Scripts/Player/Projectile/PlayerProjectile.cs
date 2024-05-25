@@ -12,8 +12,7 @@ namespace CoffeeCat
     public class PlayerProjectile : MonoBehaviour
     {
         protected Transform tr = null;
-
-        public ProjectileDamageData AttackData { get; set; } = null;
+        public ProjectileDamageData projectileDamageData { get; set; } = null;
 
         protected virtual void Awake()
         {

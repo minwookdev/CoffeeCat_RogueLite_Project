@@ -13,22 +13,20 @@ namespace CoffeeCat
         protected Table_PlayerSkills skillData = null;
         public Table_PlayerSkills SkillData => skillData;
 
-        public PlayerSkillEffect(PlayerSkillsKey skillKey)
+        public PlayerSkillEffect(Table_PlayerSkills skillData)
         {
-            skillData = DataManager.Instance.PlayerSkills[(int)skillKey];
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(skillData.SkillName, true);
+            this.skillData = skillData;
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(skillData.SkillKey, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
         
-        public void Fire(Transform playerTr)
+        public void Fire(Transform playerTr, PlayerStatus playerStat)
         {
-            CatLog.Log("Fire");
-            SkillEffect(playerTr);
+            SkillEffect(playerTr, playerStat);
         }
 
-        protected virtual void SkillEffect(Transform playerTr)
+        protected virtual void SkillEffect(Transform playerTr, PlayerStatus playerStat)
         {
-            CatLog.Log("SkillEffect : base");
         }
     }
 }

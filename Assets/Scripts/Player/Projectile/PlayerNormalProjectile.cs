@@ -24,7 +24,7 @@ namespace CoffeeCat
                 return;
 
             var damageData =
-                DamageData.GetData(AttackData, monsterStat.CurrentStat);
+                DamageData.GetData(projectileDamageData, monsterStat.CurrentStat);
             monsterStat.OnDamaged(damageData, true, tr.position, 10f);
 
             ObjectPoolManager.Instance.Despawn(gameObject);

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-4664036473335961617
+--- !u!114 &-938825836181798353
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,4 +41,4 @@ MonoBehaviour:
   m_Name: TSet_PlayerStatus
   m_EditorClassIdentifier: 
   values:
-  - {fileID: -4664036473335961617}
+  - {fileID: -938825836181798353}

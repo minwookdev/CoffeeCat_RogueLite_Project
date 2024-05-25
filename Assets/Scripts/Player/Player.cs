@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
-using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -12,7 +9,7 @@ using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
 {
-    public class Player : MonoBehaviour
+    public partial class Player : MonoBehaviour
     {
         [Title("Status")]
         [SerializeField] protected PlayerStatusKey playerName = PlayerStatusKey.NONE;
@@ -27,7 +24,6 @@ namespace CoffeeCat
 
         [SerializeField] protected Transform projectilePoint = null;
 
-        private PlayerSkillEffect skillEffect = null;
         private Rigidbody2D rigid = null;
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
@@ -51,7 +47,7 @@ namespace CoffeeCat
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
-                ObjectPoolManager.Instance.Spawn("testSkill", tr.position);
+                EnableSkillSelect();
             }
         }
 
@@ -59,7 +55,7 @@ namespace CoffeeCat
         {
             SetStatus();
             LoadResources();
-            NormalAttack();
+            // NormalAttack();
 
             // test
             CheckInvincibleTime();
@@ -133,7 +129,7 @@ namespace CoffeeCat
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
                                                                projectilePoint.position);
                           spawnObj.TryGetComponent(out PlayerNormalProjectile projectile);
-                          projectile.AttackData = new ProjectileDamageData(status);
+                          projectile.projectileDamageData = new ProjectileDamageData(status);
                           projectile.Fire(direction, status.ProjectileSpeed, projectilePoint.position);
 
                           hasFiredProjectile = true;
@@ -162,32 +158,6 @@ namespace CoffeeCat
 
                 return target;
             }
-        }
-
-        private void GetSkilled()
-        {
-            this.ObserveEveryValueChanged(_ => skillEffect)
-                .Where(_ => skillEffect != null)
-                .Skip(TimeSpan.Zero)
-                .Subscribe(_ =>
-                {
-                    CatLog.Log("GetSkilled");
-                    // 스킬 슬롯 설정
-                    SkillAttack();
-                });
-        }
-
-        private void SkillAttack()
-        {
-            this.ObserveEveryValueChanged(_ => isPlayerInBattle)
-                .Where(_ => isPlayerInBattle)
-                .Where(_ => !isDead)
-                .Skip(TimeSpan.Zero)
-                .Subscribe(_ =>
-                {
-                    CatLog.Log("SKillAttack");
-                    skillEffect.Fire(tr);
-                });
         }
 
         private void OnDamaged(DamageData damageData)
@@ -237,12 +207,6 @@ namespace CoffeeCat
                 OnDamaged(damageData);
             }
         }
-
-        /*private void OnDrawGizmos()
-        {
-            Gizmos.color = Color.white;
-            Gizmos.DrawWireSphere(Tr.position, 3.0f);
-        }*/
 
         private void PlayerEnteredRoom(RoomType roomType)
         {
@@ -303,28 +267,9 @@ namespace CoffeeCat
             isPlayerDamaged = false;
         }
 
-        // TODO : Stat 만들고 이거 완성해
         public bool IsDead()
         {
             return isDead;
-        }
-
-        public void GetSkill(PlayerSkillsKey skillKey)
-        {
-            skillEffect = new PlayerSkillEffect(skillKey);
-            SkillEffectConverter.ConvertSkillEffect(skillEffect);
-            SkillAttack();
-        }
-
-        public void UpdateSkill(int index)
-        {
-            // -1 index is Invalid
-            if (index == -1)
-            {
-                return;
-            }
-            
-            
         }
     }
 }

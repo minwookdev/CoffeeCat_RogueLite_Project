@@ -12,15 +12,13 @@ namespace CoffeeCat
 {
     public class PlayerSkill_Explosion : PlayerSkillEffect
     {
-        protected override void SkillEffect(Transform playerTr)
+        protected override void SkillEffect(Transform playerTr, PlayerStatus playerStat)
         {
-            CatLog.Log("SkillEffect");
             Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
                       .Subscribe(_ =>
                       {
                           // TODO : 몬스터가 없어서 null일 경우 쿨타임은?
                           // TODO : 몬스터가 죽으면 return
-                          // TODO : 스킬 Projectile 대미지 설정을 어디서, 언제
 
                           var targets = FindAroundMonsters(skillData.AttackCount);
 
@@ -29,12 +27,10 @@ namespace CoffeeCat
 
                           foreach (var target in targets)
                           {
-                              var skillObj = ObjectPoolManager.Instance.Spawn("testSkill", target);
-                              skillObj.transform.localPosition = Vector3.zero;
-                              // skillObj.TryGetComponent(out PlayerSkillProjectile projectile);
-                              // projectile.SetDamageData(status, skill.SkillInfo.SkillBaseDamage,
-                              //                        skill.SkillInfo.SkillCoefficient);
-                              
+                              var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.position);
+                              skillObj.TryGetComponent(out PlayerSkillProjectile projectile);
+                              projectile.SetDamageData(playerStat, skillData.SkillBaseDamage,
+                                                       skillData.SkillCoefficient);
                           }
                       }).AddTo(playerTr.gameObject);
 
@@ -63,7 +59,7 @@ namespace CoffeeCat
             }
         }
 
-        public PlayerSkill_Explosion(PlayerSkillsKey skillKey) : base(skillKey)
+        public PlayerSkill_Explosion(Table_PlayerSkills skillKey) : base(skillKey)
         {
         }
     }
