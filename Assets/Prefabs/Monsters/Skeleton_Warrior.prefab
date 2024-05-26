@@ -336,7 +336,7 @@ MonoBehaviour:
   - {fileID: 4235725238525127421}
   - {fileID: 992003376628216518}
   isDefaultSpriteFlipX: 0
-  deathAnimDuration: 0.81666666
+  deathAnimDuration: 0.8166667
   centerPointTr: {fileID: 9127218254482701054}
   moveSpeed: 2.5
   sqrDistanceToAttack: 1.5
@@ -347,7 +347,6 @@ MonoBehaviour:
   dashAttackSpeed: 18
   linearDrag: 3
   dashReadyParticle1: {fileID: 7508916526021648823}
-  dashReadyParticle2: {fileID: 7508916526021637687}
   dashPrticle: {fileID: 8976415511654203116}
   dashReadyParticleTr: {fileID: 7508916526007517453}
 --- !u!114 &53973506582177618
@@ -673,11 +672,6 @@ PrefabInstance:
 --- !u!4 &7508916526007517453 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 469488, guid: 56346542eb69e3444bc72d177bc462d8, type: 3}
-  m_PrefabInstance: {fileID: 7508916526007331069}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &7508916526021637687 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 19816138, guid: 56346542eb69e3444bc72d177bc462d8, type: 3}
   m_PrefabInstance: {fileID: 7508916526007331069}
   m_PrefabAsset: {fileID: 0}
 --- !u!198 &7508916526021648823 stripped

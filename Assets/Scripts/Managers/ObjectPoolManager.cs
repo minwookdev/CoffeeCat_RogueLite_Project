@@ -10,8 +10,11 @@ using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat.FrameWork
 {
-    public class ObjectPoolManager : GenericSingleton<ObjectPoolManager>
+    public class ObjectPoolManager : GenericSingleton<ObjectPoolManager> 
     {
+        [Space(5f), Title("Parent"), ReadOnly]
+        [SerializeField] private Transform rootParentTr = null;
+        
         [Space(5f), Title("POOL INFORMATION")]
         [SerializeField, DictionaryDrawerSettings(DisplayMode = DictionaryDisplayOptions.ExpandedFoldout, IsReadOnly = true)] 
         private StringPoolInformationDictionary originInformationDict = null;
@@ -55,6 +58,11 @@ namespace CoffeeCat.FrameWork
         }
 
         private void AddToObjectPoolDictionary(PoolInformation information) {
+            // Spawn PoolObjects Root Parent
+            if (!rootParentTr) {
+                SetPoolObjectsRootParent();   
+            }
+            
             if (poolStackDict.ContainsKey(information.PoolObject.name)) {
                 CatLog.Log($"{information.PoolObject.name} is Already Containing Object Pool Dictionary.");
                 return;
@@ -69,6 +77,7 @@ namespace CoffeeCat.FrameWork
                 if (!information.HasCustomRootParent) {
                     string rootParentName = information.PoolObject.name + "_Root";
                     parent = new GameObject(rootParentName).GetComponent<Transform>();
+                    parent.SetParent(rootParentTr);
                 }
                 else {
                     parent = information.CustomRootParent;
@@ -279,11 +288,26 @@ namespace CoffeeCat.FrameWork
             ClearPoolDictionary();
         }
 
-        public void ClearPoolDictionary() {
+        private void ClearPoolDictionary() {
             originInformationDict.Clear();
             originPoolStackDictionary.Clear();
             poolStackDict.Clear();
             rootParentDict.Clear();
+            if (rootParentTr) {
+                Destroy(rootParentTr.gameObject);
+            }
+            rootParentTr = null;
+        }
+
+        private void SetPoolObjectsRootParent() {
+            if (rootParentTr) {
+                return;
+            }
+            
+            rootParentTr = new GameObject("ObjectPool_RootParent").transform;
+            rootParentTr.position = Vector3.zero;
+            rootParentTr.rotation = Quaternion.identity;
+            rootParentTr.localScale = Vector3.one;
         }
     }
 }

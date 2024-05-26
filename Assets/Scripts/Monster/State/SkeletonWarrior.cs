@@ -17,7 +17,6 @@ namespace CoffeeCat {
 		[TitleGroup("Attack", order: 3), SerializeField] private float dashAttackSpeed = 5f;
 		[TitleGroup("Attack", order: 3), SerializeField] private float linearDrag = 3f;
 		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashReadyParticle1 = null;
-		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashReadyParticle2 = null;
 		[TitleGroup("Attack", order: 3), SerializeField] private ParticleSystem dashPrticle = null;
 		[TitleGroup("Attack", order: 3), SerializeField] private Transform dashReadyParticleTr = null;
 		
