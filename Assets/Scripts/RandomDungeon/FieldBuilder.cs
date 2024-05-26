@@ -155,7 +155,7 @@ namespace RandomDungeonWithBluePrint
             
             // Check All Section is Connected
             // TODO: Check the parts that require exception handling (ex: infinite loop)
-            var isAllSectionIsConnected = IsAllSectionConnectedWithMakeGroup(field, true, out var sectionGroupList);
+            var isAllSectionIsConnected = IsAllSectionConnectedWithMakeGroup(field, false, out var sectionGroupList);
             if (bluePrint.IsConnectAllCompletely && !isAllSectionIsConnected)
             {
                 CompletelyConnectAllSections(field, sectionGroupList);

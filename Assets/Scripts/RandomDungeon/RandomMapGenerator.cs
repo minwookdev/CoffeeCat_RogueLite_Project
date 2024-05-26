@@ -109,7 +109,7 @@ namespace RandomDungeonWithBluePrint
             fieldView.DrawDungeon(field);
             IsGenerateCompleted = true;
 
-            CatLog.Log($"Map Generated Completed. MapType : {bluePrint.MapType}");
+            // CatLog.Log($"Map Generated Completed. MapType : {bluePrint.MapType}");
         }
 
         private BluePrintWithWeight Raffle()
