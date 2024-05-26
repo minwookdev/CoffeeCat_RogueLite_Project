@@ -4708,12 +4708,12 @@ MonoBehaviour:
         m_CallState: 2
   IsBakePathFindGrid: 1
   pathFindGrid: {fileID: 563312532}
-  IsDisplayRoomType: 0
-  IsDisplaySectionRectDrawer: 0
-  IsDisplaySectionIndex: 0
-  IsDisplayRoomRectDrawer: 0
+  IsDisplayRoomType: 1
+  IsDisplaySectionRectDrawer: 1
+  IsDisplaySectionIndex: 1
+  IsDisplayRoomRectDrawer: 1
   RoomDrawerColor: {r: 0, g: 1, b: 0, a: 1}
-  SectionDrawerColor: {r: 0, g: 1, b: 0, a: 1}
+  SectionDrawerColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1664023316
 GameObject:
   m_ObjectHideFlags: 0

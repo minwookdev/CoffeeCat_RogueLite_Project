@@ -17,6 +17,7 @@ namespace CoffeeCat
             Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
                       .Subscribe(_ =>
                       {
+                          // TODO : 같은 collider를 여러번 검출하는지 test > 챗지피티한테 물어바
                           // TODO : 몬스터가 없어서 null일 경우 쿨타임은?
                           // TODO : 몬스터가 죽으면 return
 

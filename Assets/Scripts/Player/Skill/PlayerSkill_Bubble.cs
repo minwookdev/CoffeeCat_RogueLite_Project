@@ -7,26 +7,23 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    public class PlayerSkill_Beam : PlayerSkillEffect
+    public class PlayerSkill_Bubble : PlayerSkillEffect
     {
+        // TODO : 몬스터 스턴이 필요해
+        // TODO : Battle Room 클리어 여부
         protected override void SkillEffect(Transform playerTr, PlayerStatus playerStat)
         {
             Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
                       .Subscribe(_ =>
                       {
-                          var target = FindAroundMonster(playerTr, skillData.AttackCount);
-
-                          if (target == null)
-                              return;
-
-                          var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.position);
+                          var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, playerTr.position);
                           skillObj.TryGetComponent(out PlayerSkillProjectile projectile);
                           projectile.SetDamageData(playerStat, skillData.SkillBaseDamage,
                                                    skillData.SkillCoefficient);
                       }).AddTo(playerTr.gameObject);
         }
 
-        public PlayerSkill_Beam(Table_PlayerSkills skillData) : base(skillData)
+        public PlayerSkill_Bubble(Table_PlayerSkills skillData) : base(skillData)
         {
         }
     }

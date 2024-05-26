@@ -81,6 +81,7 @@ namespace CoffeeCat.Utils.Defines
         Beam_1,
         Beam_2,
         Beam_3,
+        Bubble_1,
     }
 
     public enum SkillType

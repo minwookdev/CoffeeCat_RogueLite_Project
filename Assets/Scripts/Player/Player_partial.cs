@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using CoffeeCat.FrameWork;
-using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UniRx;
-using UnityEngine;
 
 namespace CoffeeCat
 {
@@ -17,15 +14,19 @@ namespace CoffeeCat
         [ShowInInspector] private List<string> ownedSkillsList = new List<string>();
 
         private PlayerSkillSelectData[] skillSelectDatas = null;
-        private List<PlayerSkillEffect> skillEffects = null;
 
         private void GenerateSkillEffect(Table_PlayerSkills skillData)
         {
             switch (skillData.SkillName)
             {
-                case "Explosion" : Explosion(skillData);
+                case "Explosion":
+                    Explosion(skillData);
                     break;
-                case "Beam" : Beam(skillData);
+                case "Beam":
+                    Beam(skillData);
+                    break;
+                case "Bubble":
+                    Bubble(skillData);
                     break;
                 default:
                     break;
@@ -41,20 +42,21 @@ namespace CoffeeCat
                 .Subscribe(_ => { skillEffect.Fire(tr, status); });
         }
 
+        // TODO
         private void SetSelectSkillData()
         {
-            // TODO
             skillSelectDatas = new PlayerSkillSelectData[Defines.PLAYER_SKILL_SELECT_COUNT];
-            var skillData = StageManager.Instance.PlayerSkills[(int)PlayerSkillsKey.Explosion_1];
-            var skillData2 = StageManager.Instance.PlayerSkills[(int)PlayerSkillsKey.Beam_1];
+            var explosion = StageManager.Instance.PlayerSkills[(int)PlayerSkillsKey.Explosion_1];
+            var beam = StageManager.Instance.PlayerSkills[(int)PlayerSkillsKey.Beam_1];
+            var bubble = StageManager.Instance.PlayerSkills[(int)PlayerSkillsKey.Bubble_1];
 
-            var skill = new PlayerSkillSelectData(skillData.SkillName, "이걸 선택해", skillData.Index);
-            var skill2 = new PlayerSkillSelectData(skillData2.SkillName, "빔 테스트", skillData2.Index);
-            var dummySkill = new PlayerSkillSelectData("화난 더미", "난 인형 안에 사는 유령이다!", -1);
+            var skill = new PlayerSkillSelectData(explosion.SkillName, "다중 몬스터 단일 공격", explosion.Index);
+            var skill2 = new PlayerSkillSelectData(beam.SkillName, "하나만 조짐", beam.Index);
+            var skill3 = new PlayerSkillSelectData(bubble.SkillName, "전체 공격", bubble.Index);
 
             skillSelectDatas[0] = skill;
             skillSelectDatas[1] = skill2;
-            skillSelectDatas[2] = dummySkill;
+            skillSelectDatas[2] = skill3;
         }
 
         public void UpdateSkill(int index)
@@ -76,7 +78,6 @@ namespace CoffeeCat
         // test
         private void EnableSkillSelect()
         {
-            skillEffects = new List<PlayerSkillEffect>();
             SetSelectSkillData();
             UIPresenter.Instance.OpenSkillSelectPanel(skillSelectDatas);
         }
@@ -86,14 +87,18 @@ namespace CoffeeCat
         private void Explosion(Table_PlayerSkills skillData)
         {
             var skillEffect = new PlayerSkill_Explosion(skillData);
-            skillEffects.Add(skillEffect);
             ActivateSkill(skillEffect);
         }
 
         private void Beam(Table_PlayerSkills skillData)
         {
             var skillEffect = new PlayerSkill_Beam(skillData);
-            skillEffects.Add(skillEffect);
+            ActivateSkill(skillEffect);
+        }
+
+        private void Bubble(Table_PlayerSkills skillData)
+        {
+            var skillEffect = new PlayerSkill_Bubble(skillData);
             ActivateSkill(skillEffect);
         }
 

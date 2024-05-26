@@ -62,7 +62,8 @@ namespace CoffeeCat
 
         private void AreaAttack(MonsterStatus monster)
         {
-            isAttacked = true;
+            DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
+            monster.OnDamaged(damageData, true);
         }
         
         private void SingleTargetAttack(MonsterStatus monster)

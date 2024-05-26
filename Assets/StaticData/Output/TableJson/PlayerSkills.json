@@ -6,7 +6,7 @@
     "SkillName": "Explosion",
     "SkillBaseDamage": 5.0,
     "SkillCoefficient": 0.2,
-    "SkillRange": 8.0,
+    "SkillRange": 5.0,
     "SkillCoolTime": 2.0,
     "AttackCount": 3.0,
     "": null
@@ -18,7 +18,7 @@
     "SkillName": "Explosion",
     "SkillBaseDamage": 5.0,
     "SkillCoefficient": 0.2,
-    "SkillRange": 8.0,
+    "SkillRange": 5.0,
     "SkillCoolTime": 2.0,
     "AttackCount": 5.0,
     "": null
@@ -30,7 +30,7 @@
     "SkillName": "Explosion",
     "SkillBaseDamage": 6.0,
     "SkillCoefficient": 0.2,
-    "SkillRange": 8.0,
+    "SkillRange": 5.0,
     "SkillCoolTime": 2.0,
     "AttackCount": 5.0,
     "": null
@@ -68,6 +68,18 @@
     "SkillCoefficient": 1.0,
     "SkillRange": 4.0,
     "SkillCoolTime": 3.0,
+    "AttackCount": 1.0,
+    "": null
+  },
+  {
+    "Index": 7.0,
+    "SkillKey": "Bubble",
+    "Grade": 1.0,
+    "SkillName": "Bubble",
+    "SkillBaseDamage": 10.0,
+    "SkillCoefficient": 0.3,
+    "SkillRange": -1.0,
+    "SkillCoolTime": 5.0,
     "AttackCount": 1.0,
     "": null
   }
