@@ -36,9 +36,9 @@ namespace CoffeeCat.RogueLite {
 		public virtual void EnteredPlayer() {
 			IsPlayerInside = true;
 			StageManager.Instance.InvokeRoomEnteringEvent(RoomType);
-			CatLog.Log("Entering Room. print room info log" + '\n' +
-			           $"type: {RoomType.ToStringExtended()}" + '\n' +
-			           $"rarity: {Rarity.ToString()}");
+			// CatLog.Log("Entering Room. print room info log" + '\n' +
+			//            $"type: {RoomType.ToStringExtended()}" + '\n' +
+			//            $"rarity: {Rarity.ToString()}");
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace CoffeeCat.RogueLite {
 		/// </summary>
 		public virtual void LeavesPlayer() {
 			IsPlayerInside = false;
-			CatLog.Log("Leaves Room");
+			// CatLog.Log("Leaves Room");
 		}
 	}
 

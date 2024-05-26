@@ -46,7 +46,7 @@ namespace CoffeeCat.FrameWork {
                             // Singleton Initialize Call. 
                             _instance.SendMessage(nameof(GenericSingleton<T>.Initialize)); // Type 1. SendMessage
                             //_instance.GetComponent<GenericSingleton<T>>().Initialize();  // Type 2. GetComponent
-                            CatLog.Log($"Initialized Singleton {typeof(T).Name}");
+                            // CatLog.Log($"Initialized Singleton {typeof(T).Name}");
                         }
                     }
                     return _instance;
