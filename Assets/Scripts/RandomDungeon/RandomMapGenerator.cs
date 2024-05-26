@@ -41,7 +41,7 @@ namespace RandomDungeonWithBluePrint
         public bool IsBakePathFindGrid = false;
         [SerializeField] private PathFindGrid pathFindGrid;
         
-        [Title("Debug")]
+        [Title("Debugging Options", TitleAlignment = TitleAlignments.Centered)]
         public bool IsDisplayRoomType = false;
         public bool IsDisplaySectionRectDrawer = false;
         public bool IsDisplaySectionIndex = false;
