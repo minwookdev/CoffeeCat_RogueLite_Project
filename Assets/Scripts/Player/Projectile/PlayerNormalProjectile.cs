@@ -10,10 +10,12 @@ namespace CoffeeCat
 {
     public class PlayerNormalProjectile : PlayerProjectile
     {
+        [SerializeField] private float maxDistance = 0;
+        
         protected override void ProjectilePath(Vector3 direction, float speed, Vector3 startPos)
         {
             tr.DORewind();
-            tr.DOMove(direction * 10f, speed)
+            tr.DOMove(direction * maxDistance, speed)
               .SetRelative().SetSpeedBased().SetEase(Ease.Linear).SetDelay(0.1f).From(startPos)
               .OnComplete(() => ObjectPoolManager.Instance.Despawn(gameObject));
         }

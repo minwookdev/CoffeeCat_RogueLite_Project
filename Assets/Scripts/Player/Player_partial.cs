@@ -23,10 +23,9 @@ namespace CoffeeCat
         {
             switch (skillData.SkillName)
             {
-                case "Explosion":
-                    var skillEffect = new PlayerSkill_Explosion(skillData);
-                    skillEffects.Add(skillEffect);
-                    ActivateSkill(skillEffect);
+                case "Explosion" : Explosion(skillData);
+                    break;
+                case "Beam" : Beam(skillData);
                     break;
                 default:
                     break;
@@ -46,15 +45,16 @@ namespace CoffeeCat
         {
             // TODO
             skillSelectDatas = new PlayerSkillSelectData[Defines.PLAYER_SKILL_SELECT_COUNT];
-            var skillData = StageManager.Instance.PlayerSkills[1];
+            var skillData = StageManager.Instance.PlayerSkills[(int)PlayerSkillsKey.Explosion_1];
+            var skillData2 = StageManager.Instance.PlayerSkills[(int)PlayerSkillsKey.Beam_1];
 
             var skill = new PlayerSkillSelectData(skillData.SkillName, "이걸 선택해", skillData.Index);
+            var skill2 = new PlayerSkillSelectData(skillData2.SkillName, "빔 테스트", skillData2.Index);
             var dummySkill = new PlayerSkillSelectData("화난 더미", "난 인형 안에 사는 유령이다!", -1);
-            var dummySkill2 = new PlayerSkillSelectData("냥냥 펀치", "가벼워서 아프지는 않지만 기분이 나쁘다.", -1);
-            
+
             skillSelectDatas[0] = skill;
-            skillSelectDatas[1] = dummySkill;
-            skillSelectDatas[2] = dummySkill2;
+            skillSelectDatas[1] = skill2;
+            skillSelectDatas[2] = dummySkill;
         }
 
         public void UpdateSkill(int index)
@@ -69,7 +69,7 @@ namespace CoffeeCat
             var getSkill = StageManager.Instance.PlayerSkills[index];
             ownedSkillsList.Add(getSkill.SkillName);
             GenerateSkillEffect(getSkill);
-            
+
             // TODO : 선택한 스킬이 원래 가지고 있던 스킬의 다음 등급일 경우
         }
 
@@ -80,5 +80,23 @@ namespace CoffeeCat
             SetSelectSkillData();
             UIPresenter.Instance.OpenSkillSelectPanel(skillSelectDatas);
         }
+
+        #region Gernerate Skill Effect
+
+        private void Explosion(Table_PlayerSkills skillData)
+        {
+            var skillEffect = new PlayerSkill_Explosion(skillData);
+            skillEffects.Add(skillEffect);
+            ActivateSkill(skillEffect);
+        }
+
+        private void Beam(Table_PlayerSkills skillData)
+        {
+            var skillEffect = new PlayerSkill_Beam(skillData);
+            skillEffects.Add(skillEffect);
+            ActivateSkill(skillEffect);
+        }
+
+        #endregion
     }
 }

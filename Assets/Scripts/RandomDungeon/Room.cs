@@ -6,6 +6,7 @@ using UnityEngine;
 using CoffeeCat;
 using CoffeeCat.Utils;
 using CoffeeCat.RogueLite;
+using Unity.VisualScripting;
 
 namespace RandomDungeonWithBluePrint {
     public class Joint {
@@ -41,7 +42,7 @@ namespace RandomDungeonWithBluePrint {
             foreach (var pos in Rect.allPositionsWithin) {
                 Positions.Add(pos);
             }
-
+    
             Edge[Constants.Direction.Left] = Positions.Where(p => p.x == Rect.xMin).ToList();
             Edge[Constants.Direction.Right] = Positions.Where(p => p.x == Rect.xMax - 1).ToList();
             Edge[Constants.Direction.Up] = Positions.Where(p => p.y == Rect.yMin).ToList();

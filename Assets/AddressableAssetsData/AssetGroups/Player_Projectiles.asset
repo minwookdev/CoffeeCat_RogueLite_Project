@@ -27,6 +27,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 24395c685cdbd2e47b9011b3caddde9d
+    m_Address: Beam
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5ed59c197b30a6f4e98c355416f5842e, type: 2}
   m_SchemaSet:

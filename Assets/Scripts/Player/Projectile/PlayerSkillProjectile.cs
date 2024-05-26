@@ -15,8 +15,8 @@ namespace CoffeeCat
         public enum SkillType
         {
             NONE,
-            AreaAttack,
             SingleTargetAttack,
+            AreaAttack,
         }
         
         [SerializeField] private SkillType skillType = SkillType.AreaAttack;
@@ -67,7 +67,6 @@ namespace CoffeeCat
         
         private void SingleTargetAttack(MonsterStatus monster)
         {
-            CatLog.Log("Explosion : SingleTargetAttack");
             isAttacked = true;
             monsterTr = monster.transform;
             DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);

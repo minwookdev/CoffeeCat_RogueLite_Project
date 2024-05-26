@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &11400000
+--- !u!114 &-3824738613313706437
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9,14 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0128e02d047f2764ba1d077b4c8371e3, type: 3}
-  m_Name: TSet_PlayerSkills
+  m_Script: {fileID: 11500000, guid: 5811683bffc7d4f47a22f123ed8c7714, type: 3}
+  m_Name: Table_PlayerSkills_4
   m_EditorClassIdentifier: 
-  values:
-  - {fileID: 4530314409209988454}
-  - {fileID: 4964070566705243657}
-  - {fileID: 2869866365336815852}
---- !u!114 &2869866365336815852
+  tKey: 4
+  Index: 4
+  SkillKey: Beam
+  Grade: 1
+  SkillName: Beam
+  SkillBaseDamage: 10
+  SkillCoefficient: 1
+  SkillRange: 3.5
+  SkillCoolTime: 3
+  AttackCount: 1
+--- !u!114 &-300710028020495340
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,7 +44,26 @@ MonoBehaviour:
   SkillRange: 8
   SkillCoolTime: 2
   AttackCount: 5
---- !u!114 &4530314409209988454
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0128e02d047f2764ba1d077b4c8371e3, type: 3}
+  m_Name: TSet_PlayerSkills
+  m_EditorClassIdentifier: 
+  values:
+  - {fileID: 1448175113971179376}
+  - {fileID: 8017154996130344658}
+  - {fileID: -300710028020495340}
+  - {fileID: -3824738613313706437}
+  - {fileID: 8267767750709854471}
+  - {fileID: 8959436135914411163}
+--- !u!114 &1448175113971179376
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -60,7 +85,7 @@ MonoBehaviour:
   SkillRange: 8
   SkillCoolTime: 2
   AttackCount: 3
---- !u!114 &4964070566705243657
+--- !u!114 &8017154996130344658
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,3 +107,47 @@ MonoBehaviour:
   SkillRange: 8
   SkillCoolTime: 2
   AttackCount: 5
+--- !u!114 &8267767750709854471
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5811683bffc7d4f47a22f123ed8c7714, type: 3}
+  m_Name: Table_PlayerSkills_5
+  m_EditorClassIdentifier: 
+  tKey: 5
+  Index: 5
+  SkillKey: Beam
+  Grade: 2
+  SkillName: Beam
+  SkillBaseDamage: 10
+  SkillCoefficient: 1
+  SkillRange: 4
+  SkillCoolTime: 3
+  AttackCount: 1
+--- !u!114 &8959436135914411163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5811683bffc7d4f47a22f123ed8c7714, type: 3}
+  m_Name: Table_PlayerSkills_6
+  m_EditorClassIdentifier: 
+  tKey: 6
+  Index: 6
+  SkillKey: Beam
+  Grade: 3
+  SkillName: Beam
+  SkillBaseDamage: 11
+  SkillCoefficient: 1
+  SkillRange: 4
+  SkillCoolTime: 3
+  AttackCount: 1

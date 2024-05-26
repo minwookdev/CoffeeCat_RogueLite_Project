@@ -34,5 +34,41 @@
     "SkillCoolTime": 2.0,
     "AttackCount": 5.0,
     "": null
+  },
+  {
+    "Index": 4.0,
+    "SkillKey": "Beam",
+    "Grade": 1.0,
+    "SkillName": "Beam",
+    "SkillBaseDamage": 10.0,
+    "SkillCoefficient": 1.0,
+    "SkillRange": 3.5,
+    "SkillCoolTime": 3.0,
+    "AttackCount": 1.0,
+    "": null
+  },
+  {
+    "Index": 5.0,
+    "SkillKey": "Beam",
+    "Grade": 2.0,
+    "SkillName": "Beam",
+    "SkillBaseDamage": 10.0,
+    "SkillCoefficient": 1.0,
+    "SkillRange": 4.0,
+    "SkillCoolTime": 3.0,
+    "AttackCount": 1.0,
+    "": null
+  },
+  {
+    "Index": 6.0,
+    "SkillKey": "Beam",
+    "Grade": 3.0,
+    "SkillName": "Beam",
+    "SkillBaseDamage": 11.0,
+    "SkillCoefficient": 1.0,
+    "SkillRange": 4.0,
+    "SkillCoolTime": 3.0,
+    "AttackCount": 1.0,
+    "": null
   }
 ]

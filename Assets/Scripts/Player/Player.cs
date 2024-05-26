@@ -55,7 +55,7 @@ namespace CoffeeCat
         {
             SetStatus();
             LoadResources();
-            NormalAttack();
+            // NormalAttack();
 
             // test
             CheckInvincibleTime();
@@ -115,9 +115,10 @@ namespace CoffeeCat
                           var targetMonster = FindNearestMonster();
                           if (targetMonster == null) return;
 
-                          var a = (tr.position - targetMonster.position).normalized;
-                          if (a != Vector3.zero)
-                              SwitchingPlayerDirection(a.x > 0 ? true : false);
+                          var targetDirection = (targetMonster.position - tr.position).normalized;
+                          
+                          if (targetDirection != Vector3.zero)
+                              SwitchingPlayerDirection(targetDirection.x > 0 ? true : false);
 
                           if (targetMonster.TryGetComponent(out MonsterState state))
                           {

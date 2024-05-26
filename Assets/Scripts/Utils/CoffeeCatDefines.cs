@@ -2,10 +2,10 @@ using System;
 
 namespace CoffeeCat.Utils.Defines
 {
-    public static class Defines 
+    public static class Defines
     {
         public const int PLAYER_SKILL_SELECT_COUNT = 3;
-        
+
         public static string ToStringEx(this AddressablesKey key)
         {
             return key switch
@@ -75,9 +75,12 @@ namespace CoffeeCat.Utils.Defines
     public enum PlayerSkillsKey
     {
         NONE,
-        Explosion = 1,
+        Explosion_1 = 1,
         Explosion_2,
         Explosion_3,
+        Beam_1,
+        Beam_2,
+        Beam_3,
     }
 
     public enum SkillType

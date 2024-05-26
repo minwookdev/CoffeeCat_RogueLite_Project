@@ -30,6 +30,7 @@ namespace CoffeeCat
         private Room playerCurrentRoom = null;
         
         // Properties
+        public Room PlayerCurrentRoom => playerCurrentRoom;
         public bool IsPlayerInsideRoom => playerCurrentRoom != null;
         public int CurrentRoomMonsterKilledCount { get; private set; } = 0;
         public int CurrentFloorMonsterKillCount { get; private set; } = 0;
