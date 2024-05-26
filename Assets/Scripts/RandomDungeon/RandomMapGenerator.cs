@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 using Sirenix.OdinInspector;
-using CoffeeCat;
 using CoffeeCat.FrameWork;
-using CoffeeCat.RogueLite;
 using CoffeeCat.Utils;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
+using UniRx;
 using UnityRandom = UnityEngine.Random;
 using PathFindGrid = CoffeeCat.Pathfinding2D.Grid;
 
 namespace RandomDungeonWithBluePrint
 {
-    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
     public class RandomMapGenerator : MonoBehaviour
     {
         [Serializable]
@@ -48,55 +43,39 @@ namespace RandomDungeonWithBluePrint
         
         [Title("Debug")]
         public bool IsDisplayRoomType = false;
-        public bool IsDisplayMonsterSpawnPoint = false;
-
-        private void Awake()
-        {
-            // 난수 생성 시드값으로 초기화
-            UnityRandom.InitState(seed);
-            
-            generateButton.onClick.AddListener(() =>
-            {
-                onDisposeMapBefore.Invoke();
-                
-                ExecuteGenerate();
-                DisplayRoomType();
-                /*DisplayMonsterSpawnPoint();*/
-                
-                onGeneratedMapCompleted?.Invoke(field);
-            });
-
-            // 초기 맵 생성 실행
-            ExecuteGenerate();
-            return;
-
-            void ExecuteGenerate()
-            {
-                var targetFieldBluePrint = (DefinitiveBluePrint) ? DefinitiveBluePrint : Raffle().BluePrint;
-                Create(targetFieldBluePrint);
-            }
-        }
-
+        public bool IsDisplaySectionRectDrawer = false;
+        public bool IsDisplaySectionIndex = false;
+        public bool IsDisplayRoomRectDrawer = false;
+        public Color RoomDrawerColor = Color.green;
+        public Color SectionDrawerColor = Color.white;
+        
         private void Start()
         {
-            // Awake에서 맵이 생성되었다면 이벤트 호출
-            if (IsGenerateCompleted) {
-                // UnityEvent에서 Manager에 접근할 가능성이 있기 때문에 Awake에서 호출을 피하기 위함
-                onGeneratedMapCompleted?.Invoke(field);
-                DisplayRoomType();
-                /*DisplayMonsterSpawnPoint();*/
-            }
+            // Init Random Seed
+            UnityRandom.InitState(seed);
+            
+            // Generate Map
+            ExecuteGenerate();
             
             // Generate PathFind Grid
             if (IsBakePathFindGrid) {
                 pathFindGrid.CreateGridDictionary(this);
             }
+            
+            // Add Generate Button Event
+            generateButton.onClick.AddListener(ExecuteGenerate);
+            InitDebugs();
+            return;
 
-            /*var gatePoints = field.Gates.Select(gate => gate.Position);
-            foreach (var point in gatePoints) {
-                Vector2 spawnPoint = new Vector2(point.x, point.y);
-                ObjectPoolManager.Instance.Spawn<Transform>("Guide_Circle2D", spawnPoint);
-            }*/
+            void ExecuteGenerate()
+            {
+                onDisposeMapBefore?.Invoke();
+                
+                var targetFieldBluePrint = (DefinitiveBluePrint) ? DefinitiveBluePrint : Raffle().BluePrint;
+                Create(targetFieldBluePrint);
+                
+                onGeneratedMapCompleted?.Invoke(field);
+            }
         }
         
         private void Create(BluePrintWithWeight bluePrintWeight) {
@@ -131,63 +110,130 @@ namespace RandomDungeonWithBluePrint
             return candidate[pick];
         }
 
-        /// <summary>
-        /// BattleRoom의 MonsterSpawnPoint를 표시
-        /// </summary>
-        private void DisplayMonsterSpawnPoint() {
-            if (!IsDisplayMonsterSpawnPoint) {
-                return;
-            }
-            
-            string key = "Guide_Circle2D";
-            if (!ObjectPoolManager.Instance.IsExistInPoolDictionary(key)) {
-                return;
+        #region Debug_Drawer
+        
+        private void InitDebugs() {
+            if (IsDisplayRoomType) {
+                DisplayRoomType();
             }
 
-            ObjectPoolManager.Instance.DespawnAll(key);
-            
-            foreach (var room in field.Rooms) {
-                if (room.RoomType != RoomType.MonsterSpawnRoom || room.RoomData is not BattleRoomData battleRoom) {
-                    continue;
-                }
-
-                foreach (var position in battleRoom.SpawnPositions) {
-                    ObjectPoolManager.Instance.Spawn<Transform>(key, position, Quaternion.identity);
-                }
+            if (IsDisplaySectionIndex) {
+                DisplaySectionIndex();
             }
+            
+            // Init Observable Room Type
+            this.ObserveEveryValueChanged(_ => IsDisplayRoomType)
+                .Skip(0)
+                .TakeUntilDestroy(this)
+                .Subscribe(isEnable => {
+                    if (isEnable) {
+                        DisplayRoomType();
+                    }
+                    else {
+                        ClearRoomTypeText();
+                    }
+                })
+                .AddTo(this);
+            
+            // Init Observable Section Index
+            this.ObserveEveryValueChanged(_ => IsDisplaySectionIndex)
+                .Skip(0)
+                .TakeUntilDestroy(this)
+                .Subscribe(isEnable => {
+                    if (isEnable) {
+                        DisplaySectionIndex();
+                    }
+                    else {
+                        ClearSectionIndexText();
+                    }
+                })
+                .AddTo(this);
         }
         
         /// <summary>
         /// RoomType을 표시
         /// </summary>
         private void DisplayRoomType() {
-            if (!IsDisplayRoomType) {
-                return;
-            }
-
-            string key = "Guide_Text";
-            if (!ObjectPoolManager.Instance.IsExistInPoolDictionary(key))
-                return;
-            ObjectPoolManager.Instance.DespawnAll(key);
+            ClearRoomTypeText();
             
             foreach (var room in field.Rooms) {
                 Vector2 spawnPoint = new Vector2(room.Rect.xMin, room.Rect.yMin);
-                var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>(key, spawnPoint, Quaternion.identity);
+                var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_room_type", spawnPoint, Quaternion.identity);
                 text.SetText(room.RoomType.ToStringExtended());
             }
         }
 
+        private void ClearRoomTypeText() {
+            if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_room_type"))
+                return;
+            ObjectPoolManager.Instance.DespawnAll("editor_text_room_type");
+        }
+
+        private void DisplaySectionIndex() {
+            ClearSectionIndexText();
+            
+            var sections = field?.Sections;
+            if (sections == null)
+                return;
+            
+            for (int i = 0; i < sections.Count; i++) {
+                var rect = sections[i].Rect;
+                var point = new Vector2(rect.xMin, rect.yMax);
+                var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_section_index", point, Quaternion.identity);
+                text.SetText("< " + sections[i].Index.ToString() + " >");
+            }
+        }
+        
+        private void ClearSectionIndexText() {
+            if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_section_index"))
+                return;
+            ObjectPoolManager.Instance.DespawnAll("editor_text_section_index");
+        }
+        
         private void OnDrawGizmos() {
             if (field == null) {
                 return;
             }
-
-            foreach (var room in field.Rooms) {
-                RectInt floorRectInt = room.FloorRectInt;
-                Vector3 centerVec = new Vector3(floorRectInt.center.x, floorRectInt.center.y, 0f);
-                Vector3 sizeVec = new Vector3(floorRectInt.width, floorRectInt.height, 0f);
-                Gizmos.DrawWireCube(centerVec, sizeVec);
+            
+            // Draw Room Rect
+            if (IsDisplaySectionRectDrawer) {
+                var sections = field?.Sections;
+                if (sections == null)
+                    return;
+                
+                Gizmos.color = SectionDrawerColor;
+                for (int i = 0; i < sections.Count; i++) {
+                    if (sections[i] == null)
+                        continue;
+                    var rect = sections[i].Rect;
+                    var center = new Vector3(rect.center.x, rect.center.y, 0f);
+                    var size = new Vector3(rect.width, rect.height, 0f);
+                    Gizmos.DrawWireCube(center, size);
+                }
             }
+            
+            // Draw Section Rect
+            if (IsDisplayRoomRectDrawer) {
+                var rooms = field?.Rooms;
+                if (rooms == null)
+                    return;
+                
+                Gizmos.color = RoomDrawerColor;
+                for (var i = 0; i < rooms.Count; i++) {
+                    var room = rooms[i];
+                    if (room == null)
+                        continue;
+                    RectInt floorRectInt = room.FloorRectInt;
+                    Vector3 centerVec = new Vector3(floorRectInt.center.x, floorRectInt.center.y, 0f);
+                    Vector3 sizeVec = new Vector3(floorRectInt.width, floorRectInt.height, 0f);
+                    Gizmos.DrawWireCube(centerVec, sizeVec);
+                }
+            }
+
+            // Restore Gizmos Color 
+            Gizmos.color = Color.white;
         }
+        
+        #endregion
     }
 }
