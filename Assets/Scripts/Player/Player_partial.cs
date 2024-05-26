@@ -16,8 +16,8 @@ namespace CoffeeCat
         [Title("Skill")]
         [ShowInInspector] private List<string> ownedSkillsList = new List<string>();
 
+        private PlayerSkillSelectData[] skillSelectDatas = null;
         private List<PlayerSkillEffect> skillEffects = null;
-        private PlayerSkillSelectData[] skillSelelectDatas = null;
 
         private void GenerateSkillEffect(Table_PlayerSkills skillData)
         {
@@ -44,16 +44,17 @@ namespace CoffeeCat
 
         private void SetSelectSkillData()
         {
-            skillSelelectDatas = new PlayerSkillSelectData[Defines.PLAYER_SKILL_SELECT_COUNT];
-            var skillData = DataManager.Instance.PlayerSkills[1];
+            // TODO
+            skillSelectDatas = new PlayerSkillSelectData[Defines.PLAYER_SKILL_SELECT_COUNT];
+            var skillData = StageManager.Instance.PlayerSkills[1];
 
             var skill = new PlayerSkillSelectData(skillData.SkillName, "이걸 선택해", skillData.Index);
             var dummySkill = new PlayerSkillSelectData("화난 더미", "난 인형 안에 사는 유령이다!", -1);
             var dummySkill2 = new PlayerSkillSelectData("냥냥 펀치", "가벼워서 아프지는 않지만 기분이 나쁘다.", -1);
             
-            skillSelelectDatas[0] = skill;
-            skillSelelectDatas[1] = dummySkill;
-            skillSelelectDatas[2] = dummySkill2;
+            skillSelectDatas[0] = skill;
+            skillSelectDatas[1] = dummySkill;
+            skillSelectDatas[2] = dummySkill2;
         }
 
         public void UpdateSkill(int index)
@@ -65,7 +66,7 @@ namespace CoffeeCat
             }
 
             // 새로운 스킬 Get
-            var getSkill = DataManager.Instance.PlayerSkills[index];
+            var getSkill = StageManager.Instance.PlayerSkills[index];
             ownedSkillsList.Add(getSkill.SkillName);
             GenerateSkillEffect(getSkill);
             
@@ -77,7 +78,7 @@ namespace CoffeeCat
         {
             skillEffects = new List<PlayerSkillEffect>();
             SetSelectSkillData();
-            UIPresenter.Instance.OpenSkillSelectPanel(skillSelelectDatas);
+            UIPresenter.Instance.OpenSkillSelectPanel(skillSelectDatas);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace CoffeeCat
         {
             SetStatus();
             LoadResources();
-            // NormalAttack();
+            NormalAttack();
 
             // test
             CheckInvincibleTime();
@@ -73,7 +73,7 @@ namespace CoffeeCat
 
         private void SetStatus()
         {
-            status = new PlayerStatus(DataManager.Instance.playerStatus[(int)playerName]);
+            status = new PlayerStatus(StageManager.Instance.PlayerStatus[(int)playerName]);
         }
 
         private void Movement()

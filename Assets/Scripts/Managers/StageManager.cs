@@ -44,6 +44,10 @@ namespace CoffeeCat
         [SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
         [SerializeField] private UnityEvent OnSkillSelectCompleted = null;
 
+        [Title("Player_TSet")]
+        public TSet_PlayerStatus PlayerStatus = null;
+        public TSet_PlayerSkills PlayerSkills = null;
+
         private void Update()
         {
             if (!RogueLiteManager.Instance.SpawnedPlayer) {
