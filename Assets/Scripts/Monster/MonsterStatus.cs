@@ -12,6 +12,7 @@ namespace CoffeeCat {
         [SerializeField, ReadOnly] public MonsterStat CurrentStat { get; private set; } = null;
         private MonsterStat originStat = null; // 수정금지
         private MonsterState state = null;
+        public bool IsAlive => CurrentStat.HP > 0f;
 
         private void Start() {
             state = GetComponent<MonsterState>();
@@ -73,8 +74,11 @@ namespace CoffeeCat {
             }
         }
 
-        private void Attack(in DamageData damageData) {
-
+        public Vector2 GetCenterPosition() {
+            if (state != null && state.CenterPointTr) 
+                return state.CenterPointTr.position;
+            CatLog.ELog("Monster State or Center Point Transform is Null");
+            return Vector2.zero;
         }
     }
 }
