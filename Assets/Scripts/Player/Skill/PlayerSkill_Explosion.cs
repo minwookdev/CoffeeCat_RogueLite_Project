@@ -12,31 +12,39 @@ namespace CoffeeCat
 {
     public class PlayerSkill_Explosion : PlayerSkillEffect
     {
-        protected override void SkillEffect(Transform playerTr, PlayerStatus playerStat)
+        protected override void SkillEffect(PlayerStatus playerStat)
         {
-            Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
+            float currentCoolTime;
+            currentCoolTime = skillData.SkillCoolTime;
+
+            Observable.EveryUpdate()
+                      .Skip(TimeSpan.Zero)
                       .Subscribe(_ =>
                       {
-                          // TODO : 같은 collider를 여러번 검출하는지 test > 챗지피티한테 물어바
-                          // TODO : 몬스터가 없어서 null일 경우 쿨타임은?
-                          // TODO : 몬스터가 죽으면 return
+                          currentCoolTime += Time.deltaTime;
 
-                          var targets = FindAroundMonsters(playerTr, skillData.AttackCount);
-
-                          if (targets == null)
-                              return;
-
+                          if (currentCoolTime < skillData.SkillCoolTime) return;
+                          
+                          var targets = FindAroundMonsters(skillData.AttackCount);
+                          
+                          if (targets == null) return;
+                          
                           foreach (var target in targets)
                           {
-                              var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.position);
-                              skillObj.TryGetComponent(out PlayerSkillProjectile projectile);
-                              projectile.SetDamageData(playerStat, skillData.SkillBaseDamage,
-                                                       skillData.SkillCoefficient);
+                              if (target == null) continue;
+                              
+                              var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.transform.position);
+                              var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
+                              projectile.SingleTargetAttack(playerStat, target, skillData.SkillBaseDamage, skillData.SkillCoefficient);
                           }
+
+                          currentCoolTime = 0;
                       }).AddTo(playerTr.gameObject);
+            
+            // TODO : 플레이어 비활성화시 구독 해제할 것인지, 파괴시 구독 해제할 것인지
         }
 
-        public PlayerSkill_Explosion(Table_PlayerSkills skillKey) : base(skillKey)
+        public PlayerSkill_Explosion(Transform playerTr, Table_PlayerSkills skillKey) : base(playerTr, skillKey)
         {
         }
     }

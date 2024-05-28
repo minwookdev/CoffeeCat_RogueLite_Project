@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UniRx;
+using Unity.VisualScripting;
 using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
@@ -55,7 +57,7 @@ namespace CoffeeCat
         {
             SetStatus();
             LoadResources();
-            // NormalAttack();
+            NormalAttack();
 
             // test
             CheckInvincibleTime();
@@ -113,25 +115,18 @@ namespace CoffeeCat
                       .Subscribe(_ =>
                       {
                           var targetMonster = FindNearestMonster();
+
                           if (targetMonster == null) return;
 
-                          var targetDirection = (targetMonster.position - tr.position).normalized;
-                          
-                          if (targetDirection != Vector3.zero)
-                              SwitchingPlayerDirection(targetDirection.x > 0 ? true : false);
+                          var targetMonsterCenter = targetMonster.GetComponent<MonsterState>().CenterPointTr;
+                          var targetDirection = (targetMonsterCenter.position - projectilePoint.position).normalized;
+                          SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
 
-                          if (targetMonster.TryGetComponent(out MonsterState state))
-                          {
-                              targetMonster = state.CenterPointTr;
-                          }
-
-                          var direction = (targetMonster.position - projectilePoint.position).normalized;
                           var spawnObj =
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
                                                                projectilePoint.position);
-                          spawnObj.TryGetComponent(out PlayerNormalProjectile projectile);
-                          projectile.projectileDamageData = new ProjectileDamageData(status);
-                          projectile.Fire(direction, status.ProjectileSpeed, projectilePoint.position);
+                          var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
+                          projectile.Fire(status, projectilePoint.position, targetDirection);
 
                           hasFiredProjectile = true;
                       }).AddTo(this);
@@ -144,18 +139,12 @@ namespace CoffeeCat
                 if (monsters.Length <= 0)
                     return null;
 
-                var target = monsters[0].transform;
-                var shortestDistance = Vector2.Distance(Tr.position, target.position);
-
-                for (int i = 1; i < monsters.Length; i++)
-                {
-                    var distance = Vector2.Distance(Tr.position, monsters[i].transform.position);
-
-                    if (distance < shortestDistance)
-                        target = monsters[i].transform;
-
-                    i++;
-                }
+                var target = monsters
+                             .Select(monster => monster.transform)
+                             .Where(monster => monster.GetComponent<MonsterState>().State != MonsterState.EnumMonsterState.Death)
+                             .OrderBy(monster => Vector2.Distance
+                                          (projectilePoint.position, monster.position))
+                             .FirstOrDefault();
 
                 return target;
             }

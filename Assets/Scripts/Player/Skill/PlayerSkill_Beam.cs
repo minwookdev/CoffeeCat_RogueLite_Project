@@ -9,24 +9,33 @@ namespace CoffeeCat
 {
     public class PlayerSkill_Beam : PlayerSkillEffect
     {
-        protected override void SkillEffect(Transform playerTr, PlayerStatus playerStat)
+        protected override void SkillEffect(PlayerStatus playerStat)
         {
-            Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
+            float currentCoolTime;
+            currentCoolTime = skillData.SkillCoolTime;
+            
+            Observable.EveryUpdate()
+                      .Skip(TimeSpan.Zero)
                       .Subscribe(_ =>
                       {
-                          var target = FindAroundMonster(playerTr, skillData.AttackCount);
+                            currentCoolTime += Time.deltaTime;
+    
+                            if (currentCoolTime < skillData.SkillCoolTime) return;
 
-                          if (target == null)
-                              return;
+                            var target = FindAroundMonster(skillData.AttackCount);
 
-                          var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.position);
-                          skillObj.TryGetComponent(out PlayerSkillProjectile projectile);
-                          projectile.SetDamageData(playerStat, skillData.SkillBaseDamage,
-                                                   skillData.SkillCoefficient);
+                            if (target == null) return;
+
+                            var monsterStat = target.GetComponent<MonsterStatus>();
+                            var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, monsterStat.transform.position);
+                            var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
+                            projectile.SingleTargetAttack(playerStat, monsterStat, skillData.SkillBaseDamage, skillData.SkillCoefficient);
+
+                            currentCoolTime = 0;
                       }).AddTo(playerTr.gameObject);
         }
 
-        public PlayerSkill_Beam(Table_PlayerSkills skillData) : base(skillData)
+        public PlayerSkill_Beam(Transform playerTr, Table_PlayerSkills skillData) : base(playerTr, skillData)
         {
         }
     }

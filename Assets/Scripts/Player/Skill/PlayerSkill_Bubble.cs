@@ -11,19 +11,32 @@ namespace CoffeeCat
     {
         // TODO : 몬스터 스턴이 필요해
         // TODO : Battle Room 클리어 여부
-        protected override void SkillEffect(Transform playerTr, PlayerStatus playerStat)
+        protected override void SkillEffect(PlayerStatus playerStat)
         {
-            Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
+            float currentCoolTime;
+            currentCoolTime = skillData.SkillCoolTime;
+            
+            Observable.EveryUpdate()
+                      .Skip(TimeSpan.Zero)
                       .Subscribe(_ =>
                       {
+                          currentCoolTime += Time.deltaTime;
+                          
+                          if (currentCoolTime < skillData.SkillCoolTime) return;
+
+                          var targets = FindAllMonsters();
+                          
+                          if (targets == null) return;
+
                           var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, playerTr.position);
-                          skillObj.TryGetComponent(out PlayerSkillProjectile projectile);
-                          projectile.SetDamageData(playerStat, skillData.SkillBaseDamage,
-                                                   skillData.SkillCoefficient);
+                          var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
+                          projectile.AreaAttack(playerStat, targets, skillData.SkillBaseDamage, skillData.SkillCoefficient);
+                          
+                          currentCoolTime = 0;
                       }).AddTo(playerTr.gameObject);
         }
 
-        public PlayerSkill_Bubble(Table_PlayerSkills skillData) : base(skillData)
+        public PlayerSkill_Bubble(Transform playerTr, Table_PlayerSkills skillData) : base(playerTr, skillData)
         {
         }
     }

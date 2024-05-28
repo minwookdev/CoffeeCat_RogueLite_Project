@@ -39,7 +39,7 @@ namespace CoffeeCat
                 .Where(_ => isPlayerInBattle)
                 .Where(_ => !isDead)
                 .Skip(TimeSpan.Zero)
-                .Subscribe(_ => { skillEffect.Fire(tr, status); });
+                .Subscribe(_ => { skillEffect.Fire(status); });
         }
 
         // TODO
@@ -86,19 +86,19 @@ namespace CoffeeCat
 
         private void Explosion(Table_PlayerSkills skillData)
         {
-            var skillEffect = new PlayerSkill_Explosion(skillData);
+            var skillEffect = new PlayerSkill_Explosion(tr, skillData);
             ActivateSkill(skillEffect);
         }
 
         private void Beam(Table_PlayerSkills skillData)
         {
-            var skillEffect = new PlayerSkill_Beam(skillData);
+            var skillEffect = new PlayerSkill_Beam(tr, skillData);
             ActivateSkill(skillEffect);
         }
 
         private void Bubble(Table_PlayerSkills skillData)
         {
-            var skillEffect = new PlayerSkill_Bubble(skillData);
+            var skillEffect = new PlayerSkill_Bubble(tr, skillData);
             ActivateSkill(skillEffect);
         }
 

@@ -11,26 +11,42 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect
     {
+        protected Transform playerTr = null;
         protected Table_PlayerSkills skillData = null;
         public Table_PlayerSkills SkillData => skillData;
 
-        public PlayerSkillEffect(Table_PlayerSkills skillData)
+        public PlayerSkillEffect(Transform playerTr, Table_PlayerSkills skillData)
         {
+            this.playerTr = playerTr;
             this.skillData = skillData;
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(skillData.SkillKey, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
-        public void Fire(Transform playerTr, PlayerStatus playerStat)
+        public void Fire(PlayerStatus playerStat)
         {
-            SkillEffect(playerTr, playerStat);
+            SkillEffect(playerStat);
         }
 
-        protected virtual void SkillEffect(Transform playerTr, PlayerStatus playerStat)
+        protected virtual void SkillEffect(PlayerStatus playerStat)
         {
         }
 
-        protected List<Transform> FindAroundMonsters(Transform playerTr, int attackCount)
+        protected List<MonsterStatus> FindAllMonsters()
+        {
+            var monsters = Physics2D.OverlapBoxAll(playerTr.position,
+                                                   new Vector2(Defines.PLAYER_AREA_SKILL_VECTOR_X,
+                                                               Defines.PLAYER_AREA_SKILL_VECTOR_Y), 0f,
+                                                   1 << LayerMask.NameToLayer("Monster"));
+
+            if (monsters.Length <= 0) return null;
+
+            return monsters.Select(mon => mon.GetComponent<MonsterStatus>())
+                           // .Where(monsterStatus => monsterStatus.state != Dead)
+                           .ToList();
+        }
+
+        protected List<MonsterStatus> FindAroundMonsters(int attackCount)
         {
             var monsters = new Collider2D[attackCount];
             var monsterCount = Physics2D.OverlapCircleNonAlloc
@@ -39,23 +55,28 @@ namespace CoffeeCat
             if (monsterCount <= 0)
                 return null;
 
-            var targets = new List<Transform>();
-            
-            for (int i = 0; i < monsterCount; i++)
-            {
-                targets.Add(monsters[i].transform);
-            }
+            var targets = monsters
+                          .Where(collider2D => collider2D)
+                          .Select(collider2D => collider2D.GetComponent<MonsterStatus>()) 
+                          // .Where(monsterStatus => monsterStatus.state != Dead)
+                          .ToList();
 
             return targets;
         }
 
-        protected Transform FindAroundMonster(Transform playerTr, int attackCount)
+        protected MonsterStatus FindAroundMonster(int attackCount)
         {
             var monsters = new Collider2D[attackCount];
             var monsterCount = Physics2D.OverlapCircleNonAlloc(playerTr.position, skillData.SkillRange, monsters,
-                                            1 << LayerMask.NameToLayer("Monster"));
+                                                               1 << LayerMask.NameToLayer("Monster"));
 
-            return monsterCount <= 0 ? null : monsters[0].transform;
+            if (monsterCount <= 0) return null;
+
+            return monsters
+                   .Where(collider2D => collider2D)
+                   .Select(collider2D => collider2D.GetComponent<MonsterStatus>())
+                   // .Where(monsterStatus => monsterStatus.state != Dead)
+                   .FirstOrDefault();
         }
     }
 }

@@ -12,18 +12,16 @@ namespace CoffeeCat
     public class PlayerProjectile : MonoBehaviour
     {
         protected Transform tr = null;
-        public ProjectileDamageData projectileDamageData { get; set; } = null;
+        protected ProjectileDamageData projectileDamageData = null;
 
         protected virtual void Awake()
         {
             tr = GetComponent<Transform>();
         }
-
-        public void Fire(Vector3 direction, float speed, Vector3 startPos)
+        
+        protected virtual void SetDamageData(PlayerStatus playerStatus, float skillBaseDamage = 0f, float skillCoefficient = 1f)
         {
-            ProjectilePath(direction, speed, startPos);
+            projectileDamageData = new ProjectileDamageData(playerStatus, skillBaseDamage, skillCoefficient);
         }
-
-        protected virtual void ProjectilePath(Vector3 direction, float speed, Vector3 startPos) { }
     }
 }
