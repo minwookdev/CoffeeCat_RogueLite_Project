@@ -31,7 +31,7 @@ namespace CoffeeCat
                           
                           foreach (var target in targets)
                           {
-                              if (target == null) continue;
+                              if (!target.IsAlive) continue;
                               
                               var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.transform.position);
                               var projectile = skillObj.GetComponent<PlayerSkillProjectile>();

@@ -11,6 +11,7 @@ namespace CoffeeCat
 {
     public class PlayerProjectile : MonoBehaviour
     {
+        [SerializeField] protected float knockBackForce = 0f; 
         protected Transform tr = null;
         protected ProjectileDamageData projectileDamageData = null;
 

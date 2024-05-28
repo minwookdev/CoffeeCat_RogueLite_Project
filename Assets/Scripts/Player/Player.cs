@@ -118,8 +118,8 @@ namespace CoffeeCat
 
                           if (targetMonster == null) return;
 
-                          var targetMonsterCenter = targetMonster.GetComponent<MonsterState>().CenterPointTr;
-                          var targetDirection = (targetMonsterCenter.position - projectilePoint.position).normalized;
+                          var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
+                          var targetDirection = (targetMonsterStatus.GetCenterPosition() - projectilePoint.position).normalized;
                           SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
 
                           var spawnObj =

@@ -74,11 +74,11 @@ namespace CoffeeCat {
             }
         }
 
-        public Vector2 GetCenterPosition() {
+        public Vector3 GetCenterPosition() {
             if (state != null && state.CenterPointTr) 
                 return state.CenterPointTr.position;
             CatLog.ELog("Monster State or Center Point Transform is Null");
-            return Vector2.zero;
+            return Vector3.zero;
         }
     }
 }

@@ -15,6 +15,7 @@ namespace CoffeeCat
         protected Table_PlayerSkills skillData = null;
         public Table_PlayerSkills SkillData => skillData;
 
+        // TODO : 죽은 몬스터 걸러내는 부분 좀 다시 생각해야할 듯..
         public PlayerSkillEffect(Transform playerTr, Table_PlayerSkills skillData)
         {
             this.playerTr = playerTr;
@@ -42,7 +43,6 @@ namespace CoffeeCat
             if (monsters.Length <= 0) return null;
 
             return monsters.Select(mon => mon.GetComponent<MonsterStatus>())
-                           // .Where(monsterStatus => monsterStatus.state != Dead)
                            .ToList();
         }
 
@@ -58,7 +58,6 @@ namespace CoffeeCat
             var targets = monsters
                           .Where(collider2D => collider2D)
                           .Select(collider2D => collider2D.GetComponent<MonsterStatus>()) 
-                          // .Where(monsterStatus => monsterStatus.state != Dead)
                           .ToList();
 
             return targets;
@@ -75,7 +74,6 @@ namespace CoffeeCat
             return monsters
                    .Where(collider2D => collider2D)
                    .Select(collider2D => collider2D.GetComponent<MonsterStatus>())
-                   // .Where(monsterStatus => monsterStatus.state != Dead)
                    .FirstOrDefault();
         }
     }

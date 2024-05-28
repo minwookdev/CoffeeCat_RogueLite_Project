@@ -10,7 +10,7 @@ namespace CoffeeCat
 {
     public class PlayerNormalProjectile : PlayerProjectile
     {
-        [SerializeField] private float maxDistance = 0;
+        private readonly float maxDistance = 20f;
 
         private void ProjectilePath(float speed, Vector3 startPos, Vector3 direction)
         {
@@ -26,7 +26,7 @@ namespace CoffeeCat
                 return;
 
             var damageData = DamageData.GetData(projectileDamageData, monsterStat.CurrentStat);
-            monsterStat.OnDamaged(damageData, true, tr.position, 10f);
+            monsterStat.OnDamaged(damageData, true, tr.position, 3f);
 
             ObjectPoolManager.Instance.Despawn(gameObject);
         }

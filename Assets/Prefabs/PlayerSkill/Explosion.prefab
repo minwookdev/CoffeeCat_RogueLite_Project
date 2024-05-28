@@ -25733,7 +25733,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71168b741e6ca714dad3bb0d7cee55f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillType: 1
+  knockBackForce: 5
 --- !u!198 &5619386021293234897
 ParticleSystem:
   m_ObjectHideFlags: 0

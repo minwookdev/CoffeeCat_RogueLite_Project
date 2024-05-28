@@ -28,13 +28,13 @@ namespace CoffeeCat
         public void AreaAttack(PlayerStatus playerStatus, List<MonsterStatus> monsters, float skillBaseDamage = 0f, float skillCoefficient = 1f)
         {
             SetDamageData(playerStatus, skillBaseDamage, skillCoefficient);
-
+            
             foreach (var monster in monsters)
             {
-                if (monster != null) continue;
+                if (!monster.IsAlive) continue;
                 
                 DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
-                monster.OnDamaged(damageData, true);
+                monster.OnDamaged(damageData, true, tr.position, knockBackForce);
             }
         }
 
@@ -44,7 +44,7 @@ namespace CoffeeCat
             UpdatePosition(monster.transform);
             
             DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
-            monster.OnDamaged(damageData, true);
+            monster.OnDamaged(damageData, true, tr.position, knockBackForce);
         }
 
         private void DespawnProjectile()

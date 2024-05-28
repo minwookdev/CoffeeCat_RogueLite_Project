@@ -24,12 +24,11 @@ namespace CoffeeCat
 
                             var target = FindAroundMonster(skillData.AttackCount);
 
-                            if (target == null) return;
+                            if (!target.IsAlive) return;
 
-                            var monsterStat = target.GetComponent<MonsterStatus>();
-                            var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, monsterStat.transform.position);
+                            var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.transform.position);
                             var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
-                            projectile.SingleTargetAttack(playerStat, monsterStat, skillData.SkillBaseDamage, skillData.SkillCoefficient);
+                            projectile.SingleTargetAttack(playerStat, target, skillData.SkillBaseDamage, skillData.SkillCoefficient);
 
                             currentCoolTime = 0;
                       }).AddTo(playerTr.gameObject);
