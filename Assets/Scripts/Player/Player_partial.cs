@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoffeeCat.FrameWork;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UniRx;
@@ -80,7 +81,7 @@ namespace CoffeeCat
                 }
                 
                 var pickSkill = StageManager.Instance.PlayerSkills[randomOwnedSkill.Index + 1];
-                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index);
+                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, false);
                 skillSelectDatas[skillSelectDataIndex] = pickSkillSelectData;
                 skillSelectDataIndex++;
 
@@ -99,7 +100,7 @@ namespace CoffeeCat
             {
                 var pickSkill = newSkillList[Random.Range(0, newSkillList.Count)];
                 newSkillList.Remove(pickSkill);
-                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index);
+                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
                 skillSelectDatas[skillSelectDataIndex] = pickSkillSelectData;
                 skillSelectDataIndex++;
             }
@@ -107,8 +108,17 @@ namespace CoffeeCat
             return skillSelectDatas;
         }
 
-        public void UpdateSkill(int index)
+        public void UpdateSkill(PlayerSkillSelectData data) 
         {
+            if (data == null) 
+            {
+                CatLog.ELog("Invalid Data !");
+                return;    
+            }
+
+            var index = data.Index;
+            var isOwned = data.isOwned;
+            
             // -1 index is Invalid
             if (index == -1)
             {
@@ -125,8 +135,6 @@ namespace CoffeeCat
             // 보유중인 스킬 Upgrade
             var getSkill2 = StageManager.Instance.PlayerSkills[index];
             // SkillEffect.UpdateSkillData(getSkill2);
-            
-            
         }
 
         // test

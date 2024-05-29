@@ -42,6 +42,9 @@ namespace CoffeeCat.UI {
 
         public void ClosePanel() {
             gameObject.SetActive(false);
+            for (int i = 0; i < selectButtons.Length; i++) {
+                selectButtons[i].Clear();
+            }
         }
     }
 }

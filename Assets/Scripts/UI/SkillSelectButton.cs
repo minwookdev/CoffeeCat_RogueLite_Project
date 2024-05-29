@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using CoffeeCat.FrameWork;
+using Sirenix.OdinInspector;
 using UnityEngine.Events;
 
 namespace CoffeCat.UI {
@@ -13,7 +14,7 @@ namespace CoffeCat.UI {
         [SerializeField] private TextMeshProUGUI tmpDesc = null;
         [SerializeField] private TextMeshProUGUI tmpType = null;
         [SerializeField] private Image imgIcon = null;
-        [SerializeField] private int index = -1;
+        [SerializeField, ReadOnly] private PlayerSkillSelectData data = null;
 
         private void Start() {
             // button.onClick.RemoveAllListeners();
@@ -26,7 +27,7 @@ namespace CoffeCat.UI {
                     return;
                 }
 
-                player.UpdateSkill(index);
+                player.UpdateSkill(data);
                 StageManager.Instance.InvokeSkillSelectCompleted();
             });
         }
@@ -37,22 +38,22 @@ namespace CoffeCat.UI {
             });
         }*/
 
-        public void Set(PlayerSkillSelectData data) {
-            tmpName.SetText(data.Name);
-            tmpDesc.SetText(data.Desc);
-            tmpType.SetText(data.Type == 0 ? "<< Passive >>" : "<< Active >>");
-            if (data.Icon) {
-                imgIcon.sprite = data.Icon;   
+        public void Set(PlayerSkillSelectData recievedData) {
+            tmpName.SetText(recievedData.Name);
+            tmpDesc.SetText(recievedData.Desc);
+            tmpType.SetText(recievedData.Type == 0 ? "<< Passive >>" : "<< Active >>");
+            if (recievedData.Icon) {
+                imgIcon.sprite = recievedData.Icon;   
             }
-            index = data.Index;
+            data = recievedData;
         }
 
         public void Clear() {
             tmpName.SetText("");
             tmpDesc.SetText("");
             tmpType.SetText("");
-            /*imgIcon.sprite = null;*/
-            index = -1;
+            /*imgIcon.sprite = null;*/ 
+            data = null;
         }
 
         private void AddButtonEvent(UnityAction unityAction) {
