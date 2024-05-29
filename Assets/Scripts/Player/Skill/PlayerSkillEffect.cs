@@ -15,13 +15,17 @@ namespace CoffeeCat
         protected Table_PlayerSkills skillData = null;
         public Table_PlayerSkills SkillData => skillData;
 
-        // TODO : 죽은 몬스터 걸러내는 부분 좀 다시 생각해야할 듯..
         public PlayerSkillEffect(Transform playerTr, Table_PlayerSkills skillData)
         {
             this.playerTr = playerTr;
             this.skillData = skillData;
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(skillData.SkillKey, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+        }
+
+        public void UpdateSkillData(Table_PlayerSkills skillData)
+        {
+            this.skillData = skillData;
         }
 
         public void Fire(PlayerStatus playerStat)

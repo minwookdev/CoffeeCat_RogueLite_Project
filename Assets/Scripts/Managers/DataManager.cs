@@ -38,7 +38,8 @@ namespace CoffeeCat.FrameWork {
         }
     }
 
-    public class PlayerSkillSelectData {
+    public class PlayerSkillSelectData
+    {
         public string Name;
         public string Desc;
         public Sprite Icon;
