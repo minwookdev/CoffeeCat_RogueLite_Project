@@ -79,9 +79,10 @@ namespace CoffeeCat
                 {
                     randomOwnedSkill = ownedSkillsList[Random.Range(0, ownedSkillsList.Count)];
                 }
-                
+
                 var pickSkill = StageManager.Instance.PlayerSkills[randomOwnedSkill.Index + 1];
-                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, false);
+                var pickSkillSelectData =
+                    new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, true);
                 skillSelectDatas[skillSelectDataIndex] = pickSkillSelectData;
                 skillSelectDataIndex++;
 
@@ -100,7 +101,8 @@ namespace CoffeeCat
             {
                 var pickSkill = newSkillList[Random.Range(0, newSkillList.Count)];
                 newSkillList.Remove(pickSkill);
-                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
+                var pickSkillSelectData =
+                    new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
                 skillSelectDatas[skillSelectDataIndex] = pickSkillSelectData;
                 skillSelectDataIndex++;
             }
@@ -108,33 +110,26 @@ namespace CoffeeCat
             return skillSelectDatas;
         }
 
-        public void UpdateSkill(PlayerSkillSelectData data) 
+        public void UpdateSkill(PlayerSkillSelectData data)
         {
-            if (data == null) 
+            if (data == null)
             {
                 CatLog.ELog("Invalid Data !");
-                return;    
-            }
-
-            var index = data.Index;
-            var isOwned = data.isOwned;
-            
-            // -1 index is Invalid
-            if (index == -1)
-            {
                 return;
             }
-            
-            // 이미 보유중인 스킬인지 새 스킬인지 정보가 필요해
-            
-            // 새로운 스킬 Get
-            var getSkill = StageManager.Instance.PlayerSkills[index];
-            ownedSkillsList.Add(getSkill);
-            ApplySkillEffect(getSkill);
-            
-            // 보유중인 스킬 Upgrade
-            var getSkill2 = StageManager.Instance.PlayerSkills[index];
-            // SkillEffect.UpdateSkillData(getSkill2);
+
+            if (data.isOwned)
+            {
+                // 보유중인 스킬 Upgrade
+                var getSkill = StageManager.Instance.PlayerSkills[data.Index];
+                // SkillEffect.UpdateSkillData(getSkill); - 이펙트 업데이트
+            }
+            else
+            {
+                var getSkill = StageManager.Instance.PlayerSkills[data.Index];
+                ApplySkillEffect(getSkill);
+                ownedSkillsList.Add(getSkill);
+            }
         }
 
         // test
