@@ -8,13 +8,12 @@ namespace RandomDungeonWithBluePrint {
         [SerializeField] private GameObject lockedObject = null;
         
         // Fields
-        private Room roomRef = null;
         private Transform tr = null;
         private BoxCollider2D boxCollider = null;
-
+        private Room refRoom = null;
+        
         public void Initialize(int direction, Vector2Int position, Room room) {
-            roomRef = room;
-            roomRef.RoomLockAction += Lock;
+            refRoom = room;
             tr = GetComponent<Transform>();
             tr.position = GetPosition(direction, position);
             tr.rotation = GetRotation(direction);
@@ -71,22 +70,22 @@ namespace RandomDungeonWithBluePrint {
             // Player Position
             Vector2 playerPosition = collision.transform.position;
             // Entered Player in Room
-            if (roomRef.IsInsideRoom(playerPosition)) {
-                if (roomRef.RoomData.IsPlayerInside) {
+            if (refRoom.IsInsideRoom(playerPosition)) {
+                if (refRoom.RoomData.IsPlayerInside) {
                     // 플레이어가 이미 방에 있던 상태
                     return;
                 }
-                roomRef.RoomData.EnteredPlayer();
-                StageManager.Instance.SetPlayersRoom(roomRef);
+                refRoom.RoomData.EnteredPlayer();
+                StageManager.Instance.SetPlayersRoom(refRoom);
             }
             // Leaves Player From Room
             else {
-                if (!roomRef.RoomData.IsPlayerInside) {
+                if (!refRoom.RoomData.IsPlayerInside) {
                     // 플레이어가 이미 방에서 탈출한 상태 Or 아직 방에 진입하지 않은 상태
                     return;
                 }
-                roomRef.RoomData.LeavesPlayer();
-                StageManager.Instance.ClearPlayersRoom(roomRef);
+                refRoom.RoomData.LeavesPlayer();
+                StageManager.Instance.ClearPlayersRoom(refRoom);
             }
         }
     }

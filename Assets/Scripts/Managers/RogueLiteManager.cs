@@ -30,7 +30,6 @@ namespace CoffeeCat.FrameWork {
 			if (!SpawnedPlayer) {
 				return;
 			}
-			
 			ObjectPoolManager.Instance.Despawn(SpawnedPlayer.gameObject);
 		}
 

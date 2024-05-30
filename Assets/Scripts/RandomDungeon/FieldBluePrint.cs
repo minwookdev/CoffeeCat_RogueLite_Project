@@ -9,7 +9,7 @@ using UnityEngine.Serialization;
 
 namespace RandomDungeonWithBluePrint
 {
-    [CreateAssetMenu(menuName = "ScriptableObject/FieldBluePrint")]
+    [CreateAssetMenu(menuName = "CoffeeCat/Scriptable Object/FieldBluePrint")]
     public class FieldBluePrint : ScriptableObject
     {
         [Serializable]

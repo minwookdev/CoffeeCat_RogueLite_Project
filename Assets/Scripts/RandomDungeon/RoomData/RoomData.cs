@@ -3,6 +3,7 @@
 // IMPLEMENTATION: Room에 필요한 RogueLite 데이터 클래스
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UniRx;
 using CoffeeCat.FrameWork;
@@ -18,16 +19,28 @@ namespace CoffeeCat.RogueLite {
 		public bool IsCleared { get; protected set; } = false;                 // 해당 룸의 클리어 여부
 		public bool IsLocked { get; protected set; } = false;                  // 현재 룸이 잠금 상태
 		public bool IsPlayerInside { get; protected set; } = false;			   // 플레이어가 방 안에 있는지
-		protected Action<bool> roomLockAction = null;						   // 현재 Room의 GateObject Lock 처리
-
+		public bool IsPlayerFirstEntered { get; protected set; }  = false;	   // 플레이어의 처음 방문 여부
+		protected Action<bool> OnRoomLocked { get; private set; } = null;				   // 방 잠금 상태 변경 시 실행할 액션
+		
 		public RoomData(Room room, RoomType roomType, int rarity = 0) {
 			RoomType = roomType;
 			Rarity = rarity;
-			roomLockAction = room.RoomLockAction;
 		}
 
-		public virtual void Initialize() {
-			
+		public virtual void Initialize() { }
+
+		public void SetGateObjects(GateObject[] gateObjects)
+		{
+			if (gateObjects == null)
+				return;
+            
+			OnRoomLocked += isLocked =>
+			{
+				for (int i = 0; i < gateObjects.Length; i++)
+				{
+					gateObjects[i].Lock(isLocked);
+				}
+			};
 		}
 
 		/// <summary>
@@ -35,6 +48,11 @@ namespace CoffeeCat.RogueLite {
 		/// </summary>
 		public virtual void EnteredPlayer() {
 			IsPlayerInside = true;
+			if (!IsPlayerFirstEntered)
+			{
+				StageManager.Instance.InvokeRoomEnteringFirstEvent(RoomType);
+				IsPlayerFirstEntered = true;
+			}
 			StageManager.Instance.InvokeRoomEnteringEvent(RoomType);
 			// CatLog.Log("Entering Room. print room info log" + '\n' +
 			//            $"type: {RoomType.ToStringExtended()}" + '\n' +
@@ -56,6 +74,7 @@ namespace CoffeeCat.RogueLite {
 		public Vector2[] SpawnPositions { get; private set; } = null;
 		private Vector2 roomCenterPos = default;
 		private List<MonsterSpawnData> spawnDataList;
+		private List<MonsterStatus> spawnedMonsters = null;
 		private string groupSpawnPositionsKey;
 		private float totalWeight = 0f;
 		private int groupMonsterSpawnCount = 0;
@@ -73,6 +92,7 @@ namespace CoffeeCat.RogueLite {
 			EndureSeconds = entity.EndureSeconds;
 			var weights = entity.SpawnWeights;
 			spawnDataList = new List<MonsterSpawnData>();
+			spawnedMonsters = new List<MonsterStatus>();
 			// Weights first
 			for (int i = 0; i < weights.Length; i++) {
 				// 동일한 Index의 SpawnKey가 존재하지 않거나 스폰 확률이 지정되어있지 않은 경우
@@ -101,21 +121,26 @@ namespace CoffeeCat.RogueLite {
 			Preloader.Process(groupSpawnPositionsKey);
 		}
 
-		public override void Initialize() {
-			
-		}
+		public override void EnteredPlayer()
+		{
+			IsPlayerInside = true;
+			if (!IsPlayerFirstEntered)
+			{
+				StageManager.Instance.InvokeRoomEnteringFirstEvent(RoomType);
+				IsPlayerFirstEntered = true;
 
-		public override void EnteredPlayer() {
-			base.EnteredPlayer();
-			if (IsCleared) 
-				return;
+				if (!IsCleared)
+				{
+					// Room Locked And Monster Spawn Start
+					IsLocked = true;
+					OnRoomLocked?.Invoke(IsLocked);
+					SpawnGroupMonster(); // 그룹 몬스터 스폰
+					ObservableUpdateBattleRoom();  // 일반 몬스터 스폰
+				}
+			}
 			
-			// Room Locked And Monster Spawn Start
-			IsLocked = true;
-			roomLockAction?.Invoke(IsLocked);
-			StageManager.Instance.InvokeRoomEnteringFirstEvent(RoomType);
-			SpawnGroupMonster(); // 그룹 몬스터 스폰
-			UpdateBattleRoom();  // 일반 몬스터 스폰
+			StageManager.Instance.InvokeRoomEnteringEvent(RoomType);
+			return;
 
 			void SpawnGroupMonster() {
 				if (groupSpawnPositionsKey.Equals(string.Empty)) {
@@ -131,12 +156,13 @@ namespace CoffeeCat.RogueLite {
 
 					// Spawn Monster Group Spawn Position
 					var key = RaffleSpawnMonster();
-					ObjectPoolManager.Instance.Spawn(key, point);
+					var spawnedMonster = ObjectPoolManager.Instance.Spawn<MonsterStatus>(key, point);
+					spawnedMonsters.Add(spawnedMonster);
 					groupMonsterSpawnCount++;
 				}
 			}
 			
-			void UpdateBattleRoom() {
+			void ObservableUpdateBattleRoom() {
 				// Variables
 				float spawnTimer = 0f;
 				float endureTimer = 0f;
@@ -148,13 +174,7 @@ namespace CoffeeCat.RogueLite {
 				          .Select(_ => StageManager.Instance.CurrentRoomMonsterKilledCount)
 				          .TakeWhile(_ => !IsCleared)
 				          .DoOnCompleted(OnCleared)
-				          .Subscribe(currentRoomKillCount => {
-					          // Check Group Monster All Kills
-					          if (groupMonsterSpawnCount > currentRoomKillCount) {
-						          return;
-					          } // DelayTime When Group Monsters All Kill
-
-					          // Update Timer
+				          .Subscribe(currentKillCount => {
 					          endureTimer += Time.deltaTime;
 					          spawnTimer += Time.deltaTime;
 					          
@@ -164,21 +184,23 @@ namespace CoffeeCat.RogueLite {
 						          spawnTimer = 0f;
 					          }
 					          
-					          // Debug
-					          CatLog.Log("OnBattleRoom Update !");
-
-					          // Check Clear
-					          IsCleared = IsClear(currentRoomKillCount);
+					          // Check Room Clear Condition
+					          IsCleared = IsClear(currentKillCount);
 				          });
+				return;
 
 				// Monster Spawn 
 				void SpawnMonster() {
 					if (currentSpawnCount >= MaxSpawnCount) {
 						return;
 					}
+
+					var activatedMonsters = spawnedMonsters.Count(monster => monster.IsAlive);
+					if (activatedMonsters >= keepAverageCount)
+						return;
 					
-					var spawnedMonster = 
-						ObjectPoolManager.Instance.Spawn(RaffleSpawnMonster(), GetRandomPos());
+					var spawnedMonster = ObjectPoolManager.Instance.Spawn<MonsterStatus>(RaffleSpawnMonster(), GetRandomPos());
+					spawnedMonsters.Add(spawnedMonster);
 					currentSpawnCount++;
 				}
 
@@ -191,18 +213,24 @@ namespace CoffeeCat.RogueLite {
 			base.LeavesPlayer();
 
 			if (!IsCleared) {
-				// Return to Room...
+				// Return to Room
 			}
 		}
 
 		private void OnCleared() {
+			// Despawn All Alive Monsters
+			var aliveMonsters = spawnedMonsters.Where(monster => monster.IsAlive);
+			foreach (var monster in aliveMonsters) {
+				monster.ForcedKillMonster();
+			}
+			spawnedMonsters.Clear();
+			spawnedMonsters = null;
+			
 			IsCleared = true;
 			IsLocked = true;
 			StageManager.Instance.InvokeEventClearedRoomEvent(RoomType);
-
-			// 방에 남아있는 모든 몬스터 처치
-			// 몬스터 스폰 시 List또는 Queue에 담아두는 방식을 사용 !
-			// 또는 조건에 따라 ObjectPoolManager.DisableAll 메서드를 사용
+			StageManager.Instance.ClearCurrentRoomKillCount();
+			CatLog.Log("On Cleared Battle Room");
 		}
 
 		Vector2[] GetMonsterSpawnPositions(Room room, float tileRadius = 0.5f) {
@@ -273,10 +301,6 @@ namespace CoffeeCat.RogueLite {
 			Preloader.Process(key2);
 		}
 
-		public override void Initialize() {
-			base.Initialize();
-		}
-
 		public override void EnteredPlayer() {
 			base.EnteredPlayer();
 		}
@@ -292,5 +316,13 @@ namespace CoffeeCat.RogueLite {
 
 	public class ShopRoomData {
 		
+	}
+
+	public class ExitRoom : RoomData
+	{
+		public ExitRoom(Room room, RoomType roomType, int rarity = 0) : base(room, roomType, rarity)
+		{
+			
+		}
 	}
 }

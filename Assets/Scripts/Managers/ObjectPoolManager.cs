@@ -168,14 +168,21 @@ namespace CoffeeCat.FrameWork
                           Execute();
                       })
                       .AddTo(this);
+            return;
 
             // Execute Despawn GameObject
             void Execute() {
+                if (objectPoolStack.Contains(poolObject))
+                {
+                    CatLog.WLog($"This Object ({poolObject.name}) is Already Containing in Pool Stack.");
+                    return;
+                }
+                
                 poolObject.SetActive(false);
 
                 // Restore Root Parent
                 var poolObjectTr = poolObject.transform;
-                // Is Exsit Root Parent
+                // Is Exist Root Parent
                 if (rootParentDict.ContainsKey(poolObject.name)) {
                     // If Changed Parent
                     if (!ReferenceEquals(rootParentDict[poolObject.name], poolObjectTr.parent)) {

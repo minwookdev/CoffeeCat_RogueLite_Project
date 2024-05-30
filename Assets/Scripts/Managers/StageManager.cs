@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
@@ -64,12 +66,24 @@ namespace CoffeeCat
             Camera.main.transform.position = new Vector3(playerPos.x, playerPos.y, Camera.main.transform.position.z);
         }
 
-        public void CreateGate(Field field) {
-            foreach (var gate in field.Gates) {
-                var spawnedGate = ObjectPoolManager.Instance.Spawn<GateObject>("dungeon_door", Vector3.zero);
-                spawnedGate.Initialize(gate.Direction, gate.Position, gate.Room);
-                //var cellPosition = grid.CellToWorld(new Vector3Int(gate.Position.x, gate.Position.y, 0));
-                //var position = new Vector3(cellPosition.x + grid.cellSize.x * 0.5f, cellPosition.y + grid.cellSize.y * 0.5f, 0);
+        public void CreateGate(Field field)
+        {
+            var grouppedGates = field.Gates.GroupBy(g => g.Room);
+            var spawnedGateList = new List<GateObject>();
+            foreach (var group in grouppedGates)
+            {
+                var room = group.Key;
+                if (room.RoomData == null)
+                    continue;
+                spawnedGateList.Clear();
+                
+                foreach (var gate in group)
+                {
+                    var spawnedGate = ObjectPoolManager.Instance.Spawn<GateObject>("dungeon_door", Vector3.zero);
+                    spawnedGate.Initialize(gate.Direction, gate.Position, gate.Room);
+                    spawnedGateList.Add(spawnedGate);
+                }
+                room.SetGateObjects(spawnedGateList.ToArray());
             }
         }
 
@@ -129,6 +143,17 @@ namespace CoffeeCat
         
         public void TimeScaleZero() {
             RogueLiteManager.Instance.TimeScaleZero();
+        }
+
+        public void ClearCurrentRoomKillCount()
+        {
+            CurrentFloorMonsterKillCount += CurrentRoomMonsterKilledCount;
+            CurrentRoomMonsterKilledCount = 0;
+        }
+
+        public void AddCurrentRoomKillCount()
+        {
+            CurrentRoomMonsterKilledCount++;
         }
         
         #region Events

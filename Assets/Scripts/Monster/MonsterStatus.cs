@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.Datas;
@@ -8,15 +9,13 @@ using EMonsterState = CoffeeCat.MonsterState.EnumMonsterState;
 namespace CoffeeCat {
     public class MonsterStatus : MonoBehaviour {
         [Title("MONSTER STATUS")]
+        [SerializeField] private MonsterState state = null;
         [SerializeField, DisableInPlayMode] private string customStatLoadKey = string.Empty;
-        [SerializeField, ReadOnly] public MonsterStat CurrentStat { get; private set; } = null;
+        [field: SerializeField, ReadOnly] public MonsterStat CurrentStat { get; private set; } = null;
         private MonsterStat originStat = null; // 수정금지
-        private MonsterState state = null;
         public bool IsAlive => CurrentStat.HP > 0f;
 
         private void Start() {
-            state = GetComponent<MonsterState>();
-            
             // Get Origin Stat Data
             customStatLoadKey = (customStatLoadKey.Equals(string.Empty)) ? gameObject.name : customStatLoadKey;
             var monsterStatsDataDictionary = DataManager.Instance.MonsterStats.DataDictionary;
@@ -28,12 +27,24 @@ namespace CoffeeCat {
             // DeepCopy Stat Data From Origin Stat
             originStat = result.DeepCopyMonsterStat();
             CurrentStat = new MonsterStat();
-            CurrentStat.CopyValue(originStat);
             state.SetStat(CurrentStat);
+            RestoreToOriginStat();
+        }
+
+        private void OnEnable()
+        {
+            RestoreToOriginStat();
         }
         
+        private void RestoreToOriginStat()
+        {
+            if (originStat == null)
+                return;
+            CurrentStat.CopyValue(originStat);
+        }
+
         public void OnDamaged(in DamageData data, bool useDamageText, Vector2 collisionPoint = default, float force = 0f) {
-            if (state.State == EMonsterState.Death)
+            if (!IsAlive)
                 return;
             
             Vector2 knockBackDirection = Vector2.zero;
@@ -45,7 +56,8 @@ namespace CoffeeCat {
             // Damage Process
             float finalCalculatedDamageCount = data.CalculatedDamage;
             float tempHealthPoint = CurrentStat.HP - finalCalculatedDamageCount;
-            if (tempHealthPoint < 0f) {
+            if (tempHealthPoint <= 0f) {
+                StageManager.Instance.AddCurrentRoomKillCount();
                 CurrentStat.HP = 0f;
                 state.OnDeath();
             }
@@ -72,6 +84,14 @@ namespace CoffeeCat {
                 textStartPos.y += 1.25f;
                 DamageTextManager.Instance.OnFloatingText(floatingCount, textStartPos);
             }
+        }
+
+        public void ForcedKillMonster() {
+            if (!IsAlive)
+                return;
+            
+            CurrentStat.HP = 0f;
+            state.OnDeath();
         }
 
         public Vector3 GetCenterPosition() {
