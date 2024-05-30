@@ -309,7 +309,7 @@ namespace CoffeeCat {
             }
         }
         
-        protected void Despawn() {
+        public void Despawn() {
             if (ObjectPoolManager.IsExist) {
                 if (ObjectPoolManager.Instance.IsExistInPoolDictionary(gameObject.name)) {
                     ObjectPoolManager.Instance.Despawn(gameObject);

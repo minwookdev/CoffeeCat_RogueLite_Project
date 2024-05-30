@@ -19,6 +19,6 @@ MonoBehaviour:
   - 30
   - 10
   GroupSpawnPointKey: 9
-  MaxSpawnMonster: 60
-  EndureSeconds: 300
-  KeepAverageCount: 6
+  MaxSpawnMonster: 30
+  EndureSeconds: 120
+  KeepAverageCount: 8

@@ -46,6 +46,7 @@ namespace CoffeeCat {
             float finalCalculatedDamageCount = data.CalculatedDamage;
             float tempHealthPoint = CurrentStat.HP - finalCalculatedDamageCount;
             if (tempHealthPoint < 0f) {
+                StageManager.Instance.AddCurrentRoomKillCount();
                 CurrentStat.HP = 0f;
                 state.OnDeath();
             }
@@ -72,6 +73,12 @@ namespace CoffeeCat {
                 textStartPos.y += 1.25f;
                 DamageTextManager.Instance.OnFloatingText(floatingCount, textStartPos);
             }
+        }
+
+        public void ForcedKillMonster()
+        {
+            CurrentStat.HP = 0f;
+            state.OnDeath();
         }
 
         public Vector3 GetCenterPosition() {

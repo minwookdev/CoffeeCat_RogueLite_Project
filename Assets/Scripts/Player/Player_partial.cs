@@ -138,7 +138,7 @@ namespace CoffeeCat
         }
 
         // test
-        private void EnableSkillSelect()
+        public void EnableSkillSelect()
         {
             UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector(Defines.PLAYER_SKILL_SELECT_COUNT));
         }

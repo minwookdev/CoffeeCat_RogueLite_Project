@@ -226,8 +226,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 41247679bf574b944a73e0d6b7d27221, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -1585,7 +1585,13 @@ MonoBehaviour:
   tmpDesc: {fileID: 218239811}
   tmpType: {fileID: 1377949867}
   imgIcon: {fileID: 53502177}
-  index: -1
+  data:
+    Name: 
+    Desc: 
+    Icon: {fileID: 0}
+    Index: 0
+    Type: 0
+    isOwned: 0
 --- !u!1 &336130482
 GameObject:
   m_ObjectHideFlags: 0
@@ -3726,7 +3732,13 @@ MonoBehaviour:
   tmpDesc: {fileID: 554299993}
   tmpType: {fileID: 65622707}
   imgIcon: {fileID: 133328040}
-  index: -1
+  data:
+    Name: 
+    Desc: 
+    Icon: {fileID: 0}
+    Index: 0
+    Type: 0
+    isOwned: 0
 --- !u!224 &1270814328
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4578,7 +4590,13 @@ MonoBehaviour:
   tmpDesc: {fileID: 1801426236}
   tmpType: {fileID: 36304097}
   imgIcon: {fileID: 1105788437}
-  index: -1
+  data:
+    Name: 
+    Desc: 
+    Icon: {fileID: 0}
+    Index: 0
+    Type: 0
+    isOwned: 0
 --- !u!1 &1642701467
 GameObject:
   m_ObjectHideFlags: 0
@@ -4651,6 +4669,7 @@ MonoBehaviour:
     Weight: 10
   - BluePrint: {fileID: 11400000, guid: 22ab5f864cbd6ce4f92c587ff712649b, type: 2}
     Weight: 200
+  bluePrintQueue: {fileID: 11400000, guid: cbafbd23e756af448b6f5455ea96d718, type: 2}
   DefinitiveBluePrint: {fileID: 11400000, guid: 11514046847cb46438bb39f8f656cf44, type: 2}
   onGeneratedMapCompleted:
     m_PersistentCalls:
@@ -6257,7 +6276,7 @@ GameObject:
   - component: {fileID: 1940562988}
   - component: {fileID: 1940562987}
   m_Layer: 31
-  m_Name: UiCamera
+  m_Name: UICamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

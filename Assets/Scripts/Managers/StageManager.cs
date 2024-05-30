@@ -130,6 +130,17 @@ namespace CoffeeCat
         public void TimeScaleZero() {
             RogueLiteManager.Instance.TimeScaleZero();
         }
+
+        public void ClearCurrentRoomKillCount()
+        {
+            CurrentFloorMonsterKillCount += CurrentRoomMonsterKilledCount;
+            CurrentRoomMonsterKilledCount = 0;
+        }
+
+        public void AddCurrentRoomKillCount()
+        {
+            CurrentRoomMonsterKilledCount++;
+        }
         
         #region Events
         

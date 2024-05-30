@@ -32,6 +32,7 @@ namespace RandomDungeonWithBluePrint
 
         [Title("Generate Options")]
         public FieldBluePrint DefinitiveBluePrint = null; // 확정 생성 BluePrint
+        [SerializeField] private BluePrintQueue bluePrintQueue = default;
         
         [Title("Events")]
         [SerializeField] private UnityEvent<Field> onGeneratedMapCompleted = null;
@@ -64,6 +65,14 @@ namespace RandomDungeonWithBluePrint
             
             // Add Generate Button Event
             generateButton.onClick.AddListener(ExecuteGenerate);
+            if (bluePrintQueue.IsGrantSkillOnStart)
+            {
+                var player = RogueLiteManager.Instance.SpawnedPlayer;
+                if (player)
+                {  
+                   player.EnableSkillSelect(); 
+                }
+            }
             InitDebugs();
             return;
 
