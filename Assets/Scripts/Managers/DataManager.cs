@@ -2,8 +2,6 @@ using System;
 using Sirenix.OdinInspector;
 using CoffeeCat.Datas;
 using CoffeeCat.Utils.JsonParser;
-using CoffeeCat.Utils;
-using UnityEditor.iOS;
 using UnityEngine;
 
 namespace CoffeeCat.FrameWork {

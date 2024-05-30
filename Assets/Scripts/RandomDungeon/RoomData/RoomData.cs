@@ -22,7 +22,7 @@ namespace CoffeeCat.RogueLite {
 		public bool IsPlayerFirstEntered { get; protected set; }  = false;	   // 플레이어의 처음 방문 여부
 		protected Action<bool> OnRoomLocked { get; private set; } = null;				   // 방 잠금 상태 변경 시 실행할 액션
 		
-		public RoomData(Room room, RoomType roomType, int rarity = 0) {
+		public RoomData(RoomType roomType, int rarity = 0) {
 			RoomType = roomType;
 			Rarity = rarity;
 		}
@@ -68,7 +68,7 @@ namespace CoffeeCat.RogueLite {
 		}
 	}
 
-	public class BattleRoomData : RoomData {
+	public class BattleRoom : RoomData {
 		// Monster Spawn Variables
 		private static readonly float spawnIntervalTime = 0.35f;
 		public Vector2[] SpawnPositions { get; private set; } = null;
@@ -84,7 +84,7 @@ namespace CoffeeCat.RogueLite {
 		private int MaxSpawnCount = 0;
 		private float EndureSeconds = 0f;
 		
-		public BattleRoomData(Room room, BattleRoomDataEntity entity) : base(room, RoomType.MonsterSpawnRoom, entity.Rarity) {
+		public BattleRoom(Room room, BattleRoomDataEntity entity) : base(RoomType.MonsterSpawnRoom, entity.Rarity) {
 			SpawnPositions = GetMonsterSpawnPositions(room, tileRadius: 0.5f);
 			roomCenterPos = room.FloorRectInt.center;
 			MaxSpawnCount = entity.MaxSpawnMonster;
@@ -227,10 +227,10 @@ namespace CoffeeCat.RogueLite {
 			spawnedMonsters = null;
 			
 			IsCleared = true;
-			IsLocked = true;
+			IsLocked = false;
+			OnRoomLocked?.Invoke(IsLocked);
 			StageManager.Instance.InvokeEventClearedRoomEvent(RoomType);
 			StageManager.Instance.ClearCurrentRoomKillCount();
-			CatLog.Log("On Cleared Battle Room");
 		}
 
 		Vector2[] GetMonsterSpawnPositions(Room room, float tileRadius = 0.5f) {
@@ -287,19 +287,48 @@ namespace CoffeeCat.RogueLite {
 		}
 	}
 
-	public class PlayerSpawnRoomData : RoomData
+	public class PlayerSpawnRoom : RoomData
 	{
-		private readonly string key1 = "skill_selector_fireball";
-		private readonly string key2 = "skill_selector_lightning";
+		// private readonly string key1 = "skill_selector_fireball";
+		// private readonly string key2 = "skill_selector_lightning";
 		
-		public PlayerSpawnRoomData(Room room) : base(room, RoomType.PlayerSpawnRoom) {
-			// Spawn Init Skill Selector Prefabs
+		public PlayerSpawnRoom() : base(RoomType.PlayerSpawnRoom) {
+			/*// Spawn Init Skill Selector Prefabs
 			var playerSpawnPosition = room.Rect.center;
 			var skillPrefab1Position = playerSpawnPosition.x -= 3f;
 			var skillPrefab2Position = playerSpawnPosition.x += 3f;
 			Preloader.Process(key1);
-			Preloader.Process(key2);
+			Preloader.Process(key2);*/
 		}
+	}
+
+	public class RewardRoom : RoomData {
+		private InteractableFloor interactiveObject = null;
+		private readonly Vector3 interactiveSpawnPos;
+		
+		// Constructor
+		public RewardRoom(Room room) : base(RoomType.RewardRoom) {
+			interactiveSpawnPos = room.FloorRectInt.center;
+		}
+
+		public override void EnteredPlayer() {
+			if (!interactiveObject) {
+				interactiveObject = ObjectPoolManager.Instance.Spawn<InteractableFloor>("portal_floor", interactiveSpawnPos);	
+			}
+			interactiveObject.PlayParticle();
+		}
+
+		public override void LeavesPlayer() {
+			if (interactiveObject) {
+				interactiveObject.StopParticle();
+			}
+		}
+	}
+
+	public class ShopRoom : RoomData {
+		
+		// Constructor
+		public ShopRoom() : base(RoomType.ShopRoom) { }
 
 		public override void EnteredPlayer() {
 			base.EnteredPlayer();
@@ -310,19 +339,17 @@ namespace CoffeeCat.RogueLite {
 		}
 	}
 
-	public class RewardRoomData {
+	public class ExitRoom : RoomData {
 		
-	}
+		// Constructor
+		public ExitRoom() : base(RoomType.ExitRoom) { }
 
-	public class ShopRoomData {
-		
-	}
+		public override void EnteredPlayer() {
+			base.EnteredPlayer();
+		}
 
-	public class ExitRoom : RoomData
-	{
-		public ExitRoom(Room room, RoomType roomType, int rarity = 0) : base(room, roomType, rarity)
-		{
-			
+		public override void LeavesPlayer() {
+			base.LeavesPlayer();
 		}
 	}
 }

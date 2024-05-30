@@ -1904,6 +1904,45 @@ MonoBehaviour:
     IsStayEnabling: 0
     HasRootParent: 1
     CustomRootParent: {fileID: 0}
+  - PoolObjectLoadType: 3
+    PoolObject: {fileID: 0}
+    ResourcesPath: 
+    AddressablesName: portal_floor
+    AssetRef:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    InitSpawnCount: 1
+    IsStayEnabling: 0
+    HasRootParent: 0
+    CustomRootParent: {fileID: 0}
+  - PoolObjectLoadType: 3
+    PoolObject: {fileID: 0}
+    ResourcesPath: 
+    AddressablesName: portal_reward
+    AssetRef:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    InitSpawnCount: 1
+    IsStayEnabling: 0
+    HasRootParent: 0
+    CustomRootParent: {fileID: 0}
+  - PoolObjectLoadType: 3
+    PoolObject: {fileID: 0}
+    ResourcesPath: 
+    AddressablesName: portal_shop
+    AssetRef:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    InitSpawnCount: 1
+    IsStayEnabling: 0
+    HasRootParent: 0
+    CustomRootParent: {fileID: 0}
   AudioClipDictionary:
     keyData: []
     valueData: []

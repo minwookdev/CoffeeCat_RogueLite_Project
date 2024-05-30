@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace CoffeeCat.Utils.Defines
 {
@@ -35,6 +36,10 @@ namespace CoffeeCat.Utils.Defines
                 PlayerAddressablesKey.PlayerAttack_01_Pink => "PlayerAttack_01_Pink",
                 _ => throw new ArgumentOutOfRangeException(nameof(key), key, null)
             };
+        }
+
+        public static LayerMask GetPlayerLayer() {
+            return LayerMask.NameToLayer("Player");
         }
     }
 

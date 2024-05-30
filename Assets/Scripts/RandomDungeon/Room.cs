@@ -197,24 +197,27 @@ namespace RandomDungeonWithBluePrint {
                         CatLog.ELog("RoomDataEntity Converting Error !");
                         break;
                     }
-                    RoomData = new BattleRoomData(this, battleRoomEntity);
+                    RoomData = new BattleRoom(this, battleRoomEntity);
                     break;
                 case RoomType.PlayerSpawnRoom:
-                    RoomData = new PlayerSpawnRoomData(this);
+                    RoomData = new PlayerSpawnRoom();
                     break;
                 case RoomType.ShopRoom:
-                case RoomType.BossRoom:
-                case RoomType.RewardRoom:
-                case RoomType.EmptyRoom:
-                case RoomType.ExitRoom:
-                    RoomData = new RoomData(this, roomType);
+                    RoomData = new ShopRoom();
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(roomType), roomType, null);
+                case RoomType.RewardRoom:
+                    RoomData = new RewardRoom(this);
+                    break;
+                case RoomType.ExitRoom:
+                    RoomData = new ExitRoom();
+                    break;
+                case RoomType.EmptyRoom:
+                case RoomType.BossRoom:
+                    break;
+                default: throw new ArgumentOutOfRangeException(nameof(roomType), roomType, null);
             }
-            
             // Set Gate Objects
-            RoomData.Initialize();
+            RoomData?.Initialize();
         }
         
         public bool IsInsideRoom(Vector2 position) {
