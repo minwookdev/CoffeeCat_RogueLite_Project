@@ -3,7 +3,6 @@
 // IMPLEMENTATION: Room에 필요한 RogueLite 데이터 클래스
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 using UnityEngine;
 using UniRx;
@@ -11,7 +10,6 @@ using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using RandomDungeonWithBluePrint;
-using Unity.VisualScripting;
 using UnityRandom = UnityEngine.Random;
 
 namespace CoffeeCat.RogueLite {
@@ -22,16 +20,27 @@ namespace CoffeeCat.RogueLite {
 		public bool IsLocked { get; protected set; } = false;                  // 현재 룸이 잠금 상태
 		public bool IsPlayerInside { get; protected set; } = false;			   // 플레이어가 방 안에 있는지
 		public bool IsPlayerFirstEntered { get; protected set; }  = false;	   // 플레이어의 처음 방문 여부
-		protected Action<bool> roomLockAction = null;						   // 현재 Room의 GateObject Lock 처리
-
+		protected Action<bool> OnRoomLocked { get; private set; } = null;				   // 방 잠금 상태 변경 시 실행할 액션
+		
 		public RoomData(Room room, RoomType roomType, int rarity = 0) {
 			RoomType = roomType;
 			Rarity = rarity;
-			roomLockAction = room.RoomLockAction;
 		}
 
-		public virtual void Initialize() {
-			
+		public virtual void Initialize() { }
+
+		public void SetGateObjects(GateObject[] gateObjects)
+		{
+			if (gateObjects == null)
+				return;
+            
+			OnRoomLocked += isLocked =>
+			{
+				for (int i = 0; i < gateObjects.Length; i++)
+				{
+					gateObjects[i].Lock(isLocked);
+				}
+			};
 		}
 
 		/// <summary>
@@ -112,10 +121,6 @@ namespace CoffeeCat.RogueLite {
 			Preloader.Process(groupSpawnPositionsKey);
 		}
 
-		public override void Initialize() {
-			
-		}
-
 		public override void EnteredPlayer()
 		{
 			IsPlayerInside = true;
@@ -128,7 +133,7 @@ namespace CoffeeCat.RogueLite {
 				{
 					// Room Locked And Monster Spawn Start
 					IsLocked = true;
-					roomLockAction?.Invoke(IsLocked);
+					OnRoomLocked?.Invoke(IsLocked);
 					SpawnGroupMonster(); // 그룹 몬스터 스폰
 					ObservableUpdateBattleRoom();  // 일반 몬스터 스폰
 				}
@@ -224,6 +229,7 @@ namespace CoffeeCat.RogueLite {
 			IsCleared = true;
 			IsLocked = true;
 			StageManager.Instance.InvokeEventClearedRoomEvent(RoomType);
+			StageManager.Instance.ClearCurrentRoomKillCount();
 			CatLog.Log("On Cleared Battle Room");
 		}
 
@@ -293,10 +299,6 @@ namespace CoffeeCat.RogueLite {
 			var skillPrefab2Position = playerSpawnPosition.x += 3f;
 			Preloader.Process(key1);
 			Preloader.Process(key2);
-		}
-
-		public override void Initialize() {
-			base.Initialize();
 		}
 
 		public override void EnteredPlayer() {

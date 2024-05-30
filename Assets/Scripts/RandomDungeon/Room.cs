@@ -21,6 +21,7 @@ namespace RandomDungeonWithBluePrint {
         public readonly Dictionary<int, List<Vector2Int>> Edge = new Dictionary<int, List<Vector2Int>>();
         public readonly Dictionary<int, Vector2Int> EdgeWithCenter = new Dictionary<int, Vector2Int>();
         public readonly List<Joint> Joints = new List<Joint>();
+        public GateObject[] GateObjects { get; protected set; } = null;			   // 방의 게이트 오브젝트
         
         // Floor Tiles Data
         public readonly List<Vector2Int> Floors = new List<Vector2Int>(); // 바닥 좌표 Vector2Int List
@@ -33,9 +34,6 @@ namespace RandomDungeonWithBluePrint {
         // RogueLite Room Data
         public RoomData RoomData { get; private set; } = null;
         public RoomType RoomType => RoomData == null ? RoomType.EmptyRoom : RoomData.RoomType;
-        
-        // Gate Objects Lock Action
-        public Action<bool> RoomLockAction = null;
 
         public Room(RectInt rect) {
             Rect = rect;
@@ -144,6 +142,12 @@ namespace RandomDungeonWithBluePrint {
             });
         }
 
+        public void SetGateObjects(GateObject[] gates)
+        {
+            GateObjects = gates;
+            RoomData?.SetGateObjects(GateObjects);
+        }
+
         /// <summary>
         /// Wall Tiles에서 Joint Position 제외 처리
         /// </summary>
@@ -190,7 +194,7 @@ namespace RandomDungeonWithBluePrint {
             switch (roomType) {
                 case RoomType.MonsterSpawnRoom:
                     if (entity is not BattleRoomDataEntity battleRoomEntity) {
-                        PrintConvertingErrorLog();
+                        CatLog.ELog("RoomDataEntity Converting Error !");
                         break;
                     }
                     RoomData = new BattleRoomData(this, battleRoomEntity);
@@ -209,11 +213,8 @@ namespace RandomDungeonWithBluePrint {
                     throw new ArgumentOutOfRangeException(nameof(roomType), roomType, null);
             }
             
+            // Set Gate Objects
             RoomData.Initialize();
-
-            void PrintConvertingErrorLog() {
-                CatLog.ELog("RoomDataEntity Converting Error !");
-            }
         }
         
         public bool IsInsideRoom(Vector2 position) {
