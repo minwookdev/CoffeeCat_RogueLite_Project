@@ -361,6 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3d1e94c9f58414babb8f0d2ce3e047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: {fileID: 5739886004326205281}
   customStatLoadKey: Skeleton_Warrior
 --- !u!95 &4235725239492644404
 Animator:

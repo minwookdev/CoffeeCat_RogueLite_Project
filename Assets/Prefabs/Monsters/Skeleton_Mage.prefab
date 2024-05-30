@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d3d1e94c9f58414babb8f0d2ce3e047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  state: {fileID: 315139273145602295}
   customStatLoadKey: Skeleton_Mage
 --- !u!114 &1165742970008717284
 MonoBehaviour:

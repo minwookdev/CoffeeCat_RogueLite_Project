@@ -174,7 +174,7 @@ namespace CoffeeCat.FrameWork
             void Execute() {
                 if (objectPoolStack.Contains(poolObject))
                 {
-                    CatLog.ELog("This Object is Already Containing in Pool Stack.");
+                    CatLog.WLog($"This Object ({poolObject.name}) is Already Containing in Pool Stack.");
                     return;
                 }
                 

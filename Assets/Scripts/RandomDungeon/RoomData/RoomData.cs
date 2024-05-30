@@ -208,7 +208,7 @@ namespace CoffeeCat.RogueLite {
 			base.LeavesPlayer();
 
 			if (!IsCleared) {
-				// Return to Room...
+				// Return to Room
 			}
 		}
 
@@ -224,7 +224,7 @@ namespace CoffeeCat.RogueLite {
 			IsCleared = true;
 			IsLocked = true;
 			StageManager.Instance.InvokeEventClearedRoomEvent(RoomType);
-			CatLog.Log("Cleared Battle Room !");
+			CatLog.Log("On Cleared Battle Room");
 		}
 
 		Vector2[] GetMonsterSpawnPositions(Room room, float tileRadius = 0.5f) {
