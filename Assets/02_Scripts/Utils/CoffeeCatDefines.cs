@@ -10,41 +10,9 @@ namespace CoffeeCat.Utils.Defines
         public const float PLAYER_AREA_SKILL_VECTOR_X = 15;
         public const float PLAYER_AREA_SKILL_VECTOR_Y = 8;
 
-        public static string ToStringEx(this AddressablesKey key)
-        {
-            return key switch
-            {
-                AddressablesKey.NONE => "",
-                AddressablesKey.Effect_hit_1 => "Effect_hit_1",
-                AddressablesKey.Effect_hit_2 => "Effect_hit_2",
-                AddressablesKey.Effect_hit_3 => "Effect_hit_3",
-                AddressablesKey.Skeleton_Mage_Projectile_Default => "monster_attack_fireball",
-                AddressablesKey.Skeleton_Mage_Projectile_Skill => "monster_skill_expsphere",
-                AddressablesKey.Monster_Skeleton => "Skeleton",
-                AddressablesKey.Monster_Skeleton_Warrior => "Skeleton_Warrior",
-                AddressablesKey.Monster_Skeleton_Mage => "Skeleton_Mage",
-                AddressablesKey.GroupSpawnPositions => "GroupSpawnPositions",
-                _ => throw new ArgumentOutOfRangeException(nameof(key), key, null)
-            };
-        }
-
-        public static string ToStringEx(this PlayerAddressablesKey key)
-        {
-            return key switch
-            {
-                PlayerAddressablesKey.NONE => "",
-                PlayerAddressablesKey.PlayerAttack_01_Pink => "PlayerAttack_01_Pink",
-                _ => throw new ArgumentOutOfRangeException(nameof(key), key, null)
-            };
-        }
-
         public static LayerMask GetPlayerLayer() {
             return LayerMask.NameToLayer("Player");
         }
-    }
-
-    public static class Constants
-    {
     }
 
     public enum SceneName
@@ -119,5 +87,13 @@ namespace CoffeeCat.Utils.Defines
     {
         NONE,
         monster_skill_expsphere,
+    }
+
+    public enum InteractableType
+    {
+        None,
+        Floor,
+        Shop,
+        Reward
     }
 }

@@ -203,13 +203,13 @@ namespace RandomDungeonWithBluePrint {
                     RoomData = new PlayerSpawnRoom();
                     break;
                 case RoomType.ShopRoom:
-                    RoomData = new ShopRoom();
+                    RoomData = new ShopRoom(this);
                     break;
                 case RoomType.RewardRoom:
                     RoomData = new RewardRoom(this);
                     break;
                 case RoomType.ExitRoom:
-                    RoomData = new ExitRoom();
+                    RoomData = new ExitRoomInteractable(this);
                     break;
                 case RoomType.EmptyRoom:
                 case RoomType.BossRoom:

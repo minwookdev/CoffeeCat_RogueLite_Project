@@ -7,7 +7,6 @@ using System.Linq;
 using UnityEngine;
 using UniRx;
 using CoffeeCat.FrameWork;
-using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using RandomDungeonWithBluePrint;
 using UnityRandom = UnityEngine.Random;
@@ -20,11 +19,18 @@ namespace CoffeeCat.RogueLite {
 		public bool IsLocked { get; protected set; } = false;                  // 현재 룸이 잠금 상태
 		public bool IsPlayerInside { get; protected set; } = false;			   // 플레이어가 방 안에 있는지
 		public bool IsPlayerFirstEntered { get; protected set; }  = false;	   // 플레이어의 처음 방문 여부
-		protected Action<bool> OnRoomLocked { get; private set; } = null;				   // 방 잠금 상태 변경 시 실행할 액션
+		protected Action<bool> OnRoomLocked { get; private set; } = null;	   // 방 잠금 상태 변경 시 실행할 액션
+		protected InteractableObject interactableObject = null;				   // 상호작용 오브젝트
+		protected Vector3 interactiveObjectSpawnPos = Vector3.zero;
 		
-		public RoomData(RoomType roomType, int rarity = 0) {
+		public RoomData(RoomType roomType, int rarity = 0, Room room = null) {
 			RoomType = roomType;
 			Rarity = rarity;
+			
+			if (room != null)
+			{
+				interactiveObjectSpawnPos = room.FloorRectInt.center;
+			}
 		}
 
 		public virtual void Initialize() { }
@@ -54,9 +60,6 @@ namespace CoffeeCat.RogueLite {
 				IsPlayerFirstEntered = true;
 			}
 			StageManager.Instance.InvokeRoomEnteringEvent(RoomType);
-			// CatLog.Log("Entering Room. print room info log" + '\n' +
-			//            $"type: {RoomType.ToStringExtended()}" + '\n' +
-			//            $"rarity: {Rarity.ToString()}");
 		}
 
 		/// <summary>
@@ -64,7 +67,14 @@ namespace CoffeeCat.RogueLite {
 		/// </summary>
 		public virtual void LeavesPlayer() {
 			IsPlayerInside = false;
-			// CatLog.Log("Leaves Room");
+		}
+
+		protected void SetInteractiveObject(InteractableType type)
+		{
+			if (interactableObject) {
+				return;
+			}
+			interactableObject = ObjectPoolManager.Instance.Spawn<InteractableObject>(type.ToKey(), interactiveObjectSpawnPos);
 		}
 	}
 
@@ -289,67 +299,57 @@ namespace CoffeeCat.RogueLite {
 
 	public class PlayerSpawnRoom : RoomData
 	{
-		// private readonly string key1 = "skill_selector_fireball";
-		// private readonly string key2 = "skill_selector_lightning";
-		
-		public PlayerSpawnRoom() : base(RoomType.PlayerSpawnRoom) {
-			/*// Spawn Init Skill Selector Prefabs
-			var playerSpawnPosition = room.Rect.center;
-			var skillPrefab1Position = playerSpawnPosition.x -= 3f;
-			var skillPrefab2Position = playerSpawnPosition.x += 3f;
-			Preloader.Process(key1);
-			Preloader.Process(key2);*/
-		}
+		public PlayerSpawnRoom() : base(RoomType.PlayerSpawnRoom) { }
 	}
 
 	public class RewardRoom : RoomData {
-		private InteractableFloor interactiveObject = null;
-		private readonly Vector3 interactiveSpawnPos;
-		
-		// Constructor
-		public RewardRoom(Room room) : base(RoomType.RewardRoom) {
-			interactiveSpawnPos = room.FloorRectInt.center;
-		}
+		public RewardRoom(Room room) : base(RoomType.RewardRoom, room: room) { }
 
 		public override void EnteredPlayer() {
-			if (!interactiveObject) {
-				interactiveObject = ObjectPoolManager.Instance.Spawn<InteractableFloor>("portal_floor", interactiveSpawnPos);	
-			}
-			interactiveObject.PlayParticle();
+			base.EnteredPlayer();
+			SetInteractiveObject(InteractableType.Reward);
+			interactableObject.PlayParticle();
 		}
 
 		public override void LeavesPlayer() {
-			if (interactiveObject) {
-				interactiveObject.StopParticle();
+			base.LeavesPlayer();
+			if (interactableObject) {
+				interactableObject.StopParticle();
 			}
 		}
 	}
 
 	public class ShopRoom : RoomData {
-		
-		// Constructor
-		public ShopRoom() : base(RoomType.ShopRoom) { }
+		public ShopRoom(Room room) : base(RoomType.ShopRoom, room: room) { }
 
 		public override void EnteredPlayer() {
 			base.EnteredPlayer();
+			SetInteractiveObject(InteractableType.Shop);
+			interactableObject.PlayParticle();
 		}
 
 		public override void LeavesPlayer() {
 			base.LeavesPlayer();
+			if (interactableObject) {
+				interactableObject.StopParticle();
+			}
 		}
 	}
 
-	public class ExitRoom : RoomData {
-		
-		// Constructor
-		public ExitRoom() : base(RoomType.ExitRoom) { }
+	public class ExitRoomInteractable : RoomData {
+		public ExitRoomInteractable(Room room) : base(RoomType.ExitRoom, room: room) { }
 
 		public override void EnteredPlayer() {
 			base.EnteredPlayer();
+			SetInteractiveObject(InteractableType.Floor);
+			interactableObject.PlayParticle();
 		}
 
 		public override void LeavesPlayer() {
 			base.LeavesPlayer();
+			if (interactableObject) {
+				interactableObject.StopParticle();
+			}
 		}
 	}
 }

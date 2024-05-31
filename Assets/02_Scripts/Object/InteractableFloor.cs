@@ -1,5 +1,7 @@
-namespace CoffeeCat {
-    public class InteractableFloor : InteractiveObject {
+namespace CoffeeCat 
+{
+    public class InteractableFloor : InteractableObject 
+    {
         
     }
 }

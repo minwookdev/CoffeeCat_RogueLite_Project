@@ -41,6 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9220452529456790867}
+  - component: {fileID: 2725772898153509162}
   - component: {fileID: 8508205329842853969}
   m_Layer: 0
   m_Name: portal_shop
@@ -65,6 +66,19 @@ Transform:
   - {fileID: 4576573587118627359}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2725772898153509162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4039474240312527659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0757299debf0c7b4b9ed011177807b23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ps: {fileID: 6818509790030665684}
 --- !u!61 &8508205329842853969
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -195,6 +209,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cdd278b04e3bb0747b84d49e8b7138b9, type: 3}
+--- !u!198 &6818509790030665684 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 749093556639959764, guid: cdd278b04e3bb0747b84d49e8b7138b9, type: 3}
+  m_PrefabInstance: {fileID: 6108400730903813376}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6818509790030665685 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 749093556639959765, guid: cdd278b04e3bb0747b84d49e8b7138b9, type: 3}

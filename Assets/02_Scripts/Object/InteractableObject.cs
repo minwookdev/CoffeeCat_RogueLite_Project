@@ -2,7 +2,7 @@ using UnityEngine;
 using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat {
-    public class InteractiveObject : MonoBehaviour {
+    public class InteractableObject : MonoBehaviour {
         [SerializeField] private ParticleSystem ps = null;
         
         private void OnTriggerEnter2D(Collider2D other) {

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3957841388885665156}
+  - component: {fileID: 5864590723952922217}
   - component: {fileID: 1114683268955235076}
   m_Layer: 0
   m_Name: portal_reward
@@ -33,6 +34,19 @@ Transform:
   - {fileID: 1551030567060877922}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5864590723952922217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1644551496165326224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89651b0e8c7f90741bc5aa4850d70d49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ps: {fileID: 2263425227441167519}
 --- !u!61 &1114683268955235076
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -198,5 +212,10 @@ PrefabInstance:
 --- !u!4 &2263425227441167518 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3879890615736701426, guid: d6e1ae9b9b630554eba9f865a531ee5e, type: 3}
+  m_PrefabInstance: {fileID: 3076361747612978540}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &2263425227441167519 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3879890615736701427, guid: d6e1ae9b9b630554eba9f865a531ee5e, type: 3}
   m_PrefabInstance: {fileID: 3076361747612978540}
   m_PrefabAsset: {fileID: 0}
