@@ -3,7 +3,7 @@ guid: 0f4a3777414f9a84da0a0f023d575ce9
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 12
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -75,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -87,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -99,6 +103,33 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -619,33 +650,32 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Basic Charakter Actions_4: 130642744
       Basic Charakter Actions_0: -129706968
-      Basic Charakter Actions_22: -571253538
-      Basic Charakter Actions_16: 357086106
       Basic Charakter Actions_1: 1845412043
-      Basic Charakter Actions_17: -2119912862
-      Basic Charakter Actions_6: 2078369612
-      Basic Charakter Actions_13: -868080675
-      Basic Charakter Actions_9: -662644585
-      Basic Charakter Actions_15: 326473927
-      Basic Charakter Actions_19: 996740165
       Basic Charakter Actions_10: 1862241492
-      Basic Charakter Actions_3: 2037063020
-      Basic Charakter Actions_2: 1268551343
-      Basic Charakter Actions_5: 426383197
-      Basic Charakter Actions_21: -1473249885
       Basic Charakter Actions_11: -751575
-      Basic Charakter Actions_20: 1786191213
       Basic Charakter Actions_12: -715337417
+      Basic Charakter Actions_13: -868080675
       Basic Charakter Actions_14: -1850396500
-      Basic Charakter Actions_7: -352342992
-      Basic Charakter Actions_23: 1090855381
-      Basic Charakter Actions_8: -360497247
+      Basic Charakter Actions_15: 326473927
+      Basic Charakter Actions_16: 357086106
+      Basic Charakter Actions_17: -2119912862
       Basic Charakter Actions_18: -1944869360
-  spritePackingTag: 
+      Basic Charakter Actions_19: 996740165
+      Basic Charakter Actions_2: 1268551343
+      Basic Charakter Actions_20: 1786191213
+      Basic Charakter Actions_21: -1473249885
+      Basic Charakter Actions_22: -571253538
+      Basic Charakter Actions_23: 1090855381
+      Basic Charakter Actions_3: 2037063020
+      Basic Charakter Actions_4: 130642744
+      Basic Charakter Actions_5: 426383197
+      Basic Charakter Actions_6: 2078369612
+      Basic Charakter Actions_7: -352342992
+      Basic Charakter Actions_8: -360497247
+      Basic Charakter Actions_9: -662644585
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
