@@ -17,13 +17,41 @@ namespace CoffeeCat.FrameWork {
 			base.Initialize();
 		}
 
-		public void SpawnPlayer(Vector2 spawnPosition) {
+		public void SetPlayerOnEnteredDungeon(Vector2 playerSpawnPosition) {
+			SpawnPlayer();
+			SetPlayerPosition(playerSpawnPosition);
+			ActivePlayer();
+		}
+
+		public void SpawnPlayer() {
+			if (SpawnedPlayer)
+				return;
+			
 			if (!ObjectPoolManager.Instance.IsExistInPoolDictionary(playerKey)) {
 				var origin = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(playerKey, true);
 				ObjectPoolManager.Instance.AddToPool(PoolInformation.New(origin, true, 1));
 			}
 
-			SpawnedPlayer = ObjectPoolManager.Instance.Spawn<Player>(playerKey, spawnPosition);
+			SpawnedPlayer = ObjectPoolManager.Instance.Spawn<Player>(playerKey, Vector3.zero);
+		}
+		
+		public void SetPlayerPosition(Vector2 position) {
+			if (!SpawnedPlayer) {
+				return;
+			}
+			SpawnedPlayer.Tr.position = position;
+		}
+
+		public void ActivePlayer() {
+			if (!SpawnedPlayer)
+				return;
+			SpawnedPlayer.gameObject.SetActive(true);
+		}
+
+		public void DisablePlayer() {
+			if (!SpawnedPlayer)
+				return;
+			SpawnedPlayer.gameObject.SetActive(false);
 		}
 
 		public void DespawnPlayer() {

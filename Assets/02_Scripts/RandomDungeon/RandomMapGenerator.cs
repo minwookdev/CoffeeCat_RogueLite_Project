@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CoffeeCat;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
@@ -21,26 +22,20 @@ namespace RandomDungeonWithBluePrint
             public FieldBluePrint BluePrint = default;
             public int Weight = default;
         }
-
+        
+        [Title("Generate Options")]
         [SerializeField] private int seed = default;
         [SerializeField] private Button generateButton = default;
         [SerializeField] private FieldView fieldView = default;
+        [SerializeField] private BluePrintQueue bluePrintQueue = default;
+        [SerializeField] private FieldBluePrint TestBluePrint = null; // 확정 생성 BluePrint
         [SerializeField] private BluePrintWithWeight[] bluePrints = default;
-
         public Field field { get; private set; }
         public bool IsGenerateCompleted { get; set; } = false;
 
-        [Title("Generate Options")]
-        public FieldBluePrint DefinitiveBluePrint = null; // 확정 생성 BluePrint
-        [SerializeField] private BluePrintQueue bluePrintQueue = default;
-        
-        [Title("Events")]
-        [SerializeField] private UnityEvent<Field> onGeneratedMapCompleted = null;
-        [SerializeField] private UnityEvent onDisposeMapBefore = null;
-
-        [Title("Bake PathFind Grid")]
-        public bool IsBakePathFindGrid = false;
-        [SerializeField] private PathFindGrid pathFindGrid;
+        [Title("Bake PathFind Grid (Not Using)")]
+        [SerializeField, ReadOnly] private bool isBakePathFindGrid = false;
+        [SerializeField, ReadOnly] private PathFindGrid pathFindGrid;
         
         [Title("Debugging Options", TitleAlignment = TitleAlignments.Centered)]
         public bool IsDisplayRoomType = false;
@@ -59,7 +54,7 @@ namespace RandomDungeonWithBluePrint
             ExecuteGenerate();
             
             // Generate PathFind Grid
-            if (IsBakePathFindGrid) {
+            if (isBakePathFindGrid) {
                 pathFindGrid.CreateGridDictionary(this);
             }
             
@@ -78,12 +73,12 @@ namespace RandomDungeonWithBluePrint
 
             void ExecuteGenerate()
             {
-                onDisposeMapBefore?.Invoke();
+                StageManager.Instance.InvokeMapDisposeBefore();
                 
-                var targetFieldBluePrint = (DefinitiveBluePrint) ? DefinitiveBluePrint : Raffle().BluePrint;
+                var targetFieldBluePrint = (TestBluePrint) ? TestBluePrint : Raffle().BluePrint;
                 Create(targetFieldBluePrint);
                 
-                onGeneratedMapCompleted?.Invoke(field);
+                StageManager.Instance.InvokeMapGenerateCompleted(field);
             }
         }
         
@@ -117,6 +112,19 @@ namespace RandomDungeonWithBluePrint
             }
 
             return candidate[pick];
+        }
+
+        public void GenerateNextFloor(int currentFloor) {
+            var bluePrints = bluePrintQueue.NormalMapBluePrints;
+            if (bluePrints.Length <= currentFloor) {
+                CatLog.WLog("Failed to Get Next BluePrint.");
+                return;
+            }
+            
+            StageManager.Instance.InvokeMapDisposeBefore();
+            var targetFieldBluePrint = bluePrints[currentFloor];
+            Create(targetFieldBluePrint);
+            StageManager.Instance.InvokeMapGenerateCompleted(field);
         }
 
         #region Debug_Drawer

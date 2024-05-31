@@ -24,27 +24,30 @@ namespace CoffeeCat
     }
 
     public class StageManager : PrelocatedSingleton<StageManager> {
-        [Title("StageManager")]
-        [SerializeField] private RandomMapGenerator generator;
-        //[SerializeField] private Grid grid = null;
-        
-        // Fields
+        [Title("StageManager", TitleAlignment = TitleAlignments.Centered)]
+        [TabGroup("Requires"), SerializeField] private RandomMapGenerator generator;
+        [TabGroup("Requires"), ShowInInspector, ReadOnly] public int CurrentRoomMonsterKilledCount { get; private set; } = 0;
+        [TabGroup("Requires"), ShowInInspector, ReadOnly] public int CurrentFloorMonsterKillCount { get; private set; } = 0;
+        [TabGroup("Requires"), ShowInInspector, ReadOnly] public int TotalMonsterKilledCount { get; private set; } = 0;
+        [TabGroup("Requires"), ShowInInspector, ReadOnly] public int CurrentFloor { get; private set; } = 0;
         private Room playerCurrentRoom = null;
-        
-        // Properties
+        public Room PlayerCurrentRoom => playerCurrentRoom;
         public bool IsPlayerInsideRoom => playerCurrentRoom != null;
-        public int CurrentRoomMonsterKilledCount { get; private set; } = 0;
-        public int CurrentFloorMonsterKillCount { get; private set; } = 0;
-        public int TotalMonsterKilledCount { get; private set; } = 0;
+        
+        [Title("Events", TitleAlignment = TitleAlignments.Centered)]
+        [TabGroup("Events"), SerializeField] private UnityEvent<Field> onMapGenerateCompleted = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent onMapDisposeBefore = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<RoomType> OnRoomEntering = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<RoomType> OnRoomFirstEntering = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<RoomType> OnClearedRoom = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent OnMonsterKilled = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent OnPlayerKilled = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent OnSkillSelectCompleted = null;
 
-        [Title("Events")]
-        [SerializeField] private UnityEvent<RoomType> OnRoomEntering = null;
-        [SerializeField] private UnityEvent<RoomType> OnRoomFirstEntering = null;
-        [SerializeField] private UnityEvent<RoomType> OnClearedRoom = null;
-        [SerializeField] private UnityEvent OnMonsterKilled = null;
-        [SerializeField] private UnityEvent OnPlayerKilled = null;
-        [SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
-        [SerializeField] private UnityEvent OnSkillSelectCompleted = null;
+        [Title("Player_TSet")]
+        public TSet_PlayerStatus PlayerStatus = null;
+        public TSet_PlayerSkills PlayerSkills = null;
 
         private void Update()
         {
@@ -82,15 +85,15 @@ namespace CoffeeCat
             }
         }
 
-        public void SpawnPlayer(Field field) {
+        public void SetPlayer(Field field) {
             // Not Founded Entry Room
             if (!field.TryFindRoomFromType(RoomType.PlayerSpawnRoom, out Room result)) {
                 CatLog.WLog("Not Exist PlayerSpawn Room !");
                 return;
             }
             
-            // Spawn RogueLite Player 
-            RogueLiteManager.Instance.SpawnPlayer(result.Rect.center);
+            // Set RogueLite Player Object
+            RogueLiteManager.Instance.SetPlayerOnEnteredDungeon(result.Rect.center);
             playerCurrentRoom = result;
             playerCurrentRoom.RoomData.EnteredPlayer();
         }
@@ -98,7 +101,9 @@ namespace CoffeeCat
         /// <summary>
         /// Despawn Players
         /// </summary>
-        public void DespawnPlayer() => RogueLiteManager.Instance.DespawnPlayer();
+        public void DisablePlayer() {
+            RogueLiteManager.Instance.DisablePlayer();
+        }
 
         /// <summary>
         /// Despawn All Gates
@@ -150,6 +155,10 @@ namespace CoffeeCat
         {
             CurrentRoomMonsterKilledCount++;
         }
+
+        public void RequestGenerateNextFloor() {
+            generator.GenerateNextFloor(CurrentFloor);
+        }
         
         #region Events
         
@@ -163,13 +172,25 @@ namespace CoffeeCat
 
         public void InvokeRoomEnteringFirstEvent(RoomType roomType) => OnRoomFirstEntering?.Invoke(roomType);
 
-        public void AddListenerRoomFirstEnteringEvent(UnityAction<RoomType> action) => OnRoomFirstEntering.AddListener(action);
+        public void AddListenerRoomEnteringEvent(UnityAction<RoomType> action) => OnRoomEntering.AddListener(action);
 
         public void AddListenerClearedRoomEvent(UnityAction<RoomType> action) => OnClearedRoom.AddListener(action);
         
         public void AddEventToOpeningSkillSelectPanel(UnityAction action) => OnOpeningSkillSelectPanel.AddListener(action);
         
         public void AddEventToSkillSelectCompleted(UnityAction action) => OnSkillSelectCompleted.AddListener(action);
+        
+        public void AddEventToMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.AddListener(action);
+        
+        public void InvokeMapGenerateCompleted(Field field) => onMapGenerateCompleted?.Invoke(field);
+        
+        public void RemoveEventToMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.RemoveListener(action);
+        
+        public void AddEventToMapDisposeBefore(UnityAction action) => onMapDisposeBefore.AddListener(action);
+        
+        public void InvokeMapDisposeBefore() => onMapDisposeBefore?.Invoke();
+        
+        public void RemoveEventToMapDisposeBefore(UnityAction action) => onMapDisposeBefore.RemoveListener(action);
 
         public void InvokeOpeningSkillSelectPanel() => OnOpeningSkillSelectPanel?.Invoke();
         
