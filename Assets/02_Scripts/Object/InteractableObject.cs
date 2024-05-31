@@ -1,20 +1,40 @@
 using UnityEngine;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
+using Sirenix.OdinInspector;
+using UniRx;
+using UniRx.Triggers;
 
 namespace CoffeeCat {
     public class InteractableObject : MonoBehaviour {
         [SerializeField] private ParticleSystem ps = null;
-        
-        private void OnTriggerEnter2D(Collider2D other) {
-            if (other.gameObject.layer == Defines.GetPlayerLayer()) {
-                
-            }
-        }
+        [ShowInInspector, ReadOnly] public bool IsEnteredPlayer { get; private set; } = false;
 
-        private void OnTriggerExit2D(Collider2D other) {
-            if (other.gameObject.layer == Defines.GetPlayerLayer()) {
-                
-            }
+        protected void Start()
+        {
+            Collider2D lastCollider = null;
+            
+            this.OnTriggerStay2DAsObservable()
+                .Where(other => other.gameObject.layer == Defines.GetPlayerLayer())
+                .Subscribe(playerCollider =>
+                {
+                    if (IsEnteredPlayer)
+                        return;
+                    IsEnteredPlayer = true;
+                    lastCollider = playerCollider;
+                    OnPlayerEnter();
+                });
+
+            this.OnTriggerExit2DAsObservable()
+                .Where(other => other.gameObject.layer == Defines.GetPlayerLayer())
+                .Subscribe(playerCollider =>
+                {
+                    if (!IsEnteredPlayer || lastCollider != playerCollider)
+                        return;
+                    IsEnteredPlayer = false;
+                    lastCollider = null;
+                    OnPlayerExit();
+                });
         }
 
         public virtual void PlayParticle() {
@@ -25,12 +45,14 @@ namespace CoffeeCat {
             ps.Stop();
         }
 
-        protected virtual void OnPlayerEnter() {
-            
+        protected virtual void OnPlayerEnter()
+        {
+            CatLog.Log("Enter Player To Interactable.");
         }
 
-        protected virtual void OnPlayerExit() {
-            
+        protected virtual void OnPlayerExit()
+        {
+            CatLog.Log("Exit Player From Interactable.");
         }
     }
 }

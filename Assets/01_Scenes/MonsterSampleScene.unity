@@ -1915,7 +1915,7 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
     InitSpawnCount: 1
     IsStayEnabling: 0
-    HasRootParent: 0
+    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 3
     PoolObject: {fileID: 0}
@@ -1928,7 +1928,7 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
     InitSpawnCount: 1
     IsStayEnabling: 0
-    HasRootParent: 0
+    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 3
     PoolObject: {fileID: 0}
@@ -1941,7 +1941,7 @@ MonoBehaviour:
       m_EditorAssetChanged: 0
     InitSpawnCount: 1
     IsStayEnabling: 0
-    HasRootParent: 0
+    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   AudioClipDictionary:
     keyData: []
