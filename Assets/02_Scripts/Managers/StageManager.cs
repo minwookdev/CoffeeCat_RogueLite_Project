@@ -45,10 +45,6 @@ namespace CoffeeCat
         [TabGroup("Events"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnSkillSelectCompleted = null;
 
-        [Title("Player_TSet")]
-        public TSet_PlayerStatus PlayerStatus = null;
-        public TSet_PlayerSkills PlayerSkills = null;
-
         private void Update()
         {
             if (!RogueLiteManager.Instance.SpawnedPlayer) {
@@ -172,7 +168,7 @@ namespace CoffeeCat
 
         public void InvokeRoomEnteringFirstEvent(RoomType roomType) => OnRoomFirstEntering?.Invoke(roomType);
 
-        public void AddListenerRoomEnteringEvent(UnityAction<RoomType> action) => OnRoomEntering.AddListener(action);
+        public void AddListenerRoomFirstEnteringEvent(UnityAction<RoomType> action) => OnRoomFirstEntering.AddListener(action);
 
         public void AddListenerClearedRoomEvent(UnityAction<RoomType> action) => OnClearedRoom.AddListener(action);
         
