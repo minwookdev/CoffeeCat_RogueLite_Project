@@ -1591,7 +1591,7 @@ MonoBehaviour:
     Icon: {fileID: 0}
     Index: 0
     Type: 0
-    isOwned: 0
+    IsOwned: 0
 --- !u!1 &336130482
 GameObject:
   m_ObjectHideFlags: 0
@@ -3488,58 +3488,10 @@ MonoBehaviour:
   generator: {fileID: 1642701469}
   onMapGenerateCompleted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: CreateGate
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: SetPlayer
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   onMapDisposeBefore:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: DespawnGates
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: DisablePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnRoomEntering:
     m_PersistentCalls:
       m_Calls: []
@@ -3621,8 +3573,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  PlayerStatus: {fileID: 11400000, guid: bc6fc6f87cdd1b14bb27dd7f733431e7, type: 2}
-  PlayerSkills: {fileID: 11400000, guid: 2d603870f11ec0841aeb7b60b2983bfd, type: 2}
 --- !u!1 &1224183318
 GameObject:
   m_ObjectHideFlags: 0
@@ -3831,7 +3781,7 @@ MonoBehaviour:
     Icon: {fileID: 0}
     Index: 0
     Type: 0
-    isOwned: 0
+    IsOwned: 0
 --- !u!224 &1270814328
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4689,7 +4639,7 @@ MonoBehaviour:
     Icon: {fileID: 0}
     Index: 0
     Type: 0
-    isOwned: 0
+    IsOwned: 0
 --- !u!1 &1642701467
 GameObject:
   m_ObjectHideFlags: 0
@@ -4764,60 +4714,6 @@ MonoBehaviour:
     Weight: 10
   - BluePrint: {fileID: 11400000, guid: 22ab5f864cbd6ce4f92c587ff712649b, type: 2}
     Weight: 200
-  onGeneratedMapCompleted:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: CreateGate
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: SetPlayer
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  onDisposeMapBefore:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: DespawnGates
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1213819442}
-        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: DisablePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
   isBakePathFindGrid: 0
   pathFindGrid: {fileID: 563312532}
   IsDisplayRoomType: 1

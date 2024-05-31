@@ -21,6 +21,7 @@ namespace CoffeeCat
                       {
                           var target = FindAroundMonster(skillData.AttackCount);
 
+                          if (target == null) return;
                           if (!target.IsAlive) return;
 
                           var skillObj =

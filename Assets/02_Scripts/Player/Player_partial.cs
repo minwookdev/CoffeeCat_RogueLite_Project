@@ -13,7 +13,7 @@ namespace CoffeeCat
     public partial class Player
     {
         private readonly List<Table_PlayerActiveSkills> ownedSkillsList = new List<Table_PlayerActiveSkills>();
-        private Dictionary<string, PlayerSkillEffect> skillEffects = new Dictionary<string, PlayerSkillEffect>();
+        private readonly Dictionary<string, PlayerSkillEffect> skillEffects = new Dictionary<string, PlayerSkillEffect>();
 
         private PlayerSkillSelectData[] SkillSelector(int SelectCount)
         {
@@ -22,15 +22,13 @@ namespace CoffeeCat
             var playerSkills = DataManager.Instance.PlayerActiveSkills.Values;
             var skillSelectDataList = new List<PlayerSkillSelectData>();
 
-            var upgradeableSkills = ownedSkillsList
-                                    .Where(skill => skill.Grade < Defines.PLAYER_SKILL_MAX_GRADE).ToList();
+            var upgradeableSkills = ownedSkillsList.Where(skill => skill.Grade < Defines.PLAYER_SKILL_MAX_GRADE).ToList();
 
             if (upgradeableSkills.Any())
             {
                 var randomOwnedSkill = upgradeableSkills[Random.Range(0, upgradeableSkills.Count)];
                 var pickSkill = DataManager.Instance.PlayerActiveSkills[randomOwnedSkill.Index + 1];
-                var pickSkillSelectData = new PlayerSkillSelectData
-                    (pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, true);
+                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, true);
                 skillSelectDataList.Add(pickSkillSelectData);
 
                 // Remove owned skills from the list
@@ -67,6 +65,7 @@ namespace CoffeeCat
                     Bubble(skillData);
                     break;
                 default:
+                    // Passive(skillData);
                     break;
             }
         }
