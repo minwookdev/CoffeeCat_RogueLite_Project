@@ -15,17 +15,24 @@ namespace CoffeeCat {
             Collider2D lastCollider = null;
             
             this.OnTriggerStay2DAsObservable()
+                .Skip(0)
+                .TakeUntilDestroy(this)
                 .Where(other => other.gameObject.layer == Defines.GetPlayerLayer())
                 .Subscribe(playerCollider =>
                 {
-                    if (IsEnteredPlayer)
+                    if (IsEnteredPlayer) {
+                        OnPlayerStay();
                         return;
+                    }
                     IsEnteredPlayer = true;
                     lastCollider = playerCollider;
                     OnPlayerEnter();
-                });
+                })
+                .AddTo(this);
 
             this.OnTriggerExit2DAsObservable()
+                .Skip(0)
+                .TakeUntilDestroy(this)
                 .Where(other => other.gameObject.layer == Defines.GetPlayerLayer())
                 .Subscribe(playerCollider =>
                 {
@@ -34,7 +41,8 @@ namespace CoffeeCat {
                     IsEnteredPlayer = false;
                     lastCollider = null;
                     OnPlayerExit();
-                });
+                })
+                .AddTo(this);
         }
 
         public virtual void PlayParticle() {
@@ -45,14 +53,16 @@ namespace CoffeeCat {
             ps.Stop();
         }
 
-        protected virtual void OnPlayerEnter()
-        {
-            CatLog.Log("Enter Player To Interactable.");
+        protected virtual void OnPlayerEnter() {
+            
         }
 
-        protected virtual void OnPlayerExit()
-        {
-            CatLog.Log("Exit Player From Interactable.");
+        protected virtual void OnPlayerStay() {
+            
+        }
+
+        protected virtual void OnPlayerExit() {
+            
         }
     }
 }

@@ -3486,6 +3486,60 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 1642701469}
+  onMapGenerateCompleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1213819442}
+        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
+        m_MethodName: CreateGate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1213819442}
+        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
+        m_MethodName: SetPlayer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onMapDisposeBefore:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1213819442}
+        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
+        m_MethodName: DespawnGates
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1213819442}
+        m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
+        m_MethodName: DisablePlayer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnRoomEntering:
     m_PersistentCalls:
       m_Calls: []
@@ -4683,6 +4737,8 @@ MonoBehaviour:
   seed: 0
   generateButton: {fileID: 1933723496}
   fieldView: {fileID: 1940253223}
+  bluePrintQueue: {fileID: 11400000, guid: cbafbd23e756af448b6f5455ea96d718, type: 2}
+  TestBluePrint: {fileID: 0}
   bluePrints:
   - BluePrint: {fileID: 11400000, guid: 4dcbc3b4d2b3c4beeb5bea52285e145f, type: 2}
     Weight: 0
@@ -4708,8 +4764,6 @@ MonoBehaviour:
     Weight: 10
   - BluePrint: {fileID: 11400000, guid: 22ab5f864cbd6ce4f92c587ff712649b, type: 2}
     Weight: 200
-  DefinitiveBluePrint: {fileID: 11400000, guid: 11514046847cb46438bb39f8f656cf44, type: 2}
-  bluePrintQueue: {fileID: 11400000, guid: cbafbd23e756af448b6f5455ea96d718, type: 2}
   onGeneratedMapCompleted:
     m_PersistentCalls:
       m_Calls:
@@ -4727,7 +4781,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1213819442}
         m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: SpawnPlayer
+        m_MethodName: SetPlayer
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4754,7 +4808,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 1213819442}
         m_TargetAssemblyTypeName: CoffeeCat.StageManager, Assembly-CSharp
-        m_MethodName: DespawnPlayer
+        m_MethodName: DisablePlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4764,7 +4818,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  IsBakePathFindGrid: 1
+  isBakePathFindGrid: 0
   pathFindGrid: {fileID: 563312532}
   IsDisplayRoomType: 1
   IsDisplaySectionRectDrawer: 1
