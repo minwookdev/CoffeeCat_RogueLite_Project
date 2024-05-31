@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-5327230174698057719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7ea85e8b640f34d93deb779623ef06, type: 3}
+  m_Name: Table_PlayerActiveSkills_7
+  m_EditorClassIdentifier: 
+  tKey: 7
+  Index: 7
+  SkillKey: Bubble
+  Grade: 1
+  SkillName: Bubble
+  SkillBaseDamage: 10
+  SkillCoefficient: 0.3
+  SkillRange: -1
+  SkillCoolTime: 5
+  AttackCount: 1
+--- !u!114 &-2707805069609639571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7ea85e8b640f34d93deb779623ef06, type: 3}
+  m_Name: Table_PlayerActiveSkills_1
+  m_EditorClassIdentifier: 
+  tKey: 1
+  Index: 1
+  SkillKey: Explosion
+  Grade: 1
+  SkillName: Explosion
+  SkillBaseDamage: 5
+  SkillCoefficient: 0.2
+  SkillRange: 5
+  SkillCoolTime: 2
+  AttackCount: 3
+--- !u!114 &-119474908224255564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7ea85e8b640f34d93deb779623ef06, type: 3}
+  m_Name: Table_PlayerActiveSkills_2
+  m_EditorClassIdentifier: 
+  tKey: 2
+  Index: 2
+  SkillKey: Explosion
+  Grade: 2
+  SkillName: Explosion
+  SkillBaseDamage: 5
+  SkillCoefficient: 0.2
+  SkillRange: 5
+  SkillCoolTime: 2
+  AttackCount: 5
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: debaabd7ddd783244a4c13e36e74454a, type: 3}
+  m_Name: TSet_PlayerActiveSkills
+  m_EditorClassIdentifier: 
+  values:
+  - {fileID: -2707805069609639571}
+  - {fileID: -119474908224255564}
+  - {fileID: 5505019861301871227}
+  - {fileID: 2501918849099546753}
+  - {fileID: 1596683529839203607}
+  - {fileID: 1347635165199098397}
+  - {fileID: -5327230174698057719}
+--- !u!114 &1347635165199098397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7ea85e8b640f34d93deb779623ef06, type: 3}
+  m_Name: Table_PlayerActiveSkills_6
+  m_EditorClassIdentifier: 
+  tKey: 6
+  Index: 6
+  SkillKey: Beam
+  Grade: 3
+  SkillName: Beam
+  SkillBaseDamage: 11
+  SkillCoefficient: 1
+  SkillRange: 4
+  SkillCoolTime: 3
+  AttackCount: 1
+--- !u!114 &1596683529839203607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7ea85e8b640f34d93deb779623ef06, type: 3}
+  m_Name: Table_PlayerActiveSkills_5
+  m_EditorClassIdentifier: 
+  tKey: 5
+  Index: 5
+  SkillKey: Beam
+  Grade: 2
+  SkillName: Beam
+  SkillBaseDamage: 10
+  SkillCoefficient: 1
+  SkillRange: 4
+  SkillCoolTime: 3
+  AttackCount: 1
+--- !u!114 &2501918849099546753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7ea85e8b640f34d93deb779623ef06, type: 3}
+  m_Name: Table_PlayerActiveSkills_4
+  m_EditorClassIdentifier: 
+  tKey: 4
+  Index: 4
+  SkillKey: Beam
+  Grade: 1
+  SkillName: Beam
+  SkillBaseDamage: 10
+  SkillCoefficient: 1
+  SkillRange: 3.5
+  SkillCoolTime: 3
+  AttackCount: 1
+--- !u!114 &5505019861301871227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd7ea85e8b640f34d93deb779623ef06, type: 3}
+  m_Name: Table_PlayerActiveSkills_3
+  m_EditorClassIdentifier: 
+  tKey: 3
+  Index: 3
+  SkillKey: Explosion
+  Grade: 3
+  SkillName: Explosion
+  SkillBaseDamage: 6
+  SkillCoefficient: 0.2
+  SkillRange: 5
+  SkillCoolTime: 2
+  AttackCount: 5

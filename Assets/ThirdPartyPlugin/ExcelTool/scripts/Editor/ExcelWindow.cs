@@ -10,12 +10,14 @@ public class ExcelWindow : EditorWindow
 {
     private const string KeyFilePath = "Excel_FilePath";
     private const string KeyOutPath = "Excel_OutPath";
+    private const string KeyScriptPath = "Excel_ScriptPath";
     private const string KeySheetCount = "Excel_SheetCount";
     private const string KeyIncSub = "Excel_IncSub";
 
-    private string filePath; // source excel file path
-    private string outPath; // output path
-    private bool isIncSub; // whether include subdirectories
+    private string filePath;    // source excel file path
+    private string outPath;     // output path
+    private string scriptPath;  // script output path
+    private bool isIncSub;      // whether include subdirectories
     private int sheetCount = 1; // load sheet count. 0 means all.
     
     private int excelFileCount;
@@ -107,7 +109,19 @@ public class ExcelWindow : EditorWindow
         
         if (GUILayout.Button("Browse", GUILayout.Width(80)))
         {
-            outPath = EditorUtility.OpenFolderPanel("Choose Excel Files Forlder", "", "");
+            outPath = EditorUtility.OpenFolderPanel("Choose Output Files Forlder", "", "");
+            EditorPrefs.SetString(KeyOutPath, outPath);
+        }
+        EditorGUILayout.EndHorizontal();
+        
+        GUILayout.Space(5);
+        EditorGUILayout.BeginHorizontal();
+        EditorGUIUtility.labelWidth = 80;
+        scriptPath = EditorGUILayout.TextField ("Script Path:", scriptPath, tfstyle);
+        
+        if (GUILayout.Button("Browse", GUILayout.Width(80)))
+        {
+            scriptPath = EditorUtility.OpenFolderPanel("Choose Script Files Forlder", "", "");
             EditorPrefs.SetString(KeyOutPath, outPath);
         }
         EditorGUILayout.EndHorizontal();
@@ -149,7 +163,7 @@ public class ExcelWindow : EditorWindow
     void DrawExcelFiles()
     {
         Rect rect = new Rect(5, H1, position.width - 10, position.height - H1 - H2 - H3 - 30);
-        EditorGUI.DrawRect(rect, new Color(0.8f, 0.8f, 0.8f));
+        EditorGUI.DrawRect(rect, Color.gray);
         GUILayout.BeginArea(new Rect(rect.x + 5, rect.y + 5, rect.width - 10, rect.height - 10));
 
         if (string.IsNullOrEmpty(filePath))
@@ -364,7 +378,7 @@ public class ExcelWindow : EditorWindow
     {
         if(!CanGenerate()) return;
 
-        FileExporter exporter = new FileExporter(excelFiles, isUseFiles, outPath, sheetCount, 3);
+        FileExporter exporter = new FileExporter(excelFiles, isUseFiles, scriptPath, sheetCount, 3);
         genResult = exporter.SaveCsFiles();
         curLogState = genResult > 0 ? LogState.GenSuccess : LogState.GenFailed;
         AssetDatabase.Refresh();

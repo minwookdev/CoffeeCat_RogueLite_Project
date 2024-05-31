@@ -32,7 +32,6 @@ namespace CoffeeCat
         private Room playerCurrentRoom = null;
         
         // Properties
-        public Room PlayerCurrentRoom => playerCurrentRoom;
         public bool IsPlayerInsideRoom => playerCurrentRoom != null;
         public int CurrentRoomMonsterKilledCount { get; private set; } = 0;
         public int CurrentFloorMonsterKillCount { get; private set; } = 0;
@@ -46,10 +45,6 @@ namespace CoffeeCat
         [SerializeField] private UnityEvent OnPlayerKilled = null;
         [SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
         [SerializeField] private UnityEvent OnSkillSelectCompleted = null;
-
-        [Title("Player_TSet")]
-        public TSet_PlayerStatus PlayerStatus = null;
-        public TSet_PlayerSkills PlayerSkills = null;
 
         private void Update()
         {
@@ -168,7 +163,7 @@ namespace CoffeeCat
 
         public void InvokeRoomEnteringFirstEvent(RoomType roomType) => OnRoomFirstEntering?.Invoke(roomType);
 
-        public void AddListenerRoomEnteringEvent(UnityAction<RoomType> action) => OnRoomEntering.AddListener(action);
+        public void AddListenerRoomFirstEnteringEvent(UnityAction<RoomType> action) => OnRoomFirstEntering.AddListener(action);
 
         public void AddListenerClearedRoomEvent(UnityAction<RoomType> action) => OnClearedRoom.AddListener(action);
         

@@ -11,11 +11,10 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect
     {
-        protected Transform playerTr = null;
-        protected Table_PlayerSkills skillData = null;
-        public Table_PlayerSkills SkillData => skillData;
+        protected readonly Transform playerTr = null;
+        protected Table_PlayerActiveSkills skillData = null;
 
-        public PlayerSkillEffect(Transform playerTr, Table_PlayerSkills skillData)
+        protected PlayerSkillEffect(Transform playerTr, Table_PlayerActiveSkills skillData)
         {
             this.playerTr = playerTr;
             this.skillData = skillData;
@@ -23,9 +22,9 @@ namespace CoffeeCat
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
-        public void UpdateSkillData(Table_PlayerSkills skillData)
+        public void UpdateSkillData(Table_PlayerActiveSkills updateSkillData)
         {
-            this.skillData = skillData;
+            skillData = updateSkillData;
         }
 
         public void Fire(PlayerStatus playerStat)

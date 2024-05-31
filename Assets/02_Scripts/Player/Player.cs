@@ -15,7 +15,6 @@ namespace CoffeeCat
     {
         [Title("Status")]
         [SerializeField] protected PlayerStatusKey playerName = PlayerStatusKey.NONE;
-
         [ShowInInspector, ReadOnly] protected PlayerStatus status;
 
         [Title("Attack")]
@@ -27,7 +26,7 @@ namespace CoffeeCat
         [SerializeField] protected Transform projectilePoint = null;
 
         private Rigidbody2D rigid = null;
-        private bool isPlayerInBattle = false;
+        [ShowInInspector]private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
         private bool isPlayerDamaged = false;
         private bool isInvincible = false;
@@ -39,7 +38,13 @@ namespace CoffeeCat
         private void Start()
         {
             rigid = GetComponent<Rigidbody2D>();
-            Initialize();
+            LoadResources();
+            SetStatus();
+            NormalAttack();
+            CheckInvincibleTime();
+
+            StageManager.Instance.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
+            StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
         }
 
         private void Update()
@@ -53,19 +58,6 @@ namespace CoffeeCat
             }
         }
 
-        private void Initialize()
-        {
-            SetStatus();
-            LoadResources();
-            NormalAttack();
-
-            // test
-            CheckInvincibleTime();
-
-            StageManager.Instance.AddListenerRoomEnteringEvent(PlayerEnteredRoom);
-            StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
-        }
-
         private void LoadResources()
         {
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(),
@@ -75,7 +67,7 @@ namespace CoffeeCat
 
         private void SetStatus()
         {
-            status = new PlayerStatus(StageManager.Instance.PlayerStatus[(int)playerName]);
+            status = new PlayerStatus(DataManager.Instance.PlayerStatus[(int)playerName]);
         }
 
         private void Movement()
@@ -149,6 +141,20 @@ namespace CoffeeCat
                 return target;
             }
         }
+        
+        private void CheckInvincibleTime()
+        {
+            this.ObserveEveryValueChanged(_ => isPlayerDamaged)
+                .Skip(TimeSpan.Zero)
+                .Where(_ => isPlayerDamaged)
+                .Select(_ => isInvincible)
+                .Subscribe(_ =>
+                {
+                    isInvincible = true;
+                    Observable.Timer(TimeSpan.FromSeconds(status.InvincibleTime))
+                              .Subscribe(__ => isInvincible = false);
+                }).AddTo(this);
+        }
 
         private void OnDamaged(DamageData damageData)
         {
@@ -169,20 +175,6 @@ namespace CoffeeCat
         {
             isDead = true;
             rigid.velocity = Vector2.zero;
-        }
-
-        private void CheckInvincibleTime()
-        {
-            this.ObserveEveryValueChanged(_ => isPlayerDamaged)
-                .Skip(TimeSpan.Zero)
-                .Where(_ => isPlayerDamaged)
-                .Select(_ => isInvincible)
-                .Subscribe(_ =>
-                {
-                    isInvincible = true;
-                    Observable.Timer(TimeSpan.FromSeconds(status.InvincibleTime))
-                              .Subscribe(__ => isInvincible = false);
-                }).AddTo(this);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -232,6 +224,8 @@ namespace CoffeeCat
             }
         }
 
+        #region Public Methods
+
         public bool IsWalking()
         {
             return rigid.velocity.x != 0 || rigid.velocity.y != 0;
@@ -261,5 +255,7 @@ namespace CoffeeCat
         {
             return isDead;
         }
+
+        #endregion
     }
 }

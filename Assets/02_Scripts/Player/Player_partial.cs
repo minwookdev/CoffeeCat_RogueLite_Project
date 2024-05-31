@@ -10,14 +10,50 @@ using Random = UnityEngine.Random;
 
 namespace CoffeeCat
 {
-    // Skill
     public partial class Player
     {
-        // SkillIndex(SKillKey?)를 key로 가진 SKillEffect 딕셔너리?
-        [Title("Skill")]
-        [ShowInInspector, ReadOnly] private List<Table_PlayerSkills> ownedSkillsList = new List<Table_PlayerSkills>();
+        private readonly List<Table_PlayerActiveSkills> ownedSkillsList = new List<Table_PlayerActiveSkills>();
+        private Dictionary<string, PlayerSkillEffect> skillEffects = new Dictionary<string, PlayerSkillEffect>();
 
-        private void ApplySkillEffect(Table_PlayerSkills skillData)
+        private PlayerSkillSelectData[] SkillSelector(int SelectCount)
+        {
+            // TODO : 새로 배울 수 있는 스킬의 수가 셀렉트 패널에 표시 할 수 있는 수보다 적을 경우
+            
+            var playerSkills = DataManager.Instance.PlayerActiveSkills.Values;
+            var skillSelectDataList = new List<PlayerSkillSelectData>();
+
+            var upgradeableSkills = ownedSkillsList
+                                    .Where(skill => skill.Grade < Defines.PLAYER_SKILL_MAX_GRADE).ToList();
+
+            if (upgradeableSkills.Any())
+            {
+                var randomOwnedSkill = upgradeableSkills[Random.Range(0, upgradeableSkills.Count)];
+                var pickSkill = DataManager.Instance.PlayerActiveSkills[randomOwnedSkill.Index + 1];
+                var pickSkillSelectData = new PlayerSkillSelectData
+                    (pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, true);
+                skillSelectDataList.Add(pickSkillSelectData);
+
+                // Remove owned skills from the list
+                playerSkills = playerSkills.Except(ownedSkillsList).ToList();
+
+                SelectCount--;
+            }
+
+            var newSkillList = playerSkills.Where(skill => skill.Grade == 1).ToList();
+            newSkillList = newSkillList.OrderBy(x => Random.value).ToList();
+
+            for (int i = 0; i < SelectCount; i++)
+            {
+                var pickSkill = newSkillList[i];
+                var pickSkillSelectData =
+                    new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
+                skillSelectDataList.Add(pickSkillSelectData);
+            }
+
+            return skillSelectDataList.ToArray();
+        }
+
+        private void ApplySkillEffect(Table_PlayerActiveSkills skillData)
         {
             switch (skillData.SkillName)
             {
@@ -44,72 +80,6 @@ namespace CoffeeCat
                 .Subscribe(_ => { skillEffect.Fire(status); });
         }
 
-        private bool CanUpgradeSkill()
-        {
-            // 보유스킬이 1개 이상일 경우
-            if (ownedSkillsList.Count >= 1)
-            {
-                foreach (var ownedSkill in ownedSkillsList)
-                {
-                    // 최대등급이 아닌 스킬이 1개라도 있을 경우
-                    if (ownedSkill.Grade < Defines.PLAYER_SKILL_MAX_GRADE)
-                        return true;
-                }
-
-                return false;
-            }
-
-            return false;
-        }
-
-        // TODO
-        private PlayerSkillSelectData[] SkillSelector(int SelectCount)
-        {
-            var playerSkills = StageManager.Instance.PlayerSkills.Values;
-            var skillSelectDatas = new PlayerSkillSelectData[SelectCount];
-            var skillSelectDataIndex = 0;
-            var newSkillCount = SelectCount;
-
-            if (CanUpgradeSkill())
-            {
-                var randomOwnedSkill = ownedSkillsList[Random.Range(0, ownedSkillsList.Count)];
-
-                // 업그레이드 가능한 스킬일 때까지 다시 뽑기
-                while (randomOwnedSkill.Grade == Defines.PLAYER_SKILL_MAX_GRADE)
-                {
-                    randomOwnedSkill = ownedSkillsList[Random.Range(0, ownedSkillsList.Count)];
-                }
-
-                var pickSkill = StageManager.Instance.PlayerSkills[randomOwnedSkill.Index + 1];
-                var pickSkillSelectData =
-                    new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, true);
-                skillSelectDatas[skillSelectDataIndex] = pickSkillSelectData;
-                skillSelectDataIndex++;
-
-                // 스킬 리스트에서 보유중인 스킬 제거
-                for (int i = 0; i < ownedSkillsList.Count; i++)
-                {
-                    playerSkills = playerSkills.Where(skill => skill.SkillKey != ownedSkillsList[i].SkillKey).ToList();
-                }
-
-                newSkillCount -= 1;
-            }
-
-            var newSkillList = playerSkills.Where(skill => skill.Grade == 1).ToList();
-
-            for (int i = 0; i < newSkillCount; i++)
-            {
-                var pickSkill = newSkillList[Random.Range(0, newSkillList.Count)];
-                newSkillList.Remove(pickSkill);
-                var pickSkillSelectData =
-                    new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
-                skillSelectDatas[skillSelectDataIndex] = pickSkillSelectData;
-                skillSelectDataIndex++;
-            }
-
-            return skillSelectDatas;
-        }
-
         public void UpdateSkill(PlayerSkillSelectData data)
         {
             if (data == null)
@@ -117,16 +87,16 @@ namespace CoffeeCat
                 CatLog.ELog("Invalid Data !");
                 return;
             }
-
-            if (data.isOwned)
+            
+            if (data.IsOwned)
             {
-                // 보유중인 스킬 Upgrade
-                var getSkill = StageManager.Instance.PlayerSkills[data.Index];
-                // SkillEffect.UpdateSkillData(getSkill); - 이펙트 업데이트
+                var getSkill = DataManager.Instance.PlayerActiveSkills[data.Index];
+                var skillEffect = skillEffects[getSkill.SkillKey];
+                skillEffect.UpdateSkillData(getSkill);
             }
             else
             {
-                var getSkill = StageManager.Instance.PlayerSkills[data.Index];
+                var getSkill = DataManager.Instance.PlayerActiveSkills[data.Index];
                 ApplySkillEffect(getSkill);
                 ownedSkillsList.Add(getSkill);
             }
@@ -138,23 +108,26 @@ namespace CoffeeCat
             UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector(Defines.PLAYER_SKILL_SELECT_COUNT));
         }
 
-        #region Apliy Skill Effect
+        #region Skill Effect
 
-        private void Explosion(Table_PlayerSkills skillData)
+        private void Explosion(Table_PlayerActiveSkills skillData)
         {
-            var skillEffect = new PlayerSkill_Explosion(tr, skillData);
+            var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData);
+            skillEffects.Add(skillData.SkillName, skillEffect);
             ActivateSkill(skillEffect);
         }
 
-        private void Beam(Table_PlayerSkills skillData)
+        private void Beam(Table_PlayerActiveSkills skillData)
         {
-            var skillEffect = new PlayerSkill_Beam(tr, skillData);
+            var skillEffect = new PlayerSkillEffect_Beam(tr, skillData);
+            skillEffects.Add(skillData.SkillName, skillEffect);
             ActivateSkill(skillEffect);
         }
 
-        private void Bubble(Table_PlayerSkills skillData)
+        private void Bubble(Table_PlayerActiveSkills skillData)
         {
-            var skillEffect = new PlayerSkill_Bubble(tr, skillData);
+            var skillEffect = new PlayerSkillEffect_Bubble(tr, skillData);
+            skillEffects.Add(skillData.SkillName, skillEffect);
             ActivateSkill(skillEffect);
         }
 

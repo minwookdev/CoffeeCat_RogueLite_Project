@@ -1,0 +1,186 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8177074163414008397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_2
+  m_EditorClassIdentifier: 
+  tKey: 2
+  Index: 2
+  SkillKey: SpeedUp
+  Grade: 2
+  SkillName: Speed Up
+  Delta: 0.4
+--- !u!114 &-6757342857064514777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_6
+  m_EditorClassIdentifier: 
+  tKey: 6
+  Index: 6
+  SkillKey: CoolTimeReducer
+  Grade: 3
+  SkillName: CoolTime Reducer
+  Delta: 0.4
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21be29e09826bd54094fbdebf2518999, type: 3}
+  m_Name: TSet_PlayerPassiveSkills
+  m_EditorClassIdentifier: 
+  values:
+  - {fileID: 6050604123005414560}
+  - {fileID: -8177074163414008397}
+  - {fileID: 8527264178850187619}
+  - {fileID: 7920618189847932943}
+  - {fileID: 5214983434999465769}
+  - {fileID: -6757342857064514777}
+  - {fileID: 6180963940144972046}
+  - {fileID: 2764926983578574953}
+  - {fileID: 6922608514827340917}
+--- !u!114 &2764926983578574953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_8
+  m_EditorClassIdentifier: 
+  tKey: 8
+  Index: 8
+  SkillKey: DamageIncrease
+  Grade: 2
+  SkillName: Damage Increase
+  Delta: 2
+--- !u!114 &5214983434999465769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_5
+  m_EditorClassIdentifier: 
+  tKey: 5
+  Index: 5
+  SkillKey: CoolTimeReducer
+  Grade: 2
+  SkillName: CoolTime Reducer
+  Delta: 0.3
+--- !u!114 &6050604123005414560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_1
+  m_EditorClassIdentifier: 
+  tKey: 1
+  Index: 1
+  SkillKey: SpeedUp
+  Grade: 1
+  SkillName: Speed Up
+  Delta: 0.3
+--- !u!114 &6180963940144972046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_7
+  m_EditorClassIdentifier: 
+  tKey: 7
+  Index: 7
+  SkillKey: DamageIncrease
+  Grade: 1
+  SkillName: Damage Increase
+  Delta: 1
+--- !u!114 &6922608514827340917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_9
+  m_EditorClassIdentifier: 
+  tKey: 9
+  Index: 9
+  SkillKey: DamageIncrease
+  Grade: 3
+  SkillName: Damage Increase
+  Delta: 3
+--- !u!114 &7920618189847932943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_4
+  m_EditorClassIdentifier: 
+  tKey: 4
+  Index: 4
+  SkillKey: CoolTimeReducer
+  Grade: 1
+  SkillName: CoolTime Reducer
+  Delta: 0.2
+--- !u!114 &8527264178850187619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cca6fde92df6e0498e77b8a6291b72f, type: 3}
+  m_Name: Table_PlayerPassiveSkills_3
+  m_EditorClassIdentifier: 
+  tKey: 3
+  Index: 3
+  SkillKey: SpeedUp
+  Grade: 3
+  SkillName: Speed Up
+  Delta: 0.5

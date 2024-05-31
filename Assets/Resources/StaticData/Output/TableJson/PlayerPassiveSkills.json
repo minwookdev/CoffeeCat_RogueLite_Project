@@ -1,0 +1,65 @@
+﻿[
+  {
+    "Index": 1.0,
+    "SkillKey": "SpeedUp",
+    "Grade": 1.0,
+    "SkillName": "Speed Up",
+    "Delta": 0.3
+  },
+  {
+    "Index": 2.0,
+    "SkillKey": "SpeedUp",
+    "Grade": 2.0,
+    "SkillName": "Speed Up",
+    "Delta": 0.4
+  },
+  {
+    "Index": 3.0,
+    "SkillKey": "SpeedUp",
+    "Grade": 3.0,
+    "SkillName": "Speed Up",
+    "Delta": 0.5
+  },
+  {
+    "Index": 4.0,
+    "SkillKey": "CoolTimeReducer",
+    "Grade": 1.0,
+    "SkillName": "CoolTime Reducer",
+    "Delta": 0.2
+  },
+  {
+    "Index": 5.0,
+    "SkillKey": "CoolTimeReducer",
+    "Grade": 2.0,
+    "SkillName": "CoolTime Reducer",
+    "Delta": 0.3
+  },
+  {
+    "Index": 6.0,
+    "SkillKey": "CoolTimeReducer",
+    "Grade": 3.0,
+    "SkillName": "CoolTime Reducer",
+    "Delta": 0.4
+  },
+  {
+    "Index": 7.0,
+    "SkillKey": "DamageIncrease",
+    "Grade": 1.0,
+    "SkillName": "Damage Increase",
+    "Delta": 1.0
+  },
+  {
+    "Index": 8.0,
+    "SkillKey": "DamageIncrease",
+    "Grade": 2.0,
+    "SkillName": "Damage Increase",
+    "Delta": 2.0
+  },
+  {
+    "Index": 9.0,
+    "SkillKey": "DamageIncrease",
+    "Grade": 3.0,
+    "SkillName": "Damage Increase",
+    "Delta": 3.0
+  }
+]
