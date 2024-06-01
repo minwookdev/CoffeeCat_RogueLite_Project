@@ -9,6 +9,9 @@ namespace CoffeeCat.Utils.Defines
         public const int PLAYER_SKILL_MAX_GRADE = 3;
         public const float PLAYER_AREA_SKILL_VECTOR_X = 15;
         public const float PLAYER_AREA_SKILL_VECTOR_Y = 8;
+        
+        // Encrypt/Decrypt
+        public static readonly string ENC_KEY = "m71a12x28";
 
         public static LayerMask GetPlayerLayer() {
             return LayerMask.NameToLayer("Player");

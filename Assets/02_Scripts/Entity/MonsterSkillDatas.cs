@@ -1,15 +1,22 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using CoffeeCat.Utils.JsonParser;
 using CoffeeCat.Utils.SerializedDictionaries;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace CoffeeCat.Datas {
     [Serializable]
     public class MonsterSkillDatas {
         [ShowInInspector, ReadOnly] public StringMonsterSkillDictionary DataDictionary { get; private set; } = null;
 
-        public void Initialize(JsonParser jsonParser) {
-            MonsterSkillStat[] datas = jsonParser.LoadFromJsonInResources<MonsterSkillStat>("Entity/Json/MonsterSkillStat");
+        public void Initialize() {
+            var textAsset = Resources.Load<TextAsset>("Entity/Json/MonsterSkillStat");
+            var decText = Cryptor.Decrypt2(textAsset.text);
+            var datas = JsonConvert.DeserializeObject<MonsterSkillStat[]>(decText);
+            
+            // MonsterSkillStat[] datas = jsonParser.LoadFromJsonInResources<MonsterSkillStat>("Entity/Json/MonsterSkillStat");
             DataDictionary = new StringMonsterSkillDictionary();
             for (int i = 0; i < datas.Length; i++) {
                 DataDictionary.Add(datas[i].Key, datas[i]);

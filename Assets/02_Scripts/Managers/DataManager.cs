@@ -45,9 +45,9 @@ namespace CoffeeCat.FrameWork
         /// </summary>
         private void JsonToClasses()
         {
-            JsonParser jsonParser = new JsonParser();
-            MonsterStats.Initialize(jsonParser);
-            MonsterSkills.Initialize(jsonParser);
+            // JsonParser jsonParser = new JsonParser();
+            MonsterStats.Initialize(/*jsonParser*/);
+            MonsterSkills.Initialize(/*jsonParser*/);
         }
 
         private void LoadTableSet()
