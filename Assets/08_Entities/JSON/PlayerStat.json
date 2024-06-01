@@ -2,7 +2,7 @@
   {
     "Index": "1",
     "Name": "Flower Magician",
-    "HealthPoint": "100",
+    "MaxHp": "100",
     "Defense": "5",
     "MoveSpeed": "5",
     "InvincibleTime": "0.5",

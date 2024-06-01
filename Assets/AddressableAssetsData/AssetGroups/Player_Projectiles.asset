@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: bbc00df7a0176ff43814d7bc11c71370
   m_SerializeEntries:
   - m_GUID: 6c4b11eba4c0b8f4eb59113b0953790b
-    m_Address: PlayerAttack_01_Pink
+    m_Address: NormalAttack_01
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

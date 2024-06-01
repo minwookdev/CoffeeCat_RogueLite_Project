@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -14,19 +15,17 @@ namespace CoffeeCat
     public partial class Player : MonoBehaviour
     {
         [Title("Status")]
-        [SerializeField] protected PlayerStatusKey playerName = PlayerStatusKey.NONE;
         [ShowInInspector, ReadOnly] protected PlayerStat stat;
-
-        [Title("Attack")]
+        [SerializeField] protected PlayerAddressablesKey playerName = PlayerAddressablesKey.NONE;
         [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
 
         [Title("Transform")]
         [SerializeField] protected Transform tr = null;
-
         [SerializeField] protected Transform projectilePoint = null;
 
         private Rigidbody2D rigid = null;
-        [ShowInInspector]private bool isPlayerInBattle = false;
+        private PlayerSkill normalAttackData = null;
+        private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
         private bool isPlayerDamaged = false;
         private bool isInvincible = false;
@@ -38,9 +37,10 @@ namespace CoffeeCat
         private void Start()
         {
             rigid = GetComponent<Rigidbody2D>();
+            normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
             LoadResources();
             SetStatus();
-            // NormalAttack();
+            NormalAttack();
             CheckInvincibleTime();
 
             StageManager.Instance.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
@@ -67,7 +67,7 @@ namespace CoffeeCat
 
         private void SetStatus()
         {
-            stat = DataManager.Instance.PlayerStats.DataDictionary[0];
+            stat = DataManager.Instance.PlayerStats.DataDictionary[playerName.ToStringEx()];
             stat.Initialize();
         }
 
@@ -100,9 +100,15 @@ namespace CoffeeCat
             };
         }
 
-        /*private void NormalAttack()
+        private void NormalAttack()
         {
-            Observable.Interval(TimeSpan.FromSeconds(stat.AttackDelay))
+            if (normalAttackData is not PlayerActiveSkill normalAttack)
+            {
+                CatLog.WLog("NormalAttackData is not PlayerActiveSkill");
+                return;
+            }
+            
+            Observable.Interval(TimeSpan.FromSeconds(normalAttack.SkillCoolTime))
                       .Where(_ => !isDead)
                       .Where(_ => isPlayerInBattle)
                       .Subscribe(_ =>
@@ -119,7 +125,7 @@ namespace CoffeeCat
                               ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
                                                                projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
-                          projectile.Fire(status, projectilePoint.position, targetDirection);
+                          projectile.Fire(stat, projectilePoint.position, targetDirection);
 
                           hasFiredProjectile = true;
                       }).AddTo(this);
@@ -127,7 +133,7 @@ namespace CoffeeCat
             Transform FindNearestMonster()
             {
                 var monsters =
-                    Physics2D.OverlapCircleAll(Tr.position, status.AttackRange, 1 << LayerMask.NameToLayer("Monster"));
+                    Physics2D.OverlapCircleAll(Tr.position, normalAttack.SkillRange, 1 << LayerMask.NameToLayer("Monster"));
 
                 if (monsters.Length <= 0)
                     return null;
@@ -141,7 +147,7 @@ namespace CoffeeCat
 
                 return target;
             }
-        }*/
+        }
         
         private void CheckInvincibleTime()
         {

@@ -9,7 +9,7 @@ namespace CoffeeCat
     [Serializable]
     public class PlayerStatDatas
     {
-        [ShowInInspector, ReadOnly] public IntPlayerStatDictionary DataDictionary { get; private set; } = null;
+        [ShowInInspector, ReadOnly] public StringPlayerStatDictionary DataDictionary { get; private set; } = null;
 
         public void Initialize()
         {
@@ -17,10 +17,10 @@ namespace CoffeeCat
             var decText = Cryptor.Decrypt2(textAsset.text);
             var datas = JsonConvert.DeserializeObject<PlayerStat[]>(decText);
             
-            DataDictionary = new IntPlayerStatDictionary();
+            DataDictionary = new StringPlayerStatDictionary();
             for (int i = 0; i < datas.Length; i++)
             {
-                DataDictionary.Add(datas[i].Index, datas[i]);
+                DataDictionary.Add(datas[i].Name, datas[i]);
             }
         }
     }

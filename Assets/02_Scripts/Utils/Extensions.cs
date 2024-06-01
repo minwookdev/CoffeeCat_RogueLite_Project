@@ -10,7 +10,6 @@ namespace CoffeeCat
         {
             return type switch
             {
-                
                 InteractableType.Floor  => "portal_floor",
                 InteractableType.Shop   => "portal_reward",
                 InteractableType.Reward => "portal_shop",
@@ -18,7 +17,7 @@ namespace CoffeeCat
                 _                       => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
         }
-        
+
         public static string ToStringEx(this AddressablesKey key)
         {
             return key switch
@@ -41,9 +40,10 @@ namespace CoffeeCat
         {
             return key switch
             {
-                PlayerAddressablesKey.NONE => "",
-                PlayerAddressablesKey.PlayerAttack_01_Pink => "PlayerAttack_01_Pink",
-                _ => throw new ArgumentOutOfRangeException(nameof(key), key, null)
+                PlayerAddressablesKey.NONE            => "",
+                PlayerAddressablesKey.NormalAttack_01 => "NormalAttack_01",
+                PlayerAddressablesKey.FlowerMagician  => "FlowerMagician",
+                _                                     => throw new ArgumentOutOfRangeException(nameof(key), key, null)
             };
         }
     }

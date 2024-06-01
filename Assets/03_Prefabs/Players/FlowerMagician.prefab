@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 6863063650883928876}
   - component: {fileID: 4854793041281363723}
   m_Layer: 7
-  m_Name: 01_FlowerMagician
+  m_Name: FlowerMagician
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a4c283ca63dae4aa378ff67290986a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 1
+  playerName: 2
   normalAttackProjectile: 1
   tr: {fileID: 1305159281282759405}
   projectilePoint: {fileID: 1303632491375746209}

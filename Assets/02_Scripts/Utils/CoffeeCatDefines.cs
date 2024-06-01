@@ -42,7 +42,8 @@ namespace CoffeeCat.Utils.Defines
     public enum PlayerAddressablesKey
     {
         NONE,
-        PlayerAttack_01_Pink,
+        NormalAttack_01 = 1,
+        FlowerMagician,
     }
 
     public enum PlayerStatusKey
