@@ -67,7 +67,7 @@ namespace CoffeeCat
 
         private void SetStatus()
         {
-            stat = DataManager.Instance.PlayerStats.DataDictionary[0];
+            stat = DataManager.Instance.PlayerStats.DataDictionary[1];
             stat.Initialize();
         }
 
