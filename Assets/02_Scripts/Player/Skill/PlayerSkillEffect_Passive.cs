@@ -14,7 +14,8 @@ namespace CoffeeCat
             MAX_HP,
             MOVE_SPEED,
             ATTACK_POWER,
-            ATTACK_SPEED,
+            ATTACK_DELAY,
+            PROJECTILE_SPEED,
             DEFENSE,
             CRITICAL_CHANCE,
             CRITICAL_DAMAGE,
@@ -37,7 +38,9 @@ namespace CoffeeCat
                 case PassiveSkillType.ATTACK_POWER:
                     // playerStat.AttackPower += skillData.Delta;
                     break;
-                case PassiveSkillType.ATTACK_SPEED:
+                case PassiveSkillType.ATTACK_DELAY:
+                    break;
+                case PassiveSkillType.PROJECTILE_SPEED:
                     break;
                 case PassiveSkillType.DEFENSE:
                     break;
@@ -51,7 +54,6 @@ namespace CoffeeCat
                 default:
                     break;
             }
-            
         }
 
         protected PlayerSkillEffect_Passive(Transform playerTr, Table_PlayerActiveSkills skillData) : base(playerTr, skillData)

@@ -47,7 +47,7 @@ namespace CoffeeCat
             monster.OnDamaged(damageData, true, tr.position, knockBackForce);
         }
 
-        private void DespawnProjectile()
+        public void DespawnProjectile()
         {
             var particleDuration = GetComponent<ParticleSystem>().main.duration;
 

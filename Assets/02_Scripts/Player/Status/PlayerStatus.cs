@@ -44,5 +44,23 @@ namespace CoffeeCat
             CriticalMultiplier = status.CriticalMultiplier;
             Penetration = status.Penetration;
         }
+
+        public void StatEnhancement(PlayerStatEnhanceData enhanceData)
+        {
+            MaxHp += enhanceData.MaxHp;
+            Defence += enhanceData.Defence;
+            MoveSpeed += enhanceData.MoveSpeed;
+            AttackRange += enhanceData.AttackRange;
+            AttackPower += enhanceData.AttackPower;
+        }
+    }
+    
+    public class PlayerStatEnhanceData
+    {
+        public float MaxHp = 0;
+        public float Defence = 0;
+        public float MoveSpeed = 0;
+        public float AttackRange = 0;
+        public float AttackPower = 0;
     }
 }
