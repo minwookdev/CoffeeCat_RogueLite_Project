@@ -292,8 +292,10 @@ namespace Spine.Unity.Editor {
 						string problemDescription = null;
 						if (jsonAsset != null && IsSpineData(jsonAsset, out compatibilityProblemInfo, ref problemDescription))
 							skeletonPaths.Add(new PathAndProblemInfo(str, compatibilityProblemInfo, problemDescription));
-						if (problemDescription != null)
-							Debug.LogError(problemDescription, jsonAsset);
+						if (problemDescription != null) {
+							// TODO: Unable To Load Json Error From Spine
+							// Debug.LogError(problemDescription, jsonAsset);
+						}
 						break;
 					}
 					case ".bytes": {

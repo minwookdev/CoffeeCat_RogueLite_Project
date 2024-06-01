@@ -1,0 +1,41 @@
+[
+  {
+    "Name": "Skeleton",
+    "Desc": "empty",
+    "HP": "100",
+    "MP": "25",
+    "MinDamage": "5",
+    "MaxDamage": "8",
+    "CriticalChance": "0",
+    "CriticalDamageMultiplier": "1.25",
+    "Defence": "0",
+    "CriticalResist": "0",
+    "Penetration": "0"
+  },
+  {
+    "Name": "Skeleton_Mage",
+    "Desc": "empty",
+    "HP": "80",
+    "MP": "50",
+    "MinDamage": "10",
+    "MaxDamage": "12",
+    "CriticalChance": "0",
+    "CriticalDamageMultiplier": "1.25",
+    "Defence": "0",
+    "CriticalResist": "0",
+    "Penetration": "0"
+  },
+  {
+    "Name": "Skeleton_Warrior",
+    "Desc": "empty",
+    "HP": "150",
+    "MP": "10",
+    "MinDamage": "16",
+    "MaxDamage": "18",
+    "CriticalChance": "0",
+    "CriticalDamageMultiplier": "1.25",
+    "Defence": "2",
+    "CriticalResist": "0",
+    "Penetration": "0"
+  }
+]

@@ -6,7 +6,7 @@ namespace CoffeeCat
     {
         protected override void OnPlayerStay() {
             if (Input.GetKeyDown(KeyCode.Q)) {
-                
+                StageManager.Instance.RequestGenerateNextFloor();
             }
         }
     }
