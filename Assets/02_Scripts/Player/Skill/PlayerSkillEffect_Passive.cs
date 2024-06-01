@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
 using UnityEngine;
 
@@ -8,23 +9,6 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect_Passive : PlayerSkillEffect
     {
-        // TODO : 시트에 enum변수 추가
-        private enum PassiveSkillType
-        {
-            NONE,
-            MAX_HP,
-            MOVE_SPEED,
-            ATTACK_POWER,
-            ATTACK_DELAY,
-            PROJECTILE_SPEED,
-            DEFENSE,
-            CRITICAL_CHANCE,
-            CRITICAL_DAMAGE,
-            COOL_TIME_REDUCE,
-        }
-
-        private PassiveSkillType passiveSkillType = PassiveSkillType.NONE;
-        
         protected override void SkillEffect(PlayerStat playerStat)
         {
             if (playerSkillData is not PlayerPassiveSkill skilldata)
@@ -32,39 +16,54 @@ namespace CoffeeCat
                 CatLog.WLog("PlayerSkillEffect_Passive : skillData is null");
                 return;
             }
-            
-            switch (passiveSkillType)
+
+            switch (skilldata.SkillName)
             {
-                case PassiveSkillType.NONE:
+                case "SpeedUp": SpeedUp(playerStat, skilldata);
                     break;
-                case PassiveSkillType.MAX_HP:
+                case "CoolTimeReduce": CoolTimeReduce(skilldata);
                     break;
-                case PassiveSkillType.MOVE_SPEED:
-                    // playerStat.MoveSpeed += skillData.Delta;
-                    break;
-                case PassiveSkillType.ATTACK_POWER:
-                    // playerStat.AttackPower += skillData.Delta;
-                    break;
-                case PassiveSkillType.ATTACK_DELAY:
-                    break;
-                case PassiveSkillType.PROJECTILE_SPEED:
-                    break;
-                case PassiveSkillType.DEFENSE:
-                    break;
-                case PassiveSkillType.CRITICAL_CHANCE:
-                    break;
-                case PassiveSkillType.CRITICAL_DAMAGE:
-                    break;
-                case PassiveSkillType.COOL_TIME_REDUCE:
-                    // playerStat.CoolTimeReduce += skillData.Delta;
-                    break;
-                default:
+                case "DamageIncrease": DamageIncrease(playerStat, skilldata);
                     break;
             }
+            
+            var spawnObj = ObjectPoolManager.Instance.Spawn("Passive", playerTr);
+            spawnObj.transform.localPosition = new Vector3(0f, 0.3f, 0f);
         }
 
-        protected PlayerSkillEffect_Passive(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
+        public override void UpdateSkillData(PlayerSkill updateSkillData)
         {
+            playerSkillData = updateSkillData;
+            var spawnObj = ObjectPoolManager.Instance.Spawn("Passive", playerTr);
+            spawnObj.transform.localPosition = new Vector3(0f, 0.3f, 0f);
         }
+
+        public PlayerSkillEffect_Passive(Transform playerTr, PlayerSkill playerSkillData)
+        {
+            this.playerTr = playerTr;
+            this.playerSkillData = playerSkillData;
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("Passive", true);
+            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+        }
+
+        #region PassiveSkillEffect
+
+        private void SpeedUp(PlayerStat stat, PlayerPassiveSkill skillData)
+        {
+            stat.MoveSpeed += skillData.Delta;
+        }
+        
+        private void CoolTimeReduce(PlayerPassiveSkill skillData)
+        {
+            var player = playerTr.GetComponent<Player>();
+            player.GetCoolTimeReduce(skillData.Delta);
+        }
+        
+        private void DamageIncrease(PlayerStat stat, PlayerPassiveSkill skillData)
+        {
+            stat.AttackPower += skillData.Delta;
+        }
+
+        #endregion
     }
 }

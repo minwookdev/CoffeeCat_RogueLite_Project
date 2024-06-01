@@ -14,6 +14,8 @@ namespace CoffeeCat
 {
     public partial class Player : MonoBehaviour
     {
+        // TODO : 영구강화 된 스탯 / 던전 일시 강화 스탯
+        
         [Title("Stat")]
         [ShowInInspector, ReadOnly] protected PlayerStat stat;
         [ShowInInspector, ReadOnly] private PlayerActiveSkill normalAttackData = null;
