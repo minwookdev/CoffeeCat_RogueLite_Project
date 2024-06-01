@@ -75,7 +75,8 @@ namespace RandomDungeonWithBluePrint
             {
                 StageManager.Instance.InvokeMapDisposeBefore();
                 
-                var targetFieldBluePrint = (TestBluePrint) ? TestBluePrint : Raffle().BluePrint;
+                /*var targetFieldBluePrint = (TestBluePrint) ? TestBluePrint : Raffle().BluePrint;*/
+                var targetFieldBluePrint = (TestBluePrint) ? TestBluePrint : bluePrintQueue.NormalMapBluePrints[0];
                 Create(targetFieldBluePrint);
                 
                 StageManager.Instance.InvokeMapGenerateCompleted(field);
