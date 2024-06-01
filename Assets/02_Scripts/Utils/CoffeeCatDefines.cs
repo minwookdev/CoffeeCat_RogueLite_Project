@@ -51,24 +51,6 @@ namespace CoffeeCat.Utils.Defines
         FlowerMagician = 1,
     }
 
-    public enum PlayerSkillsKey
-    {
-        NONE,
-        Explosion_1 = 1,
-        Explosion_2,
-        Explosion_3,
-        Beam_1,
-        Beam_2,
-        Beam_3,
-        Bubble_1,
-    }
-
-    public enum SkillType
-    {
-        NONE,
-        Explosion,
-    }
-
     public enum Layer
     {
         NONE,

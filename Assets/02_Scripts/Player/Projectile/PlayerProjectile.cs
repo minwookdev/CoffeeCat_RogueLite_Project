@@ -20,9 +20,9 @@ namespace CoffeeCat
             tr = GetComponent<Transform>();
         }
         
-        protected virtual void SetDamageData(PlayerStatus playerStatus, float skillBaseDamage = 0f, float skillCoefficient = 1f)
+        protected virtual void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f, float skillCoefficient = 1f)
         {
-            projectileDamageData = new ProjectileDamageData(playerStatus, skillBaseDamage, skillCoefficient);
+            projectileDamageData = new ProjectileDamageData(playerStat, skillBaseDamage, skillCoefficient);
         }
     }
 }

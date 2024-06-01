@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using CoffeeCat.Utils;
 using UnityEngine;
 
 namespace CoffeeCat
@@ -24,8 +25,14 @@ namespace CoffeeCat
 
         private PassiveSkillType passiveSkillType = PassiveSkillType.NONE;
         
-        protected override void SkillEffect(PlayerStatus playerStat)
+        protected override void SkillEffect(PlayerStat playerStat)
         {
+            if (playerSkillData is not PlayerPassiveSkill skilldata)
+            {
+                CatLog.WLog("PlayerSkillEffect_Passive : skillData is null");
+                return;
+            }
+            
             switch (passiveSkillType)
             {
                 case PassiveSkillType.NONE:
@@ -56,9 +63,8 @@ namespace CoffeeCat
             }
         }
 
-        protected PlayerSkillEffect_Passive(Transform playerTr, Table_PlayerActiveSkills skillData) : base(playerTr, skillData)
+        protected PlayerSkillEffect_Passive(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
         {
-            // passiveSkillType = skillData.PassiveSkillType;
         }
     }
 }

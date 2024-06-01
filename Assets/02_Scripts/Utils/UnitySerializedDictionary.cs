@@ -40,4 +40,7 @@ namespace CoffeeCat.Utils.SerializedDictionaries {
     // DATA DICTIONARIES
     [Serializable] public class StringMonsterStatDictionary : UnitySerializedDictionary<string, MonsterStat> { }
     [Serializable] public class StringMonsterSkillDictionary : UnitySerializedDictionary<string, MonsterSkillStat> { }
+    [Serializable] public class IntPlayerStatDictionary : UnitySerializedDictionary<int, PlayerStat> { }
+    [Serializable] public class IntPlayerActiveSkillDictionary : UnitySerializedDictionary<int, PlayerSkill> { }
+    [Serializable] public class IntPlayerPassiveSkillDictionary : UnitySerializedDictionary<int, PlayerSkill> { }
 }

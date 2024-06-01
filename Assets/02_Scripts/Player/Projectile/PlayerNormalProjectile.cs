@@ -23,10 +23,10 @@ namespace CoffeeCat
             ObjectPoolManager.Instance.Despawn(gameObject);
         }
 
-        protected override void SetDamageData(PlayerStatus playerStatus, float skillBaseDamage = 0f,
+        protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f,
                                               float skillCoefficient = 1f)
         {
-            projectileDamageData = new ProjectileDamageData(playerStatus);
+            projectileDamageData = new ProjectileDamageData(playerStat);
         }
 
         private void ProjectilePath(float speed, Vector3 startPos, Vector3 direction)
@@ -41,10 +41,10 @@ namespace CoffeeCat
               });
         }
 
-        public void Fire(PlayerStatus playerStat, Vector3 startPos, Vector3 direction)
+        public void Fire(PlayerStat playerStat, Vector3 startPos, Vector3 direction)
         {
             SetDamageData(playerStat);
-            ProjectilePath(playerStat.ProjectileSpeed, startPos, direction);
+            // ProjectilePath(playerStat.ProjectileSpeed, startPos, direction);
         }
     }
 }

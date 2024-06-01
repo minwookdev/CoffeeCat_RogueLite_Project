@@ -12,27 +12,27 @@ namespace CoffeeCat
     public class PlayerSkillEffect
     {
         protected readonly Transform playerTr = null;
-        protected Table_PlayerActiveSkills skillData = null;
+        protected PlayerSkill playerSkillData = null;
 
-        protected PlayerSkillEffect(Transform playerTr, Table_PlayerActiveSkills skillData)
+        protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
         {
             this.playerTr = playerTr;
-            this.skillData = skillData;
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(skillData.SkillKey, true);
+            this.playerSkillData = playerSkillData;
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(playerSkillData.SkillName, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
-        public void UpdateSkillData(Table_PlayerActiveSkills updateSkillData)
+        public void UpdateSkillData(PlayerSkill updateSkillData)
         {
-            skillData = updateSkillData;
+            playerSkillData = updateSkillData;
         }
 
-        public void Fire(PlayerStatus playerStat)
+        public void Fire(PlayerStat playerStat)
         {
             SkillEffect(playerStat);
         }
 
-        protected virtual void SkillEffect(PlayerStatus playerStat)
+        protected virtual void SkillEffect(PlayerStat playerStat)
         {
         }
 
@@ -49,11 +49,11 @@ namespace CoffeeCat
                            .ToList();
         }
 
-        protected List<MonsterStatus> FindAroundMonsters(int attackCount)
+        protected List<MonsterStatus> FindAroundMonsters(int attackCount, float skillRange)
         {
             var monsters = new Collider2D[attackCount];
             var monsterCount = Physics2D.OverlapCircleNonAlloc
-                (playerTr.position, skillData.SkillRange, monsters, 1 << LayerMask.NameToLayer("Monster"));
+                (playerTr.position, skillRange, monsters, 1 << LayerMask.NameToLayer("Monster"));
 
             if (monsterCount <= 0)
                 return null;
@@ -66,10 +66,10 @@ namespace CoffeeCat
             return targets;
         }
 
-        protected MonsterStatus FindAroundMonster(int attackCount)
+        protected MonsterStatus FindAroundMonster(int attackCount, float skillRange)
         {
             var monsters = new Collider2D[attackCount];
-            var monsterCount = Physics2D.OverlapCircleNonAlloc(playerTr.position, skillData.SkillRange, monsters,
+            var monsterCount = Physics2D.OverlapCircleNonAlloc(playerTr.position, skillRange, monsters,
                                                                1 << LayerMask.NameToLayer("Monster"));
 
             if (monsterCount <= 0) return null;

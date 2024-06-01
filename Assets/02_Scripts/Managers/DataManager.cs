@@ -10,10 +10,9 @@ namespace CoffeeCat.FrameWork
     {
         [ShowInInspector, ReadOnly] public MonsterStatDatas MonsterStats { get; private set; } = null;
         [ShowInInspector, ReadOnly] public MonsterSkillDatas MonsterSkills { get; private set; } = null;
-
-        [ShowInInspector, ReadOnly] public TSet_PlayerStatus PlayerStatus { get; private set; } = null;
-        [ShowInInspector, ReadOnly] public TSet_PlayerActiveSkills PlayerActiveSkills { get; private set; } = null;
-        [ShowInInspector, ReadOnly] public TSet_PlayerPassiveSkills PlayerPassiceSkills { get; private set; } = null;
+        [ShowInInspector, ReadOnly] public PlayerStatDatas PlayerStats { get; private set; } = null;
+        [ShowInInspector, ReadOnly] public PlayerActiveSkillDatas PlayerActiveSkills { get; private set; } = null;
+        [ShowInInspector, ReadOnly] public PlayerPassiveSkillDatas PlayerPassiveSkills { get; private set; } = null;
 
         private const string tablePath = "StaticData/Output/TableAssets";
         
@@ -23,6 +22,9 @@ namespace CoffeeCat.FrameWork
         {
             MonsterStats = new MonsterStatDatas();
             MonsterSkills = new MonsterSkillDatas();
+            PlayerStats = new PlayerStatDatas();
+            PlayerActiveSkills = new PlayerActiveSkillDatas();
+            PlayerPassiveSkills = new PlayerPassiveSkillDatas();
         }
 
         public void DataLoad()
@@ -30,14 +32,12 @@ namespace CoffeeCat.FrameWork
             if (IsDataLoaded)
                 return;
             JsonToClasses();
-            LoadTableSet();
             IsDataLoaded = true;
         }
 
         public void DataReload()
         {
             JsonToClasses();
-            LoadTableSet();
         }
 
         /// <summary>
@@ -48,15 +48,9 @@ namespace CoffeeCat.FrameWork
             // JsonParser jsonParser = new JsonParser();
             MonsterStats.Initialize(/*jsonParser*/);
             MonsterSkills.Initialize(/*jsonParser*/);
-        }
-
-        private void LoadTableSet()
-        {
-            PlayerStatus = Resources.Load<TSet_PlayerStatus>($"{tablePath}/{nameof(TSet_PlayerStatus)}");
-            PlayerActiveSkills =
-                Resources.Load<TSet_PlayerActiveSkills>($"{tablePath}/{nameof(TSet_PlayerActiveSkills)}");
-            PlayerPassiceSkills =
-                Resources.Load<TSet_PlayerPassiveSkills>($"{tablePath}/{nameof(TSet_PlayerPassiveSkills)}");
+            PlayerStats.Initialize();
+            PlayerActiveSkills.Initialize();
+            PlayerPassiveSkills.Initialize();
         }
     }
 }

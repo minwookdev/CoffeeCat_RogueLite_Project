@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using CoffeeCat.FrameWork;
+using CoffeeCat.Utils;
 using UniRx;
 using UnityEngine;
 
@@ -11,8 +12,14 @@ namespace CoffeeCat
     {
         // TODO : 피해범위 보여주기
         // TODO : Battle Room 클리어 여부
-        protected override void SkillEffect(PlayerStatus playerStat)
+        protected override void SkillEffect(PlayerStat playerStat)
         {
+            if (playerSkillData is not PlayerActiveSkill skillData)
+            {
+                CatLog.WLog("PlayerSkillEffect_Explosion : skillData is null");
+                return;
+            }
+            
             var currentCoolTime = skillData.SkillCoolTime;
             
             Observable.EveryUpdate()
@@ -25,7 +32,7 @@ namespace CoffeeCat
                           
                           if (targets == null) return;
 
-                          var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillKey, playerTr.position);
+                          var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillName, playerTr.position);
                           var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
                           projectile.AreaAttack(playerStat, targets, skillData.SkillBaseDamage, skillData.SkillCoefficient);
                           
@@ -33,7 +40,7 @@ namespace CoffeeCat
                       }).AddTo(playerTr.gameObject);
         }
 
-        public PlayerSkillEffect_Bubble(Transform playerTr, Table_PlayerActiveSkills skillData) : base(playerTr, skillData)
+        public PlayerSkillEffect_Bubble(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
         {
         }
     }

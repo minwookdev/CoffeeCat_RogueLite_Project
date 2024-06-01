@@ -12,37 +12,43 @@ namespace CoffeeCat
 {
     public partial class Player
     {
-        private readonly List<Table_PlayerActiveSkills> ownedSkillsList = new List<Table_PlayerActiveSkills>();
-        private readonly Dictionary<string, PlayerSkillEffect> skillEffects = new Dictionary<string, PlayerSkillEffect>();
+        private readonly List<PlayerSkill> ownedSkillsList = new List<PlayerSkill>();
+        private readonly Dictionary<int, PlayerSkillEffect> skillEffects = new Dictionary<int, PlayerSkillEffect>();
 
         private PlayerSkillSelectData[] SkillSelector(int SelectCount)
         {
             // TODO : 새로 배울 수 있는 스킬의 수가 셀렉트 패널에 표시 할 수 있는 수보다 적을 경우
+            // TODO : 스킬 Description 시트에 추가
+
+            List<PlayerSkill> playerAllSkills = new List<PlayerSkill>();
+            var activeSkills = DataManager.Instance.PlayerActiveSkills;
+            var passiveSkills = DataManager.Instance.PlayerPassiveSkills;
             
-            var playerSkills = DataManager.Instance.PlayerActiveSkills.Values;
+            playerAllSkills.AddRange(activeSkills.DataDictionary.Values);
+            playerAllSkills.AddRange(passiveSkills.DataDictionary.Values);
+            
             var skillSelectDataList = new List<PlayerSkillSelectData>();
 
             var upgradeableSkills = ownedSkillsList.Where(skill => skill.Grade < Defines.PLAYER_SKILL_MAX_GRADE).ToList();
-
             if (upgradeableSkills.Any())
             {
                 var randomOwnedSkill = upgradeableSkills[Random.Range(0, upgradeableSkills.Count)];
-                var pickSkill = DataManager.Instance.PlayerActiveSkills[randomOwnedSkill.Index + 1];
+                var pickSkill = DataManager.Instance.PlayerActiveSkills.DataDictionary[randomOwnedSkill.Index + 1];
                 var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임", pickSkill.Index, true);
                 skillSelectDataList.Add(pickSkillSelectData);
 
                 // Remove owned skills from the list
-                playerSkills = playerSkills.Except(ownedSkillsList).ToList();
+                playerAllSkills = playerAllSkills.Except(ownedSkillsList).ToList();
 
                 SelectCount--;
             }
 
-            var newSkillList = playerSkills.Where(skill => skill.Grade == 1).ToList();
-            newSkillList = newSkillList.OrderBy(x => Random.value).ToList();
+            var learnableSkills = playerAllSkills.Where(skill => skill.Grade == 1).ToList();
+            learnableSkills = learnableSkills.OrderBy(x => Random.value).ToList();
 
             for (int i = 0; i < SelectCount; i++)
             {
-                var pickSkill = newSkillList[i];
+                var pickSkill = learnableSkills[i];
                 var pickSkillSelectData =
                     new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
                 skillSelectDataList.Add(pickSkillSelectData);
@@ -51,7 +57,7 @@ namespace CoffeeCat
             return skillSelectDataList.ToArray();
         }
 
-        private void ApplySkillEffect(Table_PlayerActiveSkills skillData)
+        private void ApplySkillEffect(PlayerSkill skillData)
         {
             switch (skillData.SkillName)
             {
@@ -76,7 +82,7 @@ namespace CoffeeCat
                 .Where(_ => isPlayerInBattle)
                 .Where(_ => !isDead)
                 .Skip(TimeSpan.Zero)
-                .Subscribe(_ => { skillEffect.Fire(status); });
+                .Subscribe(_ => { skillEffect.Fire(stat); });
         }
 
         public void UpdateSkill(PlayerSkillSelectData data)
@@ -89,13 +95,13 @@ namespace CoffeeCat
             
             if (data.IsOwned)
             {
-                var getSkill = DataManager.Instance.PlayerActiveSkills[data.Index];
-                var skillEffect = skillEffects[getSkill.SkillKey];
+                var getSkill = DataManager.Instance.PlayerActiveSkills.DataDictionary[data.Index];
+                var skillEffect = skillEffects[getSkill.Index];
                 skillEffect.UpdateSkillData(getSkill);
             }
             else
             {
-                var getSkill = DataManager.Instance.PlayerActiveSkills[data.Index];
+                var getSkill = DataManager.Instance.PlayerActiveSkills.DataDictionary[data.Index];
                 ApplySkillEffect(getSkill);
                 ownedSkillsList.Add(getSkill);
             }
@@ -109,24 +115,24 @@ namespace CoffeeCat
 
         #region Skill Effect
 
-        private void Explosion(Table_PlayerActiveSkills skillData)
+        private void Explosion(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData);
-            skillEffects.Add(skillData.SkillName, skillEffect);
+            skillEffects.Add(skillData.Index, skillEffect);
             ActivateSkill(skillEffect);
         }
 
-        private void Beam(Table_PlayerActiveSkills skillData)
+        private void Beam(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Beam(tr, skillData);
-            skillEffects.Add(skillData.SkillName, skillEffect);
+            skillEffects.Add(skillData.Index, skillEffect);
             ActivateSkill(skillEffect);
         }
 
-        private void Bubble(Table_PlayerActiveSkills skillData)
+        private void Bubble(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Bubble(tr, skillData);
-            skillEffects.Add(skillData.SkillName, skillEffect);
+            skillEffects.Add(skillData.Index, skillEffect);
             ActivateSkill(skillEffect);
         }
 

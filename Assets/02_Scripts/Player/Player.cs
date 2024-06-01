@@ -15,7 +15,7 @@ namespace CoffeeCat
     {
         [Title("Status")]
         [SerializeField] protected PlayerStatusKey playerName = PlayerStatusKey.NONE;
-        [ShowInInspector, ReadOnly] protected PlayerStatus status;
+        [ShowInInspector, ReadOnly] protected PlayerStat stat;
 
         [Title("Attack")]
         [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
@@ -33,14 +33,14 @@ namespace CoffeeCat
         private bool isDead = false;
 
         public Transform Tr => tr;
-        public PlayerStatus Status => status;
+        public PlayerStat Stat => stat;
 
         private void Start()
         {
             rigid = GetComponent<Rigidbody2D>();
             LoadResources();
             SetStatus();
-            NormalAttack();
+            // NormalAttack();
             CheckInvincibleTime();
 
             StageManager.Instance.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
@@ -67,7 +67,8 @@ namespace CoffeeCat
 
         private void SetStatus()
         {
-            status = new PlayerStatus(DataManager.Instance.PlayerStatus[(int)playerName]);
+            stat = DataManager.Instance.PlayerStats.DataDictionary[0];
+            stat.Initialize();
         }
 
         private void Movement()
@@ -78,7 +79,7 @@ namespace CoffeeCat
             var hor = Input.GetAxisRaw("Horizontal");
             var ver = Input.GetAxisRaw("Vertical");
 
-            rigid.velocity = new Vector2(hor, ver) * status.MoveSpeed;
+            rigid.velocity = new Vector2(hor, ver) * stat.MoveSpeed;
 
             if (isPlayerInBattle)
                 return;
@@ -99,9 +100,9 @@ namespace CoffeeCat
             };
         }
 
-        private void NormalAttack()
+        /*private void NormalAttack()
         {
-            Observable.Interval(TimeSpan.FromSeconds(status.AttackDelay))
+            Observable.Interval(TimeSpan.FromSeconds(stat.AttackDelay))
                       .Where(_ => !isDead)
                       .Where(_ => isPlayerInBattle)
                       .Subscribe(_ =>
@@ -140,7 +141,7 @@ namespace CoffeeCat
 
                 return target;
             }
-        }
+        }*/
         
         private void CheckInvincibleTime()
         {
@@ -151,7 +152,7 @@ namespace CoffeeCat
                 .Subscribe(_ =>
                 {
                     isInvincible = true;
-                    Observable.Timer(TimeSpan.FromSeconds(status.InvincibleTime))
+                    Observable.Timer(TimeSpan.FromSeconds(stat.InvincibleTime))
                               .Subscribe(__ => isInvincible = false);
                 }).AddTo(this);
         }
@@ -162,11 +163,11 @@ namespace CoffeeCat
                 return;
 
             isPlayerDamaged = true;
-            status.CurrentHp -= damageData.CalculatedDamage;
+            stat.CurrentHp -= damageData.CalculatedDamage;
 
-            if (status.CurrentHp <= 0)
+            if (stat.CurrentHp <= 0)
             {
-                status.CurrentHp = 0;
+                stat.CurrentHp = 0;
                 OnDead();
             }
         }
@@ -184,7 +185,7 @@ namespace CoffeeCat
             // Monster와 충돌
             if (other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
             {
-                var damageData = DamageData.GetData(monsterStat.CurrentStat, status);
+                var damageData = DamageData.GetData(monsterStat.CurrentStat, stat);
                 /*CatLog.Log($"Player_OnTriggerEnter2D_{monsterStat.name} : {damageData.CalculatedDamage.ToString()}");*/
                 OnDamaged(damageData);
             }

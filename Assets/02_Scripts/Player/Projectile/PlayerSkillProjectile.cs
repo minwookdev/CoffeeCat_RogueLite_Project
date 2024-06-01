@@ -25,9 +25,9 @@ namespace CoffeeCat
                       .Subscribe(_ => { tr.position = monsterTr.position; });
         }
 
-        public void AreaAttack(PlayerStatus playerStatus, List<MonsterStatus> monsters, float skillBaseDamage = 0f, float skillCoefficient = 1f)
+        public void AreaAttack(PlayerStat playerStat, List<MonsterStatus> monsters, float skillBaseDamage = 0f, float skillCoefficient = 1f)
         {
-            SetDamageData(playerStatus, skillBaseDamage, skillCoefficient);
+            SetDamageData(playerStat, skillBaseDamage, skillCoefficient);
             
             foreach (var monster in monsters)
             {
@@ -38,9 +38,9 @@ namespace CoffeeCat
             }
         }
 
-        public void SingleTargetAttack(PlayerStatus playerStatus, MonsterStatus monster, float skillBaseDamage = 0f, float skillCoefficient = 1f)
+        public void SingleTargetAttack(PlayerStat playerStat, MonsterStatus monster, float skillBaseDamage = 0f, float skillCoefficient = 1f)
         {
-            SetDamageData(playerStatus, skillBaseDamage, skillCoefficient);
+            SetDamageData(playerStat, skillBaseDamage, skillCoefficient);
             UpdatePosition(monster.transform);
             
             DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
@@ -57,10 +57,10 @@ namespace CoffeeCat
                       .Subscribe(_ => { ObjectPoolManager.Instance.Despawn(gameObject); });
         }
 
-        protected override void SetDamageData(PlayerStatus playerStatus, float skillBaseDamage = 0f,
+        protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f,
                                               float skillCoefficient = 1f)
         {
-            projectileDamageData = new ProjectileDamageData(playerStatus, skillBaseDamage, skillCoefficient);
+            projectileDamageData = new ProjectileDamageData(playerStat, skillBaseDamage, skillCoefficient);
         }
     }
 }

@@ -13,8 +13,14 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect_Explosion : PlayerSkillEffect
     {
-        protected override void SkillEffect(PlayerStatus playerStat)
+        protected override void SkillEffect(PlayerStat playerStat)
         {
+            if (playerSkillData is not PlayerActiveSkill skillData)
+            {
+                CatLog.WLog("PlayerSkillEffect_Explosion : skillData is null");
+                return;
+            }
+            
             var currentCoolTime = skillData.SkillCoolTime;
 
             Observable.EveryUpdate()
@@ -23,7 +29,7 @@ namespace CoffeeCat
                       .Skip(TimeSpan.Zero)
                       .Subscribe(_ =>
                       {
-                          var targets = FindAroundMonsters(skillData.AttackCount);
+                          var targets = FindAroundMonsters(skillData.AttackCount, skillData.SkillRange);
 
                           if (targets == null) return;
 
@@ -32,7 +38,7 @@ namespace CoffeeCat
                               if (!target.IsAlive) continue;
 
                               var skillObj =
-                                  ObjectPoolManager.Instance.Spawn(skillData.SkillKey, target.transform.position);
+                                  ObjectPoolManager.Instance.Spawn(skillData.SkillName, target.transform.position);
                               var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
                               projectile.SingleTargetAttack(playerStat, target, skillData.SkillBaseDamage,
                                                             skillData.SkillCoefficient);
@@ -44,7 +50,7 @@ namespace CoffeeCat
             // TODO : 플레이어 비활성화시 구독 해제할 것인지, 파괴시 구독 해제할 것인지
         }
 
-        public PlayerSkillEffect_Explosion(Transform playerTr, Table_PlayerActiveSkills skillKey) : base(playerTr, skillKey)
+        public PlayerSkillEffect_Explosion(Transform playerTr, PlayerSkill playerSkillKey) : base(playerTr, playerSkillKey)
         {
         }
     }

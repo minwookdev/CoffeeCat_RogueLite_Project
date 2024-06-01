@@ -14,13 +14,13 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetData(ProjectileDamageData attacker, PlayerStatus defender)
+        public static DamageData GetData(ProjectileDamageData attacker, PlayerStat defender)
         {
             var data = new DamageData();
             data.SetIsCritical(attacker.CriticalChance, defender.CriticalResistance);                // 치명타 발생 계산
             data.ApplySkillDamage(attacker.SkillDamage, attacker.BaseDamage, attacker.SkillCoefficient); // *스킬 데미지 배율 공식 적용
             data.ApplyCriticalDamage(attacker.CriticalMultiplier);                                   // 치명타 발생 시 데미지에 치명타 배율 적용
-            data.ApplyDefenceValue(defender.Defence, attacker.Penetration);                          // 방어자 방어 수치 및 관통력 수치 계산
+            data.ApplyDefenceValue(defender.Defense, attacker.Penetration);                          // 방어자 방어 수치 및 관통력 수치 계산
             data.CorrectionValue();                                                                  // 마이너스 데미지 보정
             return data;
         }
@@ -32,13 +32,13 @@ namespace CoffeeCat.Datas {
         /// <param name="skillStat"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetData(MonsterStat attacker, PlayerStatus defender)
+        public static DamageData GetData(MonsterStat attacker, PlayerStat defender)
         {
             var data = new DamageData();
             data.SetIsCritical(attacker.CriticalChance, defender.CriticalResistance); // 치명타 발생 계산
             data.SetDamageMinMax(attacker.Damage, attacker.DamageDeviation);          // 최소 ~ 최대 데미지 범위 내 산출
             data.ApplyCriticalDamage(attacker.CriticalMultiplier);                    // 치명타 발생 시 데미지에 치명타 배율 적용
-            data.ApplyDefenceValue(defender.Defence, attacker.Penetration);           // 방어자 방어 수치 및 관통력 수치 계산
+            data.ApplyDefenceValue(defender.Defense, attacker.Penetration);           // 방어자 방어 수치 및 관통력 수치 계산
             data.CorrectionValue();                                                   // 마이너스 데미지 보정
             return data;
         }
@@ -120,7 +120,7 @@ namespace CoffeeCat.Datas {
         public float SkillDamage => skillDamage;
         public float SkillCoefficient => skillCoefficient;
 
-        public ProjectileDamageData(PlayerStatus stat, float skillBaseDamage = 0f, float skillCoefficient = 1f) 
+        public ProjectileDamageData(PlayerStat stat, float skillBaseDamage = 0f, float skillCoefficient = 1f) 
         {
             // Calculate Min/Max Damage
             baseDamage = Random.Range(stat.AttackPower - (stat.AttackPower * stat.DamageDeviation), stat.AttackPower + (stat.AttackPower * stat.DamageDeviation));

@@ -1,0 +1,16 @@
+[
+  {
+    "Index": "1",
+    "Name": "Flower Magician",
+    "HealthPoint": "100",
+    "Defense": "5",
+    "MoveSpeed": "5",
+    "InvincibleTime": "0.5",
+    "AttackPower": "10",
+    "CriticalChance": "0.03",
+    "CriticalResistance": "0",
+    "CriticalMuliplier": "1.5",
+    "DamageDeviation": "0.05",
+    "Penetration": "0"
+  }
+]

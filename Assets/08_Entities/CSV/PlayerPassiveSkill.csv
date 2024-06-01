@@ -1,0 +1,12 @@
+;Index;SkillName;Grade;Delta
+;int;string;int;float
+;인덱스;스킬 이름;스킬 등급;증감 값
+;1;SpeedUp;1;0.3
+;2;SpeedUp;2;0.4
+;3;SpeedUp;3;0.5
+;4;CoolTimeReducer;1;0.2
+;5;CoolTimeReducer;2;0.3
+;6;CoolTimeReducer;3;0.4
+;7;DamageIncrease;1;1
+;8;DamageIncrease;2;2
+;9;DamageIncrease;3;3
