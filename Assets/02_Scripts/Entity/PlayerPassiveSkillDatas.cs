@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using CoffeeCat.Utils.SerializedDictionaries;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;

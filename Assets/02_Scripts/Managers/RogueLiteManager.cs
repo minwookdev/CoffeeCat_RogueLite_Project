@@ -11,7 +11,7 @@ namespace CoffeeCat.FrameWork {
 		public Vector3 SpawnedPlayerPosition => SpawnedPlayer.Tr.position;
 
 		// Fields
-		private const string playerKey = "01_FlowerMagician";
+		private const string playerKey = "FlowerMagician";
 
 		protected override void Initialize() {
 			base.Initialize();

@@ -46,12 +46,6 @@ namespace CoffeeCat.Utils.Defines
         FlowerMagician,
     }
 
-    public enum PlayerStatusKey
-    {
-        NONE,
-        FlowerMagician = 1,
-    }
-
     public enum Layer
     {
         NONE,

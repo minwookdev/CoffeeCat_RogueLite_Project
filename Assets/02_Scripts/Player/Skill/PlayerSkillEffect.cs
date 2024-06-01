@@ -1,17 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using CoffeeCat.FrameWork;
-using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
-using UnityEditor;
 using UnityEngine;
 
 namespace CoffeeCat
 {
     public class PlayerSkillEffect
     {
-        protected readonly Transform playerTr = null;
+        protected Transform playerTr = null;
         protected PlayerSkill playerSkillData = null;
 
         protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
@@ -22,7 +19,7 @@ namespace CoffeeCat
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
-        public void UpdateSkillData(PlayerSkill updateSkillData)
+        public virtual void UpdateSkillData(PlayerSkill updateSkillData)
         {
             playerSkillData = updateSkillData;
         }

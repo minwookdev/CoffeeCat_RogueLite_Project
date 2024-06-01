@@ -8,35 +8,43 @@
     "SkillCoefficient": "0.2",
     "SkillRange": "3",
     "AttackCount": "1",
-    "ProjectileSpeed": "5",
-    "Duration": "1"
+    "ProjectileSpeed": "5"
   },
   {
     "Index": "2",
     "SkillName": "NormalAttack",
     "Grade": "2",
-    "SkillCoolTime": "0.8",
+    "SkillCoolTime": "0.9",
     "SkillBaseDamage": "4",
     "SkillCoefficient": "0.3",
     "SkillRange": "3.5",
     "AttackCount": "1",
-    "ProjectileSpeed": "6",
-    "Duration": "1"
+    "ProjectileSpeed": "6"
   },
   {
     "Index": "3",
     "SkillName": "NormalAttack",
     "Grade": "3",
-    "SkillCoolTime": "0.6",
+    "SkillCoolTime": "0.8",
     "SkillBaseDamage": "5",
     "SkillCoefficient": "0.4",
     "SkillRange": "4",
     "AttackCount": "1",
-    "ProjectileSpeed": "7",
-    "Duration": "1"
+    "ProjectileSpeed": "7"
   },
   {
     "Index": "4",
+    "SkillName": "NormalAttack",
+    "Grade": "4",
+    "SkillCoolTime": "0.7",
+    "SkillBaseDamage": "6",
+    "SkillCoefficient": "0.4",
+    "SkillRange": "4.5",
+    "AttackCount": "1",
+    "ProjectileSpeed": "7"
+  },
+  {
+    "Index": "5",
     "SkillName": "Explosion",
     "Grade": "1",
     "SkillCoolTime": "2",
@@ -44,11 +52,10 @@
     "SkillCoefficient": "0.2",
     "SkillRange": "5",
     "AttackCount": "3",
-    "ProjectileSpeed": "-1",
-    "Duration": "-1"
+    "ProjectileSpeed": "-1"
   },
   {
-    "Index": "5",
+    "Index": "6",
     "SkillName": "Explosion",
     "Grade": "2",
     "SkillCoolTime": "2",
@@ -56,11 +63,10 @@
     "SkillCoefficient": "0.2",
     "SkillRange": "5",
     "AttackCount": "5",
-    "ProjectileSpeed": "-1",
-    "Duration": "-1"
+    "ProjectileSpeed": "-1"
   },
   {
-    "Index": "6",
+    "Index": "7",
     "SkillName": "Explosion",
     "Grade": "3",
     "SkillCoolTime": "2",
@@ -68,11 +74,10 @@
     "SkillCoefficient": "0.2",
     "SkillRange": "5",
     "AttackCount": "5",
-    "ProjectileSpeed": "-1",
-    "Duration": "-1"
+    "ProjectileSpeed": "-1"
   },
   {
-    "Index": "7",
+    "Index": "8",
     "SkillName": "Beam",
     "Grade": "1",
     "SkillCoolTime": "3",
@@ -80,11 +85,10 @@
     "SkillCoefficient": "1",
     "SkillRange": "3.5",
     "AttackCount": "1",
-    "ProjectileSpeed": "-1",
-    "Duration": "-1"
+    "ProjectileSpeed": "-1"
   },
   {
-    "Index": "8",
+    "Index": "9",
     "SkillName": "Beam",
     "Grade": "2",
     "SkillCoolTime": "3",
@@ -92,11 +96,10 @@
     "SkillCoefficient": "1",
     "SkillRange": "4",
     "AttackCount": "1",
-    "ProjectileSpeed": "-1",
-    "Duration": "-1"
+    "ProjectileSpeed": "-1"
   },
   {
-    "Index": "9",
+    "Index": "10",
     "SkillName": "Beam",
     "Grade": "3",
     "SkillCoolTime": "3",
@@ -104,19 +107,72 @@
     "SkillCoefficient": "1",
     "SkillRange": "4",
     "AttackCount": "1",
-    "ProjectileSpeed": "-1",
-    "Duration": "-1"
+    "ProjectileSpeed": "-1"
   },
   {
-    "Index": "10",
+    "Index": "11",
     "SkillName": "Bubble",
     "Grade": "1",
+    "SkillCoolTime": "5",
+    "SkillBaseDamage": "8",
+    "SkillCoefficient": "0.3",
+    "SkillRange": "-1",
+    "AttackCount": "1",
+    "ProjectileSpeed": "-1"
+  },
+  {
+    "Index": "12",
+    "SkillName": "Bubble",
+    "Grade": "2",
+    "SkillCoolTime": "5",
+    "SkillBaseDamage": "9",
+    "SkillCoefficient": "0.3",
+    "SkillRange": "-1",
+    "AttackCount": "1",
+    "ProjectileSpeed": "-1"
+  },
+  {
+    "Index": "13",
+    "SkillName": "Bubble",
+    "Grade": "3",
     "SkillCoolTime": "5",
     "SkillBaseDamage": "10",
     "SkillCoefficient": "0.3",
     "SkillRange": "-1",
     "AttackCount": "1",
-    "ProjectileSpeed": "-1",
-    "Duration": "-1"
+    "ProjectileSpeed": "-1"
+  },
+  {
+    "Index": "14",
+    "SkillName": "NormalAttackUp",
+    "Grade": "1",
+    "SkillCoolTime": "-1",
+    "SkillBaseDamage": "-1",
+    "SkillCoefficient": "-1",
+    "SkillRange": "-1",
+    "AttackCount": "-1",
+    "ProjectileSpeed": "-1"
+  },
+  {
+    "Index": "15",
+    "SkillName": "NormalAttackUp",
+    "Grade": "2",
+    "SkillCoolTime": "-1",
+    "SkillBaseDamage": "-1",
+    "SkillCoefficient": "-1",
+    "SkillRange": "-1",
+    "AttackCount": "-1",
+    "ProjectileSpeed": "-1"
+  },
+  {
+    "Index": "16",
+    "SkillName": "NormalAttackUp",
+    "Grade": "3",
+    "SkillCoolTime": "-1",
+    "SkillBaseDamage": "-1",
+    "SkillCoefficient": "-1",
+    "SkillRange": "-1",
+    "AttackCount": "-1",
+    "ProjectileSpeed": "-1"
   }
 ]

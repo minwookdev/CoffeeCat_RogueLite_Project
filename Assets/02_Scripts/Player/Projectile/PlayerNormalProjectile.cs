@@ -20,7 +20,8 @@ namespace CoffeeCat
             var damageData = DamageData.GetData(projectileDamageData, monsterStat.CurrentStat);
             monsterStat.OnDamaged(damageData, true, tr.position, 3f);
 
-            ObjectPoolManager.Instance.Despawn(gameObject);
+            if (gameObject.activeSelf)
+                ObjectPoolManager.Instance.Despawn(gameObject);
         }
 
         protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f,
@@ -41,10 +42,10 @@ namespace CoffeeCat
               });
         }
 
-        public void Fire(PlayerStat playerStat, Vector3 startPos, Vector3 direction)
+        public void Fire(PlayerStat playerStat, float projectileSpeed, Vector3 startPos, Vector3 direction)
         {
             SetDamageData(playerStat);
-            // ProjectilePath(playerStat.ProjectileSpeed, startPos, direction);
+            ProjectilePath(projectileSpeed, startPos, direction);
         }
     }
 }

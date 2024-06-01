@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using CoffeeCat.Utils.SerializedDictionaries;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
@@ -36,6 +34,5 @@ namespace CoffeeCat
         public float SkillRange = default;
         public int AttackCount = default;
         public float ProjectileSpeed = default;
-        public float Duration = default;
     }
 }

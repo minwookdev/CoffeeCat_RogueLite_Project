@@ -14,8 +14,9 @@ namespace CoffeeCat
 {
     public partial class Player : MonoBehaviour
     {
-        [Title("Status")]
+        [Title("Stat")]
         [ShowInInspector, ReadOnly] protected PlayerStat stat;
+        [ShowInInspector, ReadOnly] private PlayerActiveSkill normalAttackData = null;
         [SerializeField] protected PlayerAddressablesKey playerName = PlayerAddressablesKey.NONE;
         [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
 
@@ -24,7 +25,6 @@ namespace CoffeeCat
         [SerializeField] protected Transform projectilePoint = null;
 
         private Rigidbody2D rigid = null;
-        private PlayerSkill normalAttackData = null;
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
         private bool isPlayerDamaged = false;
@@ -32,7 +32,6 @@ namespace CoffeeCat
         private bool isDead = false;
 
         public Transform Tr => tr;
-        public PlayerStat Stat => stat;
 
         private void Start()
         {
@@ -54,7 +53,7 @@ namespace CoffeeCat
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
-                // EnableSkillSelect();
+                EnableSkillSelect();
             }
         }
 
@@ -102,15 +101,12 @@ namespace CoffeeCat
 
         private void NormalAttack()
         {
-            if (normalAttackData is not PlayerActiveSkill normalAttack)
-            {
-                CatLog.WLog("NormalAttackData is not PlayerActiveSkill");
-                return;
-            }
+            float currentCoolTime = normalAttackData.SkillCoolTime;
             
-            Observable.Interval(TimeSpan.FromSeconds(normalAttack.SkillCoolTime))
-                      .Where(_ => !isDead)
-                      .Where(_ => isPlayerInBattle)
+            Observable.EveryUpdate()
+                      .Where(_ => isPlayerInBattle && !isDead)
+                      .Select(_ => currentCoolTime += Time.deltaTime)
+                      .Where(_ => currentCoolTime >= normalAttackData.SkillCoolTime)
                       .Subscribe(_ =>
                       {
                           var targetMonster = FindNearestMonster();
@@ -121,19 +117,18 @@ namespace CoffeeCat
                           var targetDirection = (targetMonsterStatus.GetCenterPosition() - projectilePoint.position).normalized;
                           SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
 
-                          var spawnObj =
-                              ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
-                                                               projectilePoint.position);
+                          var spawnObj = ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(), projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
-                          projectile.Fire(stat, projectilePoint.position, targetDirection);
-
+                          projectile.Fire(stat, normalAttackData.ProjectileSpeed, projectilePoint.position, targetDirection);
+                          
+                          currentCoolTime = 0;
                           hasFiredProjectile = true;
                       }).AddTo(this);
-
+    
             Transform FindNearestMonster()
             {
                 var monsters =
-                    Physics2D.OverlapCircleAll(Tr.position, normalAttack.SkillRange, 1 << LayerMask.NameToLayer("Monster"));
+                    Physics2D.OverlapCircleAll(Tr.position, normalAttackData.SkillRange, 1 << LayerMask.NameToLayer("Monster"));
 
                 if (monsters.Length <= 0)
                     return null;
@@ -261,6 +256,12 @@ namespace CoffeeCat
         public bool IsDead()
         {
             return isDead;
+        }
+
+        public void UpgradeNormalAttack()
+        {
+            var index = normalAttackData.Index + 1;
+            normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[index];
         }
 
         #endregion

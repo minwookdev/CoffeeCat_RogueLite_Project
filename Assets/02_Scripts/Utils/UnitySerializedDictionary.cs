@@ -41,6 +41,6 @@ namespace CoffeeCat.Utils.SerializedDictionaries {
     [Serializable] public class StringMonsterStatDictionary : UnitySerializedDictionary<string, MonsterStat> { }
     [Serializable] public class StringMonsterSkillDictionary : UnitySerializedDictionary<string, MonsterSkillStat> { }
     [Serializable] public class StringPlayerStatDictionary : UnitySerializedDictionary<string, PlayerStat> { }
-    [Serializable] public class IntPlayerActiveSkillDictionary : UnitySerializedDictionary<int, PlayerSkill> { }
-    [Serializable] public class IntPlayerPassiveSkillDictionary : UnitySerializedDictionary<int, PlayerSkill> { }
+    [Serializable] public class IntPlayerActiveSkillDictionary : UnitySerializedDictionary<int, PlayerActiveSkill> { }
+    [Serializable] public class IntPlayerPassiveSkillDictionary : UnitySerializedDictionary<int, PlayerPassiveSkill> { }
 }

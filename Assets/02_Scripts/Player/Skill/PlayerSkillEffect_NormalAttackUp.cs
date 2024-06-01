@@ -10,27 +10,24 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect_NormalAttackUp : PlayerSkillEffect
     {
-        protected override void SkillEffect(PlayerStat playerStat)
+        private readonly Player player = null;
+
+        public override void UpdateSkillData(PlayerSkill updateSkillData)
         {
-            var skillData = playerSkillData as PlayerActiveSkill;
-            if (skillData == null)
-            {
-                CatLog.WLog("PlayerSkillEffect_Explosion : skillData is null");
-                return;
-            }
+            player.UpgradeNormalAttack();
             
-            Observable.Interval(TimeSpan.FromSeconds(skillData.SkillCoolTime))
-                      .Subscribe(_ =>
-                      {
-                          ObjectPoolManager.Instance.Spawn(skillData.SkillName, playerTr.position);
-                          // TODO : Active 스킬에 Delta 추가
-                          // playerStat.AttackPower += skillData.Delta;
-                      }).AddTo(playerTr.gameObject);
+            var spawnObj = ObjectPoolManager.Instance.Spawn(playerSkillData.SkillName, playerTr);
+            spawnObj.transform.localPosition = Vector3.zero;
         }
 
-        protected PlayerSkillEffect_NormalAttackUp(Transform playerTr, PlayerSkill playerSkillData) :
-            base(playerTr, playerSkillData)
+        public PlayerSkillEffect_NormalAttackUp(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
         {
+            this.playerTr = playerTr;
+            player = playerTr.GetComponent<Player>();
+            player.UpgradeNormalAttack();
+            
+            var spawnObj = ObjectPoolManager.Instance.Spawn(playerSkillData.SkillName, playerTr);
+            spawnObj.transform.localPosition = Vector3.zero;
         }
     }
 }

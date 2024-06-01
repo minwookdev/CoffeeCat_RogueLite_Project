@@ -1,6 +1,4 @@
 using System;
-using CoffeeCat.Utils.SerializedDictionaries;
-using Sirenix.OdinInspector;
 
 namespace CoffeeCat
 {

@@ -12,7 +12,7 @@ namespace CoffeeCat
 {
     public partial class Player
     {
-        private readonly List<PlayerSkill> ownedSkillsList = new List<PlayerSkill>();
+        [ShowInInspector] private readonly List<PlayerSkill> ownedSkillsList = new List<PlayerSkill>();
         private readonly Dictionary<int, PlayerSkillEffect> skillEffects = new Dictionary<int, PlayerSkillEffect>();
 
         private PlayerSkillSelectData[] SkillSelector(int SelectCount)
@@ -44,13 +44,13 @@ namespace CoffeeCat
             }
 
             var learnableSkills = playerAllSkills.Where(skill => skill.Grade == 1).ToList();
-            learnableSkills = learnableSkills.OrderBy(x => Random.value).ToList();
-
+            var randomIndex = Random.Range(0, learnableSkills.Count);
+            
             for (int i = 0; i < SelectCount; i++)
             {
-                var pickSkill = learnableSkills[i];
-                var pickSkillSelectData =
-                    new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
+                var pickSkill = learnableSkills[randomIndex];
+                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, false);
+                learnableSkills.RemoveAt(randomIndex);
                 skillSelectDataList.Add(pickSkillSelectData);
             }
 
@@ -70,6 +70,9 @@ namespace CoffeeCat
                 case "Bubble":
                     Bubble(skillData);
                     break;
+                case "NormalAttackUp":
+                    NormalAttackUp(skillData);
+                    break;
                 default:
                     // Passive(skillData);
                     break;
@@ -79,8 +82,7 @@ namespace CoffeeCat
         private void ActivateSkill(PlayerSkillEffect skillEffect)
         {
             this.ObserveEveryValueChanged(_ => isPlayerInBattle)
-                .Where(_ => isPlayerInBattle)
-                .Where(_ => !isDead)
+                .Where(_ => isPlayerInBattle && !isDead)
                 .Skip(TimeSpan.Zero)
                 .Subscribe(_ => { skillEffect.Fire(stat); });
         }
@@ -132,6 +134,13 @@ namespace CoffeeCat
         private void Bubble(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Bubble(tr, skillData);
+            skillEffects.Add(skillData.Index, skillEffect);
+            ActivateSkill(skillEffect);
+        }
+
+        private void NormalAttackUp(PlayerSkill skillData)
+        {
+            var skillEffect = new PlayerSkillEffect_NormalAttackUp(tr, skillData);
             skillEffects.Add(skillData.Index, skillEffect);
             ActivateSkill(skillEffect);
         }
