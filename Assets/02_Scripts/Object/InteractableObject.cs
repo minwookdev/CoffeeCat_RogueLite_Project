@@ -1,3 +1,4 @@
+using CoffeeCat.FrameWork;
 using UnityEngine;
 using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
@@ -7,8 +8,12 @@ using UniRx.Triggers;
 
 namespace CoffeeCat {
     public class InteractableObject : MonoBehaviour {
+        [SerializeField] protected bool isShowInteractableSign = true;
         [SerializeField] private ParticleSystem ps = null;
+        [SerializeField, ReadOnly] private Transform interactableSignTr = null;
         [ShowInInspector, ReadOnly] public bool IsEnteredPlayer { get; private set; } = false;
+        private Transform playerTr = null;
+        private Vector3 interactableSignOffset = new Vector3(0, 1.5f, 0);
 
         protected void Start()
         {
@@ -22,11 +27,16 @@ namespace CoffeeCat {
                 {
                     if (IsEnteredPlayer) {
                         OnPlayerStay();
+                        UpdateInteractableSign();
                         return;
                     }
                     IsEnteredPlayer = true;
                     lastCollider = playerCollider;
                     OnPlayerEnter();
+
+                    if (isShowInteractableSign) {
+                        SpawnInteractableSign(playerCollider.gameObject);
+                    }
                 })
                 .AddTo(this);
 
@@ -41,6 +51,7 @@ namespace CoffeeCat {
                     IsEnteredPlayer = false;
                     lastCollider = null;
                     OnPlayerExit();
+                    DisposeInteractableSign();
                 })
                 .AddTo(this);
         }
@@ -63,6 +74,38 @@ namespace CoffeeCat {
 
         protected virtual void OnPlayerExit() {
             
+        }
+        
+        private Vector3 GetInteractableSignPosition(Vector3 playerPos) {
+            return playerPos + interactableSignOffset;
+        }
+
+        private void SpawnInteractableSign(GameObject collisionGameObject) {
+            if (!playerTr) {
+                playerTr = collisionGameObject.GetComponent<Transform>();
+            }
+
+            if (interactableSignTr) {
+                return;
+            }
+            var signPosition = GetInteractableSignPosition(playerTr.position);
+            interactableSignTr = ObjectPoolManager.Instance.Spawn<Transform>(AddressablesKey.InteractableSign.ToStringEx(), signPosition);
+        }
+
+        private void UpdateInteractableSign() {
+            if (!interactableSignTr) 
+                return;
+            var signPosition = GetInteractableSignPosition(playerTr.position);
+            interactableSignTr.position = signPosition;
+        }
+
+        private void DisposeInteractableSign() {
+            if (!interactableSignTr) {
+                return;
+            }
+
+            ObjectPoolManager.Instance.Despawn(interactableSignTr.gameObject);
+            interactableSignTr = null;
         }
     }
 }

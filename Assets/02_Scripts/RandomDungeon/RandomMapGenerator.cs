@@ -25,13 +25,13 @@ namespace RandomDungeonWithBluePrint
         
         [Title("Generate Options")]
         [SerializeField] private int seed = default;
-        [SerializeField] private Button generateButton = default;
-        [SerializeField] private FieldView fieldView = default;
-        [SerializeField] private BluePrintQueue bluePrintQueue = default;
+        [SerializeField] private FieldView fieldView = null;
+        [SerializeField] public BluePrintQueue bluePrintQueue = null;
         [SerializeField] private FieldBluePrint TestBluePrint = null; // 확정 생성 BluePrint
-        [SerializeField] private BluePrintWithWeight[] bluePrints = default;
+        [SerializeField] private BluePrintWithWeight[] bluePrints = null;
         public Field field { get; private set; }
         public bool IsGenerateCompleted { get; set; } = false;
+        public BluePrintQueue BluePrintQueue => bluePrintQueue;
 
         [Title("Bake PathFind Grid (Not Using)")]
         [SerializeField, ReadOnly] private bool isBakePathFindGrid = false;
@@ -42,45 +42,52 @@ namespace RandomDungeonWithBluePrint
         public bool IsDisplaySectionRectDrawer = false;
         public bool IsDisplaySectionIndex = false;
         public bool IsDisplayRoomRectDrawer = false;
+        private bool initialziedDebugging = false;
         public Color RoomDrawerColor = Color.green;
         public Color SectionDrawerColor = Color.white;
-        
-        private void Start()
-        {
+
+        private void Awake() {
             // Init Random Seed
             UnityRandom.InitState(seed);
+        }
+
+        public void GenerateNextFloor(int currentFloor) {
+            var normalMapBluePrints = bluePrintQueue.NormalMapBluePrints;
+            if (normalMapBluePrints.Length <= currentFloor) {
+                CatLog.Log("Reached The Maximum Floor.");
+                return;
+            }
             
-            // Generate Map
-            ExecuteGenerate();
+            var bluePrint = normalMapBluePrints[currentFloor];
+            ExecuteGenerate(bluePrint);
+        }
+        
+        private void ExecuteGenerate(FieldBluePrint bluePrint) {
+            if(TestBluePrint != null) {
+                bluePrint = TestBluePrint;
+                CatLog.WLog("Override Test BluePrint: [GENERATE TEST MODE MAP");
+            }
             
-            // Generate PathFind Grid
+            if (!bluePrint) {
+                CatLog.ELog("BluePrint Is Null");
+                return;
+            }
+            
+            // Invoke Event Before Dispose Generated Map  
+            if (field != null) {
+                StageManager.Instance.InvokeMapDisposeBefore();
+            }
+            
+            // Clear And ReGenerate Dungeon Map
+            Create(bluePrint);
+            StageManager.Instance.InvokeMapGenerateCompleted(field);
+            
+            // Bake PathFind Grid
             if (isBakePathFindGrid) {
                 pathFindGrid.CreateGridDictionary(this);
             }
             
-            // Add Generate Button Event
-            generateButton.onClick.AddListener(ExecuteGenerate);
-            if (bluePrintQueue.IsGrantSkillOnStart)
-            {
-                var player = RogueLiteManager.Instance.SpawnedPlayer;
-                if (player)
-                {  
-                   player.EnableSkillSelect(); 
-                }
-            }
             InitDebugs();
-            return;
-
-            void ExecuteGenerate()
-            {
-                StageManager.Instance.InvokeMapDisposeBefore();
-                
-                /*var targetFieldBluePrint = (TestBluePrint) ? TestBluePrint : Raffle().BluePrint;*/
-                var targetFieldBluePrint = (TestBluePrint) ? TestBluePrint : bluePrintQueue.NormalMapBluePrints[0];
-                Create(targetFieldBluePrint);
-                
-                StageManager.Instance.InvokeMapGenerateCompleted(field);
-            }
         }
         
         private void Create(BluePrintWithWeight bluePrintWeight) {
@@ -92,8 +99,6 @@ namespace RandomDungeonWithBluePrint
             field = FieldBuilder.Build(bluePrint);
             fieldView.DrawDungeon(field);
             IsGenerateCompleted = true;
-
-            // CatLog.Log($"Map Generated Completed. MapType : {bluePrint.MapType}");
         }
 
         private BluePrintWithWeight Raffle()
@@ -115,22 +120,13 @@ namespace RandomDungeonWithBluePrint
             return candidate[pick];
         }
 
-        public void GenerateNextFloor(int currentFloor) {
-            var bluePrints = bluePrintQueue.NormalMapBluePrints;
-            if (bluePrints.Length <= currentFloor) {
-                CatLog.WLog("Failed to Get Next BluePrint.");
-                return;
-            }
-            
-            StageManager.Instance.InvokeMapDisposeBefore();
-            var targetFieldBluePrint = bluePrints[currentFloor];
-            Create(targetFieldBluePrint);
-            StageManager.Instance.InvokeMapGenerateCompleted(field);
-        }
-
         #region Debug_Drawer
         
         private void InitDebugs() {
+#if UNITY_EDITOR
+            if (initialziedDebugging)
+                return;
+            
             if (IsDisplayRoomType) {
                 DisplayRoomType();
             }
@@ -166,12 +162,15 @@ namespace RandomDungeonWithBluePrint
                     }
                 })
                 .AddTo(this);
+            initialziedDebugging = true;
+#endif
         }
         
         /// <summary>
         /// RoomType을 표시
         /// </summary>
         private void DisplayRoomType() {
+#if UNITY_EDITOR
             ClearRoomTypeText();
             
             foreach (var room in field.Rooms) {
@@ -179,15 +178,19 @@ namespace RandomDungeonWithBluePrint
                 var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_room_type", spawnPoint, Quaternion.identity);
                 text.SetText(room.RoomType.ToStringExtended());
             }
+#endif
         }
 
         private void ClearRoomTypeText() {
+#if UNITY_EDITOR
             if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_room_type"))
                 return;
             ObjectPoolManager.Instance.DespawnAll("editor_text_room_type");
+#endif
         }
 
         private void DisplaySectionIndex() {
+#if UNITY_EDITOR
             ClearSectionIndexText();
             
             var sections = field?.Sections;
@@ -200,15 +203,19 @@ namespace RandomDungeonWithBluePrint
                 var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_section_index", point, Quaternion.identity);
                 text.SetText("< " + sections[i].Index.ToString() + " >");
             }
+#endif
         }
         
         private void ClearSectionIndexText() {
+#if UNITY_EDITOR
             if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_section_index"))
                 return;
             ObjectPoolManager.Instance.DespawnAll("editor_text_section_index");
+#endif
         }
         
         private void OnDrawGizmos() {
+#if UNITY_EDITOR
             if (field == null) {
                 return;
             }
@@ -250,6 +257,7 @@ namespace RandomDungeonWithBluePrint
 
             // Restore Gizmos Color 
             Gizmos.color = Color.white;
+#endif
         }
         
         #endregion

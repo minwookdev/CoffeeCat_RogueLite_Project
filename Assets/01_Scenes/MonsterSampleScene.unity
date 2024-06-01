@@ -1943,6 +1943,19 @@ MonoBehaviour:
     IsStayEnabling: 0
     HasRootParent: 1
     CustomRootParent: {fileID: 0}
+  - PoolObjectLoadType: 3
+    PoolObject: {fileID: 0}
+    ResourcesPath: 
+    AddressablesName: InteractableIcon
+    AssetRef:
+      m_AssetGUID: 
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+    InitSpawnCount: 1
+    IsStayEnabling: 0
+    HasRootParent: 1
+    CustomRootParent: {fileID: 0}
   AudioClipDictionary:
     keyData: []
     valueData: []
@@ -3485,7 +3498,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c006558e214486647ac2ddabbab868ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generator: {fileID: 1642701469}
+  mapGen: {fileID: 1642701469}
   onMapGenerateCompleted:
     m_PersistentCalls:
       m_Calls:
@@ -4733,7 +4746,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 0
-  generateButton: {fileID: 1933723496}
   fieldView: {fileID: 1940253223}
   bluePrintQueue: {fileID: 11400000, guid: cbafbd23e756af448b6f5455ea96d718, type: 2}
   TestBluePrint: {fileID: 0}

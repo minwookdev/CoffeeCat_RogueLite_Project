@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,7 +26,7 @@ namespace CoffeeCat
 
     public class StageManager : PrelocatedSingleton<StageManager> {
         [Title("StageManager", TitleAlignment = TitleAlignments.Centered)]
-        [TabGroup("Requires"), SerializeField] private RandomMapGenerator generator;
+        [TabGroup("Requires"), SerializeField] private RandomMapGenerator mapGen;
         [TabGroup("Requires"), ShowInInspector, ReadOnly] public int CurrentRoomMonsterKilledCount { get; private set; } = 0;
         [TabGroup("Requires"), ShowInInspector, ReadOnly] public int CurrentFloorMonsterKillCount { get; private set; } = 0;
         [TabGroup("Requires"), ShowInInspector, ReadOnly] public int TotalMonsterKilledCount { get; private set; } = 0;
@@ -44,6 +45,17 @@ namespace CoffeeCat
         [TabGroup("Events"), SerializeField] private UnityEvent OnPlayerKilled = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnSkillSelectCompleted = null;
+
+        private void Start() {
+            mapGen.GenerateNextFloor(CurrentFloor);
+            var queue = mapGen.BluePrintQueue;
+            if (!queue) 
+                return;
+            if (queue.IsGrantSkillOnStart) {
+                var player = RogueLiteManager.Instance.SpawnedPlayer;
+                player.EnableSkillSelect();
+            }
+        }
 
         private void Update()
         {
@@ -153,7 +165,8 @@ namespace CoffeeCat
         }
 
         public void RequestGenerateNextFloor() {
-            generator.GenerateNextFloor(CurrentFloor);
+            CurrentFloor++;
+            mapGen.GenerateNextFloor(CurrentFloor);
         }
         
         #region Events

@@ -37,6 +37,7 @@ namespace CoffeeCat.Utils.Defines
         Skeleton_Mage_Projectile_Default,
         Skeleton_Mage_Projectile_Skill,
         GroupSpawnPositions,
+        InteractableSign,
     }
 
     public enum PlayerAddressablesKey
