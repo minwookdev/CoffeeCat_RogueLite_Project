@@ -78,7 +78,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98538b3df08dafe4eb73d869f1f50d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShowInteractableSign: 1
   ps: {fileID: 8959093279819541929}
+  interactableSignTr: {fileID: 0}
 --- !u!61 &8666074876274117009
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -122,7 +124,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.2, y: 0.5}
+  m_Size: {x: 1.5, y: 0.8}
   m_EdgeRadius: 0
 --- !u!1001 &2064198125627085653
 PrefabInstance:

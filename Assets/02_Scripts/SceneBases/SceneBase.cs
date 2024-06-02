@@ -43,20 +43,14 @@ namespace CoffeeCat.FrameWork {
             if (isPreloadData) {
                 DataManager.Instance.DataLoad();
             }
-
-            if (DefaultPoolInformation is { Length: > 0 }) {
-                ObjectPoolManager.Instance.AddToPool(DefaultPoolInformation);
-            }
-
+            
             if (AudioClipDictionary is { Count: > 0 }) {
                 SoundManager.Instance.RegistAudioClips(AudioClipDictionary);
             }
         }
 
         public void Start() {
-            Preloader.StartProcess(this);
-            
-            ResourceManager.Instance.AddressablesAsyncLoad<AudioClip>("coin", true, (clip) => {
+            /*ResourceManager.Instance.AddressablesAsyncLoad<AudioClip>("coin", true, (clip) => {
                 clips.Add(clip);
             });
             ResourceManager.Instance.AddressablesAsyncLoad<AudioClip>("coin2", true, (clip) => {
@@ -64,7 +58,7 @@ namespace CoffeeCat.FrameWork {
             });
             ResourceManager.Instance.AddressablesAsyncLoad<AudioClip>("coin3", true, (clip) => {
                 clips.Add(clip);
-            });
+            });*/
 
             /*this.UpdateAsObservable()
                 .Skip(0)
@@ -93,6 +87,10 @@ namespace CoffeeCat.FrameWork {
                     }#1#
                 })
                 .AddTo(this);*/
+            
+            if (DefaultPoolInformation is { Length: > 0 }) {
+                ObjectPoolManager.Instance.AddToPool(DefaultPoolInformation);
+            }
 
             if (IsSetupDamageText) {
                 DamageTextManager.Instance.Setup(damageTextCanvas, uiCamera);
@@ -102,6 +100,8 @@ namespace CoffeeCat.FrameWork {
                     DamageTextManager.Instance.ReleaseSingleton();
                 }
             }
+            
+            Preloader.StartProcess(this);
         }
 
         private void OnDisable() {

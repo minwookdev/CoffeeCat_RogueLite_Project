@@ -9,13 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eaca0c5b4504c944b1707f566174cbc, type: 3}
-  m_Name: minor_medium_battle_2
+  m_Script: {fileID: 188390376, guid: a4865f1ab4504ed8a368670db22f409c, type: 3}
+  m_Name: ImportSettingsConfig
   m_EditorClassIdentifier: 
-  Rarity: 2
-  SpawnKeys: 
-  SpawnWeights: []
-  GroupSpawnPointKey: 9
-  MaxSpawnMonster: 0
-  EndureSeconds: 300
-  KeepAverageCount: 6
+  automateBeforeBuild: 1

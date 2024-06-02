@@ -24,7 +24,7 @@ namespace CoffeeCat.Utils.Defines
     {
         NONE,
         LoadingScene,
-        MonsterSampleScene,
+        DungeonScene,
     }
 
     public enum AddressablesKey
