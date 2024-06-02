@@ -14,8 +14,6 @@ namespace CoffeeCat.FrameWork
         [ShowInInspector, ReadOnly] public PlayerActiveSkillDatas PlayerActiveSkills { get; private set; } = null;
         [ShowInInspector, ReadOnly] public PlayerPassiveSkillDatas PlayerPassiveSkills { get; private set; } = null;
 
-        private const string tablePath = "StaticData/Output/TableAssets";
-        
         public bool IsDataLoaded { get; private set; } = false;
 
         protected override void Initialize()

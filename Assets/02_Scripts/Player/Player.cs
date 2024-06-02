@@ -55,7 +55,7 @@ namespace CoffeeCat
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
-                EnableSkillSelect();
+                // EnableSkillSelect();
             }
         }
 
@@ -167,6 +167,7 @@ namespace CoffeeCat
 
             isPlayerDamaged = true;
             stat.CurrentHp -= damageData.CalculatedDamage;
+            DamageTextManager.Instance.
 
             if (stat.CurrentHp <= 0)
             {

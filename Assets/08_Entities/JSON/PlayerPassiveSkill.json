@@ -2,64 +2,73 @@
   {
     "Index": "1",
     "SkillName": "SpeedUp",
-    "Grade": "1",
     "SkillType": "1",
+    "Grade": "1",
+    "Description": "이속 증가 1단계",
     "Delta": "0.3"
   },
   {
     "Index": "2",
     "SkillName": "SpeedUp",
-    "Grade": "2",
     "SkillType": "1",
+    "Grade": "2",
+    "Description": "이속 증가 2단계",
     "Delta": "0.4"
   },
   {
     "Index": "3",
     "SkillName": "SpeedUp",
-    "Grade": "3",
     "SkillType": "1",
+    "Grade": "3",
+    "Description": "이속 증가 3단계",
     "Delta": "0.5"
   },
   {
     "Index": "4",
     "SkillName": "CoolTimeReduce",
-    "Grade": "1",
     "SkillType": "1",
+    "Grade": "1",
+    "Description": "쿨타임 감소 1단계",
     "Delta": "0.2"
   },
   {
     "Index": "5",
     "SkillName": "CoolTimeReduce",
-    "Grade": "2",
     "SkillType": "1",
+    "Grade": "2",
+    "Description": "쿨타임 감소 2단계",
     "Delta": "0.3"
   },
   {
     "Index": "6",
     "SkillName": "CoolTimeReduce",
-    "Grade": "3",
     "SkillType": "1",
+    "Grade": "3",
+    "Description": "쿨타임 감소 3단계",
     "Delta": "0.4"
   },
   {
     "Index": "7",
     "SkillName": "DamageIncrease",
-    "Grade": "1",
     "SkillType": "1",
+    "Grade": "1",
+    "Description": "공격력 증가 1단계",
     "Delta": "1"
   },
   {
     "Index": "8",
     "SkillName": "DamageIncrease",
-    "Grade": "2",
     "SkillType": "1",
+    "Grade": "2",
+    "Description": "공격력 증가 2단계",
     "Delta": "2"
   },
   {
     "Index": "9",
     "SkillName": "DamageIncrease",
-    "Grade": "3",
     "SkillType": "1",
+    "Grade": "3",
+    "Description": "공격력 증가 3단계",
     "Delta": "3"
   }
 ]

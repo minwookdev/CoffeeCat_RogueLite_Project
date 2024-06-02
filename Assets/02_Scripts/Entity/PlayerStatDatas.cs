@@ -16,7 +16,7 @@ namespace CoffeeCat
             var textAsset = Resources.Load<TextAsset>("Entity/Json/PlayerStat");
             var decText = Cryptor.Decrypt2(textAsset.text);
             var datas = JsonConvert.DeserializeObject<PlayerStat[]>(decText);
-            
+
             DataDictionary = new StringPlayerStatDictionary();
             for (int i = 0; i < datas.Length; i++)
             {
@@ -24,7 +24,7 @@ namespace CoffeeCat
             }
         }
     }
-    
+
     [Serializable]
     public class PlayerStat
     {
@@ -46,21 +46,13 @@ namespace CoffeeCat
         {
             CurrentHp = MaxHp;
         }
-        
-        public void StatEnhancement(PlayerStatEnhanceData enhanceData)
+
+        public void StatEnhancement(PlayerEnhanceData enhanceData)
         {
             MaxHp += enhanceData.MaxHp;
             Defense += enhanceData.Defence;
             MoveSpeed += enhanceData.MoveSpeed;
             AttackPower += enhanceData.AttackPower;
         }
-    }
-
-    public class PlayerStatEnhanceData
-    {
-        public float MaxHp = default;
-        public float Defence = default;
-        public float MoveSpeed = default;
-        public float AttackPower = default;
     }
 }

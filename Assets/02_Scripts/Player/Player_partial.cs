@@ -17,16 +17,13 @@ namespace CoffeeCat
         [ShowInInspector] private readonly List<PlayerSkill> ownedSkillsList = new List<PlayerSkill>();
 
         [ShowInInspector]
-        private readonly Dictionary<string, PlayerSkillEffect> skillEffects =
-            new Dictionary<string, PlayerSkillEffect>();
-
+        private readonly Dictionary<string, PlayerSkillEffect> skillEffects = new Dictionary<string, PlayerSkillEffect>();
         private readonly UnityEvent OnUpdateSkillCompleted = new UnityEvent();
 
         private PlayerSkillSelectData[] SkillSelector(int SelectCount)
         {
             // TODO : Seed
             // TODO : 노션에 전달 할 기획 메모 작성 : 스킬 Select는 배틀룸 밖에서만 해야함 (InBattleRoom 변수가 변화하는 순간 업데이트 된 스킬들이 반영됨)
-            // TODO : 스킬 Description 시트에 추가
 
             var skillSelectDataList = new List<PlayerSkillSelectData>();
 
@@ -51,7 +48,7 @@ namespace CoffeeCat
                     ? activeSkills.DataDictionary[randomOwnedSkill.Index + 1]
                     : passiveSkills.DataDictionary[randomOwnedSkill.Index + 1];
 
-                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, "원래 있는거 업그레이드임",
+                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, pickSkill.Description,
                                                                     pickSkill.Index, (int)pickSkill.SkillType, true);
                 skillSelectDataList.Add(pickSkillSelectData);
 
@@ -83,14 +80,14 @@ namespace CoffeeCat
                 var randomIndex = Random.Range(0, learnableSkills.Count);
                 var pickSkill = learnableSkills[randomIndex];
                 var pickSkillSelectData =
-                    new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, (int)pickSkill.SkillType,
+                    new PlayerSkillSelectData(pickSkill.SkillName, pickSkill.Description, pickSkill.Index, (int)pickSkill.SkillType,
                                               false);
 
                 learnableSkills.RemoveAt(randomIndex);
                 skillSelectDataList.Add(pickSkillSelectData);
             }
 
-            // 나머지 Select Panel을 채우기 위해 빈 데이터 추가
+            // 배울 수 있는 스킬이 부족했다면 데이터를 채우기 위해 빈 데이터 추가
             if (isNotEnoughSkill)
             {
                 var overCount = Defines.PLAYER_SKILL_SELECT_COUNT - skillSelectDataList.Count;
@@ -137,12 +134,6 @@ namespace CoffeeCat
 
         public void UpdateSkill(PlayerSkillSelectData data)
         {
-            if (data == null)
-            {
-                CatLog.ELog("Invalid Data !");
-                return;
-            }
-
             if (data.Index == -1)
             {
                 return;
@@ -169,12 +160,6 @@ namespace CoffeeCat
             OnUpdateSkillCompleted.Invoke();
         }
 
-        // test
-        public void EnableSkillSelect()
-        {
-            UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector(Defines.PLAYER_SKILL_SELECT_COUNT));
-        }
-
         public void GetCoolTimeReduce(float delta)
         {
             // 보유 중인 액티브 스킬 중 쿨타임이 있는 스킬들을 찾아서 쿨타임을 감소
@@ -190,16 +175,10 @@ namespace CoffeeCat
             // 이후 새로 스킬을 배울 때마다 쿨타임을 감소시키기 위해 이벤트 추가
             OnUpdateSkillCompleted.AddListener(() => CoolTimeReduce(delta));
         }
-
-        private void CoolTimeReduce(float delta)
+        
+        public void EnableSkillSelect()
         {
-            // Skill을 업데이트 한 시점에는 항상 ownedSkillsList의 마지막 요소에 업데이트된 Skill이 들어가 있음
-            var newSkill = ownedSkillsList.Last();
-
-            if (newSkill is not PlayerActiveSkill activeSkill)
-                return;
-
-            activeSkill.SkillCoolTime -= delta;
+            UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector(Defines.PLAYER_SKILL_SELECT_COUNT));
         }
 
         #region Skill Effect
@@ -237,6 +216,17 @@ namespace CoffeeCat
             var skillEffect = new PlayerSkillEffect_Passive(tr, skillData);
             skillEffects.Add(skillData.SkillName, skillEffect);
             skillEffect.Fire(stat);
+        }
+        
+        private void CoolTimeReduce(float delta)
+        {
+            // Skill을 업데이트 한 시점에는 항상 ownedSkillsList의 마지막 요소에 업데이트된 Skill이 들어가 있음
+            var newSkill = ownedSkillsList.Last();
+
+            if (newSkill is not PlayerActiveSkill activeSkill)
+                return;
+
+            activeSkill.SkillCoolTime -= delta;
         }
 
         #endregion

@@ -14,6 +14,7 @@ namespace CoffeeCat
         public string SkillName = string.Empty;
         public int Grade = default;
         public SkillType SkillType = default;
+        public string Description = string.Empty;
     }
     
     public enum SkillType
