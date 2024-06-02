@@ -52,12 +52,12 @@ namespace CoffeeCat {
             base.SetBaseComponents();
 
             // Get SkillData in DataManager's Dictionary
-            if (skillData == null) {
-                if (DataManager.Instance.MonsterSkills.DataDictionary.TryGetValue(skillKey.ToString(), out MonsterSkillStat result) == false) {
-                    CatLog.ELog($"Not Found Monster Skill Data. Name: {skillKey.ToString()}");
-                }
-                this.skillData = result;
+            if (skillData != null) 
+                return;
+            if (DataManager.Instance.MonsterSkills.DataDictionary.TryGetValue(skillKey.ToString(), out MonsterSkillStat result) == false) {
+                CatLog.ELog($"Not Found Monster Skill Data. Name: {skillKey.ToString()}");
             }
+            skillData = result;
         }
 
         public override void Initialize(MonsterStat monsterStatData) {
@@ -86,15 +86,15 @@ namespace CoffeeCat {
 
         #region DAMAGED
 
-        protected override void DamageToPlayer(PlayerStat player, Vector2 collisionPoint, Vector2 collisionDirection) {
+        protected override void DamageToPlayer(Player player, Vector2 collisionPoint, Vector2 collisionDirection) {
             if (statData == null || skillData == null) {
                 CatLog.ELog("Monster Projectiles Stat or Skill Data is Null.");
                 return;
             }
 
-            /*var attackData = DamageData.GetDamageData(statData, skillData, player.Stats);
-            player.OnDamaged(attackData, collisionPoint, collisionDirection);*/
-            ObjectPoolManager.Instance.Despawn(this.gameObject);
+            var attackData = DamageData.GetData(statData, player.Stat);
+            player.OnDamaged(attackData);
+            ObjectPoolManager.Instance.Despawn(gameObject);
         }
 
         #endregion

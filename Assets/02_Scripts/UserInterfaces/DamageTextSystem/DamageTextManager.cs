@@ -20,8 +20,8 @@ namespace CoffeeCat {
         [SerializeField, ReadOnly] private int poolInitializingCount = 30;
         [SerializeField, ReadOnly] string spawnKey = string.Empty;
         private const string textFormat = "#,###";
-        private Color monsterDamagedColor = Color.HSVToRGB(44, 100, 100);
-        private Color playerDamagedColor = Color.HSVToRGB(360, 100, 100);
+        private readonly Color monsterDamagedColor = new(1f, 0.7f, 0f, 1f);
+        private readonly Color playerDamagedColor = new(1f, 0f, 0f, 1f);
         
         protected override void Initialize() {
             base.Initialize();

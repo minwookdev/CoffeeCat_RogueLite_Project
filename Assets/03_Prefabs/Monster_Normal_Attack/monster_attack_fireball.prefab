@@ -4954,7 +4954,7 @@ MonoBehaviour:
   isAutoActive: 1
   activeType: 1
   maxLifeTime: 1
-  forceValue: 8
+  forceValue: 6
 --- !u!114 &7615089225864085170
 MonoBehaviour:
   m_ObjectHideFlags: 0

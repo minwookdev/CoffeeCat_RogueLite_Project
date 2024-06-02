@@ -34,6 +34,7 @@ namespace CoffeeCat
         private bool isDead = false;
 
         public Transform Tr => tr;
+        public PlayerStat Stat => stat;
 
         private void Start()
         {
@@ -160,7 +161,7 @@ namespace CoffeeCat
                 }).AddTo(this);
         }
 
-        private void OnDamaged(DamageData damageData)
+        public void OnDamaged(DamageData damageData)
         {
             if (isInvincible)
                 return;
