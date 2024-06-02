@@ -108,5 +108,17 @@ namespace RandomDungeonWithBluePrint
         {
             return Vector2.Distance(a.Rect.center, b.Rect.center);
         }
+
+        public void Dispose() {
+            for (int i = 0; i < Sections.Count; i++) {
+                Sections[i].Dispose();
+            }
+            Sections.Clear();
+            Connections.Clear();
+            Branches.Clear();
+            Gates.Clear();
+            RoomDictionary.Clear();
+            doorPoint.Clear();
+        }
     }
 }

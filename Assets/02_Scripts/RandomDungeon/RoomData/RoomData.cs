@@ -13,14 +13,14 @@ using UnityRandom = UnityEngine.Random;
 
 namespace CoffeeCat.RogueLite {
 	public class RoomData {
-		public RoomType RoomType { get; protected set; } = RoomType.EmptyRoom; // 룸 타입 
-		public int Rarity { get; protected set; } = 0;                         // 룸의 레어도
-		public bool IsCleared { get; protected set; } = false;                 // 해당 룸의 클리어 여부
-		public bool IsLocked { get; protected set; } = false;                  // 현재 룸이 잠금 상태
-		public bool IsPlayerInside { get; protected set; } = false;			   // 플레이어가 방 안에 있는지
-		public bool IsPlayerFirstEntered { get; protected set; }  = false;	   // 플레이어의 처음 방문 여부
-		protected Action<bool> OnRoomLocked { get; private set; } = null;	   // 방 잠금 상태 변경 시 실행할 액션
-		protected InteractableObject interactableObject = null;				   // 상호작용 오브젝트
+		public RoomType RoomType { get; protected set; }                   // 룸 타입 
+		public int Rarity { get; protected set; } = 0;                     // 룸의 레어도
+		public bool IsCleared { get; protected set; } = false;             // 해당 룸의 클리어 여부
+		public bool IsLocked { get; protected set; } = false;              // 현재 룸이 잠금 상태
+		public bool IsPlayerInside { get; protected set; } = false;        // 플레이어가 방 안에 있는지
+		public bool IsPlayerFirstEntered { get; protected set; }  = false; // 플레이어의 처음 방문 여부
+		protected Action<bool> OnRoomLocked { get; private set; } = null;  // 방 잠금 상태 변경 시 실행할 액션
+		protected InteractableObject interactableObject = null;            // 상호작용 오브젝트
 		protected Vector3 interactiveObjectSpawnPos = Vector3.zero;
 		
 		public RoomData(RoomType roomType, int rarity = 0, Room room = null) {
@@ -75,6 +75,15 @@ namespace CoffeeCat.RogueLite {
 				return;
 			}
 			interactableObject = ObjectPoolManager.Instance.Spawn<InteractableObject>(type.ToKey(), interactiveObjectSpawnPos);
+		}
+
+		public virtual void Dispose() {
+			OnRoomLocked = null;
+			if (!interactableObject) 
+				return;
+			if (ObjectPoolManager.IsExist) {
+				ObjectPoolManager.Instance.Despawn(interactableObject.gameObject);	
+			}
 		}
 	}
 
@@ -294,6 +303,14 @@ namespace CoffeeCat.RogueLite {
 		private Vector2 GetRandomPos() {
 			int index = UnityRandom.Range(0, SpawnPositions.Length);
 			return SpawnPositions[index];
+		}
+
+		public override void Dispose() {
+			base.Dispose();
+			if (ObjectPoolManager.IsExist) {
+				ObjectPoolManager.Instance?.DespawnAll(groupSpawnPositionsKey);
+			}
+			IsCleared = true;
 		}
 	}
 

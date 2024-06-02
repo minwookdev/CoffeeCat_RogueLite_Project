@@ -92,6 +92,11 @@ namespace CoffeeCat
                 room.SetGateObjects(spawnedGateList.ToArray());
             }
         }
+        
+        /// <summary>
+        /// Despawn All Gates
+        /// </summary>
+        public void DespawnGates() => ObjectPoolManager.Instance.DespawnAll("dungeon_door");
 
         public void SetPlayer(Field field) {
             // Not Founded Entry Room
@@ -112,11 +117,6 @@ namespace CoffeeCat
         public void DisablePlayer() {
             RogueLiteManager.Instance.DisablePlayer();
         }
-
-        /// <summary>
-        /// Despawn All Gates
-        /// </summary>
-        public void DespawnGates() => ObjectPoolManager.Instance.DespawnAll("dungeon_door");
 
         public void SetPlayersRoom(Room enteredRoom) {
             // 현재 플레이어의 방을 정의하는 변수가 덮혀씌워지는 것을 체크
@@ -165,8 +165,11 @@ namespace CoffeeCat
         }
 
         public void RequestGenerateNextFloor() {
-            CurrentFloor++;
-            mapGen.GenerateNextFloor(CurrentFloor);
+            var nextFloor = CurrentFloor + 1;
+            mapGen.GenerateNextFloor(nextFloor);
+            
+            // Increase Current Floor After Generatr Next Map Successed 
+            CurrentFloor = nextFloor;
         }
         
         #region Events

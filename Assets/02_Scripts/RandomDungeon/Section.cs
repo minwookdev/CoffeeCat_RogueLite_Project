@@ -21,9 +21,7 @@ namespace RandomDungeonWithBluePrint
         public int Height => Rect.height;
         public bool ExistRoom => Room != null;
 
-        public Section()
-        {
-        }
+        public Section() { }
 
         public Section(FieldBluePrint.Section bluePrint)
         {
@@ -62,6 +60,12 @@ namespace RandomDungeonWithBluePrint
         public bool ExistUnconnectedJoints(int direction)
         {
             return !ExistRoom || GetUnConnectedJoints(direction).Any();
+        }
+
+        public void Dispose() {
+            Room?.Dispose();
+            Room = null;
+            Relay = null;
         }
     }
 }

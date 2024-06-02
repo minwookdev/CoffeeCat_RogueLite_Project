@@ -126,14 +126,14 @@ namespace CoffeeCat {
         }
 
         protected virtual void OnTriggerEnterWithPlayer(Collider2D playerCollider) {
-            if (playerCollider.TryGetComponent(out PlayerStat player) == false) {
+            if (playerCollider.TryGetComponent(out Player player) == false) {
                 return;
             }
 
             // Get Attack Angle
-            /*Vector2 collisionPoint = playerCollider.ClosestPoint(tr.position);
+            Vector2 collisionPoint = playerCollider.ClosestPoint(tr.position);
             Vector2 collisionDirection = Math2DHelper.GetNormalizedDirection(collisionPoint, player.transform.position);
-            DamageToPlayer(player, collisionPoint, collisionDirection);*/
+            DamageToPlayer(player, collisionPoint, collisionDirection);
         }
 
         protected virtual void OnCollisionEnterWithTargetLayer(Collision2D collision) {
@@ -146,14 +146,14 @@ namespace CoffeeCat {
 
         #region DAMAGING
 
-        protected virtual void DamageToPlayer(PlayerStat player, Vector2 collisionPoint, Vector2 collisionDirection) {
-            if (this.statData == null) {
+        protected virtual void DamageToPlayer(Player player, Vector2 collisionPoint, Vector2 collisionDirection) {
+            if (statData == null) {
                 CatLog.ELog("Monster Stat Data is Null.");
                 return;
             }
 
-            /*var attackData = DamageData.GetDamageData(statData, player.Stats);*/
-            /*player.OnDamaged(attackData, collisionPoint, collisionDirection);*/
+            var attackData = DamageData.GetData(statData, player.Stat);
+            player.OnDamaged(attackData);
             ObjectPoolManager.Instance.Despawn(this.gameObject);
         }
 

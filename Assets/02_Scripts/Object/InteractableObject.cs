@@ -1,3 +1,4 @@
+using System;
 using CoffeeCat.FrameWork;
 using UnityEngine;
 using CoffeeCat.Utils;
@@ -13,7 +14,7 @@ namespace CoffeeCat {
         [SerializeField, ReadOnly] private Transform interactableSignTr = null;
         [ShowInInspector, ReadOnly] public bool IsEnteredPlayer { get; private set; } = false;
         private Transform playerTr = null;
-        private Vector3 interactableSignOffset = new Vector3(0, 1.5f, 0);
+        private readonly Vector3 interactableSignOffset = new(0, 1.25f, 0);
 
         protected void Start()
         {
@@ -54,6 +55,15 @@ namespace CoffeeCat {
                     DisposeInteractableSign();
                 })
                 .AddTo(this);
+        }
+
+        private void OnDisable() {
+            IsEnteredPlayer = false;
+            if (interactableSignTr) {
+                if (ObjectPoolManager.IsExist) {
+                    ObjectPoolManager.Instance.Despawn(interactableSignTr.gameObject);
+                }
+            }
         }
 
         public virtual void PlayParticle() {
@@ -99,7 +109,7 @@ namespace CoffeeCat {
             interactableSignTr.position = signPosition;
         }
 
-        private void DisposeInteractableSign() {
+        protected void DisposeInteractableSign() {
             if (!interactableSignTr) {
                 return;
             }

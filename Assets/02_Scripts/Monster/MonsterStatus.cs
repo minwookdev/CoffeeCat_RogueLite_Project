@@ -77,12 +77,12 @@ namespace CoffeeCat {
                 return;
             int floatingCount = Mathf.RoundToInt(finalCalculatedDamageCount);
             if (knockBackDirection != Vector2.zero) {
-                DamageTextManager.Instance.OnReflectingText(floatingCount, collisionPoint, knockBackDirection);   
+                DamageTextManager.Instance.OnReflectingText(floatingCount, collisionPoint, knockBackDirection, false);   
             }
             else {
                 Vector2 textStartPos = collisionPoint == default ? transform.position : collisionPoint;
                 textStartPos.y += 1.25f;
-                DamageTextManager.Instance.OnFloatingText(floatingCount, textStartPos);
+                DamageTextManager.Instance.OnFloatingText(floatingCount, textStartPos, false);
             }
         }
 

@@ -7,6 +7,7 @@ using CoffeeCat;
 using CoffeeCat.Utils;
 using CoffeeCat.RogueLite;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 namespace RandomDungeonWithBluePrint {
     public class Joint {
@@ -33,7 +34,7 @@ namespace RandomDungeonWithBluePrint {
 
         // RogueLite Room Data
         public RoomData RoomData { get; private set; } = null;
-        public RoomType RoomType => RoomData == null ? RoomType.EmptyRoom : RoomData.RoomType;
+        public RoomType RoomType => RoomData?.RoomType ?? RoomType.EmptyRoom;
 
         public Room(RectInt rect) {
             Rect = rect;
@@ -222,6 +223,18 @@ namespace RandomDungeonWithBluePrint {
         
         public bool IsInsideRoom(Vector2 position) {
             return FloorRectInt.IsInSide(position);
+        }
+
+        public void Dispose() {
+            // GateObject is Despawn in StageManager
+            GateObjects = null; 
+            
+            Positions.Clear();
+            Edge.Clear();
+            EdgeWithCenter.Clear();
+            Joints.Clear();
+            RoomData.Dispose();
+            RoomData = null;
         }
     }
 }

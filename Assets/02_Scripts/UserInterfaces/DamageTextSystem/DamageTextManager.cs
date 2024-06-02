@@ -19,8 +19,10 @@ namespace CoffeeCat {
         [SerializeField, ReadOnly] GameObject damageTextOriginGameObject = null;
         [SerializeField, ReadOnly] private int poolInitializingCount = 30;
         [SerializeField, ReadOnly] string spawnKey = string.Empty;
-        string textFormat = "#,###";
-
+        private const string textFormat = "#,###";
+        private readonly Color monsterDamagedColor = new(1f, 0.7f, 0f, 1f);
+        private readonly Color playerDamagedColor = new(1f, 0f, 0f, 1f);
+        
         protected override void Initialize() {
             base.Initialize();
             SceneManager.Instance.OnSceneChangeBeforeEvent += Clear;
@@ -76,33 +78,36 @@ namespace CoffeeCat {
 
         #region FUNCTIONS
 
-        public void OnFloatingText(float damageCount, Vector2 startPosition) {
-            OnFloatingText(damageCount.ToString(textFormat), startPosition);
+        public void OnFloatingText(float damageCount, Vector2 startPosition, bool isDamagedPlayer) {
+            OnFloatingText(damageCount.ToString(textFormat), startPosition, isDamagedPlayer);
         }
 
-        public void OnFloatingText(string damageCountStr, Vector2 startPosition) {
+        public void OnFloatingText(string damageCountStr, Vector2 startPosition, bool isDamagedPlayer) {
+            var targetColor = isDamagedPlayer ? playerDamagedColor : monsterDamagedColor;
             var spawnedDamageText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity, textsParentRectTr);
-            spawnedDamageText.OnFloating(startPosition, damageCountStr);
+            spawnedDamageText.OnFloating(startPosition, damageCountStr, targetColor);
             /*Vector2 playPosition = UIHelper.WorldPositionToCanvasAnchoredPosition(mainCamera, startPosition, targetCanvas.GetComponent<RectTransform>());*/
         }
 
-        public void OnReflectingText(float damageCount, Vector2 startPosition, Vector2 direction) {
-            OnReflectingText(damageCount.ToString(textFormat), startPosition, direction);
+        public void OnReflectingText(float damageCount, Vector2 startPosition, Vector2 direction, bool isDamagedPlayer) {
+            OnReflectingText(damageCount.ToString(textFormat), startPosition, direction, isDamagedPlayer);
         }
 
-        public void OnReflectingText(string damageCountStr, Vector2 startPosition, Vector2 direction) {
+        public void OnReflectingText(string damageCountStr, Vector2 startPosition, Vector2 direction, bool isDamagedPlayer) {
+            var targetColor = isDamagedPlayer ? playerDamagedColor : monsterDamagedColor;
             var spawnedDamageText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
             //Vector2 playPosition = UIHelper.WorldPositionToCanvasAnchoredPosition(mainCamera, startPosition, targetCanvas.GetComponent<RectTransform>());
-            spawnedDamageText.OnReflecting(startPosition, direction, damageCountStr);
+            spawnedDamageText.OnReflecting(startPosition, direction, damageCountStr, targetColor);
         }
 
-        public void OnTransmittanceText(float damageCount, Vector2 startPosition, Vector2 direction) {
-            this.OnTransmittanceText(damageCount.ToString(textFormat), startPosition, direction);
+        public void OnTransmittanceText(float damageCount, Vector2 startPosition, Vector2 direction, bool isDamagedPlayer) {
+            this.OnTransmittanceText(damageCount.ToString(textFormat), startPosition, direction, isDamagedPlayer);
         }
 
-        public void OnTransmittanceText(string damageCountStr, Vector2 startPosition, Vector2 direction) {
+        public void OnTransmittanceText(string damageCountStr, Vector2 startPosition, Vector2 direction, bool isDamagedPlayer) {
+            var targetColor = isDamagedPlayer ? playerDamagedColor : monsterDamagedColor;
             var spawnText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
-            spawnText.OnTransmittance(startPosition, direction, damageCountStr);
+            spawnText.OnTransmittance(startPosition, direction, damageCountStr, targetColor);
         }
 
         #endregion
