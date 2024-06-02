@@ -131,9 +131,9 @@ namespace CoffeeCat {
             }
 
             // Get Attack Angle
-            /*Vector2 collisionPoint = playerCollider.ClosestPoint(tr.position);
-            Vector2 collisionDirection = Math2DHelper.GetNormalizedDirection(collisionPoint, player.transform.position);
-            DamageToPlayer(player, collisionPoint, collisionDirection);*/
+            // Vector2 collisionPoint = playerCollider.ClosestPoint(tr.position);
+            // Vector2 collisionDirection = Math2DHelper.GetNormalizedDirection(collisionPoint, player.transform.position);
+            // DamageToPlayer(player, collisionPoint, collisionDirection);
         }
 
         protected virtual void OnCollisionEnterWithTargetLayer(Collision2D collision) {

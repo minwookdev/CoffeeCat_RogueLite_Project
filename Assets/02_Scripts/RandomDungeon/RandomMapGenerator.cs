@@ -30,7 +30,6 @@ namespace RandomDungeonWithBluePrint
         [SerializeField] private FieldBluePrint TestBluePrint = null; // 확정 생성 BluePrint
         [SerializeField] private BluePrintWithWeight[] bluePrints = null;
         public Field field { get; private set; }
-        public bool IsGenerateCompleted { get; set; } = false;
         public BluePrintQueue BluePrintQueue => bluePrintQueue;
 
         [Title("Bake PathFind Grid (Not Using)")]
@@ -42,14 +41,14 @@ namespace RandomDungeonWithBluePrint
         public bool IsDisplaySectionRectDrawer = false;
         public bool IsDisplaySectionIndex = false;
         public bool IsDisplayRoomRectDrawer = false;
-        private bool initialziedDebugging = false;
+        private bool initializedDebugObservable = false;
         public Color RoomDrawerColor = Color.green;
         public Color SectionDrawerColor = Color.white;
 
-        private void Awake() {
+        /*private void Awake() {
             // Init Random Seed
             UnityRandom.InitState(seed);
-        }
+        }*/
 
         public void GenerateNextFloor(int currentFloor) {
             var normalMapBluePrints = bluePrintQueue.NormalMapBluePrints;
@@ -63,7 +62,7 @@ namespace RandomDungeonWithBluePrint
         }
         
         private void ExecuteGenerate(FieldBluePrint bluePrint) {
-            if(TestBluePrint != null) {
+            if (TestBluePrint != null) {
                 bluePrint = TestBluePrint;
                 CatLog.WLog("Override Test BluePrint: [GENERATE TEST MODE MAP");
             }
@@ -95,10 +94,9 @@ namespace RandomDungeonWithBluePrint
         }
 
         private void Create(FieldBluePrint bluePrint) {
-            IsGenerateCompleted = false;
+            field?.Dispose();
             field = FieldBuilder.Build(bluePrint);
             fieldView.DrawDungeon(field);
-            IsGenerateCompleted = true;
         }
 
         private BluePrintWithWeight Raffle()
@@ -124,9 +122,6 @@ namespace RandomDungeonWithBluePrint
         
         private void InitDebugs() {
 #if UNITY_EDITOR
-            if (initialziedDebugging)
-                return;
-            
             if (IsDisplayRoomType) {
                 DisplayRoomType();
             }
@@ -134,6 +129,9 @@ namespace RandomDungeonWithBluePrint
             if (IsDisplaySectionIndex) {
                 DisplaySectionIndex();
             }
+            
+            if (initializedDebugObservable)
+                return;
             
             // Init Observable Room Type
             this.ObserveEveryValueChanged(_ => IsDisplayRoomType)
@@ -162,7 +160,8 @@ namespace RandomDungeonWithBluePrint
                     }
                 })
                 .AddTo(this);
-            initialziedDebugging = true;
+            
+            initializedDebugObservable = true;
 #endif
         }
         
