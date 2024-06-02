@@ -15,15 +15,17 @@ namespace CoffeeCat
     public partial class Player : MonoBehaviour
     {
         // TODO : 영구강화 된 스탯 / 던전 일시 강화 스탯
-        
+
         [Title("Stat")]
         [ShowInInspector, ReadOnly] protected PlayerStat stat;
+
         [ShowInInspector, ReadOnly] private PlayerActiveSkill normalAttackData = null;
         [SerializeField] protected PlayerAddressablesKey playerName = PlayerAddressablesKey.NONE;
         [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
 
         [Title("Transform")]
         [SerializeField] protected Transform tr = null;
+
         [SerializeField] protected Transform projectilePoint = null;
 
         private Rigidbody2D rigid = null;
@@ -32,6 +34,10 @@ namespace CoffeeCat
         private bool isPlayerDamaged = false;
         private bool isInvincible = false;
         private bool isDead = false;
+
+        // 임시
+        private int maxExp = 50;
+        private int currentExp = 0;
 
         public Transform Tr => tr;
         public PlayerStat Stat => stat;
@@ -57,6 +63,7 @@ namespace CoffeeCat
             if (Input.GetKeyDown(KeyCode.O))
             {
                 // EnableSkillSelect();
+                UpdateStat();
             }
         }
 
@@ -65,6 +72,10 @@ namespace CoffeeCat
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(),
                                                                                     true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+            
+            // LevelUp Effect : 임시
+            obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("LevelUp", true);
+            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj, initSpawnCount: 1));
         }
 
         private void SetStat()
@@ -72,8 +83,6 @@ namespace CoffeeCat
             stat = DataManager.Instance.PlayerStats.DataDictionary[playerName.ToStringEx()];
             stat.Initialize();
         }
-
-        
 
         private void Movement()
         {
@@ -107,7 +116,7 @@ namespace CoffeeCat
         private void NormalAttack()
         {
             float currentCoolTime = normalAttackData.SkillCoolTime;
-            
+
             Observable.EveryUpdate()
                       .Where(_ => isPlayerInBattle && !isDead)
                       .Select(_ => currentCoolTime += Time.deltaTime)
@@ -119,28 +128,34 @@ namespace CoffeeCat
                           if (targetMonster == null) return;
 
                           var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
-                          var targetDirection = (targetMonsterStatus.GetCenterPosition() - projectilePoint.position).normalized;
+                          var targetDirection = (targetMonsterStatus.GetCenterPosition() - projectilePoint.position)
+                              .normalized;
                           SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
 
-                          var spawnObj = ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(), projectilePoint.position);
+                          var spawnObj =
+                              ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
+                                                               projectilePoint.position);
                           var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
-                          projectile.Fire(stat, normalAttackData.ProjectileSpeed, projectilePoint.position, targetDirection);
-                          
+                          projectile.Fire(stat, normalAttackData.ProjectileSpeed, projectilePoint.position,
+                                          targetDirection);
+
                           currentCoolTime = 0;
                           hasFiredProjectile = true;
                       }).AddTo(this);
-    
+
             Transform FindNearestMonster()
             {
                 var monsters =
-                    Physics2D.OverlapCircleAll(Tr.position, normalAttackData.SkillRange, 1 << LayerMask.NameToLayer("Monster"));
+                    Physics2D.OverlapCircleAll(Tr.position, normalAttackData.SkillRange,
+                                               1 << LayerMask.NameToLayer("Monster"));
 
                 if (monsters.Length <= 0)
                     return null;
 
                 var target = monsters
                              .Select(monster => monster.transform)
-                             .Where(monster => monster.GetComponent<MonsterState>().State != MonsterState.EnumMonsterState.Death)
+                             .Where(monster => monster.GetComponent<MonsterState>().State !=
+                                               MonsterState.EnumMonsterState.Death)
                              .OrderBy(monster => Vector2.Distance
                                           (projectilePoint.position, monster.position))
                              .FirstOrDefault();
@@ -148,7 +163,7 @@ namespace CoffeeCat
                 return target;
             }
         }
-        
+
         private void CheckInvincibleTime()
         {
             this.ObserveEveryValueChanged(_ => isPlayerDamaged)
@@ -210,33 +225,30 @@ namespace CoffeeCat
             {
                 case RoomType.MonsterSpawnRoom:
                     isPlayerInBattle = false;
+                    GetExp();
                     break;
                 case RoomType.BossRoom:
                     break;
             }
         }
 
-        #region Public Methods
-        
-        public void UpdateStat()
+        private void GetExp()
         {
-            var enhanceData = DataManager.Instance.PlayerEnhanceData;
-            stat.StatEnhancement(enhanceData);
-        }
-        
-        public void OnDamaged(DamageData damageData)
-        {
-            var calculatedDamage = damageData.CalculatedDamage;
-            stat.CurrentHp -= calculatedDamage;
-            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, false);
-            isPlayerDamaged = true;
+            var exp = StageManager.Instance.CurrentRoomMonsterKilledCount * 5;
+            currentExp += exp;
 
-            if (stat.CurrentHp <= 0)
+            if (currentExp >= maxExp)
             {
-                stat.CurrentHp = 0;
-                OnDead();
+                maxExp += 50;
+
+                var levelUpEffect = ObjectPoolManager.Instance.Spawn("LevelUp", tr);
+                levelUpEffect.transform.localPosition = Vector3.zero;
+                Observable.Timer(TimeSpan.FromSeconds(2.5f))
+                          .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
             }
         }
+
+        #region Public Methods
 
         public bool IsWalking()
         {
@@ -266,6 +278,34 @@ namespace CoffeeCat
         public bool IsDead()
         {
             return isDead;
+        }
+
+        public void UpdateStat()
+        {
+            // UI 에서 해줄 것
+            /// 사용자의 입력을 받아서 enhanceData 객체 생성
+            /// var enhance = new PlayerEnhanceData();
+            /// enhance.MaxHp = 100;
+            /// 만들어진 객체를 enhanceData.SaveEnhanceData()로 저장
+            /// enhance.SaveEnhanceData();
+            /// 사용자가 (스탯 포인트 등을 가지고) 강화를 확정하면 UpdateStat() 호출
+
+            var enhanceData = PlayerEnhanceData.GetEnhanceData();
+            stat.StatEnhancement(enhanceData);
+        }
+
+        public void OnDamaged(DamageData damageData)
+        {
+            var calculatedDamage = damageData.CalculatedDamage;
+            stat.CurrentHp -= calculatedDamage;
+            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, false);
+            isPlayerDamaged = true;
+
+            if (stat.CurrentHp <= 0)
+            {
+                stat.CurrentHp = 0;
+                OnDead();
+            }
         }
 
         public void UpgradeNormalAttack()
