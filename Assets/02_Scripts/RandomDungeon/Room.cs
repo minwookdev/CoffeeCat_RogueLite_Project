@@ -226,14 +226,7 @@ namespace RandomDungeonWithBluePrint {
         }
 
         public void Dispose() {
-            // GateObject is Despawn in StageManager
-            GateObjects = null; 
-            
-            Positions.Clear();
-            Edge.Clear();
-            EdgeWithCenter.Clear();
-            Joints.Clear();
-            RoomData.Dispose();
+            RoomData?.Dispose();
             RoomData = null;
         }
     }

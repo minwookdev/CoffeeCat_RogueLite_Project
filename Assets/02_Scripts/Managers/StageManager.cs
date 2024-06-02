@@ -79,8 +79,6 @@ namespace CoffeeCat
             foreach (var group in grouppedGates)
             {
                 var room = group.Key;
-                if (room.RoomData == null)
-                    continue;
                 spawnedGateList.Clear();
                 
                 foreach (var gate in group)

@@ -27,17 +27,16 @@ namespace CoffeeCat {
                 .Subscribe(playerCollider =>
                 {
                     if (IsEnteredPlayer) {
-                        OnPlayerStay();
-                        UpdateInteractableSign();
                         return;
                     }
-                    IsEnteredPlayer = true;
-                    lastCollider = playerCollider;
-                    OnPlayerEnter();
 
+                    lastCollider = playerCollider;
                     if (isShowInteractableSign) {
                         SpawnInteractableSign(playerCollider.gameObject);
                     }
+                    OnPlayerEnter();
+                    
+                    IsEnteredPlayer = true;
                 })
                 .AddTo(this);
 
@@ -55,6 +54,13 @@ namespace CoffeeCat {
                     DisposeInteractableSign();
                 })
                 .AddTo(this);
+        }
+
+        private void Update() {
+            if (!IsEnteredPlayer) 
+                return;
+            UpdateInteractableSign();
+            OnPlayerStay();
         }
 
         private void OnDisable() {

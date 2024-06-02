@@ -19,7 +19,7 @@ namespace CoffeeCat {
         [SerializeField, ReadOnly] GameObject damageTextOriginGameObject = null;
         [SerializeField, ReadOnly] private int poolInitializingCount = 30;
         [SerializeField, ReadOnly] string spawnKey = string.Empty;
-        private const string textFormat = "#,###";
+        private const string textFormat = "#,##0";
         private readonly Color monsterDamagedColor = new(1f, 0.7f, 0f, 1f);
         private readonly Color playerDamagedColor = new(1f, 0f, 0f, 1f);
         

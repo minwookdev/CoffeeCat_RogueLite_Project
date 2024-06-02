@@ -114,11 +114,6 @@ namespace RandomDungeonWithBluePrint
                 Sections[i].Dispose();
             }
             Sections.Clear();
-            Connections.Clear();
-            Branches.Clear();
-            Gates.Clear();
-            RoomDictionary.Clear();
-            doorPoint.Clear();
         }
     }
 }

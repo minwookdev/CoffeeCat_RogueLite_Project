@@ -64,8 +64,7 @@ namespace RandomDungeonWithBluePrint
 
         public void Dispose() {
             Room?.Dispose();
-            Room = null;
-            Relay = null;
+            Room = null;    
         }
     }
 }
