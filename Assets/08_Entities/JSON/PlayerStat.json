@@ -3,7 +3,7 @@
     "Index": "1",
     "Name": "FlowerMagician",
     "MaxHp": "100",
-    "Defense": "5",
+    "Defense": "1",
     "MoveSpeed": "5",
     "InvincibleTime": "0.5",
     "AttackPower": "10",

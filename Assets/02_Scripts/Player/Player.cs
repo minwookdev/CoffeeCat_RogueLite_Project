@@ -41,7 +41,7 @@ namespace CoffeeCat
             rigid = GetComponent<Rigidbody2D>();
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
             LoadResources();
-            SetStatus();
+            SetStat();
             NormalAttack();
             CheckInvincibleTime();
 
@@ -67,11 +67,13 @@ namespace CoffeeCat
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
-        private void SetStatus()
+        private void SetStat()
         {
             stat = DataManager.Instance.PlayerStats.DataDictionary[playerName.ToStringEx()];
             stat.Initialize();
         }
+
+        
 
         private void Movement()
         {
@@ -161,24 +163,6 @@ namespace CoffeeCat
                 }).AddTo(this);
         }
 
-        public void OnDamaged(DamageData damageData)
-        {
-            if (isInvincible)
-                return;
-
-            CatLog.Log("OnDamaged");
-            var calculatedDamage = damageData.CalculatedDamage;
-            stat.CurrentHp -= calculatedDamage;
-            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, true);
-            isPlayerDamaged = true;
-
-            if (stat.CurrentHp <= 0)
-            {
-                stat.CurrentHp = 0;
-                OnDead();
-            }
-        }
-
         private void OnDead()
         {
             isDead = true;
@@ -187,13 +171,13 @@ namespace CoffeeCat
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // TODO : 몬스터 대시 스킬 발동 시 충돌
+            if (isInvincible)
+                return;
 
             // Monster와 충돌
             if (other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
             {
                 var damageData = DamageData.GetData(monsterStat.CurrentStat, stat);
-                /*CatLog.Log($"Player_OnTriggerEnter2D_{monsterStat.name} : {damageData.CalculatedDamage.ToString()}");*/
                 OnDamaged(damageData);
             }
         }
@@ -233,6 +217,26 @@ namespace CoffeeCat
         }
 
         #region Public Methods
+        
+        public void UpdateStat()
+        {
+            var enhanceData = DataManager.Instance.PlayerEnhanceData;
+            stat.StatEnhancement(enhanceData);
+        }
+        
+        public void OnDamaged(DamageData damageData)
+        {
+            var calculatedDamage = damageData.CalculatedDamage;
+            stat.CurrentHp -= calculatedDamage;
+            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, false);
+            isPlayerDamaged = true;
+
+            if (stat.CurrentHp <= 0)
+            {
+                stat.CurrentHp = 0;
+                OnDead();
+            }
+        }
 
         public bool IsWalking()
         {
