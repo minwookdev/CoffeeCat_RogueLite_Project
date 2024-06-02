@@ -233,7 +233,7 @@ namespace RandomDungeonWithBluePrint {
             Edge.Clear();
             EdgeWithCenter.Clear();
             Joints.Clear();
-            RoomData.Dispose();
+            RoomData?.Dispose();
             RoomData = null;
         }
     }
