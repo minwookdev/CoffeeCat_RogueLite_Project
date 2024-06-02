@@ -1,6 +1,6 @@
-idx;Name;Desc;HP;MP;MinDamage;MaxDamage;CriticalChance;CriticalDamageMultiplier;Defence;CriticalResist;Penetration
+idx;Name;Desc;HP;MP;Damage;DamageDeviation;CriticalChance;CriticalMultiplier;Defence;CriticalResist;Penetration
 ;;;;;;;;;;;
 0;s;s;f;f;f;f;f;f;f;f;f
-1;Skeleton;empty;100;25;5;8;0;1.25;0;0;0
-2;Skeleton_Mage;empty;80;50;10;12;0;1.25;0;0;0
-3;Skeleton_Warrior;empty;150;10;16;18;0;1.25;2;0;0
+1;Skeleton;empty;100;25;5;0.05;0;1.25;0;0;0
+2;Skeleton_Mage;empty;80;50;8;0.05;0;1.25;0;0;0
+3;Skeleton_Warrior;empty;150;10;12;0.05;0;1.25;2;0;0

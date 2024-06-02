@@ -51,8 +51,6 @@ namespace CoffeeCat.Datas {
         public string Desc = string.Empty;
         public float HP = default;
         public float MP = default;
-        public float MinDamage = default;
-        public float MaxDamage = default;
         public float Damage = 0f;
         public float DamageDeviation = 0.05f;
         public float CriticalChance = default;
@@ -67,8 +65,8 @@ namespace CoffeeCat.Datas {
             newStat.Desc = this.Desc;
             newStat.HP = this.HP;
             newStat.MP = this.MP;
-            newStat.MinDamage = this.MinDamage;
-            newStat.MaxDamage = this.MaxDamage;
+            newStat.Damage = this.Damage;
+            newStat.DamageDeviation = this.DamageDeviation;
             newStat.CriticalChance = this.CriticalChance;
             newStat.CriticalMultiplier = this.CriticalMultiplier;
             newStat.Defence = this.Defence;
@@ -82,8 +80,8 @@ namespace CoffeeCat.Datas {
             this.Desc = originStat.Desc;
             this.HP = originStat.HP;
             this.MP = originStat.MP;
-            this.MinDamage = originStat.MinDamage;
-            this.MaxDamage = originStat.MaxDamage;
+            this.Damage = originStat.Damage;
+            this.DamageDeviation = originStat.DamageDeviation;
             this.CriticalChance = originStat.CriticalChance;
             this.CriticalMultiplier = originStat.CriticalMultiplier;
             this.Defence = originStat.Defence;
