@@ -84,7 +84,7 @@ namespace CoffeeCat {
 
         public void OnFloatingText(string damageCountStr, Vector2 startPosition, bool isDamagedPlayer) {
             var targetColor = isDamagedPlayer ? playerDamagedColor : monsterDamagedColor;
-            var spawnedDamageText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity, textsParentRectTr);
+            var spawnedDamageText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
             spawnedDamageText.OnFloating(startPosition, damageCountStr, targetColor);
             /*Vector2 playPosition = UIHelper.WorldPositionToCanvasAnchoredPosition(mainCamera, startPosition, targetCanvas.GetComponent<RectTransform>());*/
         }

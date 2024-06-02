@@ -166,9 +166,11 @@ namespace CoffeeCat
             if (isInvincible)
                 return;
 
+            CatLog.Log("OnDamaged");
+            var calculatedDamage = damageData.CalculatedDamage;
+            stat.CurrentHp -= calculatedDamage;
+            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, true);
             isPlayerDamaged = true;
-            stat.CurrentHp -= damageData.CalculatedDamage;
-            DamageTextManager.Instance.
 
             if (stat.CurrentHp <= 0)
             {
