@@ -34,7 +34,7 @@ namespace CoffeeCat
                 if (!monster.IsAlive) continue;
                 
                 DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
-                monster.OnDamaged(damageData, true, tr.position, knockBackForce);
+                monster.OnDamaged(damageData, true);
             }
         }
 
@@ -44,7 +44,7 @@ namespace CoffeeCat
             UpdatePosition(monster.transform);
             
             DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
-            monster.OnDamaged(damageData, true, tr.position, knockBackForce);
+            monster.OnDamaged(damageData, true);
         }
 
         public void DespawnProjectile()
