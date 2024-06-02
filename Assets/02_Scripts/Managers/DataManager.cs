@@ -65,13 +65,13 @@ public class PlayerSkillSelectData
     public int Type; // 0: Passive, 1: Active
     public bool IsOwned;
 
-    public PlayerSkillSelectData(string name, string desc, int index, bool isOwned)
+    public PlayerSkillSelectData(string name, string desc, int index, int type, bool isOwned)
     {
         Name = name;
         Desc = desc;
         Index = index;
+        Type = type;
         IsOwned = isOwned;
-        /*Type = type;*/
         /*Icon = icon;*/
     }
 }

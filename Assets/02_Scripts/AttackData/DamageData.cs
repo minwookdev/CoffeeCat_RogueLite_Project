@@ -66,7 +66,7 @@ namespace CoffeeCat.Datas {
         /// <param name="attacker"></param>
         /// <param name="defender"></param>
         /// <returns></returns>
-        public static DamageData GetData(PlayerStatus attacker, MonsterStat defender)
+        public static DamageData GetData(PlayerStat attacker, MonsterStat defender)
         {
             var data = new DamageData();
             data.SetIsCritical(attacker.CriticalChance, defender.CriticalResist); // 치명타 발생 계산

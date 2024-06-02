@@ -50,9 +50,17 @@ namespace CoffeeCat
         public void StatEnhancement(PlayerStatEnhanceData enhanceData)
         {
             MaxHp += enhanceData.MaxHp;
-            // Defence += enhanceData.Defence;
+            Defense += enhanceData.Defence;
             MoveSpeed += enhanceData.MoveSpeed;
             AttackPower += enhanceData.AttackPower;
         }
+    }
+
+    public class PlayerStatEnhanceData
+    {
+        public float MaxHp = default;
+        public float Defence = default;
+        public float MoveSpeed = default;
+        public float AttackPower = default;
     }
 }

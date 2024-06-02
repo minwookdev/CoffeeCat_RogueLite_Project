@@ -10,7 +10,8 @@ namespace CoffeeCat
     {
         protected Transform playerTr = null;
         protected PlayerSkill playerSkillData = null;
-
+        
+        protected PlayerSkillEffect() { }
         protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
         {
             this.playerTr = playerTr;
