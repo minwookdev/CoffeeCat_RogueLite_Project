@@ -126,7 +126,7 @@ namespace CoffeeCat {
         }
 
         protected virtual void OnTriggerEnterWithPlayer(Collider2D playerCollider) {
-            if (playerCollider.TryGetComponent(out PlayerStatus player) == false) {
+            if (playerCollider.TryGetComponent(out PlayerStat player) == false) {
                 return;
             }
 
@@ -146,7 +146,7 @@ namespace CoffeeCat {
 
         #region DAMAGING
 
-        protected virtual void DamageToPlayer(PlayerStatus player, Vector2 collisionPoint, Vector2 collisionDirection) {
+        protected virtual void DamageToPlayer(PlayerStat player, Vector2 collisionPoint, Vector2 collisionDirection) {
             if (this.statData == null) {
                 CatLog.ELog("Monster Stat Data is Null.");
                 return;

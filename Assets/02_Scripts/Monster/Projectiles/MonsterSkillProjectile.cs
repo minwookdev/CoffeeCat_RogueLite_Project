@@ -86,7 +86,7 @@ namespace CoffeeCat {
 
         #region DAMAGED
 
-        protected override void DamageToPlayer(PlayerStatus player, Vector2 collisionPoint, Vector2 collisionDirection) {
+        protected override void DamageToPlayer(PlayerStat player, Vector2 collisionPoint, Vector2 collisionDirection) {
             if (statData == null || skillData == null) {
                 CatLog.ELog("Monster Projectiles Stat or Skill Data is Null.");
                 return;

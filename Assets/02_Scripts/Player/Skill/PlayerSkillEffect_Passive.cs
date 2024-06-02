@@ -9,32 +9,34 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect_Passive : PlayerSkillEffect
     {
+        private const string passiveAddressableKey = "Passive";
+        
         protected override void SkillEffect(PlayerStat playerStat)
         {
-            if (playerSkillData is not PlayerPassiveSkill skilldata)
+            if (playerSkillData is not PlayerPassiveSkill skillData)
             {
                 CatLog.WLog("PlayerSkillEffect_Passive : skillData is null");
                 return;
             }
 
-            switch (skilldata.SkillName)
+            switch (skillData.SkillName)
             {
-                case "SpeedUp": SpeedUp(playerStat, skilldata);
+                case "SpeedUp": SpeedUp(playerStat, skillData);
                     break;
-                case "CoolTimeReduce": CoolTimeReduce(skilldata);
+                case "CoolTimeReduce": CoolTimeReduce(skillData);
                     break;
-                case "DamageIncrease": DamageIncrease(playerStat, skilldata);
+                case "DamageIncrease": DamageIncrease(playerStat, skillData);
                     break;
             }
             
-            var spawnObj = ObjectPoolManager.Instance.Spawn("Passive", playerTr);
+            var spawnObj = ObjectPoolManager.Instance.Spawn(passiveAddressableKey, playerTr);
             spawnObj.transform.localPosition = new Vector3(0f, 0.3f, 0f);
         }
 
         public override void UpdateSkillData(PlayerSkill updateSkillData)
         {
             playerSkillData = updateSkillData;
-            var spawnObj = ObjectPoolManager.Instance.Spawn("Passive", playerTr);
+            var spawnObj = ObjectPoolManager.Instance.Spawn(passiveAddressableKey, playerTr);
             spawnObj.transform.localPosition = new Vector3(0f, 0.3f, 0f);
         }
 
@@ -42,7 +44,11 @@ namespace CoffeeCat
         {
             this.playerTr = playerTr;
             this.playerSkillData = playerSkillData;
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("Passive", true);
+
+            if (ObjectPoolManager.Instance.IsExistInPoolDictionary(passiveAddressableKey))
+                return;
+            
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(passiveAddressableKey, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 

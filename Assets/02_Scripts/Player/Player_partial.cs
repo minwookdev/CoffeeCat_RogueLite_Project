@@ -24,9 +24,11 @@ namespace CoffeeCat
 
         private PlayerSkillSelectData[] SkillSelector(int SelectCount)
         {
-            // TODO : 새로 배울 수 있는 스킬의 수가 셀렉트 패널에 표시 할 수 있는 수보다 적을 경우
-            // TODO : 가지고 있던 스킬을 업그레이드 시켰을 경우 발사체 등에 skillData가 반영되었는지 확인하기
+            // TODO : Seed
+            // TODO : 노션에 전달 할 기획 메모 작성 : 스킬 Select는 배틀룸 밖에서만 해야함 (InBattleRoom 변수가 변화하는 순간 업데이트 된 스킬들이 반영됨)
             // TODO : 스킬 Description 시트에 추가
+
+            var skillSelectDataList = new List<PlayerSkillSelectData>();
 
             List<PlayerSkill> playerAllSkills = new List<PlayerSkill>();
             var activeSkills = DataManager.Instance.PlayerActiveSkills;
@@ -34,8 +36,7 @@ namespace CoffeeCat
 
             playerAllSkills.AddRange(activeSkills.DataDictionary.Values);
             playerAllSkills.AddRange(passiveSkills.DataDictionary.Values);
-
-            var skillSelectDataList = new List<PlayerSkillSelectData>();
+            playerAllSkills = playerAllSkills.Where(skill => skill.SkillName != "NormalAttack").ToList();
 
             // 보유중인 스킬 중 업그레이드 가능한 스킬이 있는지 확인
             var upgradeableSkills =
@@ -72,10 +73,14 @@ namespace CoffeeCat
 
             // 배우지 않은 스킬 중 레벨이 1인 스킬들을 가져옴
             var learnableSkills = playerAllSkills.Where(skill => skill.Grade == 1).ToList();
-            var randomIndex = Random.Range(0, learnableSkills.Count);
+
+            // 배울 수 있는 스킬이 충분하지 않을 경우
+            var isNotEnoughSkill = learnableSkills.Count < SelectCount;
+            if (isNotEnoughSkill) SelectCount = learnableSkills.Count;
 
             for (int i = 0; i < SelectCount; i++)
             {
+                var randomIndex = Random.Range(0, learnableSkills.Count);
                 var pickSkill = learnableSkills[randomIndex];
                 var pickSkillSelectData =
                     new PlayerSkillSelectData(pickSkill.SkillName, "새로운거임", pickSkill.Index, (int)pickSkill.SkillType,
@@ -83,6 +88,18 @@ namespace CoffeeCat
 
                 learnableSkills.RemoveAt(randomIndex);
                 skillSelectDataList.Add(pickSkillSelectData);
+            }
+
+            // 나머지 Select Panel을 채우기 위해 빈 데이터 추가
+            if (isNotEnoughSkill)
+            {
+                var overCount = Defines.PLAYER_SKILL_SELECT_COUNT - skillSelectDataList.Count;
+                for (int i = 0; i < overCount; i++)
+                {
+                    var emptyData = new PlayerSkillSelectData("", "배울 수 있는 스킬이 없어 !", -1, -1, false);
+                    skillSelectDataList.Add(emptyData);
+                    SelectCount--;
+                }
             }
 
             return skillSelectDataList.ToArray();
@@ -123,6 +140,11 @@ namespace CoffeeCat
             if (data == null)
             {
                 CatLog.ELog("Invalid Data !");
+                return;
+            }
+
+            if (data.Index == -1)
+            {
                 return;
             }
 
