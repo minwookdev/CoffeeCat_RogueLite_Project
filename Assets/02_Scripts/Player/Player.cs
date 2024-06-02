@@ -1,21 +1,23 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
-using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UniRx;
-using Unity.VisualScripting;
+using UniRx.Triggers;
 using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
 {
+    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
+    [SuppressMessage("ReSharper", "SeparateLocalFunctionsWithJumpStatement")]
+    [SuppressMessage("ReSharper", "Unity.PreferNonAllocApi")]
+    [SuppressMessage("ReSharper", "HeapView.ClosureAllocation")]
     public partial class Player : MonoBehaviour
     {
-        // TODO : 영구강화 된 스탯 / 던전 일시 강화 스탯
-
         [Title("Stat")]
         [ShowInInspector, ReadOnly] protected PlayerStat stat;
 
@@ -46,8 +48,11 @@ namespace CoffeeCat
         {
             rigid = GetComponent<Rigidbody2D>();
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
+
             LoadResources();
             SetStat();
+
+            Movement();
             NormalAttack();
             CheckInvincibleTime();
 
@@ -57,8 +62,6 @@ namespace CoffeeCat
 
         private void Update()
         {
-            Movement();
-
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
@@ -72,7 +75,7 @@ namespace CoffeeCat
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(),
                                                                                     true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
-            
+
             // LevelUp Effect : 임시
             obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("LevelUp", true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj, initSpawnCount: 1));
@@ -86,19 +89,20 @@ namespace CoffeeCat
 
         private void Movement()
         {
-            if (isDead)
-                return;
+            this.UpdateAsObservable()
+                .Skip(TimeSpan.Zero)
+                .Where(_ => !isDead)
+                .Subscribe(_ =>
+                {
+                    var hor = Input.GetAxisRaw("Horizontal");
+                    var ver = Input.GetAxisRaw("Vertical");
 
-            var hor = Input.GetAxisRaw("Horizontal");
-            var ver = Input.GetAxisRaw("Vertical");
+                    rigid.velocity = new Vector2(hor, ver) * stat.MoveSpeed;
 
-            rigid.velocity = new Vector2(hor, ver) * stat.MoveSpeed;
+                    if (isPlayerInBattle) return;
 
-            if (isPlayerInBattle)
-                return;
-
-            if (rigid.velocity != Vector2.zero)
-                SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
+                    SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
+                }).AddTo(this);
         }
 
         private void SwitchingPlayerDirection(bool isSwitching)
@@ -115,52 +119,50 @@ namespace CoffeeCat
 
         private void NormalAttack()
         {
-            float currentCoolTime = normalAttackData.SkillCoolTime;
+            var currentCoolTime = normalAttackData.SkillCoolTime;
 
-            Observable.EveryUpdate()
-                      .Where(_ => isPlayerInBattle && !isDead)
-                      .Select(_ => currentCoolTime += Time.deltaTime)
-                      .Where(_ => currentCoolTime >= normalAttackData.SkillCoolTime)
-                      .Subscribe(_ =>
-                      {
-                          var targetMonster = FindNearestMonster();
+            this.UpdateAsObservable()
+                .Skip(TimeSpan.Zero)
+                .Where(_ => isPlayerInBattle && !isDead)
+                .Select(_ => currentCoolTime += Time.deltaTime)
+                .Where(_ => currentCoolTime >= normalAttackData.SkillCoolTime)
+                .Subscribe(_ =>
+                {
+                    var targetMonster = FindNearestMonster();
 
-                          if (targetMonster == null) return;
+                    if (targetMonster == null) return;
 
-                          var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
-                          var targetDirection = (targetMonsterStatus.GetCenterPosition() - projectilePoint.position)
-                              .normalized;
-                          SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
+                    // Battle 중에는 Player의 방향을 기본공격의 타겟 방향으로 전환
+                    var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
+                    var targetDirection = targetMonsterStatus.GetCenterPosition() - projectilePoint.position;
+                    targetDirection = targetDirection.normalized;
+                    SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
 
-                          var spawnObj =
-                              ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(),
-                                                               projectilePoint.position);
-                          var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
-                          projectile.Fire(stat, normalAttackData.ProjectileSpeed, projectilePoint.position,
-                                          targetDirection);
+                    // 기본 공격 Projectile 스폰 및 발사
+                    var spawnObj = ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(), projectilePoint.position);
+                    var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
+                    projectile.Fire(stat, normalAttackData, projectilePoint.position, targetDirection);
 
-                          currentCoolTime = 0;
-                          hasFiredProjectile = true;
-                      }).AddTo(this);
+                    // 쿨타임 초기화 및 발사 여부
+                    currentCoolTime = 0;
+                    hasFiredProjectile = true;
+                }).AddTo(this);
 
             Transform FindNearestMonster()
             {
-                var monsters =
-                    Physics2D.OverlapCircleAll(Tr.position, normalAttackData.SkillRange,
-                                               1 << LayerMask.NameToLayer("Monster"));
+                Collider2D[] result = new Collider2D[Defines.SPAWN_MONSTER_MAX_COUNT];
+                var count = Physics2D.OverlapCircleNonAlloc
+                    (Tr.position, normalAttackData.SkillRange, result, 1 << LayerMask.NameToLayer("Monster"));
 
-                if (monsters.Length <= 0)
-                    return null;
+                if (count <= 0) return null;
 
-                var target = monsters
-                             .Select(monster => monster.transform)
-                             .Where(monster => monster.GetComponent<MonsterState>().State !=
-                                               MonsterState.EnumMonsterState.Death)
-                             .OrderBy(monster => Vector2.Distance
-                                          (projectilePoint.position, monster.position))
-                             .FirstOrDefault();
+                var target = result.Where(Collider2D => Collider2D != null)
+                                   .Select(Collider2D => Collider2D.GetComponent<MonsterStatus>())
+                                   .Where(monster => monster.IsAlive)
+                                   .OrderBy(monster => Vector2.Distance(projectilePoint.position,monster.GetCenterPosition()))
+                                   .FirstOrDefault();
 
-                return target;
+                return target == null ? null : target.transform;
             }
         }
 
@@ -169,7 +171,6 @@ namespace CoffeeCat
             this.ObserveEveryValueChanged(_ => isPlayerDamaged)
                 .Skip(TimeSpan.Zero)
                 .Where(_ => isPlayerDamaged)
-                .Select(_ => isInvincible)
                 .Subscribe(_ =>
                 {
                     isInvincible = true;
@@ -180,8 +181,8 @@ namespace CoffeeCat
 
         private void OnDead()
         {
-            isDead = true;
             rigid.velocity = Vector2.zero;
+            isDead = true;
         }
 
         private void OnTriggerEnter2D(Collider2D other)

@@ -25,29 +25,7 @@ namespace CoffeeCat
                       .Subscribe(_ => { tr.position = monsterTr.position; });
         }
 
-        public void AreaAttack(PlayerStat playerStat, List<MonsterStatus> monsters, float skillBaseDamage = 0f, float skillCoefficient = 1f)
-        {
-            SetDamageData(playerStat, skillBaseDamage, skillCoefficient);
-            
-            foreach (var monster in monsters)
-            {
-                if (!monster.IsAlive) continue;
-                
-                DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
-                monster.OnDamaged(damageData, true);
-            }
-        }
-
-        public void SingleTargetAttack(PlayerStat playerStat, MonsterStatus monster, float skillBaseDamage = 0f, float skillCoefficient = 1f)
-        {
-            SetDamageData(playerStat, skillBaseDamage, skillCoefficient);
-            UpdatePosition(monster.transform);
-            
-            DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
-            monster.OnDamaged(damageData, true);
-        }
-
-        public void DespawnProjectile()
+        private void DespawnProjectile()
         {
             var particleDuration = GetComponent<ParticleSystem>().main.duration;
 
@@ -62,5 +40,33 @@ namespace CoffeeCat
         {
             projectileDamageData = new ProjectileDamageData(playerStat, skillBaseDamage, skillCoefficient);
         }
+
+        #region public methods
+
+        public void AreaAttack(PlayerStat playerStat, List<MonsterStatus> monsters, float skillBaseDamage = 0f,
+                               float skillCoefficient = 1f)
+        {
+            SetDamageData(playerStat, skillBaseDamage, skillCoefficient);
+
+            foreach (var monster in monsters)
+            {
+                if (!monster.IsAlive) continue;
+
+                DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
+                monster.OnDamaged(damageData, true);
+            }
+        }
+
+        public void SingleTargetAttack(PlayerStat playerStat, MonsterStatus monster, float skillBaseDamage = 0f,
+                                       float skillCoefficient = 1f)
+        {
+            SetDamageData(playerStat, skillBaseDamage, skillCoefficient);
+            UpdatePosition(monster.transform);
+
+            DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
+            monster.OnDamaged(damageData, true);
+        }
+
+        #endregion
     }
 }

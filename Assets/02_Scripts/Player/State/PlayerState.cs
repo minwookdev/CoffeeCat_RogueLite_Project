@@ -1,12 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Spine.Unity;
 using UnityEditor;
 using UnityEngine;
 
 namespace CoffeeCat
 {
+    [SuppressMessage("ReSharper", "Unity.PerformanceCriticalCodeInvocation")]
+    [SuppressMessage("ReSharper", "SwitchStatementHandlesSomeKnownEnumValuesWithDefault")]
     public class PlayerState : MonoBehaviour
     {
         public enum EnumPlayerState
@@ -25,11 +28,11 @@ namespace CoffeeCat
         protected SkeletonAnimation anim = null;
         protected Player player = null;
 
-        protected readonly string animIdle = "Idle_2";
-        protected readonly string animWalk = "Walk_NoHand";
-        protected readonly string animAttack = "Attack_2";
-        protected readonly string animHit = "Hit";
-        protected readonly string animDead = "Die_2";
+        protected const string animIdle = "Idle_2";
+        protected const string animWalk = "Walk_NoHand";
+        protected const string animAttack = "Attack_2";
+        protected const string animHit = "Hit";
+        protected const string animDead = "Die_2";
 
         protected virtual void Start()
         {
@@ -91,8 +94,6 @@ namespace CoffeeCat
                 case EnumPlayerState.Dead:
                     Exit_DeadState();
                     break;
-                default:
-                    break;
             }
 
             State = targetState;
@@ -115,8 +116,6 @@ namespace CoffeeCat
                     break;
                 case EnumPlayerState.Dead:
                     Enter_DeadState();
-                    break;
-                default:
                     break;
             }
         }

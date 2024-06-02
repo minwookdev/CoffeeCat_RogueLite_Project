@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CoffeeCat.Utils;
 using Spine;
 using Unity.VisualScripting;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
+    [SuppressMessage("ReSharper", "Unity.PerformanceCriticalCodeInvocation")]
     public class FlowerMagicianState : PlayerState
     {
         private TrackEntry currentTrack = null;

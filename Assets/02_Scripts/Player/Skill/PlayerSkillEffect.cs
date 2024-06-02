@@ -25,7 +25,7 @@ namespace CoffeeCat
             playerSkillData = updateSkillData;
         }
 
-        public void Fire(PlayerStat playerStat)
+        public void ActivateSkillEffect(PlayerStat playerStat)
         {
             SkillEffect(playerStat);
         }

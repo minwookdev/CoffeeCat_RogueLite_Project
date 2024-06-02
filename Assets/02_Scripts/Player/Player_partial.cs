@@ -13,18 +13,19 @@ namespace CoffeeCat
 {
     public partial class Player
     {
+        // TODO : 노션에 전달 할 기획 메모 작성 : 스킬 Select는 배틀룸 밖에서만 해야함 (InBattleRoom 변수가 변화하는 순간 업데이트 된 스킬들이 반영됨)
+
         [Title("Skill")]
         [ShowInInspector] private readonly List<PlayerSkill> ownedSkillsList = new List<PlayerSkill>();
 
         [ShowInInspector]
-        private readonly Dictionary<string, PlayerSkillEffect> skillEffects = new Dictionary<string, PlayerSkillEffect>();
+        private readonly Dictionary<string, PlayerSkillEffect> skillEffects =
+            new Dictionary<string, PlayerSkillEffect>();
+
         private readonly UnityEvent OnUpdateSkillCompleted = new UnityEvent();
 
         private PlayerSkillSelectData[] SkillSelector(int SelectCount)
         {
-            // TODO : Seed
-            // TODO : 노션에 전달 할 기획 메모 작성 : 스킬 Select는 배틀룸 밖에서만 해야함 (InBattleRoom 변수가 변화하는 순간 업데이트 된 스킬들이 반영됨)
-
             var skillSelectDataList = new List<PlayerSkillSelectData>();
 
             List<PlayerSkill> playerAllSkills = new List<PlayerSkill>();
@@ -80,7 +81,8 @@ namespace CoffeeCat
                 var randomIndex = Random.Range(0, learnableSkills.Count);
                 var pickSkill = learnableSkills[randomIndex];
                 var pickSkillSelectData =
-                    new PlayerSkillSelectData(pickSkill.SkillName, pickSkill.Description, pickSkill.Index, (int)pickSkill.SkillType,
+                    new PlayerSkillSelectData(pickSkill.SkillName, pickSkill.Description, pickSkill.Index,
+                                              (int)pickSkill.SkillType,
                                               false);
 
                 learnableSkills.RemoveAt(randomIndex);
@@ -102,7 +104,7 @@ namespace CoffeeCat
             return skillSelectDataList.ToArray();
         }
 
-        private void ApplySkillEffect(PlayerSkill skillData)
+        private void InstantiateSkillEffect(PlayerSkill skillData)
         {
             switch (skillData.SkillName)
             {
@@ -129,7 +131,7 @@ namespace CoffeeCat
             this.ObserveEveryValueChanged(_ => isPlayerInBattle)
                 .Where(_ => isPlayerInBattle && !isDead)
                 .Skip(TimeSpan.Zero)
-                .Subscribe(_ => { skillEffect.Fire(stat); });
+                .Subscribe(_ => { skillEffect.ActivateSkillEffect(stat); });
         }
 
         public void UpdateSkill(PlayerSkillSelectData data)
@@ -153,7 +155,7 @@ namespace CoffeeCat
             }
             else
             {
-                ApplySkillEffect(getSkill);
+                InstantiateSkillEffect(getSkill);
                 ownedSkillsList.Add(getSkill);
             }
 
@@ -175,7 +177,7 @@ namespace CoffeeCat
             // 이후 새로 스킬을 배울 때마다 쿨타임을 감소시키기 위해 이벤트 추가
             OnUpdateSkillCompleted.AddListener(() => CoolTimeReduce(delta));
         }
-        
+
         public void EnableSkillSelect()
         {
             UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector(Defines.PLAYER_SKILL_SELECT_COUNT));
@@ -215,9 +217,9 @@ namespace CoffeeCat
         {
             var skillEffect = new PlayerSkillEffect_Passive(tr, skillData);
             skillEffects.Add(skillData.SkillName, skillEffect);
-            skillEffect.Fire(stat);
+            skillEffect.ActivateSkillEffect(stat);
         }
-        
+
         private void CoolTimeReduce(float delta)
         {
             // Skill을 업데이트 한 시점에는 항상 ownedSkillsList의 마지막 요소에 업데이트된 Skill이 들어가 있음

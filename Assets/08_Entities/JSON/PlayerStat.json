@@ -6,7 +6,7 @@
     "Defense": "1",
     "MoveSpeed": "5",
     "InvincibleTime": "0.5",
-    "AttackPower": "10",
+    "AttackPower": "20",
     "CriticalChance": "0.03",
     "CriticalResistance": "0",
     "CriticalMuliplier": "1.5",

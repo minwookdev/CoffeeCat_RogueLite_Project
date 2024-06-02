@@ -27,7 +27,7 @@ namespace CoffeeCat
         protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f,
                                               float skillCoefficient = 1f)
         {
-            projectileDamageData = new ProjectileDamageData(playerStat);
+            projectileDamageData = new ProjectileDamageData(playerStat, skillBaseDamage, skillCoefficient);
         }
 
         private void ProjectilePath(float speed, Vector3 startPos, Vector3 direction)
@@ -42,10 +42,10 @@ namespace CoffeeCat
               });
         }
 
-        public void Fire(PlayerStat playerStat, float projectileSpeed, Vector3 startPos, Vector3 direction)
+        public void Fire(PlayerStat playerStat, PlayerActiveSkill skillData, Vector3 startPos, Vector3 direction)
         {
-            SetDamageData(playerStat);
-            ProjectilePath(projectileSpeed, startPos, direction);
+            SetDamageData(playerStat, skillData.SkillBaseDamage, skillData.SkillCoefficient);
+            ProjectilePath(skillData.ProjectileSpeed, startPos, direction);
         }
     }
 }
