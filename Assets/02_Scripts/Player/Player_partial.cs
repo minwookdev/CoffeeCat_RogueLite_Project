@@ -226,7 +226,11 @@ namespace CoffeeCat
             if (newSkill is not PlayerActiveSkill activeSkill)
                 return;
 
-            activeSkill.SkillCoolTime -= delta;
+            // 최소 쿨타임 0.1초
+            if (activeSkill.SkillCoolTime - delta < 0)
+                activeSkill.SkillCoolTime = 0.1f;
+            else
+                activeSkill.SkillCoolTime -= delta;
         }
 
         #endregion
