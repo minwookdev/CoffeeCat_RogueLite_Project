@@ -170,7 +170,7 @@ namespace CoffeeCat.FrameWork {
                 }
 
                 onCompleted.Invoke(resourceInfo.SetResource<T>(operationHandle.Result));
-                Addressables.Release(operationHandle);
+                /*Addressables.Release(operationHandle);*/
             };
         }
 
@@ -200,7 +200,7 @@ namespace CoffeeCat.FrameWork {
             }
 
             // Addressables를 통한 에셋 로드 요청
-            resourcesDict.Add(key, ResourceManager.ResourceInformation.New(isMultipleSceenAllowedResources));
+            resourcesDict.Add(key, ResourceInformation.New(isMultipleSceenAllowedResources));
             var resourceInfo = resourcesDict[key];
             var asyncOperationHandle = Addressables.LoadAssetAsync<T>(key);
             T result = asyncOperationHandle.WaitForCompletion(); // 결과를 받을 때 까지 동기방식으로 대기
@@ -210,8 +210,10 @@ namespace CoffeeCat.FrameWork {
                 return null;
             }
 
-            Addressables.Release(asyncOperationHandle); // Release Handle
+            /*Addressables.Release(asyncOperationHandle); // Release Handle*/
             return resourceInfo.SetResource<T>(result);
+
+            return null;
         }
 
         /// <summary>

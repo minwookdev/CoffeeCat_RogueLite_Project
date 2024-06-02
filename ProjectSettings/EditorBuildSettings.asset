@@ -7,15 +7,6 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/01_Scenes/DungeonScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Samples/RogueLikeSceneSystem/Scenes/RogueLike_Main.unity
-    guid: 4f818e442e130134496da62db3d93367
-  - enabled: 0
-    path: Assets/Samples/RogueLikeSceneSystem/Scenes/RogueLike_Normal.unity
-    guid: 7da86e2f1e8441c4d82ca1fd2fcb2cbd
-  - enabled: 1
-    path: Assets/01_Scenes/LoadingScene.unity
-    guid: 73c30a59ee1e6784180c516c6042f90b
+    guid: 8b48a84a707075e4687506026e8ea092
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: a57f73b1e72eda741a98e6041d7337f7, type: 2}

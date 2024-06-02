@@ -13,12 +13,9 @@ MonoBehaviour:
   m_Name: minor_medium_battle_0
   m_EditorClassIdentifier: 
   Rarity: 1
-  GroupMonsterKey: 0
-  MonsterKeys: 040000000500000006000000
-  Frequencies:
-  - 100
-  - 10
-  - 20
+  SpawnKeys: 
+  SpawnWeights: []
+  GroupSpawnPointKey: 9
   MaxSpawnMonster: 30
-  SpawningTimer: 60
-  AverageCountOfMonstersRetained: 4
+  EndureSeconds: 300
+  KeepAverageCount: 6
