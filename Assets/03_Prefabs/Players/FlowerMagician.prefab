@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 1305159281282759407}
   - component: {fileID: 1305159281282759404}
   - component: {fileID: 6863063650883928876}
-  - component: {fileID: 4854793041281363723}
+  - component: {fileID: 7188517268794022222}
   m_Layer: 7
   m_Name: FlowerMagician
   m_TagString: Player
@@ -215,8 +215,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!61 &4854793041281363723
-BoxCollider2D:
+--- !u!70 &7188517268794022222
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -247,19 +247,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.018631529, y: 0.049923547}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.2171039, y: 0.11965276}
-  m_EdgeRadius: 0
+  m_Offset: {x: 0, y: 0.05}
+  m_Size: {x: 0.13, y: 0.1}
+  m_Direction: 0
 --- !u!1 &4289045923996293589
 GameObject:
   m_ObjectHideFlags: 0

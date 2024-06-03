@@ -33,7 +33,7 @@ namespace CoffeeCat
                               if (!target.IsAlive) return;
 
                               var skillObj =
-                                  ObjectPoolManager.Instance.Spawn(skillData.SkillName, target.transform.position);
+                                  ObjectPoolManager.Instance.Spawn(skillData.SkillName, target.transform);
                               var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
                               projectile.SingleTargetAttack(playerStat, target, skillData.SkillBaseDamage,
                                                             skillData.SkillCoefficient);
