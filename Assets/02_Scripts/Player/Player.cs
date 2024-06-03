@@ -64,8 +64,8 @@ namespace CoffeeCat
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
-                // EnableSkillSelect();
-                UpdateStat();
+                EnableSkillSelect();
+                // UpdateStat();
             }
         }
 

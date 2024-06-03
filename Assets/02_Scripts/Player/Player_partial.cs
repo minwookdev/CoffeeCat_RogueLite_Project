@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
@@ -11,6 +12,11 @@ using Random = UnityEngine.Random;
 
 namespace CoffeeCat
 {
+    [SuppressMessage("ReSharper", "HeapView.ObjectAllocation.Evident")]
+    [SuppressMessage("ReSharper", "ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator")]
+    [SuppressMessage("ReSharper", "HeapView.ClosureAllocation")]
+    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
+    [SuppressMessage("ReSharper", "InvertIf")]
     public partial class Player
     {
         // TODO : 노션에 전달 할 기획 메모 작성 : 스킬 Select는 배틀룸 밖에서만 해야함 (InBattleRoom 변수가 변화하는 순간 업데이트 된 스킬들이 반영됨)
@@ -24,8 +30,9 @@ namespace CoffeeCat
 
         private readonly UnityEvent OnUpdateSkillCompleted = new UnityEvent();
 
-        private PlayerSkillSelectData[] SkillSelector(int SelectCount)
+        private PlayerSkillSelectData[] SkillSelector()
         {
+            var selectCount = Defines.PLAYER_SKILL_SELECT_COUNT;
             var skillSelectDataList = new List<PlayerSkillSelectData>();
 
             List<PlayerSkill> playerAllSkills = new List<PlayerSkill>();
@@ -53,37 +60,26 @@ namespace CoffeeCat
                                                                     pickSkill.Index, (int)pickSkill.SkillType, true);
                 skillSelectDataList.Add(pickSkillSelectData);
 
-                SelectCount--;
+                selectCount--;
             }
 
             // 현재 보유중인 스킬은 새로 배울 스킬에서 제외
             foreach (var ownedSkill in ownedSkillsList)
-            {
                 playerAllSkills = playerAllSkills.Where(skill => skill.SkillName != ownedSkill.SkillName).ToList();
-            }
 
-            // 보유 스킬 중 최고등급을 달성한 스킬을 리스트에서 제외
-            var MaxGradeSkills = ownedSkillsList.Where(skill => skill.Grade == Defines.PLAYER_SKILL_MAX_GRADE).ToList();
-            foreach (var maxGradeSkill in MaxGradeSkills)
-            {
-                playerAllSkills = playerAllSkills.Where(skill => skill.SkillName != maxGradeSkill.SkillName).ToList();
-            }
-
-            // 배우지 않은 스킬 중 레벨이 1인 스킬들을 가져옴
+            // 배우지 않은 스킬 중 등급이 1인 스킬들을 가져옴
             var learnableSkills = playerAllSkills.Where(skill => skill.Grade == 1).ToList();
 
             // 배울 수 있는 스킬이 충분하지 않을 경우
-            var isNotEnoughSkill = learnableSkills.Count < SelectCount;
-            if (isNotEnoughSkill) SelectCount = learnableSkills.Count;
+            var isNotEnoughSkill = learnableSkills.Count < selectCount;
+            if (isNotEnoughSkill) selectCount = learnableSkills.Count;
 
-            for (int i = 0; i < SelectCount; i++)
+            for (int i = 0; i < selectCount; i++)
             {
                 var randomIndex = Random.Range(0, learnableSkills.Count);
                 var pickSkill = learnableSkills[randomIndex];
-                var pickSkillSelectData =
-                    new PlayerSkillSelectData(pickSkill.SkillName, pickSkill.Description, pickSkill.Index,
-                                              (int)pickSkill.SkillType,
-                                              false);
+                var pickSkillSelectData = new PlayerSkillSelectData(pickSkill.SkillName, pickSkill.Description,
+                                                                    pickSkill.Index, (int)pickSkill.SkillType, false);
 
                 learnableSkills.RemoveAt(randomIndex);
                 skillSelectDataList.Add(pickSkillSelectData);
@@ -97,7 +93,7 @@ namespace CoffeeCat
                 {
                     var emptyData = new PlayerSkillSelectData("", "배울 수 있는 스킬이 없어 !", -1, -1, false);
                     skillSelectDataList.Add(emptyData);
-                    SelectCount--;
+                    selectCount--;
                 }
             }
 
@@ -130,16 +126,12 @@ namespace CoffeeCat
         {
             this.ObserveEveryValueChanged(_ => isPlayerInBattle)
                 .Where(_ => isPlayerInBattle)
-                .Skip(TimeSpan.Zero)
                 .Subscribe(_ => { skillEffect.ActivateSkillEffect(stat); });
         }
 
         public void UpdateSkill(PlayerSkillSelectData data)
         {
-            if (data.Index == -1)
-            {
-                return;
-            }
+            if (data.Index == -1) return;
 
             PlayerSkill getSkill = null;
             getSkill = data.Type == 0
@@ -148,10 +140,13 @@ namespace CoffeeCat
 
             if (data.IsOwned)
             {
+                var prevSkill = ownedSkillsList.Find
+                    (skill => skill.SkillName == getSkill.SkillName);
+                ownedSkillsList.Remove(prevSkill);
+                ownedSkillsList.Add(getSkill);
+
                 var skillEffect = skillEffects[getSkill.SkillName];
                 skillEffect.UpdateSkillData(getSkill);
-                ownedSkillsList.Remove(ownedSkillsList.Find(skill => skill.SkillName == getSkill.SkillName));
-                ownedSkillsList.Add(getSkill);
             }
             else
             {
@@ -165,12 +160,11 @@ namespace CoffeeCat
         public void GetCoolTimeReduce(float delta)
         {
             // 보유 중인 액티브 스킬 중 쿨타임이 있는 스킬들을 찾아서 쿨타임을 감소
-            var ownedActiveSkills = ownedSkillsList.Where(skill => skill.SkillType == SkillType.Active).ToList();
+            var ownedActiveSkills = 
+                ownedSkillsList.Where(skill => skill.SkillType == SkillType.Active).ToList();
             foreach (var ownedActiveSkill in ownedActiveSkills)
             {
-                if (ownedActiveSkill is not PlayerActiveSkill activeSkill)
-                    continue;
-
+                if (ownedActiveSkill is not PlayerActiveSkill activeSkill) continue;
                 activeSkill.SkillCoolTime -= delta;
             }
 
@@ -180,16 +174,16 @@ namespace CoffeeCat
 
         public void EnableSkillSelect()
         {
-            UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector(Defines.PLAYER_SKILL_SELECT_COUNT));
+            UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector());
         }
 
         #region Skill Effect
 
         private void Explosion(PlayerSkill skillData)
         {
-            var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData); // 스킬 효과 생성
-            OnPlayerDead.AddListener(skillEffect.OnDispose);                  // 플레이어가 죽으면 스킬 효과 비활성화
+            var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData); // 스킬 효과 객체 생성
             skillEffects.Add(skillData.SkillName, skillEffect);               // 스킬 효과 딕셔너리에 추가 (Key : 스킬 이름)
+            OnPlayerDead.AddListener(skillEffect.OnDispose);                  // 플레이어가 죽으면 스킬 효과 비활성화
             ActivateSkill(skillEffect);                                       // 스킬 효과 활성화
         }
 
@@ -223,9 +217,9 @@ namespace CoffeeCat
             skillEffect.ActivateSkillEffect(stat);
         }
 
+        // Skill을 업데이트 한 시점의 ownedSkillsList의 마지막 아이템은 언제나 업데이트된 Skill
         private void CoolTimeReduce(float delta)
         {
-            // Skill을 업데이트 한 시점에는 항상 ownedSkillsList의 마지막 요소에 업데이트된 Skill이 들어가 있음
             var newSkill = ownedSkillsList.Last();
 
             if (newSkill is not PlayerActiveSkill activeSkill)

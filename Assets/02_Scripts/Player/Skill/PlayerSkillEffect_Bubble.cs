@@ -29,7 +29,6 @@ namespace CoffeeCat
                           .Subscribe(_ =>
                           {
                               var targets = FindAllMonsters();
-
                               if (targets == null) return;
 
                               var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillName, playerTr.position);

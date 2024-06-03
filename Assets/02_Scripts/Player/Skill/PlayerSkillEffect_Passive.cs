@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
 using UnityEngine;
 
 namespace CoffeeCat
 {
+    [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Local")]
     public class PlayerSkillEffect_Passive : PlayerSkillEffect
     {
         private const string passiveAddressableKey = "Passive";
@@ -23,9 +25,9 @@ namespace CoffeeCat
             {
                 case "SpeedUp": SpeedUp(playerStat, skillData);
                     break;
-                case "CoolTimeReduce": CoolTimeReduce(skillData);
-                    break;
                 case "DamageIncrease": DamageIncrease(playerStat, skillData);
+                    break;
+                case "CoolTimeReduce": CoolTimeReduce(skillData);
                     break;
             }
 
@@ -58,20 +60,14 @@ namespace CoffeeCat
 
         #region PassiveSkillEffect
 
-        private void SpeedUp(PlayerStat stat, PlayerPassiveSkill skillData)
-        {
-            stat.MoveSpeed += skillData.Delta;
-        }
+        private void SpeedUp(PlayerStat stat, PlayerPassiveSkill skillData) => stat.MoveSpeed += skillData.Delta;
+        
+        private void DamageIncrease(PlayerStat stat, PlayerPassiveSkill skillData) => stat.AttackPower += skillData.Delta;
         
         private void CoolTimeReduce(PlayerPassiveSkill skillData)
         {
             var player = playerTr.GetComponent<Player>();
             player.GetCoolTimeReduce(skillData.Delta);
-        }
-        
-        private void DamageIncrease(PlayerStat stat, PlayerPassiveSkill skillData)
-        {
-            stat.AttackPower += skillData.Delta;
         }
 
         #endregion

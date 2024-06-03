@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.Defines;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
+    [SuppressMessage("ReSharper", "Unity.PreferNonAllocApi")]
     public class PlayerSkillEffect
     {
         protected Transform playerTr = null;
@@ -24,10 +26,15 @@ namespace CoffeeCat
             {
                 if (roomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(playerSkillData.SkillName, true);
+            
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>
+                (playerSkillData.SkillName, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
+        // 스킬 효과
+        protected virtual void SkillEffect(PlayerStat playerStat) { }
+        
         // 보유한 스킬 선택 (등급 업)
         public virtual void UpdateSkillData(PlayerSkill updateSkillData) => playerSkillData = updateSkillData;
 
@@ -37,8 +44,9 @@ namespace CoffeeCat
         // 스킬 효과 비활성화
         public void OnDispose() => updateDisposable.Dispose();
 
-        protected virtual void SkillEffect(PlayerStat playerStat) { }
 
+        #region FindMonster
+        
         protected List<MonsterStatus> FindAllMonsters()
         {
             var monsters = Physics2D.OverlapBoxAll(playerTr.position,
@@ -82,5 +90,7 @@ namespace CoffeeCat
                    .Select(collider2D => collider2D.GetComponent<MonsterStatus>())
                    .FirstOrDefault();
         }
+        
+        #endregion
     }
 }

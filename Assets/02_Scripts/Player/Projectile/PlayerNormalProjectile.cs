@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
+    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
     public class PlayerNormalProjectile : PlayerProjectile
     {
         private const float maxDistance = 20f;
@@ -24,8 +25,7 @@ namespace CoffeeCat
                 ObjectPoolManager.Instance.Despawn(gameObject);
         }
 
-        protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f,
-                                              float skillCoefficient = 1f)
+        protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f, float skillCoefficient = 1f)
         {
             projectileDamageData = new ProjectileDamageData(playerStat, skillBaseDamage, skillCoefficient);
         }
