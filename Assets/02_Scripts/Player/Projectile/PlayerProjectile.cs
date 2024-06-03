@@ -15,7 +15,7 @@ namespace CoffeeCat
         protected Transform tr = null;
         protected ProjectileDamageData projectileDamageData = null;
 
-        protected virtual void Awake()
+        private void Awake()
         {
             tr = GetComponent<Transform>();
         }

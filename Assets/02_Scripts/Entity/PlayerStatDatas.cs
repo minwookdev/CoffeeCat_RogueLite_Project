@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using CoffeeCat.Utils.SerializedDictionaries;
 using Newtonsoft.Json;
 using Sirenix.OdinInspector;
@@ -7,6 +8,8 @@ using UnityEngine;
 namespace CoffeeCat
 {
     [Serializable]
+    [SuppressMessage("ReSharper", "ForCanBeConvertedToForeach")]
+    [SuppressMessage("ReSharper", "HeapView.ObjectAllocation.Evident")]
     public class PlayerStatDatas
     {
         [ShowInInspector, ReadOnly] public StringPlayerStatDictionary DataDictionary { get; private set; } = null;
@@ -42,7 +45,7 @@ namespace CoffeeCat
         public float DamageDeviation = default;
         public float Penetration = default;
 
-        public void Initialize()
+        public void SetCurrentHp()
         {
             CurrentHp = MaxHp;
         }

@@ -83,7 +83,7 @@ namespace CoffeeCat
         private void SetStat()
         {
             stat = DataManager.Instance.PlayerStats.DataDictionary[playerName.ToStringEx()];
-            stat.Initialize();
+            stat.SetCurrentHp();
         }
 
         private void Movement()
@@ -134,7 +134,7 @@ namespace CoffeeCat
 
                     // Battle 중에는 Player의 방향을 기본공격의 타겟 방향으로 전환
                     var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
-                    var targetDirection = targetMonsterStatus.GetCenterPosition() - projectileTr.position;
+                    var targetDirection = targetMonsterStatus.GetCenterTr().position - projectileTr.position;
                     targetDirection = targetDirection.normalized;
                     SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
 
@@ -161,7 +161,7 @@ namespace CoffeeCat
                                    .Select(Collider2D => Collider2D.GetComponent<MonsterStatus>())
                                    .Where(monster => monster.IsAlive)
                                    .OrderBy(monster => Vector2.Distance(projectileTr.position,
-                                                                        monster.GetCenterPosition()))
+                                                                        monster.GetCenterTr().position))
                                    .FirstOrDefault();
 
                 return target == null ? null : target.transform;

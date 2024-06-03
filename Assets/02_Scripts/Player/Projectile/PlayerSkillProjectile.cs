@@ -6,6 +6,7 @@ using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
 using UniRx;
+using UniRx.Triggers;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -20,12 +21,11 @@ namespace CoffeeCat
             DespawnProjectile();
         }
 
-        private void UpdatePosition(Vector3 monsterCenterPos)
+        private void UpdatePosition(Transform monsterCenterTr)
         {
-            Observable.EveryUpdate()
-                      .Skip(TimeSpan.Zero)
-                      .TakeUntilDisable(gameObject)
-                      .Subscribe(_ => { tr.position = monsterCenterPos; });
+            this.UpdateAsObservable()
+                .TakeUntilDisable(this)
+                .Subscribe(_ => { tr.position = monsterCenterTr.position; });
         }
 
         private void DespawnProjectile()
@@ -38,7 +38,8 @@ namespace CoffeeCat
                       .Subscribe(_ => { ObjectPoolManager.Instance.Despawn(gameObject); });
         }
 
-        protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f, float skillCoefficient = 1f)
+        protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f,
+                                              float skillCoefficient = 1f)
         {
             projectileDamageData = new ProjectileDamageData(playerStat, skillBaseDamage, skillCoefficient);
         }
@@ -63,7 +64,7 @@ namespace CoffeeCat
                                        float skillCoefficient = 1f)
         {
             SetDamageData(playerStat, skillBaseDamage, skillCoefficient);
-            UpdatePosition(monster.GetCenterPosition());
+            UpdatePosition(monster.GetCenterTr());
 
             DamageData damageData = DamageData.GetData(projectileDamageData, monster.CurrentStat);
             monster.OnDamaged(damageData, true);
