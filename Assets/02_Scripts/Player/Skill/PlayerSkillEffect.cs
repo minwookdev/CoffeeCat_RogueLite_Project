@@ -27,9 +27,10 @@ namespace CoffeeCat
                 if (roomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
             
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>
-                (playerSkillData.SkillName, true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+            // TODO : 안드로이드 빌드 버그 수정 후 주석 해제
+            // var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>
+            //     (playerSkillData.SkillName, true);
+            // ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
         // 스킬 효과

@@ -52,7 +52,8 @@ namespace CoffeeCat
             this.playerSkillData = playerSkillData;
 
             // Passive Skill Effect는 모든 Passive Skill의 Addressable Key가 동일하기 때문에 중복 방지
-            if (ObjectPoolManager.Instance.IsExistInPoolDictionary(passiveAddressableKey)) return;
+            if (ObjectPoolManager.Instance.IsExistInPoolDictionary(passiveAddressableKey)) 
+                return;
             
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(passiveAddressableKey, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));

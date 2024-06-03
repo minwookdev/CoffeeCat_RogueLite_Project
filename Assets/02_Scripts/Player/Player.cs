@@ -48,7 +48,7 @@ namespace CoffeeCat
             rigid = GetComponent<Rigidbody2D>();
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
 
-            LoadResources();
+            // LoadResources();
             SetStat();
 
             Movement();

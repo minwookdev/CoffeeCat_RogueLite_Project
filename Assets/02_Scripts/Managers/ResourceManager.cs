@@ -194,7 +194,7 @@ namespace CoffeeCat.FrameWork {
         /// <param name="isMultipleSceenAllowedResources"></param>
         /// <returns></returns>
         public T AddressablesSyncLoad<T>(string key, bool isMultipleSceenAllowedResources) where T : UnityObject {
-            // Dictionary이미 로드된 Resource를 반환
+            /*// Dictionary이미 로드된 Resource를 반환
             if (TryGetResourceInDictionarySync<T>(key, out T resource)) {
                 return resource;
             }
@@ -210,9 +210,10 @@ namespace CoffeeCat.FrameWork {
                 return null;
             }
 
-            /*Addressables.Release(asyncOperationHandle); // Release Handle*/
-            return resourceInfo.SetResource<T>(result);
+            /*Addressables.Release(asyncOperationHandle); // Release Handle#1#
+            return resourceInfo.SetResource<T>(result);*/
 
+            CatLog.ELog("Invalid Addressable Load Type: " + key);
             return null;
         }
 

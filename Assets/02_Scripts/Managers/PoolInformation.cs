@@ -113,10 +113,17 @@ namespace CoffeeCat.FrameWork {
                     PoolObject = ResourceManager.Instance.ResourcesLoad<GameObject>(ResourcesPath, false);
                     break;
                 case LoadType.Addressables_Key:
-                    PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AddressablesName, false);
+                    /*PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AddressablesName, false);*/
+                    ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(AddressablesName, false, loadedObject => {
+                        PoolObject = loadedObject;
+                    });
                     break;
                 case LoadType.Addressables_AssetRef:
-                    PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AssetRef, false);
+                    /*PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AssetRef, false);*/
+                    /*PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AddressablesName, false);*/
+                    ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(AssetRef, false, loadedObject => {
+                        PoolObject = loadedObject;
+                    });
                     break;
                 case LoadType.Caching:
                 case LoadType.Custom:
