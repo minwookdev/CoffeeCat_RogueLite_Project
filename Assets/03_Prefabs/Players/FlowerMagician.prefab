@@ -87,7 +87,7 @@ MonoBehaviour:
   playerName: 2
   normalAttackProjectile: 1
   tr: {fileID: 1305159281282759405}
-  projectilePoint: {fileID: 1303632491375746209}
+  projectileTr: {fileID: 1303632491375746209}
 --- !u!114 &7360086901526505623
 MonoBehaviour:
   m_ObjectHideFlags: 0

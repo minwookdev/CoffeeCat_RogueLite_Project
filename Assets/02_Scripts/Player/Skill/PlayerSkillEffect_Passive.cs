@@ -28,14 +28,18 @@ namespace CoffeeCat
                 case "DamageIncrease": DamageIncrease(playerStat, skillData);
                     break;
             }
-            
-            var spawnObj = ObjectPoolManager.Instance.Spawn(passiveAddressableKey, playerTr);
-            spawnObj.transform.localPosition = new Vector3(0f, 0.3f, 0f);
+
+            PassiveSkillEffectSpawn();
         }
 
         public override void UpdateSkillData(PlayerSkill updateSkillData)
         {
             playerSkillData = updateSkillData;
+            PassiveSkillEffectSpawn();
+        }
+
+        private void PassiveSkillEffectSpawn()
+        {
             var spawnObj = ObjectPoolManager.Instance.Spawn(passiveAddressableKey, playerTr);
             spawnObj.transform.localPosition = new Vector3(0f, 0.3f, 0f);
         }
@@ -45,8 +49,8 @@ namespace CoffeeCat
             this.playerTr = playerTr;
             this.playerSkillData = playerSkillData;
 
-            if (ObjectPoolManager.Instance.IsExistInPoolDictionary(passiveAddressableKey))
-                return;
+            // Passive Skill Effect는 모든 Passive Skill의 Addressable Key가 동일하기 때문에 중복 방지
+            if (ObjectPoolManager.Instance.IsExistInPoolDictionary(passiveAddressableKey)) return;
             
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(passiveAddressableKey, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));

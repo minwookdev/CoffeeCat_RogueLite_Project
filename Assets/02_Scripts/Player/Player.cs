@@ -8,28 +8,26 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using UnityEngine.Events;
 using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
-    [SuppressMessage("ReSharper", "SeparateLocalFunctionsWithJumpStatement")]
-    [SuppressMessage("ReSharper", "Unity.PreferNonAllocApi")]
-    [SuppressMessage("ReSharper", "HeapView.ClosureAllocation")]
     public partial class Player : MonoBehaviour
     {
-        [Title("Stat")]
-        [ShowInInspector, ReadOnly] protected PlayerStat stat;
-
-        [ShowInInspector, ReadOnly] private PlayerActiveSkill normalAttackData = null;
+        [Title("Status")]
         [SerializeField] protected PlayerAddressablesKey playerName = PlayerAddressablesKey.NONE;
+
         [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
+        [ShowInInspector, ReadOnly] protected PlayerStat stat;
 
         [Title("Transform")]
         [SerializeField] protected Transform tr = null;
 
-        [SerializeField] protected Transform projectilePoint = null;
+        [SerializeField] protected Transform projectileTr = null;
 
+        private UnityEvent OnPlayerDead = new UnityEvent();
+        private PlayerActiveSkill normalAttackData = null;
         private Rigidbody2D rigid = null;
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
@@ -41,6 +39,7 @@ namespace CoffeeCat
         private int maxExp = 50;
         private int currentExp = 0;
 
+        // Property
         public Transform Tr => tr;
         public PlayerStat Stat => stat;
 
@@ -101,7 +100,8 @@ namespace CoffeeCat
 
                     if (isPlayerInBattle) return;
 
-                    SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
+                    if (hor != 0 || ver != 0)
+                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
                 }).AddTo(this);
         }
 
@@ -134,14 +134,15 @@ namespace CoffeeCat
 
                     // Battle 중에는 Player의 방향을 기본공격의 타겟 방향으로 전환
                     var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
-                    var targetDirection = targetMonsterStatus.GetCenterPosition() - projectilePoint.position;
+                    var targetDirection = targetMonsterStatus.GetCenterPosition() - projectileTr.position;
                     targetDirection = targetDirection.normalized;
                     SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
 
                     // 기본 공격 Projectile 스폰 및 발사
-                    var spawnObj = ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(), projectilePoint.position);
+                    var spawnObj =
+                        ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(), projectileTr.position);
                     var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
-                    projectile.Fire(stat, normalAttackData, projectilePoint.position, targetDirection);
+                    projectile.Fire(stat, normalAttackData, projectileTr.position, targetDirection);
 
                     // 쿨타임 초기화 및 발사 여부
                     currentCoolTime = 0;
@@ -159,7 +160,8 @@ namespace CoffeeCat
                 var target = result.Where(Collider2D => Collider2D != null)
                                    .Select(Collider2D => Collider2D.GetComponent<MonsterStatus>())
                                    .Where(monster => monster.IsAlive)
-                                   .OrderBy(monster => Vector2.Distance(projectilePoint.position,monster.GetCenterPosition()))
+                                   .OrderBy(monster => Vector2.Distance(projectileTr.position,
+                                                                        monster.GetCenterPosition()))
                                    .FirstOrDefault();
 
                 return target == null ? null : target.transform;
@@ -182,6 +184,7 @@ namespace CoffeeCat
         private void OnDead()
         {
             rigid.velocity = Vector2.zero;
+            OnPlayerDead.Invoke();
             isDead = true;
         }
 
@@ -295,6 +298,12 @@ namespace CoffeeCat
             stat.StatEnhancement(enhanceData);
         }
 
+        public void UpgradeNormalAttack()
+        {
+            var index = normalAttackData.Index + 1;
+            normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[index];
+        }
+
         public void OnDamaged(DamageData damageData)
         {
             var calculatedDamage = damageData.CalculatedDamage;
@@ -309,10 +318,9 @@ namespace CoffeeCat
             }
         }
 
-        public void UpgradeNormalAttack()
+        public void AddListenerPlayerDeadEvent(UnityAction action)
         {
-            var index = normalAttackData.Index + 1;
-            normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[index];
+            OnPlayerDead.AddListener(action);
         }
 
         #endregion

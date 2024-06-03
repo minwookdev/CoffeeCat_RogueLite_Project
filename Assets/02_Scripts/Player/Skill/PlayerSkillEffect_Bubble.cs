@@ -19,28 +19,30 @@ namespace CoffeeCat
                 CatLog.WLog("PlayerSkillEffect_Explosion : skillData is null");
                 return;
             }
-            
-            var currentCoolTime = skillData.SkillCoolTime;
-            
-            Observable.EveryUpdate()
-                      .Select(_ => currentCoolTime += Time.deltaTime)
-                      .Where(_ => currentCoolTime >= skillData.SkillCoolTime)
-                      .Skip(TimeSpan.Zero)
-                      .Subscribe(_ =>
-                      {
-                          var targets = FindAllMonsters();
-                          
-                          if (targets == null) return;
 
-                          var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillName, playerTr.position);
-                          var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
-                          projectile.AreaAttack(playerStat, targets, skillData.SkillBaseDamage, skillData.SkillCoefficient);
-                          
-                          currentCoolTime = 0;
-                      }).AddTo(playerTr.gameObject);
+            var currentCoolTime = skillData.SkillCoolTime;
+
+            updateDisposable =
+                Observable.EveryUpdate()
+                          .Select(_ => currentCoolTime += Time.deltaTime)
+                          .Where(_ => currentCoolTime >= skillData.SkillCoolTime)
+                          .Subscribe(_ =>
+                          {
+                              var targets = FindAllMonsters();
+
+                              if (targets == null) return;
+
+                              var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillName, playerTr.position);
+                              var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
+                              projectile.AreaAttack(playerStat, targets, skillData.SkillBaseDamage,
+                                                    skillData.SkillCoefficient);
+
+                              currentCoolTime = 0;
+                          });
         }
 
-        public PlayerSkillEffect_Bubble(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
+        public PlayerSkillEffect_Bubble(Transform playerTr, PlayerSkill playerSkillData) :
+            base(playerTr, playerSkillData)
         {
         }
     }

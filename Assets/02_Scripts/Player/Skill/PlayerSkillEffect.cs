@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoffeeCat.FrameWork;
@@ -10,29 +11,33 @@ namespace CoffeeCat
     {
         protected Transform playerTr = null;
         protected PlayerSkill playerSkillData = null;
-        
+        protected IDisposable updateDisposable = null;
+
+        // 새로운 스킬 선택
         protected PlayerSkillEffect() { }
         protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
         {
             this.playerTr = playerTr;
             this.playerSkillData = playerSkillData;
+            
+            StageManager.Instance.AddListenerClearedRoomEvent(roomType => 
+            {
+                if (roomType == RoomType.MonsterSpawnRoom) OnDispose();
+            });
             var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(playerSkillData.SkillName, true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
         }
 
-        public virtual void UpdateSkillData(PlayerSkill updateSkillData)
-        {
-            playerSkillData = updateSkillData;
-        }
+        // 보유한 스킬 선택 (등급 업)
+        public virtual void UpdateSkillData(PlayerSkill updateSkillData) => playerSkillData = updateSkillData;
 
-        public void ActivateSkillEffect(PlayerStat playerStat)
-        {
-            SkillEffect(playerStat);
-        }
+        // 스킬 효과 활성화
+        public void ActivateSkillEffect(PlayerStat playerStat) => SkillEffect(playerStat);
 
-        protected virtual void SkillEffect(PlayerStat playerStat)
-        {
-        }
+        // 스킬 효과 비활성화
+        public void OnDispose() => updateDisposable.Dispose();
+
+        protected virtual void SkillEffect(PlayerStat playerStat) { }
 
         protected List<MonsterStatus> FindAllMonsters()
         {

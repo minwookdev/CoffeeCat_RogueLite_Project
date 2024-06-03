@@ -129,7 +129,7 @@ namespace CoffeeCat
         private void ActivateSkill(PlayerSkillEffect skillEffect)
         {
             this.ObserveEveryValueChanged(_ => isPlayerInBattle)
-                .Where(_ => isPlayerInBattle && !isDead)
+                .Where(_ => isPlayerInBattle)
                 .Skip(TimeSpan.Zero)
                 .Subscribe(_ => { skillEffect.ActivateSkillEffect(stat); });
         }
@@ -187,14 +187,16 @@ namespace CoffeeCat
 
         private void Explosion(PlayerSkill skillData)
         {
-            var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData);
-            skillEffects.Add(skillData.SkillName, skillEffect);
-            ActivateSkill(skillEffect);
+            var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData); // 스킬 효과 생성
+            OnPlayerDead.AddListener(skillEffect.OnDispose);                  // 플레이어가 죽으면 스킬 효과 비활성화
+            skillEffects.Add(skillData.SkillName, skillEffect);               // 스킬 효과 딕셔너리에 추가 (Key : 스킬 이름)
+            ActivateSkill(skillEffect);                                       // 스킬 효과 활성화
         }
 
         private void Beam(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Beam(tr, skillData);
+            OnPlayerDead.AddListener(skillEffect.OnDispose);
             skillEffects.Add(skillData.SkillName, skillEffect);
             ActivateSkill(skillEffect);
         }
@@ -202,6 +204,7 @@ namespace CoffeeCat
         private void Bubble(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Bubble(tr, skillData);
+            OnPlayerDead.AddListener(skillEffect.OnDispose);
             skillEffects.Add(skillData.SkillName, skillEffect);
             ActivateSkill(skillEffect);
         }
