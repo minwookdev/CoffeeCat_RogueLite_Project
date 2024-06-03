@@ -69,7 +69,7 @@ namespace CoffeeCat
             var player = playerTr.GetComponent<Player>();
             player.GetCoolTimeReduce(skillData.Delta);
         }
-
+        
         #endregion
     }
 }
