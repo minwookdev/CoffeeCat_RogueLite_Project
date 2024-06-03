@@ -48,7 +48,7 @@ namespace CoffeeCat
             rigid = GetComponent<Rigidbody2D>();
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
 
-            LoadResources();
+            // LoadResources();
             SetStat();
 
             Movement();
@@ -84,6 +84,7 @@ namespace CoffeeCat
         {
             stat = DataManager.Instance.PlayerStats.DataDictionary[playerName.ToStringEx()];
             stat.SetCurrentHp();
+            UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
         }
 
         private void Movement()
@@ -93,7 +94,7 @@ namespace CoffeeCat
                 .Where(_ => !isDead)
                 .Subscribe(_ =>
                 {
-                    var hor = Input.GetAxisRaw("Horizontal");
+                    /*var hor = Input.GetAxisRaw("Horizontal");
                     var ver = Input.GetAxisRaw("Vertical");
 
                     rigid.velocity = new Vector2(hor, ver) * stat.MoveSpeed;
@@ -101,8 +102,26 @@ namespace CoffeeCat
                     if (isPlayerInBattle) return;
 
                     if (hor != 0 || ver != 0)
-                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
+                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);*/
+                    
                 }).AddTo(this);
+        }
+
+        public void Move(Vector2 direction) {
+            if (isDead)
+                return;
+            
+            rigid.velocity = new Vector2(direction.x, direction.y) * stat.MoveSpeed;
+            
+            if (isPlayerInBattle) 
+                return;
+            
+            if (direction.x != 0f || direction.y != 0f)
+                SwitchingPlayerDirection(rigid.velocity.x < 0);
+        }
+
+        public void ClearMove() {
+            rigid.velocity = Vector2.zero;
         }
 
         private void SwitchingPlayerDirection(bool isSwitching)
@@ -308,7 +327,7 @@ namespace CoffeeCat
         {
             var calculatedDamage = damageData.CalculatedDamage;
             stat.CurrentHp -= calculatedDamage;
-            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, false);
+            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, true);
             isPlayerDamaged = true;
 
             if (stat.CurrentHp <= 0)
@@ -316,6 +335,8 @@ namespace CoffeeCat
                 stat.CurrentHp = 0;
                 OnDead();
             }
+            
+            UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
         }
 
         public void AddListenerPlayerDeadEvent(UnityAction action)

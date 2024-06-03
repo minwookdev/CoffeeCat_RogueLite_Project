@@ -102,7 +102,7 @@ namespace CoffeeCat {
 
         private void OnTriggerEnter2D(Collider2D collider) {
             if (Utils.Utility.IsLayerInMask(collider.gameObject.layer, collisionLayer)) {
-                if (collider.gameObject.layer.Equals(LayerMask.NameToLayer(Layer.PLAYER.ToString()))) {
+                if (collider.gameObject.layer.Equals(LayerMask.NameToLayer("Player"))) {
                     OnTriggerEnterWithPlayer(collider);
                     return;
                 }
@@ -113,7 +113,7 @@ namespace CoffeeCat {
 
         protected void OnCollisionEnter2D(Collision2D collision) {
             if (Utils.Utility.IsLayerInMask(collision.gameObject.layer, collisionLayer)) {
-                if (collision.gameObject.layer.Equals(LayerMask.NameToLayer(Layer.PLAYER.ToString()))) {
+                if (collision.gameObject.layer.Equals(LayerMask.NameToLayer("Player"))) {
                     OnCollisionEnterWithPlayer(collision);
                     return;
                 }
@@ -126,7 +126,12 @@ namespace CoffeeCat {
         }
 
         protected virtual void OnTriggerEnterWithPlayer(Collider2D playerCollider) {
-            if (playerCollider.TryGetComponent(out Player player) == false) {
+            /*if (playerCollider.TryGetComponent(out Player player) == false) {
+                return;
+            }*/
+
+            // TODO: Fix it
+            if (playerCollider.transform.parent.TryGetComponent(out Player player) == false) {
                 return;
             }
 
@@ -154,7 +159,7 @@ namespace CoffeeCat {
 
             var attackData = DamageData.GetData(statData, player.Stat);
             player.OnDamaged(attackData);
-            ObjectPoolManager.Instance.Despawn(this.gameObject);
+            ObjectPoolManager.Instance.Despawn(gameObject);
         }
 
         #endregion

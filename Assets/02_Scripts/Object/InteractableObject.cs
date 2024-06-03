@@ -65,11 +65,7 @@ namespace CoffeeCat {
 
         private void OnDisable() {
             IsEnteredPlayer = false;
-            if (interactableSignTr) {
-                if (ObjectPoolManager.IsExist) {
-                    ObjectPoolManager.Instance.Despawn(interactableSignTr.gameObject);
-                }
-            }
+            DisposeInteractableSign();
         }
 
         public virtual void PlayParticle() {

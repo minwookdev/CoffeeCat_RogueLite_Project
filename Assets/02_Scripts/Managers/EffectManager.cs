@@ -72,7 +72,7 @@ namespace CoffeeCat.FrameWork {
         }
 
         public void RegistAddressablesSync(string addressablesName) {
-            string key = addressablesName;
+            /*string key = addressablesName;
             if (IsAlreadyRegisted(key)) {
                 return;
             }
@@ -82,7 +82,7 @@ namespace CoffeeCat.FrameWork {
                 CatLog.ELog($"this GameObject is Not Exist Effector Component. name: {effectGameObject.name}");
                 return;
             }
-            Regist(effector, key);
+            Regist(effector, key);*/
         }
 
         public string Regist(Effector effector) {

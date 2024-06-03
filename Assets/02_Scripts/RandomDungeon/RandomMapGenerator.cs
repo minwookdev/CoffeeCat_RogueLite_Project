@@ -2,8 +2,6 @@
 using System.Linq;
 using CoffeeCat;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
 using TMPro;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
@@ -121,7 +119,6 @@ namespace RandomDungeonWithBluePrint
         #region Debug_Drawer
         
         private void InitDebugs() {
-#if UNITY_EDITOR
             if (IsDisplayRoomType) {
                 DisplayRoomType();
             }
@@ -162,14 +159,12 @@ namespace RandomDungeonWithBluePrint
                 .AddTo(this);
             
             initializedDebugObservable = true;
-#endif
         }
         
         /// <summary>
         /// RoomType을 표시
         /// </summary>
         private void DisplayRoomType() {
-#if UNITY_EDITOR
             ClearRoomTypeText();
             
             foreach (var room in field.Rooms) {
@@ -177,19 +172,15 @@ namespace RandomDungeonWithBluePrint
                 var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_room_type", spawnPoint, Quaternion.identity);
                 text.SetText(room.RoomType.ToStringExtended());
             }
-#endif
         }
 
         private void ClearRoomTypeText() {
-#if UNITY_EDITOR
             if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_room_type"))
                 return;
             ObjectPoolManager.Instance.DespawnAll("editor_text_room_type");
-#endif
         }
 
         private void DisplaySectionIndex() {
-#if UNITY_EDITOR
             ClearSectionIndexText();
             
             var sections = field?.Sections;
@@ -202,15 +193,12 @@ namespace RandomDungeonWithBluePrint
                 var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_section_index", point, Quaternion.identity);
                 text.SetText("< " + sections[i].Index.ToString() + " >");
             }
-#endif
         }
         
         private void ClearSectionIndexText() {
-#if UNITY_EDITOR
             if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_section_index"))
                 return;
             ObjectPoolManager.Instance.DespawnAll("editor_text_section_index");
-#endif
         }
         
         private void OnDrawGizmos() {

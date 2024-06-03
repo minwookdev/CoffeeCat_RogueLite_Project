@@ -3,8 +3,7 @@ using UnityEngine;
 
 namespace CoffeeCat.Utils.Defines
 {
-    public static class Defines
-    {
+    public static class Defines {
         public const int SPAWN_MONSTER_MAX_COUNT = 30;
         public const int PLAYER_SKILL_SELECT_COUNT = 3;
         public const int PLAYER_SKILL_MAX_GRADE = 3;
