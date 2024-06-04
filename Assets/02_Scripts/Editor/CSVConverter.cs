@@ -6,21 +6,26 @@ using UnityEditor;
 using UnityEngine;
 using Newtonsoft.Json;
 
-namespace CoffeeCat.Editor {
-    public static class CSVConverter {
+namespace CoffeeCat.Editor
+{
+    public static class CSVConverter
+    {
         private static readonly string csvFolderPath = Application.dataPath + "/08_Entities/CSV";
         private static readonly string jsonFolderPath = Application.dataPath + "/08_Entities/JSON";
         private static readonly string jsonResourcePath = Application.dataPath + "/Resources/Entity/Json";
-        
-        private static void ConvertCsvToJson(string csvPath, string jsonPath) {
+
+        private static void ConvertCsvToJson(string csvPath, string jsonPath)
+        {
             var records = new List<Dictionary<string, string>>();
 
-            using (var reader = new StreamReader(csvPath)) {
+            using (var reader = new StreamReader(csvPath))
+            {
                 bool isFirstLine = true;
                 string[] headers = null;
                 int lineCount = 0;
 
-                while (!reader.EndOfStream) {
+                while (!reader.EndOfStream)
+                {
                     var line = reader.ReadLine();
                     lineCount++;
 
@@ -57,27 +62,34 @@ namespace CoffeeCat.Editor {
             File.WriteAllText(jsonPath, json);
         }
 
-        private static string[] ParseCsvLine(string line) {
+        private static string[] ParseCsvLine(string line)
+        {
             var values = new List<string>();
             var current = new System.Text.StringBuilder();
             bool inQuotes = false;
 
-            for (int i = 0; i < line.Length; i++) {
-                if (line[i] == '"') {
-                    if (inQuotes && i < line.Length - 1 && line[i + 1] == '"') {
+            for (int i = 0; i < line.Length; i++)
+            {
+                if (line[i] == '"')
+                {
+                    if (inQuotes && i < line.Length - 1 && line[i + 1] == '"')
+                    {
                         // 이스케이프된 큰따옴표
                         current.Append('"');
                         i++;
                     }
-                    else {
+                    else
+                    {
                         inQuotes = !inQuotes;
                     }
                 }
-                else if (line[i] == ';' && !inQuotes) {
+                else if (line[i] == ';' && !inQuotes)
+                {
                     values.Add(current.ToString());
                     current.Clear();
                 }
-                else {
+                else
+                {
                     current.Append(line[i]);
                 }
             }
@@ -87,10 +99,12 @@ namespace CoffeeCat.Editor {
         }
 
         [MenuItem("CoffeeCat/CSV/Convert All CSV to JSON")]
-        private static void ConvertAllCSVToJson() {
+        private static void ConvertAllCSVToJson()
+        {
             // Lock 파일 존재 여부 확인 (수정중인 파일이 존재하는지 체크)
-            if (Directory.GetFiles(csvFolderPath, ".~lock.*.csv#").Any() || Directory.GetFiles(csvFolderPath, "*.csv#").Any())
-            { 
+            if (Directory.GetFiles(csvFolderPath, ".~lock.*.csv#").Any() ||
+                Directory.GetFiles(csvFolderPath, "*.csv#").Any())
+            {
                 CatLog.WLog("Lock file found. CSV Conversion aborted.");
                 return;
             }
@@ -101,7 +115,8 @@ namespace CoffeeCat.Editor {
             foreach (string csvFilePath in csvFiles)
             {
                 // 각 CSV 파일을 JSON으로 변환
-                string jsonFilePath = Path.Combine(jsonFolderPath, Path.GetFileNameWithoutExtension(csvFilePath) + ".json");
+                string jsonFilePath =
+                    Path.Combine(jsonFolderPath, Path.GetFileNameWithoutExtension(csvFilePath) + ".json");
                 ConvertCsvToJson(csvFilePath, jsonFilePath);
                 totalFilesCount++;
             }
@@ -110,7 +125,8 @@ namespace CoffeeCat.Editor {
         }
 
         [MenuItem("CoffeeCat/CSV/Json To Resource Path")]
-        private static void JsonToResourcePath() {
+        private static void JsonToResourcePath()
+        {
             // JSON 파일 목록 가져오기
             int totalProcessFileCount = 0;
             string[] jsonFiles = Directory.GetFiles(jsonFolderPath, "*.json");
@@ -121,10 +137,12 @@ namespace CoffeeCat.Editor {
                 string encryptedJson = Cryptor.Encrypt2(json);
 
                 // 암호화된 JSON 파일을 Resources 폴더로 저장
-                string encryptedJsonFilePath = Path.Combine(jsonResourcePath, Path.GetFileNameWithoutExtension(jsonFilePath) + ".enc");
+                string encryptedJsonFilePath =
+                    Path.Combine(jsonResourcePath, Path.GetFileNameWithoutExtension(jsonFilePath) + ".enc");
                 File.WriteAllText(encryptedJsonFilePath, encryptedJson);
                 totalProcessFileCount++;
             }
+
             CatLog.Log($"All JSON to Copy Resource Path With Encrpyt Completed. (Total: {totalProcessFileCount.ToString()} Processed.)");
         }
     }

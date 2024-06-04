@@ -49,9 +49,8 @@ namespace CoffeeCat
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
 
             // LoadResources();
+            // Movement();
             SetStat();
-
-            Movement();
             NormalAttack();
             CheckInvincibleTime();
 
@@ -71,8 +70,7 @@ namespace CoffeeCat
 
         private void LoadResources()
         {
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(),
-                                                                                    true);
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
 
             // LevelUp Effect : 임시
@@ -94,7 +92,7 @@ namespace CoffeeCat
                 .Where(_ => !isDead)
                 .Subscribe(_ =>
                 {
-                    /*var hor = Input.GetAxisRaw("Horizontal");
+                    var hor = Input.GetAxisRaw("Horizontal");
                     var ver = Input.GetAxisRaw("Vertical");
 
                     rigid.velocity = new Vector2(hor, ver) * stat.MoveSpeed;
@@ -102,7 +100,7 @@ namespace CoffeeCat
                     if (isPlayerInBattle) return;
 
                     if (hor != 0 || ver != 0)
-                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);*/
+                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
                     
                 }).AddTo(this);
         }
