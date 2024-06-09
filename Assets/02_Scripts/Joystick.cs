@@ -22,6 +22,10 @@ namespace CoffeeCat {
         }
 
         private void Update() {
+#if UNITY_STANDALONE
+            gameObject.SetActive(false);
+#endif
+            
             if (isTouched) {
                 /*var anchoredPos = pointerRectTr.anchoredPosition;*/
                 /*directionVec.x = anchoredPos.x switch {

@@ -89,12 +89,13 @@ namespace CoffeeCat
 
         private void Movement()
         {
+#if UNITY_STANDALONE   
             this.UpdateAsObservable()
                 .Skip(TimeSpan.Zero)
                 .Where(_ => !isDead)
                 .Subscribe(_ =>
                 {
-                    /*var hor = Input.GetAxisRaw("Horizontal");
+                    var hor = Input.GetAxisRaw("Horizontal");
                     var ver = Input.GetAxisRaw("Vertical");
 
                     rigid.velocity = new Vector2(hor, ver) * stat.MoveSpeed;
@@ -102,12 +103,15 @@ namespace CoffeeCat
                     if (isPlayerInBattle) return;
 
                     if (hor != 0 || ver != 0)
-                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);*/
+                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
                     
                 }).AddTo(this);
+#endif
         }
 
-        public void Move(Vector2 direction) {
+        public void Move(Vector2 direction) 
+        {
+#if UNITY_ANDROID
             if (isDead)
                 return;
             
@@ -115,9 +119,12 @@ namespace CoffeeCat
             
             if (isPlayerInBattle) 
                 return;
-            
-            if (direction.x != 0f || direction.y != 0f)
-                SwitchingPlayerDirection(rigid.velocity.x < 0);
+
+            if (direction.x != 0f || direction.y != 0f) 
+            {
+                SwitchingPlayerDirection(rigid.velocity.x < 0);    
+            }
+#endif
         }
 
         public void ClearMove() {

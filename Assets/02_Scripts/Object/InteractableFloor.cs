@@ -6,16 +6,20 @@ namespace CoffeeCat
     public class InteractableFloor : InteractableObject 
     {
         protected override void OnPlayerStay() {
+#if UNITY_ANDROID
             UIPresenter.Instance.EnableNextFloorButton();
-            
+#elif UNITY_STANDALONE
             if (!Input.GetKeyDown(KeyCode.Q)) 
                 return;
             DisposeInteractableSign();
             StageManager.Instance.RequestGenerateNextFloor();
+#endif
         }
 
         protected override void OnPlayerExit() {
-            UIPresenter.Instance.DisableNextFloor();
+#if UNITY_ANDROID
+            UIPresenter.Instance.DisableNextFloorButton();
+#endif
         }
     }
 }
