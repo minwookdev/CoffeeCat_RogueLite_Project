@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
+using CoffeeCat.RogueLite;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -218,9 +219,9 @@ namespace CoffeeCat
             }
         }
 
-        private void PlayerEnteredRoom(RoomType roomType)
+        private void PlayerEnteredRoom(RoomDataStruct roomData)
         {
-            switch (roomType)
+            switch (roomData.RoomType)
             {
                 case RoomType.PlayerSpawnRoom:
                     break;
@@ -240,9 +241,9 @@ namespace CoffeeCat
             }
         }
 
-        private void PlayerClearedRoom(RoomType roomType)
+        private void PlayerClearedRoom(RoomDataStruct roomData)
         {
-            switch (roomType)
+            switch (roomData.RoomType)
             {
                 case RoomType.MonsterSpawnRoom:
                     isPlayerInBattle = false;

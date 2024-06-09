@@ -42,6 +42,7 @@ namespace CoffeeCat
 
         public PlayerSkillEffect_Bubble(Transform playerTr, PlayerSkill playerSkillData) :
             base(playerTr, playerSkillData)
+        
         {
         }
     }

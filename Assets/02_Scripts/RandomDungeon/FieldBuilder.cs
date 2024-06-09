@@ -347,7 +347,7 @@ namespace RandomDungeonWithBluePrint
             // RoomType에 따라 RoomData를 세팅
             foreach (var pair in result) {
                 foreach (var section in pair.Value) {
-                    section.Room.SetRoomData(pair.Key, bluePrint.GetRoomEntityByWeight(pair.Key));
+                    section.Room.SetRoomData(pair.Key, section.Index, bluePrint.GetRoomEntityByWeight(pair.Key));
                 }
             }
 

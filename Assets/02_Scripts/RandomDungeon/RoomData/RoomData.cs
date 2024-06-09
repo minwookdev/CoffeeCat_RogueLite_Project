@@ -13,7 +13,8 @@ using UnityRandom = UnityEngine.Random;
 
 namespace CoffeeCat.RogueLite {
 	public class RoomData {
-		public RoomType RoomType { get; protected set; }                   // 룸 타입 
+		public RoomType RoomType { get; protected set; }                   // 룸 타입
+		public int RoomIndex { get; protected set; } = 0;                  // 룸 인덱스
 		public int Rarity { get; protected set; } = 0;                     // 룸의 레어도
 		public bool IsCleared { get; protected set; } = false;             // 해당 룸의 클리어 여부
 		public bool IsLocked { get; protected set; } = false;              // 현재 룸이 잠금 상태
@@ -23,8 +24,9 @@ namespace CoffeeCat.RogueLite {
 		protected InteractableObject interactableObject = null;            // 상호작용 오브젝트
 		protected Vector3 interactiveObjectSpawnPos = Vector3.zero;
 		
-		public RoomData(RoomType roomType, int rarity = 0, Room room = null) {
+		public RoomData(RoomType roomType, int index, int rarity = 0, Room room = null) {
 			RoomType = roomType;
+			RoomIndex = index;
 			Rarity = rarity;
 			
 			if (room != null)
@@ -54,12 +56,13 @@ namespace CoffeeCat.RogueLite {
 		/// </summary>
 		public virtual void EnteredPlayer() {
 			IsPlayerInside = true;
+			var loomDataStruct = new RoomDataStruct(this);
 			if (!IsPlayerFirstEntered)
 			{
-				StageManager.Instance.InvokeRoomEnteringFirstEvent(RoomType);
+				StageManager.Instance.InvokeRoomEnteringFirstEvent(loomDataStruct);
 				IsPlayerFirstEntered = true;
 			}
-			StageManager.Instance.InvokeRoomEnteringEvent(RoomType);
+			StageManager.Instance.InvokeRoomEnteringEvent(loomDataStruct);
 		}
 
 		/// <summary>
@@ -67,6 +70,8 @@ namespace CoffeeCat.RogueLite {
 		/// </summary>
 		public virtual void LeavesPlayer() {
 			IsPlayerInside = false;
+			var loomDataStruct = new RoomDataStruct(this);
+			StageManager.Instance.InvokeRoomLeftEvent(loomDataStruct);
 		}
 
 		protected void SetInteractiveObject(InteractableType type)
@@ -103,7 +108,7 @@ namespace CoffeeCat.RogueLite {
 		private int MaxSpawnCount = 0;
 		private float EndureSeconds = 0f;
 		
-		public BattleRoom(Room room, BattleRoomDataEntity entity) : base(RoomType.MonsterSpawnRoom, entity.Rarity) {
+		public BattleRoom(Room room, int index, BattleRoomDataEntity entity) : base(RoomType.MonsterSpawnRoom, index, entity.Rarity) {
 			SpawnPositions = GetMonsterSpawnPositions(room, tileRadius: 0.5f);
 			roomCenterPos = room.FloorRectInt.center;
 			MaxSpawnCount = entity.MaxSpawnMonster;
@@ -143,9 +148,10 @@ namespace CoffeeCat.RogueLite {
 		public override void EnteredPlayer()
 		{
 			IsPlayerInside = true;
+			var roomDataStruct = new RoomDataStruct(this);
 			if (!IsPlayerFirstEntered)
 			{
-				StageManager.Instance.InvokeRoomEnteringFirstEvent(RoomType);
+				StageManager.Instance.InvokeRoomEnteringFirstEvent(roomDataStruct);
 				IsPlayerFirstEntered = true;
 
 				if (!IsCleared)
@@ -158,7 +164,7 @@ namespace CoffeeCat.RogueLite {
 				}
 			}
 			
-			StageManager.Instance.InvokeRoomEnteringEvent(RoomType);
+			StageManager.Instance.InvokeRoomEnteringEvent(roomDataStruct);
 			return;
 
 			void SpawnGroupMonster() {
@@ -248,7 +254,8 @@ namespace CoffeeCat.RogueLite {
 			IsCleared = true;
 			IsLocked = false;
 			OnRoomLocked?.Invoke(IsLocked);
-			StageManager.Instance.InvokeEventClearedRoomEvent(RoomType);
+			var roomDataStruct = new RoomDataStruct(this);
+			StageManager.Instance.InvokeEventClearedRoomEvent(roomDataStruct);
 			StageManager.Instance.ClearCurrentRoomKillCount();
 		}
 
@@ -316,11 +323,11 @@ namespace CoffeeCat.RogueLite {
 
 	public class PlayerSpawnRoom : RoomData
 	{
-		public PlayerSpawnRoom() : base(RoomType.PlayerSpawnRoom) { }
+		public PlayerSpawnRoom(int index) : base(RoomType.PlayerSpawnRoom, index) { }
 	}
 
 	public class RewardRoom : RoomData {
-		public RewardRoom(Room room) : base(RoomType.RewardRoom, room: room) { }
+		public RewardRoom(Room room, int index) : base(RoomType.RewardRoom, index, room: room) { }
 
 		public override void EnteredPlayer() {
 			base.EnteredPlayer();
@@ -337,7 +344,7 @@ namespace CoffeeCat.RogueLite {
 	}
 
 	public class ShopRoom : RoomData {
-		public ShopRoom(Room room) : base(RoomType.ShopRoom, room: room) { }
+		public ShopRoom(Room room, int index) : base(RoomType.ShopRoom, index, room: room) { }
 
 		public override void EnteredPlayer() {
 			base.EnteredPlayer();
@@ -352,9 +359,14 @@ namespace CoffeeCat.RogueLite {
 			}
 		}
 	}
+	
+	public class EmptyRoom : RoomData {
+		public EmptyRoom(Room room, int index) : base(RoomType.EmptyRoom, index, room: room) { }
+		
+	}
 
 	public class ExitRoomInteractable : RoomData {
-		public ExitRoomInteractable(Room room) : base(RoomType.ExitRoom, room: room) { }
+		public ExitRoomInteractable(Room room, int index) : base(RoomType.ExitRoom, index, room: room) { }
 
 		public override void EnteredPlayer() {
 			base.EnteredPlayer();
@@ -367,6 +379,18 @@ namespace CoffeeCat.RogueLite {
 			if (interactableObject) {
 				interactableObject.StopParticle();
 			}
+		}
+	}
+
+	public struct RoomDataStruct
+	{
+		public RoomType RoomType;
+		public int RoomIndex;
+
+		public RoomDataStruct(RoomData roomData)
+		{
+			RoomType = roomData.RoomType;
+			RoomIndex = roomData.RoomIndex;
 		}
 	}
 }

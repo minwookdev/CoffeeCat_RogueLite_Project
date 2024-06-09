@@ -7,7 +7,7 @@ using CoffeeCat.FrameWork;
 using Sirenix.OdinInspector;
 using UnityEngine.Events;
 
-namespace CoffeCat.UI {
+namespace CoffeeCat.UI {
     public class SkillSelectButton : MonoBehaviour {
         [SerializeField] private Button button = null;
         [SerializeField] private TextMeshProUGUI tmpName = null;

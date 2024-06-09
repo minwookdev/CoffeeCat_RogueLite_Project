@@ -1,5 +1,4 @@
 using UnityEngine;
-using CoffeCat.UI;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;

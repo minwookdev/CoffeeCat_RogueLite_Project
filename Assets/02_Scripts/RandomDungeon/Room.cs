@@ -190,29 +190,31 @@ namespace RandomDungeonWithBluePrint {
         public IEnumerable<Joint> GetConnectedJoints(int direction) {
             return Joints.Where(j => j.Direction == direction && j.Connected);
         }
-        
-        public void SetRoomData(RoomType roomType, RoomDataEntity entity) {
+
+        public void SetRoomData(RoomType roomType, int index, RoomDataEntity entity) {
             switch (roomType) {
                 case RoomType.MonsterSpawnRoom:
                     if (entity is not BattleRoomDataEntity battleRoomEntity) {
                         CatLog.ELog("RoomDataEntity Converting Error !");
                         break;
                     }
-                    RoomData = new BattleRoom(this, battleRoomEntity);
+                    RoomData = new BattleRoom(this, index, battleRoomEntity);
                     break;
                 case RoomType.PlayerSpawnRoom:
-                    RoomData = new PlayerSpawnRoom();
+                    RoomData = new PlayerSpawnRoom(index);
                     break;
                 case RoomType.ShopRoom:
-                    RoomData = new ShopRoom(this);
+                    RoomData = new ShopRoom(this, index);
                     break;
                 case RoomType.RewardRoom:
-                    RoomData = new RewardRoom(this);
+                    RoomData = new RewardRoom(this, index);
                     break;
                 case RoomType.ExitRoom:
-                    RoomData = new ExitRoomInteractable(this);
+                    RoomData = new ExitRoomInteractable(this, index);
                     break;
                 case RoomType.EmptyRoom:
+                    RoomData = new EmptyRoom(this, index);
+                    break;
                 case RoomType.BossRoom:
                     break;
                 default: throw new ArgumentOutOfRangeException(nameof(roomType), roomType, null);

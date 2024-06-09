@@ -33,14 +33,16 @@ namespace CoffeeCat
         [TabGroup("Requires"), ShowInInspector, ReadOnly] public int CurrentFloor { get; private set; } = 0;
         private Room playerCurrentRoom = null;
         public Room PlayerCurrentRoom => playerCurrentRoom;
+        public RandomMapGenerator MapGen => mapGen;
         public bool IsPlayerInsideRoom => playerCurrentRoom != null;
         
         [Title("Events", TitleAlignment = TitleAlignments.Centered)]
         [TabGroup("Events"), SerializeField] private UnityEvent<Field> onMapGenerateCompleted = null;
         [TabGroup("Events"), SerializeField] private UnityEvent onMapDisposeBefore = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<RoomType> OnRoomEntering = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<RoomType> OnRoomFirstEntering = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<RoomType> OnClearedRoom = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomEntering = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomLeft = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomFirstEntering = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnClearedRoom = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnMonsterKilled = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnPlayerKilled = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
@@ -176,15 +178,21 @@ namespace CoffeeCat
 
         public void InvokeEventPlayerKilledEvent(Player key) => OnPlayerKilled?.Invoke();
 
-        public void InvokeEventClearedRoomEvent(RoomType roomType) => OnClearedRoom?.Invoke(roomType);
+        public void InvokeEventClearedRoomEvent(RoomDataStruct roomType) => OnClearedRoom?.Invoke(roomType);
         
-        public void InvokeRoomEnteringEvent(RoomType roomType) => OnRoomEntering?.Invoke(roomType);
+        public void InvokeRoomEnteringEvent(RoomDataStruct roomType) => OnRoomEntering?.Invoke(roomType);
 
-        public void InvokeRoomEnteringFirstEvent(RoomType roomType) => OnRoomFirstEntering?.Invoke(roomType);
+        public void InvokeRoomEnteringFirstEvent(RoomDataStruct roomType) => OnRoomFirstEntering?.Invoke(roomType);
 
-        public void AddListenerRoomFirstEnteringEvent(UnityAction<RoomType> action) => OnRoomFirstEntering.AddListener(action);
+        public void InvokeRoomLeftEvent(RoomDataStruct roomType) => OnRoomLeft?.Invoke(roomType);
+        
+        public void AddListenerRoomEnteringEvent(UnityAction<RoomDataStruct> action) => OnRoomEntering.AddListener(action);
 
-        public void AddListenerClearedRoomEvent(UnityAction<RoomType> action) => OnClearedRoom.AddListener(action);
+        public void AddListenerRoomFirstEnteringEvent(UnityAction<RoomDataStruct> action) => OnRoomFirstEntering.AddListener(action);
+
+        public void AddListenerRoomLeftEvent(UnityAction<RoomDataStruct> action) => OnRoomLeft.AddListener(action);
+        
+        public void AddListenerClearedRoomEvent(UnityAction<RoomDataStruct> action) => OnClearedRoom.AddListener(action);
         
         public void AddEventToOpeningSkillSelectPanel(UnityAction action) => OnOpeningSkillSelectPanel.AddListener(action);
         

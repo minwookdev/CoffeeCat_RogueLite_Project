@@ -22,9 +22,9 @@ namespace CoffeeCat
             this.playerTr = playerTr;
             this.playerSkillData = playerSkillData;
             
-            StageManager.Instance.AddListenerClearedRoomEvent(roomType => 
+            StageManager.Instance.AddListenerClearedRoomEvent(roomData => 
             {
-                if (roomType == RoomType.MonsterSpawnRoom) OnDispose();
+                if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
             
             // TODO : 안드로이드 빌드 버그 수정 후 주석 해제
