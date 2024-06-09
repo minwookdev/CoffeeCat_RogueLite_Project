@@ -49,9 +49,8 @@ namespace CoffeeCat
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
 
             // LoadResources();
+            // Movement();
             SetStat();
-
-            Movement();
             NormalAttack();
             CheckInvincibleTime();
 
@@ -71,8 +70,7 @@ namespace CoffeeCat
 
         private void LoadResources()
         {
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(),
-                                                                                    true);
+            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
             ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
 
             // LevelUp Effect : 임시
