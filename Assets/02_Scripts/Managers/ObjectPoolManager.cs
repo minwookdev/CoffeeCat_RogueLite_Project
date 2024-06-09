@@ -48,7 +48,7 @@ namespace CoffeeCat.FrameWork
 
         public void AddToPool(PoolInformation newInfo) {
             // Load Origin PoolObject is Only Sync
-            newInfo?.TryOriginPrefabLoadSync(AddToObjectPoolDictionary);
+            newInfo?.LoadOriginPrefab(AddToObjectPoolDictionary);
         }
 
         public void AddToPool(params PoolInformation[] newInfos) {

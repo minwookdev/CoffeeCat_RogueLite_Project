@@ -74,7 +74,7 @@ namespace CoffeeCat {
             providedDictionary.Add(key, new Provided());
             // ResourceManager를 통한 로드 및 ObjectPool 등록
             ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
-                ObjectPoolManager.Instance.AddToPool(PoolInformation.New(loadedGameObject));
+                ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(loadedGameObject));
                             
                 // 작업 처리 완료
                 providedDictionary[key].RequestComplete();

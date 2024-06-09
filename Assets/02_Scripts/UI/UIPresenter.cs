@@ -15,7 +15,7 @@ namespace CoffeeCat.FrameWork {
         private void Start() {
             nextFloorButton.onClick.AddListener(() => {
                 StageManager.Instance.RequestGenerateNextFloor();
-                DisableNextFloor();
+                DisableNextFloorButton();
             });
         }
 
@@ -31,7 +31,7 @@ namespace CoffeeCat.FrameWork {
             nextFloorButton.gameObject.SetActive(true);
         }
 
-        public void DisableNextFloor() {
+        public void DisableNextFloorButton() {
             nextFloorButton.gameObject.SetActive(false);
         }
     }

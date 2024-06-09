@@ -86,7 +86,7 @@ namespace CoffeeCat.FrameWork {
             // Defined that it was requested as a Dictionary assignment (Prevent re-requests while taking control of Unity)
             requestDictionary.Add(key, new Request(onCompleted));
             ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
-                ObjectPoolManager.Instance.AddToPool(PoolInformation.New(loadedGameObject));
+                ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(loadedGameObject));
                 requestDictionary[key].RequestComplete();
             });
         }

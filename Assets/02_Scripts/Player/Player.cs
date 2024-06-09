@@ -71,12 +71,14 @@ namespace CoffeeCat
 
         private void LoadResources()
         {
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+            // TODO: Use AddressablesAsyncLoad Method !
+            
+            /*var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
+            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));*/
 
             // LevelUp Effect : 임시
-            obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("LevelUp", true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj, initSpawnCount: 1));
+            /*obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("LevelUp", true);
+            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj, initSpawnCount: 1));*/
         }
 
         private void SetStat()
@@ -88,6 +90,7 @@ namespace CoffeeCat
 
         private void Movement()
         {
+#if UNITY_STANDALONE   
             this.UpdateAsObservable()
                 .Skip(TimeSpan.Zero)
                 .Where(_ => !isDead)
@@ -104,9 +107,12 @@ namespace CoffeeCat
                         SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
                     
                 }).AddTo(this);
+#endif
         }
 
-        public void Move(Vector2 direction) {
+        public void Move(Vector2 direction) 
+        {
+#if UNITY_ANDROID
             if (isDead)
                 return;
             
@@ -114,9 +120,12 @@ namespace CoffeeCat
             
             if (isPlayerInBattle) 
                 return;
-            
-            if (direction.x != 0f || direction.y != 0f)
-                SwitchingPlayerDirection(rigid.velocity.x < 0);
+
+            if (direction.x != 0f || direction.y != 0f) 
+            {
+                SwitchingPlayerDirection(rigid.velocity.x < 0);    
+            }
+#endif
         }
 
         public void ClearMove() {

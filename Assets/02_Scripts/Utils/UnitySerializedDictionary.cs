@@ -32,7 +32,7 @@ namespace CoffeeCat.Utils.SerializedDictionaries {
     [Serializable] public class StringTransformDictionary : UnitySerializedDictionary<string, Transform> { }
     [Serializable] public class StringGameObjectStackDictionary : UnitySerializedDictionary<string, Stack<GameObject>> { }
     [Serializable] public class StringIntDictionary : UnitySerializedDictionary<string, int> { }
-    [Serializable] public class StringResourceInformationDictionary : UnitySerializedDictionary<string, ResourceManager.ResourceInformation> { }
+    [Serializable] public class StringResourceInformationDictionary : UnitySerializedDictionary<string, ResourceManager.ResourceInfo> { }
     [Serializable] public class StringEffectInformationDictionary : UnitySerializedDictionary<string, EffectManager.EffectInfo> { }
     [Serializable] public class StringAudioClipDictionary : UnitySerializedDictionary<string, AudioClip> { }
     [Serializable] public class StringAudioSourceDictionary : UnitySerializedDictionary <string, AudioSource> { }   
