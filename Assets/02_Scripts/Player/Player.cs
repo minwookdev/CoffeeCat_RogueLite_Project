@@ -70,12 +70,14 @@ namespace CoffeeCat
 
         private void LoadResources()
         {
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+            // TODO: Use AddressablesAsyncLoad Method !
+            
+            /*var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
+            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));*/
 
             // LevelUp Effect : 임시
-            obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("LevelUp", true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj, initSpawnCount: 1));
+            /*obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("LevelUp", true);
+            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj, initSpawnCount: 1));*/
         }
 
         private void SetStat()

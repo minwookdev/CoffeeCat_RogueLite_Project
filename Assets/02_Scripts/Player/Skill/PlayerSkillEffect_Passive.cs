@@ -55,8 +55,10 @@ namespace CoffeeCat
             if (ObjectPoolManager.Instance.IsExistInPoolDictionary(passiveAddressableKey)) 
                 return;
             
-            var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(passiveAddressableKey, true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+            ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(passiveAddressableKey, false, (origin) =>
+            {
+                ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(origin));
+            });
         }
 
         #region PassiveSkillEffect

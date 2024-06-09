@@ -52,7 +52,6 @@ namespace CoffeeCat.FrameWork {
         public bool HasCustomRootParent { get => CustomRootParent != null; }
 
         #region INSPECTOR BUTTONS
-
         
         [ButtonGroup("PoolObject/Buttons", ButtonHeight = 25), HideInPlayMode]
         private void Caching()
@@ -92,7 +91,7 @@ namespace CoffeeCat.FrameWork {
             CustomRootParent = null;
         }
 
-        public static PoolInformation New(GameObject poolObject, bool hasRootParent = true, int initSpawnCount = PoolInformation.DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
+        public static PoolInformation Create(GameObject poolObject, bool hasRootParent = true, int initSpawnCount = PoolInformation.DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
             return new PoolInformation() {
                 PoolObject = poolObject,
                 InitSpawnCount = initSpawnCount,
@@ -102,36 +101,29 @@ namespace CoffeeCat.FrameWork {
             };
         }
 
-        public void TryOriginPrefabLoadSync(Action<PoolInformation> onSuccessfullyCompleted = null) {
+        public void LoadOriginPrefab(Action<PoolInformation> onComplete = null) {
             switch (PoolObjectLoadType) {
                 case LoadType.Resource_Load:
                     // Check Path Included Extensions
-                    int fileExtensionPosition = ResourcesPath.LastIndexOf(".");
+                    int fileExtensionPosition = ResourcesPath.LastIndexOf(".", StringComparison.Ordinal);
                     if (fileExtensionPosition >= 0) { // Remove Paths Extension
                         ResourcesPath = ResourcesPath.Substring(0, fileExtensionPosition);
                     }
                     PoolObject = ResourceManager.Instance.ResourcesLoad<GameObject>(ResourcesPath, false);
                     break;
                 case LoadType.Addressables_Key:
-                    /*PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AddressablesName, false);*/
                     ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(AddressablesName, false, loadedObject => {
                         PoolObject = loadedObject;
+                        onComplete?.Invoke(this);
                     });
-                    break;
-                case LoadType.Addressables_AssetRef:
-                    /*PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AssetRef, false);*/
-                    /*PoolObject = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(AddressablesName, false);*/
-                    ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(AssetRef, false, loadedObject => {
-                        PoolObject = loadedObject;
-                    });
-                    break;
+                    return;
                 case LoadType.Caching:
                 case LoadType.Custom:
                 case LoadType.None:
                     break;
-                default:
-                    CatLog.ELog("Not Implemented this LoadType.");
-                    return;
+                case LoadType.Addressables_AssetRef:
+                default: 
+                    throw new NotImplementedException();
             }
 
             if (!PoolObject) {
@@ -139,7 +131,7 @@ namespace CoffeeCat.FrameWork {
                 return;
             }
             
-            onSuccessfullyCompleted?.Invoke(this);
+            onComplete?.Invoke(this);
         }
 
         /// <summary>
