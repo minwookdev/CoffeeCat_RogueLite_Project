@@ -91,7 +91,7 @@ namespace CoffeeCat.FrameWork {
             CustomRootParent = null;
         }
 
-        public static PoolInformation Create(GameObject poolObject, bool hasRootParent = true, int initSpawnCount = PoolInformation.DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
+        public static PoolInformation Create(GameObject poolObject, bool hasRootParent = true, int initSpawnCount = DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
             return new PoolInformation() {
                 PoolObject = poolObject,
                 InitSpawnCount = initSpawnCount,
