@@ -1,9 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using CoffeeCat.Utils;
 using Spine.Unity;
-using UnityEditor;
+using UniRx;
 using UnityEngine;
 
 namespace CoffeeCat
@@ -17,11 +16,12 @@ namespace CoffeeCat
             None,
             Idle,
             Walk,
+            GetItem,
             Attack,
             Hit,
             Dead
         }
-        
+
         [SerializeField] public EnumPlayerState State = EnumPlayerState.None;
 
         protected Transform tr = null;
@@ -30,6 +30,7 @@ namespace CoffeeCat
 
         protected const string animIdle = "Idle_2";
         protected const string animWalk = "Walk_NoHand";
+        protected const string animGetItem = "Charging_2";
         protected const string animAttack = "Attack_2";
         protected const string animHit = "Hit";
         protected const string animDead = "Die_2";
@@ -38,7 +39,7 @@ namespace CoffeeCat
         {
             tr = GetComponent<Transform>();
             anim = GetComponent<SkeletonAnimation>();
-            
+
             ChangeState(EnumPlayerState.Idle);
         }
 
@@ -59,6 +60,9 @@ namespace CoffeeCat
                 case EnumPlayerState.Walk:
                     Update_WalkState();
                     break;
+                case EnumPlayerState.GetItem:
+                    Update_GetItemState();
+                    break;
                 case EnumPlayerState.Attack:
                     Update_AttackState();
                     break;
@@ -73,50 +77,70 @@ namespace CoffeeCat
             }
         }
 
-        protected void ChangeState(EnumPlayerState targetState)
+        protected void ChangeState(EnumPlayerState targetState, float delayTime = 0f)
         {
-            switch (State)
+            if (delayTime <= 0)
             {
-                case EnumPlayerState.None:
-                    break;
-                case EnumPlayerState.Idle:
-                    Exit_IdleState();
-                    break;
-                case EnumPlayerState.Walk:
-                    Exit_WalkState();
-                    break;
-                case EnumPlayerState.Attack:
-                    Exit_AttackState();
-                    break;
-                case EnumPlayerState.Hit:
-                    Exit_HitState();
-                    break;
-                case EnumPlayerState.Dead:
-                    Exit_DeadState();
-                    break;
+                Execute();
+                return;
             }
 
-            State = targetState;
+            Observable.Timer(TimeSpan.FromSeconds(delayTime))
+                      .Skip(TimeSpan.Zero)
+                      .Subscribe(_ => Execute())
+                      .AddTo(this);
 
-            switch (State)
+            void Execute()
             {
-                case EnumPlayerState.None:
-                    break;
-                case EnumPlayerState.Idle:
-                    Enter_IdleState();
-                    break;
-                case EnumPlayerState.Walk:
-                    Enter_WalkState();
-                    break;
-                case EnumPlayerState.Attack:
-                    Enter_AttackState();
-                    break;
-                case EnumPlayerState.Hit:
-                    Enter_HitState();
-                    break;
-                case EnumPlayerState.Dead:
-                    Enter_DeadState();
-                    break;
+                switch (State)
+                {
+                    case EnumPlayerState.None:
+                        break;
+                    case EnumPlayerState.Idle:
+                        Exit_IdleState();
+                        break;
+                    case EnumPlayerState.Walk:
+                        Exit_WalkState();
+                        break;
+                    case EnumPlayerState.GetItem:
+                        Exit_GetItemState();
+                        break;
+                    case EnumPlayerState.Attack:
+                        Exit_AttackState();
+                        break;
+                    case EnumPlayerState.Hit:
+                        Exit_HitState();
+                        break;
+                    case EnumPlayerState.Dead:
+                        Exit_DeadState();
+                        break;
+                }
+
+                State = targetState;
+
+                switch (State)
+                {
+                    case EnumPlayerState.None:
+                        break;
+                    case EnumPlayerState.Idle:
+                        Enter_IdleState();
+                        break;
+                    case EnumPlayerState.Walk:
+                        Enter_WalkState();
+                        break;
+                    case EnumPlayerState.GetItem:
+                        Enter_GetItemState();
+                        break;
+                    case EnumPlayerState.Attack:
+                        Enter_AttackState();
+                        break;
+                    case EnumPlayerState.Hit:
+                        Enter_HitState();
+                        break;
+                    case EnumPlayerState.Dead:
+                        Enter_DeadState();
+                        break;
+                }
             }
         }
 
@@ -147,6 +171,22 @@ namespace CoffeeCat
         }
 
         protected virtual void Exit_WalkState()
+        {
+        }
+
+        #endregion
+
+        #region GETITEM
+
+        protected virtual void Enter_GetItemState()
+        {
+        }
+
+        protected virtual void Update_GetItemState()
+        {
+        }
+
+        protected virtual void Exit_GetItemState()
         {
         }
 

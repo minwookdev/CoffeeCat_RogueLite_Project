@@ -347,11 +347,10 @@ namespace CoffeeCat
             UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
         }
 
-        public void AddListenerPlayerDeadEvent(UnityAction action)
-        {
-            OnPlayerDead.AddListener(action);
-        }
-
+        public void AddListenerPlayerDeadEvent(UnityAction action) => OnPlayerDead.AddListener(action);
+        
+        public void AddListenerUpdateSkillCompletedEvent(UnityAction action) => OnUpdateSkillCompleted.AddListener(action);
+        
         #endregion
     }
 }

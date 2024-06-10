@@ -19,14 +19,9 @@ namespace CoffeeCat
     [SuppressMessage("ReSharper", "InvertIf")]
     public partial class Player
     {
-        // TODO : 노션에 전달 할 기획 메모 작성 : 스킬 Select는 배틀룸 밖에서만 해야함 (InBattleRoom 변수가 변화하는 순간 업데이트 된 스킬들이 반영됨)
-
         [Title("Skill")]
         [ShowInInspector] private readonly List<PlayerSkill> ownedSkillsList = new List<PlayerSkill>();
-
-        [ShowInInspector]
-        private readonly Dictionary<string, PlayerSkillEffect> skillEffects =
-            new Dictionary<string, PlayerSkillEffect>();
+        [ShowInInspector] private readonly Dictionary<string, PlayerSkillEffect> skillEffects = new Dictionary<string, PlayerSkillEffect>();
 
         private readonly UnityEvent OnUpdateSkillCompleted = new UnityEvent();
 
