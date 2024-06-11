@@ -5,6 +5,7 @@ using System.Linq;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.Defines;
 using UnityEngine;
+using DG.Tweening;
 
 namespace CoffeeCat
 {
@@ -16,17 +17,20 @@ namespace CoffeeCat
         protected IDisposable updateDisposable = null;
 
         // 새로운 스킬 선택
-        protected PlayerSkillEffect() { }
+        protected PlayerSkillEffect()
+        {
+        }
+
         protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
         {
             this.playerTr = playerTr;
             this.playerSkillData = playerSkillData;
-            
-            StageManager.Instance.AddListenerClearedRoomEvent(roomData => 
+
+            StageManager.Instance.AddListenerClearedRoomEvent(roomData =>
             {
                 if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
-            
+
             // TODO : 안드로이드 빌드 버그 수정 후 주석 해제
             // var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>
             //     (playerSkillData.SkillName, true);
@@ -34,8 +38,10 @@ namespace CoffeeCat
         }
 
         // 스킬 효과
-        protected virtual void SkillEffect(PlayerStat playerStat) { }
-        
+        protected virtual void SkillEffect(PlayerStat playerStat)
+        {
+        }
+
         // 보유한 스킬 선택 (등급 업)
         public virtual void UpdateSkillData(PlayerSkill updateSkillData) => playerSkillData = updateSkillData;
 
@@ -43,11 +49,10 @@ namespace CoffeeCat
         public void ActivateSkillEffect(PlayerStat playerStat) => SkillEffect(playerStat);
 
         // 스킬 효과 비활성화
-        public void OnDispose() => updateDisposable.Dispose();
-
+        public void OnDispose() => updateDisposable?.Dispose();
 
         #region FindMonster
-        
+
         protected List<MonsterStatus> FindAllMonsters()
         {
             var monsters = Physics2D.OverlapBoxAll(playerTr.position,
@@ -72,7 +77,7 @@ namespace CoffeeCat
 
             var targets = monsters
                           .Where(collider2D => collider2D)
-                          .Select(collider2D => collider2D.GetComponent<MonsterStatus>()) 
+                          .Select(collider2D => collider2D.GetComponent<MonsterStatus>())
                           .ToList();
 
             return targets;
@@ -91,7 +96,23 @@ namespace CoffeeCat
                    .Select(collider2D => collider2D.GetComponent<MonsterStatus>())
                    .FirstOrDefault();
         }
-        
+
+        protected void DisplayDamageRange()
+        {
+            var damageRangeObj = ObjectPoolManager.Instance.Spawn("DamageRange", playerTr.position);
+            damageRangeObj.transform.localScale = new Vector3(Defines.PLAYER_AREA_SKILL_VECTOR_X,
+                                                              Defines.PLAYER_AREA_SKILL_VECTOR_Y, 1f);
+            
+            var sprite = damageRangeObj.GetComponent<SpriteRenderer>();
+            sprite.DORewind();
+            sprite.DOFade(0.15f, 0.5f).SetEase(Ease.Linear)
+                  .OnComplete(() =>
+                  {
+                      sprite.DOFade(0f, 0.5f).SetEase(Ease.Linear);
+                      ObjectPoolManager.Instance.Despawn(damageRangeObj, 0.25f);
+                  });
+        }
+
         #endregion
     }
 }

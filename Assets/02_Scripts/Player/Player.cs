@@ -4,6 +4,7 @@ using System.Linq;
 using CoffeeCat.Datas;
 using CoffeeCat.FrameWork;
 using CoffeeCat.RogueLite;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace CoffeeCat
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
 
             // LoadResources();
-            // Movement();
+            Movement();
             SetStat();
             NormalAttack();
             CheckInvincibleTime();
@@ -64,7 +65,7 @@ namespace CoffeeCat
             // test
             if (Input.GetKeyDown(KeyCode.O))
             {
-                EnableSkillSelect();
+                // EnableSkillSelect();
                 // UpdateStat();
             }
         }
@@ -217,9 +218,6 @@ namespace CoffeeCat
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (isInvincible)
-                return;
-
             // Monster와 충돌
             if (other.gameObject.TryGetComponent(out MonsterStatus monsterStat))
             {
@@ -333,6 +331,9 @@ namespace CoffeeCat
 
         public void OnDamaged(DamageData damageData)
         {
+            if (isInvincible)
+                return;
+            
             var calculatedDamage = damageData.CalculatedDamage;
             stat.CurrentHp -= calculatedDamage;
             DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, true);

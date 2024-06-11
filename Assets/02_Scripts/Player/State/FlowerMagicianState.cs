@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using CoffeeCat.Utils;
 using Spine;
+using Spine.Unity;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -120,6 +122,8 @@ namespace CoffeeCat
         {
             currentTrack = anim.AnimationState.SetAnimation(1, animHit, false);
             currentTrack.TimeScale = 1.3f;
+
+            OnPlayerInvincivle();
         }
 
         protected override void Update_HitState()

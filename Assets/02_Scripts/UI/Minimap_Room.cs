@@ -10,8 +10,6 @@ namespace CoffeeCat
     // TODO : RoomIcon 어드레서블로 변경
     public class Minimap_Room : MonoBehaviour
     {
-        // 방 입장시 미니맵에 표시
-        // 클리어한 룸인지 표시
         private const string roomIconPath = "UI/RoomIcon";
         private int roomIndex = 0;
 

@@ -31,6 +31,7 @@ namespace CoffeeCat
                               var targets = FindAllMonsters();
                               if (targets == null) return;
 
+                              DisplayDamageRange();
                               var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillName, playerTr.position);
                               var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
                               projectile.AreaAttack(playerStat, targets, skillData.SkillBaseDamage,
@@ -42,7 +43,6 @@ namespace CoffeeCat
 
         public PlayerSkillEffect_Bubble(Transform playerTr, PlayerSkill playerSkillData) :
             base(playerTr, playerSkillData)
-        
         {
         }
     }

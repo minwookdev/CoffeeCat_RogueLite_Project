@@ -13,13 +13,13 @@ namespace CoffeeCat
     // TODO : Pool Manager에 등록 방식 변경 (현재 : Caching)
     public class Minimap : MonoBehaviour
     {
-        [ShowInInspector] private Dictionary<int, Minimap_Room> minimapRooms = new Dictionary<int, Minimap_Room>();
+        private readonly Dictionary<int, Minimap_Room> minimapRooms = new Dictionary<int, Minimap_Room>();
         private const float minimapRatio = 10f;
         private const string roomPanelKey = "RoomPanel";
         
         [SerializeField] private RectTransform rectTr = null;
         
-        private void Start()
+        private void Awake()
         {
             StageManager.Instance.AddEventToMapGenerateCompleted(MinimapGenerate);
         }

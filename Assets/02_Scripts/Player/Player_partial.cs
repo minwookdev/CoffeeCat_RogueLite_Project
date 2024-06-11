@@ -160,7 +160,7 @@ namespace CoffeeCat
             foreach (var ownedActiveSkill in ownedActiveSkills)
             {
                 if (ownedActiveSkill is not PlayerActiveSkill activeSkill) continue;
-                activeSkill.SkillCoolTime -= delta;
+                activeSkill.SkillCoolTime *= delta;
             }
 
             // 이후 새로 스킬을 배울 때마다 쿨타임을 감소시키기 위해 이벤트 추가
@@ -224,7 +224,7 @@ namespace CoffeeCat
             if (activeSkill.SkillCoolTime - delta < 0)
                 activeSkill.SkillCoolTime = 0.1f;
             else
-                activeSkill.SkillCoolTime -= delta;
+                activeSkill.SkillCoolTime *= delta;
         }
 
         #endregion
