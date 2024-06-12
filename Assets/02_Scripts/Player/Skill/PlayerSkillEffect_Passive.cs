@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "MemberCanBeMadeStatic.Local")]
     public class PlayerSkillEffect_Passive : PlayerSkillEffect
     {
         private const string passiveAddressableKey = "Passive";

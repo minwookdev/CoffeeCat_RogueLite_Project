@@ -8,8 +8,6 @@ using UnityEngine;
 namespace CoffeeCat
 {
     [Serializable]
-    [SuppressMessage("ReSharper", "ForCanBeConvertedToForeach")]
-    [SuppressMessage("ReSharper", "HeapView.ObjectAllocation.Evident")]
     public class PlayerStatDatas
     {
         [ShowInInspector, ReadOnly] public StringPlayerStatDictionary DataDictionary { get; private set; } = null;
