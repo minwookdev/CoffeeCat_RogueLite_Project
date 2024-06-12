@@ -19,13 +19,12 @@ namespace CoffeeCat
     {
         [Title("Status")]
         [SerializeField] protected PlayerAddressablesKey playerName = PlayerAddressablesKey.NONE;
-
         [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
+        [SerializeField] protected PlayerLevelData playerLevelData = null;
         [ShowInInspector, ReadOnly] protected PlayerStat stat;
 
         [Title("Transform")]
         [SerializeField] protected Transform tr = null;
-
         [SerializeField] protected Transform projectileTr = null;
 
         private UnityEvent OnPlayerDead = new UnityEvent();
@@ -36,10 +35,6 @@ namespace CoffeeCat
         private bool isPlayerDamaged = false;
         private bool isInvincible = false;
         private bool isDead = false;
-
-        // 임시
-        private int maxExp = 50;
-        private int currentExp = 0;
 
         // Property
         public Transform Tr => tr;
@@ -129,7 +124,8 @@ namespace CoffeeCat
 #endif
         }
 
-        public void ClearMove() {
+        public void ClearMove()
+        {
             rigid.velocity = Vector2.zero;
         }
 
@@ -254,28 +250,13 @@ namespace CoffeeCat
             {
                 case RoomType.MonsterSpawnRoom:
                     isPlayerInBattle = false;
-                    GetExp();
                     break;
                 case RoomType.BossRoom:
                     break;
             }
         }
 
-        private void GetExp()
-        {
-            var exp = StageManager.Instance.CurrentRoomMonsterKilledCount * 5;
-            currentExp += exp;
-
-            if (currentExp >= maxExp)
-            {
-                maxExp += 50;
-
-                var levelUpEffect = ObjectPoolManager.Instance.Spawn("LevelUp", tr);
-                levelUpEffect.transform.localPosition = Vector3.zero;
-                Observable.Timer(TimeSpan.FromSeconds(2.5f))
-                          .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
-            }
-        }
+       
 
         #region Public Methods
 
@@ -346,6 +327,22 @@ namespace CoffeeCat
             }
             
             UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
+        }
+        
+        public void GetExp()
+        {
+            // TODO : 층마다 다른 경험치
+            const float exp = 5f;
+            playerLevelData.AddExp(exp);
+
+            if (!playerLevelData.isReadyLevelUp()) return;
+            
+            playerLevelData.LevelUp();
+            var levelUpEffect = ObjectPoolManager.Instance.Spawn("LevelUp", tr);
+            levelUpEffect.transform.localPosition = Vector3.zero;
+
+            Observable.Timer(TimeSpan.FromSeconds(2.5f))
+                      .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
         }
 
         public void AddListenerPlayerDeadEvent(UnityAction action) => OnPlayerDead.AddListener(action);

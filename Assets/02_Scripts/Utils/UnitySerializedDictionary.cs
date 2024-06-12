@@ -36,7 +36,7 @@ namespace CoffeeCat.Utils.SerializedDictionaries {
     [Serializable] public class StringEffectInformationDictionary : UnitySerializedDictionary<string, EffectManager.EffectInfo> { }
     [Serializable] public class StringAudioClipDictionary : UnitySerializedDictionary<string, AudioClip> { }
     [Serializable] public class StringAudioSourceDictionary : UnitySerializedDictionary <string, AudioSource> { }   
-
+    
     // DATA DICTIONARIES
     [Serializable] public class StringMonsterStatDictionary : UnitySerializedDictionary<string, MonsterStat> { }
     [Serializable] public class StringMonsterSkillDictionary : UnitySerializedDictionary<string, MonsterSkillStat> { }

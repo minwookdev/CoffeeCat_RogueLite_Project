@@ -161,6 +161,9 @@ namespace CoffeeCat
 
         public void AddCurrentRoomKillCount()
         {
+            var player = RogueLiteManager.Instance.SpawnedPlayer;
+            player.GetExp();
+            
             CurrentRoomMonsterKilledCount++;
         }
 

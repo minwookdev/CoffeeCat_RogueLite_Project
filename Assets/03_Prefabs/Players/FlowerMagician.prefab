@@ -86,6 +86,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerName: 2
   normalAttackProjectile: 1
+  playerLevelData: {fileID: 11400000, guid: d9c22ae8167c93e41ab97829f662e1c3, type: 2}
   tr: {fileID: 1305159281282759405}
   projectileTr: {fileID: 1303632491375746209}
 --- !u!114 &7360086901526505623
