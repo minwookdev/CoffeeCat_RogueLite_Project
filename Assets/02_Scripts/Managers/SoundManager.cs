@@ -7,7 +7,7 @@ using CoffeeCat.Utils.Defines;
 using CoffeeCat.Utils.SerializedDictionaries;
 
 namespace CoffeeCat.FrameWork { 
-    public class SoundManager : GenericSingleton<SoundManager> {
+    public class SoundManager : DynamicSingleton<SoundManager> {
         [Title("AUDIO GROUP", TitleAlignment = TitleAlignments.Centered)]
         [ShowInInspector, ReadOnly] public Transform AudioCameraTr { get; private set; } = null;
         [ShowInInspector, ReadOnly] public Transform AudioGroupTr { get; private set; } = null;

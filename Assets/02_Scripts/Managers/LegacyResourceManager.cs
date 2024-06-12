@@ -16,7 +16,7 @@ using UnityEngine.AddressableAssets.Initialization;
 
 namespace CoffeeCat.Legacy {
 
-    public class LegacyResourceManager : GenericSingleton<LegacyResourceManager> {
+    public class LegacyResourceManager : DynamicSingleton<LegacyResourceManager> {
         // Resources Dictionary
         [SerializeField, Title("Resource Dictionary")]
         Dictionary<string, ResourceInformation> resourcesDict = null;

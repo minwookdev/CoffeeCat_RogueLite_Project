@@ -18,6 +18,8 @@ namespace CoffeeCat.Utils.Defines
             return LayerMask.NameToLayer("Player");
         }
     }
+    
+    #region Enumerations
 
     public enum SceneName
     {
@@ -78,4 +80,6 @@ namespace CoffeeCat.Utils.Defines
         Shop,
         Reward
     }
+    
+    #endregion
 }

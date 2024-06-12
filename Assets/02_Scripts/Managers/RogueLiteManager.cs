@@ -5,7 +5,7 @@ using CoffeeCat.Utils;
 using UnityEngine;
 
 namespace CoffeeCat.FrameWork {
-	public class RogueLiteManager : GenericSingleton<RogueLiteManager> {
+	public class RogueLiteManager : DynamicSingleton<RogueLiteManager> {
 		// Properties
 		public Player SpawnedPlayer { get; private set; } = null;
 		public Vector3 SpawnedPlayerPosition => SpawnedPlayer.Tr.position;

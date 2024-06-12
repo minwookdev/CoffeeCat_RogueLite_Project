@@ -73,7 +73,6 @@ GameObject:
   - component: {fileID: 1395606766211926145}
   - component: {fileID: 315139273145602295}
   - component: {fileID: 2966079685121860070}
-  - component: {fileID: 1165742970008717284}
   - component: {fileID: 1395606766211926144}
   - component: {fileID: 5196415714886648488}
   - component: {fileID: 1395606766211926173}
@@ -145,21 +144,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state: {fileID: 315139273145602295}
   customStatLoadKey: Skeleton_Mage
---- !u!114 &1165742970008717284
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1395606766211926146}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f64e02fa807ec1f40aae18ef207f054a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IsRequestOnAwake: 1
-  requests:
-  - key: 7
+  <CurrentStat>k__BackingField:
+    Name: 
+    Desc: 
+    HP: 0
+    MP: 0
+    Damage: 0
+    DamageDeviation: 0.05
+    CriticalChance: 0
+    CriticalMultiplier: 0
+    Defence: 0
+    CriticalResist: 0
+    Penetration: 0
 --- !u!95 &1395606766211926144
 Animator:
   serializedVersion: 5

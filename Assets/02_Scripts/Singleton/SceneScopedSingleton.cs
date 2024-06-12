@@ -3,7 +3,7 @@ using CoffeeCat.Utils;
 
 namespace CoffeeCat.FrameWork
 {
-    public class PrelocatedSingleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class SceneScopedSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static object _lock = new object();
         private static T _instance = null;

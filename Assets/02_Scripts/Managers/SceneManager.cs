@@ -8,7 +8,7 @@ using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat.FrameWork {
-    public class SceneManager : GenericSingleton<SceneManager> {
+    public class SceneManager : DynamicSingleton<SceneManager> {
         public const float SCENELOAD_CORRECTION_MINTIME = 3f;
 
         [Title("SCENE MANAGER FIELDS")]
@@ -23,7 +23,7 @@ namespace CoffeeCat.FrameWork {
         public event OnSceneChangeEvent OnSceneChangeAfterEvent = delegate { };
 
         //
-        // !¾À ÀÌº¥Æ® °ü¸® ¹æ½Ä º¯°æ
+        // !ì”¬ ì´ë²¤íŠ¸ ê´€ë¦¬ ë°©ì‹ ë³€ê²½
         //
         //private void ActiveSceneChanger() {
         //    //CatLog.Log($"First Scene Name: {UnitySceneManager.GetSceneAt(0).name}");
@@ -98,7 +98,7 @@ namespace CoffeeCat.FrameWork {
             sceneLoadAsyncOperation.allowSceneActivation = false;
 
             while (sceneLoadAsyncOperation.isDone == false) { 
-                // (allowSceneActivationÀÌ falseÀÎ µ¿¾È¿¡´Â progress°¡ 0.9f ±îÁö¸¸ Áõ°¡)
+                // (allowSceneActivationì´ falseì¸ ë™ì•ˆì—ëŠ” progressê°€ 0.9f ê¹Œì§€ë§Œ ì¦ê°€)
                 if (sceneLoadAsyncOperation.progress >= 0.9f) {
                     break;
                 }

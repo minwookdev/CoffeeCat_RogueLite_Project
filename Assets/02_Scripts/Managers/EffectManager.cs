@@ -14,7 +14,7 @@ namespace CoffeeCat.FrameWork {
     // !한 이펙트를 여러 사용자가 갖게될 경우 관리 방안 마련
     // !ResourceManager와 분리하기
 
-    public class EffectManager : GenericSingleton<EffectManager> {
+    public class EffectManager : DynamicSingleton<EffectManager> {
         [SerializeField, ReadOnly] StringEffectInformationDictionary effectInfoDictionary = null;
 
         [Serializable]

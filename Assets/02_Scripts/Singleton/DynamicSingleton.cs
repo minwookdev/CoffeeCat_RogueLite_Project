@@ -1,9 +1,7 @@
 using UnityEngine;
-using CoffeeCat.Utils;
 
 namespace CoffeeCat.FrameWork {
-    [DisallowMultipleComponent]
-    public class GenericSingleton<T> : MonoBehaviour where T : MonoBehaviour {
+    public class DynamicSingleton<T> : MonoBehaviour where T : MonoBehaviour {
         // Destroy 여부 확인용
         private static bool _shuttingDown = false;
         private static object _lock = new object();
@@ -44,7 +42,7 @@ namespace CoffeeCat.FrameWork {
                             DontDestroyOnLoad(singletonObject);
 
                             // Singleton Initialize Call. 
-                            _instance.SendMessage(nameof(GenericSingleton<T>.Initialize)); // Type 1. SendMessage
+                            _instance.SendMessage(nameof(DynamicSingleton<T>.Initialize)); // Type 1. SendMessage
                             //_instance.GetComponent<GenericSingleton<T>>().Initialize();  // Type 2. GetComponent
                             // CatLog.Log($"Initialized Singleton {typeof(T).Name}");
                         }
@@ -55,7 +53,7 @@ namespace CoffeeCat.FrameWork {
         }
 
         // 비 싱글턴 생성자 사용 방지
-        protected GenericSingleton() { }
+        protected DynamicSingleton() { }
 
         /// <summary>
         /// 대형 로직 작성 금지

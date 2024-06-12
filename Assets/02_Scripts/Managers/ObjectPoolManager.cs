@@ -10,7 +10,7 @@ using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat.FrameWork
 {
-    public class ObjectPoolManager : GenericSingleton<ObjectPoolManager> 
+    public class ObjectPoolManager : DynamicSingleton<ObjectPoolManager> 
     {
         [Space(5f), Title("Parent"), ReadOnly]
         [SerializeField] private Transform rootParentTr = null;
@@ -64,7 +64,7 @@ namespace CoffeeCat.FrameWork
             }
             
             if (poolStackDict.ContainsKey(information.PoolObject.name)) {
-                CatLog.Log($"{information.PoolObject.name} is Already Containing Object Pool Dictionary.");
+                // CatLog.Log($"{information.PoolObject.name} is Already Containing Object Pool Dictionary.");
                 return;
             }
 
