@@ -47,6 +47,7 @@ namespace CoffeeCat
         [TabGroup("Events"), SerializeField] private UnityEvent OnPlayerKilled = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnSkillSelectCompleted = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<float> OnPlayerGetExp = null;
 
         private void Start() {
             mapGen.GenerateNextFloor(CurrentFloor);
@@ -161,9 +162,6 @@ namespace CoffeeCat
 
         public void AddCurrentRoomKillCount()
         {
-            var player = RogueLiteManager.Instance.SpawnedPlayer;
-            player.GetExp();
-            
             CurrentRoomMonsterKilledCount++;
         }
 
@@ -216,6 +214,10 @@ namespace CoffeeCat
         public void InvokeOpeningSkillSelectPanel() => OnOpeningSkillSelectPanel?.Invoke();
         
         public void InvokeSkillSelectCompleted() => OnSkillSelectCompleted?.Invoke();
+        
+        public void AddListenerPlayerGetExp(UnityAction<float> action) => OnPlayerGetExp.AddListener(action);
+        
+        public void InvokePlayerGetExp(float exp) => OnPlayerGetExp?.Invoke(exp);
         
         #endregion
     }

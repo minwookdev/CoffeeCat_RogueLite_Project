@@ -44,13 +44,15 @@ namespace CoffeeCat
         {
             rigid = GetComponent<Rigidbody2D>();
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
-
+            playerLevelData.Initialize();
+            
             // LoadResources();
             Movement();
             SetStat();
             NormalAttack();
             CheckInvincibleTime();
 
+            StageManager.Instance.AddListenerPlayerGetExp(GetExp);
             StageManager.Instance.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
         }
@@ -256,7 +258,19 @@ namespace CoffeeCat
             }
         }
 
-       
+        private void GetExp(float exp)
+        {
+            playerLevelData.AddExp(exp);
+
+            if (!playerLevelData.isReadyLevelUp()) return;
+            
+            playerLevelData.LevelUp();
+            var levelUpEffect = ObjectPoolManager.Instance.Spawn("LevelUp", tr);
+            levelUpEffect.transform.localPosition = Vector3.zero;
+
+            Observable.Timer(TimeSpan.FromSeconds(2.5f))
+                      .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
+        }
 
         #region Public Methods
 
@@ -329,22 +343,6 @@ namespace CoffeeCat
             UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
         }
         
-        public void GetExp()
-        {
-            // TODO : 층마다 다른 경험치
-            const float exp = 5f;
-            playerLevelData.AddExp(exp);
-
-            if (!playerLevelData.isReadyLevelUp()) return;
-            
-            playerLevelData.LevelUp();
-            var levelUpEffect = ObjectPoolManager.Instance.Spawn("LevelUp", tr);
-            levelUpEffect.transform.localPosition = Vector3.zero;
-
-            Observable.Timer(TimeSpan.FromSeconds(2.5f))
-                      .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
-        }
-
         public void AddListenerPlayerDeadEvent(UnityAction action) => OnPlayerDead.AddListener(action);
         
         public void AddListenerUpdateSkillCompletedEvent(UnityAction action) => OnUpdateSkillCompleted.AddListener(action);

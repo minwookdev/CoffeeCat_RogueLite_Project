@@ -12,11 +12,6 @@ using Random = UnityEngine.Random;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "HeapView.ObjectAllocation.Evident")]
-    [SuppressMessage("ReSharper", "ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator")]
-    [SuppressMessage("ReSharper", "HeapView.ClosureAllocation")]
-    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
-    [SuppressMessage("ReSharper", "InvertIf")]
     public partial class Player
     {
         [Title("Skill")]
@@ -117,13 +112,6 @@ namespace CoffeeCat
             }
         }
 
-        // 0. 배틀중이 아닐 때 얻은 스킬은 스킬 리스트에 넣되 활성화를 기다리기
-        // 1. 배틀이 시작되면 가지고 있는 스킬들의 효과를 활성화
-        // 2. 배틀 중 스킬을 새로 얻으면 해당 스킬 효과를 활성화
-        // 3. 배틀 중 스킬이 업데이트 되면 해당 스킬의 효과를 업데이트
-        // 4. 룸이 클리어 되면 모든 스킬의 효과를 비활성화
-        // 5. 플레이어가 죽으면 모든 스킬의 효과를 비활성화
-        
         private void ActivateSkill(PlayerSkillEffect skillEffect)
         {
             this.ObserveEveryValueChanged(_ => isPlayerInBattle)

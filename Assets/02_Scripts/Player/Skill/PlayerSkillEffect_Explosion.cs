@@ -12,8 +12,6 @@ using UniRx;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "HeapView.ClosureAllocation")]
-    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
     public class PlayerSkillEffect_Explosion : PlayerSkillEffect
     {
         protected override void SkillEffect(PlayerStat playerStat)

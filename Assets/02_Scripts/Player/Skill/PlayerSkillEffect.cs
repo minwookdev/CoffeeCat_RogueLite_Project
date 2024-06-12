@@ -38,9 +38,7 @@ namespace CoffeeCat
         }
 
         // 스킬 효과
-        protected virtual void SkillEffect(PlayerStat playerStat)
-        {
-        }
+        protected virtual void SkillEffect(PlayerStat playerStat) { }
 
         // 보유한 스킬 선택 (등급 업)
         public virtual void UpdateSkillData(PlayerSkill updateSkillData) => playerSkillData = updateSkillData;
