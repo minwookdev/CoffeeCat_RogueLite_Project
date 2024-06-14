@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace CoffeeCat.FrameWork
 {
-    public class GameManager : GenericSingleton<GameManager> 
+    public class GameManager : DynamicSingleton<GameManager> 
     {
         
     }

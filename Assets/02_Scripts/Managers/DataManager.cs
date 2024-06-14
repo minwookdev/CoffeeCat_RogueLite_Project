@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CoffeeCat.FrameWork
 {
-    public class DataManager : GenericSingleton<DataManager>
+    public class DataManager : DynamicSingleton<DataManager>
     {
         [ShowInInspector, ReadOnly] public MonsterStatDatas MonsterStats { get; private set; } = null;
         [ShowInInspector, ReadOnly] public MonsterSkillDatas MonsterSkills { get; private set; } = null;

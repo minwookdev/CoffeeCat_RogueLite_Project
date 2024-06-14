@@ -12,7 +12,7 @@ using UniRx;
 using UniRx.Triggers;
 
 namespace CoffeeCat {
-    public class MonsterManager : GenericSingleton<MonsterManager> {
+    public class MonsterManager : DynamicSingleton<MonsterManager> {
         // MonsterManager를 통해 요청된 작업과 상태를 저장. 추후 다른 작업의 처리를 위해 Dictionary를 통해 관리
         private readonly Dictionary<string, Provided> providedDictionary = new Dictionary<string, Provided>();
         private readonly Queue<Action> requestQueue = new Queue<Action>();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CoffeeCat.Utils;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UniRx;
@@ -7,13 +8,14 @@ using UniRx.Triggers;
 using Sirenix.OdinInspector;
 using CoffeeCat.Utils.SerializedDictionaries;
 using CoffeeCat.Utils.Defines;
+using Spine.Unity.Examples;
 
 namespace CoffeeCat.FrameWork {
     /// <summary>
     /// Scene Base Scripts
     /// </summary>
     [DisallowMultipleComponent]
-    public class SceneBase : PrelocatedSingleton<SceneBase> {
+    public class SceneBase : SceneScopedSingleton<SceneBase> {
         [Space(5f), Title(title: "SCENE BASE", titleAlignment: TitleAlignments.Centered, horizontalLine: true, bold: true)]
 
         [Title("PRELOAD DATA")]
@@ -47,6 +49,10 @@ namespace CoffeeCat.FrameWork {
             if (AudioClipDictionary is { Count: > 0 }) {
                 SoundManager.Instance.RegistAudioClips(AudioClipDictionary);
             }
+            
+            SafeRegister.RequestRegist("Explosion");
+            SafeRegister.RequestRegist("Explosion");
+            SafeRegister.RequestRegist("Explosion");
         }
 
         public void Start() {
@@ -87,6 +93,8 @@ namespace CoffeeCat.FrameWork {
                     }#1#
                 })
                 .AddTo(this);*/
+
+            SafeRegister.StartProcess(gameObject);
             
             if (DefaultPoolInformation is { Length: > 0 }) {
                 ObjectPoolManager.Instance.AddToPool(DefaultPoolInformation);
@@ -100,12 +108,10 @@ namespace CoffeeCat.FrameWork {
                     DamageTextManager.Instance.ReleaseSingleton();
                 }
             }
-            
-            Preloader.StartProcess(this);
         }
 
         private void OnDisable() {
-            Preloader.StopProcess(this);
+            SafeRegister.StopProcess();
         }
     }
 }

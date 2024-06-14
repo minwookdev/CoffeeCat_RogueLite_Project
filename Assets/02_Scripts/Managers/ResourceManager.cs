@@ -14,7 +14,7 @@ using CoffeeCat.Utils.Defines;
 using UnityObject = UnityEngine.Object;
 
 namespace CoffeeCat.FrameWork {
-    public class ResourceManager : GenericSingleton<ResourceManager> {
+    public class ResourceManager : DynamicSingleton<ResourceManager> {
         [Serializable]
         public class ResourceInfo {
             public enum ASSETLOADSTATUS {
@@ -194,14 +194,13 @@ namespace CoffeeCat.FrameWork {
                 info.SetHandle(operationHandle);
                 if (operationHandle.Status != AsyncOperationStatus.Succeeded) {
                     info.SetFailed();
+                    onCompleted?.Invoke(null);
                     CatLog.ELog("ResourceManager: Addressables Async Load Failed !");
                     return;
                 }
 
                 var result = info.SetResource<T>(operationHandle.Result);
-                if (result) {
-                    onCompleted?.Invoke(result);
-                }
+                onCompleted?.Invoke(result);
             };
         }
         
@@ -244,7 +243,7 @@ namespace CoffeeCat.FrameWork {
         /// <param name="key"></param>
         /// <param name="resource"></param>
         /// <returns></returns>
-        private bool TryGetResource<T>(string key, Action<T> callback) where T : UnityObject {
+        private bool TryGetResource<T>(string key, Action<T> onCompleted) where T : UnityObject {
             var result = resourcesDict.TryGetValue(key, out ResourceInfo info);
             if (!result) { // Target Resource is Not Requested
                 return false;
@@ -252,13 +251,14 @@ namespace CoffeeCat.FrameWork {
             
             switch (info.Status) {
                 case ResourceInfo.ASSETLOADSTATUS.SUCCESS:
-                    callback?.Invoke(info.GetResource<T>());
+                    onCompleted?.Invoke(info.GetResource<T>());
                     break;
                 case ResourceInfo.ASSETLOADSTATUS.FAILED:
+                    onCompleted?.Invoke(null);
                     CatLog.ELog("This Resource is Load Failed.");
                     break;
                 case ResourceInfo.ASSETLOADSTATUS.LOADING:
-                    StartCoroutine(WaitLoadingResource(info, callback));
+                    StartCoroutine(WaitLoadingResource(key, info, onCompleted));
                     break;
                 default:
                     throw new NotImplementedException();
@@ -278,41 +278,25 @@ namespace CoffeeCat.FrameWork {
             return true;
         }
         
-        private static IEnumerator WaitLoadingResource<T>(ResourceInfo info, Action<T> onCompleted) where T : UnityObject {
+        private static IEnumerator WaitLoadingResource<T>(string key, ResourceInfo info, Action<T> onCompleted) where T : UnityObject {
             const float waitTimeOutSeconds = 5.0f;
             float waitTime = 0f;
-            string targetName = info.ResourceName;
             while (info.Status == ResourceInfo.ASSETLOADSTATUS.LOADING) {
                 waitTime += Time.deltaTime;
                 if (waitTime >= waitTimeOutSeconds) {
-                    CatLog.ELog($"Resource Load Wait TimedOut ! Target: {targetName}");
+                    CatLog.ELog($"Resource Load Wait TimedOut ! Target: {key}");
                     yield break;
                 }
                 yield return null;
             }
 
             if (info.Status != ResourceInfo.ASSETLOADSTATUS.SUCCESS) {
-                CatLog.ELog($"Resource Load Failed. Target: {targetName}");
+                CatLog.ELog($"Resource Load Failed. Target: {key}");
                 yield break;
             }
 
             onCompleted?.Invoke(info.GetResource<T>());
         } 
-
-        public bool IsRequestedOrCompleted(string key) {
-            return resourcesDict.ContainsKey(key);
-            
-            //if (!resourcesDict.TryGetValue(key, out ResourceInformation information)) {
-            //    return false;
-            //}
-            //
-            //return information.Status switch {
-            //    ResourceInformation.ASSETLOADSTATUS.LOADING => true,
-            //    ResourceInformation.ASSETLOADSTATUS.FAILED  => true,
-            //    ResourceInformation.ASSETLOADSTATUS.SUCCESS => true,
-            //    _                                           => false
-            //};
-        }
 
         #endregion
 

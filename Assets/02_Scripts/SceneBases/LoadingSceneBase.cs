@@ -7,7 +7,7 @@ using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat {
-    public class LoadingSceneBase : PrelocatedSingleton<LoadingSceneBase> {
+    public class LoadingSceneBase : SceneScopedSingleton<LoadingSceneBase> {
         [Header("FIELDS")]
         [SerializeField] Slider sliderLoading = null;
         [SerializeField] TextMeshProUGUI tmpLoadingState = null;

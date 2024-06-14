@@ -6,7 +6,7 @@ using CoffeeCat.UI;
 using UnityEngine.UI;
 
 namespace CoffeeCat.FrameWork {
-    public class UIPresenter : PrelocatedSingleton<UIPresenter> {
+    public class UIPresenter : SceneScopedSingleton<UIPresenter> {
         [Title("UI")]
         [SerializeField] private SkillSelectPanel skillSelector = null;
         [SerializeField] private Image hpSliderImage = null;

@@ -7,7 +7,7 @@ using CoffeeCat.UI;
 using CoffeeCat.Utils;
 
 namespace CoffeeCat {
-    public class DamageTextManager : GenericSingleton<DamageTextManager> {
+    public class DamageTextManager : DynamicSingleton<DamageTextManager> {
         [Title("Information")]
         [SerializeField, ReadOnly] Camera mainCamera = null;
         [SerializeField, ReadOnly] Camera uiCamera = null;
