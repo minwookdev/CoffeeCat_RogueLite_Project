@@ -16,8 +16,9 @@ namespace CoffeeCat
         [SerializeField] private RectTransform rectTr = null;
         [SerializeField] private GameObject defaultPanel = null;
         [SerializeField] private GameObject clearPanel = null;
-        [SerializeField] private GameObject currentIcon = null;
+        [SerializeField] private GameObject doorIcon = null;
         [SerializeField] private Image roomIcon = null;
+        [SerializeField] private GameObject currentIcon = null;
 
         private void SetRoomIcon(RoomType roomType)
         {
@@ -56,13 +57,35 @@ namespace CoffeeCat
             roomIcon.sprite = icon;
         }
 
+        private void SetJointIcon(List<RandomDungeonWithBluePrint.Joint> joints)
+        {
+            foreach (var joint in joints)
+            {
+                if (!joint.Connected)
+                    continue;
+
+                Transform door = joint.Direction switch
+                {
+                    Constants.Direction.Down  => doorIcon.transform.GetChild(0),
+                    Constants.Direction.Right => doorIcon.transform.GetChild(1),
+                    Constants.Direction.Up    => doorIcon.transform.GetChild(2),
+                    Constants.Direction.Left  => doorIcon.transform.GetChild(3),
+                    _                         => null
+                };
+
+                door?.gameObject.SetActive(true);
+            }
+        }
+
         public void Initialize(Room room, float ratio)
         {
             roomIndex = room.RoomData.RoomIndex;
             rectTr.localScale = Vector3.one;
             rectTr.sizeDelta = new Vector2(room.Rect.width, room.Rect.height) * ratio;
             rectTr.anchoredPosition = new Vector2(room.Rect.x, room.Rect.y) * ratio;
+            
             SetRoomIcon(room.RoomType);
+            SetJointIcon(room.Joints);
             gameObject.SetActive(false);
         }
 

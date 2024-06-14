@@ -117,8 +117,7 @@ namespace RandomDungeonWithBluePrint
             foreach (var section in field.Sections.Where(s => !s.ExistRoom))
             {
                 var padding = section.Rect.AddPadding(2);
-                // var point = new Vector2Int(Random.Range(padding.xMin, padding.xMax), Random.Range(padding.yMin, padding.yMax));
-                var point = new Vector2Int((int)padding.center.x, (int)padding.center.y);
+                var point = new Vector2Int(Random.Range(padding.xMin, padding.xMax), Random.Range(padding.yMin, padding.yMax));
                 section.Relay = new Relay(section.Index, point);
             }
         }
