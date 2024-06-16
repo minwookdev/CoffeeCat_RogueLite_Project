@@ -21,12 +21,11 @@ namespace CoffeeCat
         [SerializeField] private RectTransform rectTr = null;
         [SerializeField] private Button btnClose = null;
         
-        private void Awake()
-        {
-            StageManager.Instance.AddEventToMapGenerateCompleted(RoadResources);
+        private void Start() {
+            btnClose.onClick.AddListener(Close);
         }
 
-        private void RoadResources(Field field)
+        public void RoadResources(Field field)
         {
             SafeLoader.RequestRegist(roomPanelKey, spawnCount: 15, onCompleted: complete =>
             {
@@ -36,11 +35,7 @@ namespace CoffeeCat
                     CatLog.WLog("Minimap : RoomPanel Load Failed");
             });
         }
-
-        private void Start() {
-            btnClose.onClick.AddListener(Close);
-        }
-
+        
         private void MinimapGenerate(Field field)
         {
             minimapRooms.Clear();

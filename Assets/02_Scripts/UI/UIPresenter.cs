@@ -3,6 +3,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.UI;
+using RandomDungeonWithBluePrint;
 using UnityEngine.UI;
 
 namespace CoffeeCat.FrameWork {
