@@ -7,6 +7,7 @@ using CoffeeCat.Utils;
 using RandomDungeonWithBluePrint;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CoffeeCat
 {
@@ -18,10 +19,15 @@ namespace CoffeeCat
         private const string roomPanelKey = "RoomPanel";
         
         [SerializeField] private RectTransform rectTr = null;
+        [SerializeField] private Button btnClose = null;
         
         private void Awake()
         {
             StageManager.Instance.AddEventToMapGenerateCompleted(MinimapGenerate);
+        }
+
+        private void Start() {
+            btnClose.onClick.AddListener(Close);
         }
 
         private void MinimapGenerate(Field field)
@@ -66,6 +72,14 @@ namespace CoffeeCat
         {
             var roomPanel = minimapRooms[roomData.RoomIndex];
             roomPanel.ClearedRoom();
+        }
+
+        public void Open() {
+            gameObject.SetActive(true);
+        }
+        
+        private void Close() {
+            gameObject.SetActive(false);
         }
     }
 }

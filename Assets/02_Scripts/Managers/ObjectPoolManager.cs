@@ -59,7 +59,7 @@ namespace CoffeeCat.FrameWork
 
         private void AddToObjectPoolDictionary(PoolInformation info) {
             if (poolStackDict.ContainsKey(info.PoolObject.name)) {
-                CatLog.WLog($"{info.PoolObject.name} is Already Containing in Pool Dictionary.");
+                // CatLog.WLog($"{info.PoolObject.name} is Already Containing in Pool Dictionary.");
                 return;
             }
             

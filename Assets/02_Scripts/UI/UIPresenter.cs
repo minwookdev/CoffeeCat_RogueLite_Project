@@ -9,14 +9,18 @@ namespace CoffeeCat.FrameWork {
     public class UIPresenter : SceneScopedSingleton<UIPresenter> {
         [Title("UI")]
         [SerializeField] private SkillSelectPanel skillSelector = null;
+        [SerializeField] private Minimap minimap = null;
         [SerializeField] private Image hpSliderImage = null;
-        [SerializeField] private Button nextFloorButton = null;
+        [SerializeField] private Button btnNextFloor = null;
+        [SerializeField] private Button btnMap = null;
 
         private void Start() {
-            nextFloorButton.onClick.AddListener(() => {
+            btnNextFloor.onClick.AddListener(() => {
                 StageManager.Instance.RequestGenerateNextFloor();
                 DisableNextFloorButton();
             });
+            
+            btnMap.onClick.AddListener(minimap.Open);
         }
 
         public void OpenSkillSelectPanel(PlayerSkillSelectData[] datas) {
@@ -28,11 +32,11 @@ namespace CoffeeCat.FrameWork {
         }
 
         public void EnableNextFloorButton() {
-            nextFloorButton.gameObject.SetActive(true);
+            btnNextFloor.gameObject.SetActive(true);
         }
 
         public void DisableNextFloorButton() {
-            nextFloorButton.gameObject.SetActive(false);
+            btnNextFloor.gameObject.SetActive(false);
         }
     }
 }

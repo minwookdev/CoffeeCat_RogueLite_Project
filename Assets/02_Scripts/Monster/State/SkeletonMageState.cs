@@ -43,6 +43,10 @@ namespace CoffeeCat
         protected override void Initialize()
         {
             base.Initialize();
+
+            SafeLoader.RequestRegist(projectileKey.ToStringEx(), onCompleted => {
+                
+            });
         }
 
         protected override void OnActivated() => StateChange(EnumMonsterState.Idle);

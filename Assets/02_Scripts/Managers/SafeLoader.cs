@@ -65,7 +65,7 @@ namespace CoffeeCat.FrameWork {
 
             void Request() {
                 if (ObjectPoolManager.Instance.IsExistInPoolDictionary(key)) {
-                    CatLog.WLog($"{key} is Already Containing in Pool Dictionary.");
+                    // CatLog.WLog($"{key} is Already Containing in Pool Dictionary.");
                     onCompleted?.Invoke(true);
                     return;
                 }

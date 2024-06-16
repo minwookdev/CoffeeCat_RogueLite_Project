@@ -1,158 +1,84 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Sirenix.OdinInspector;
-using CoffeeCat.FrameWork;
-using CoffeeCat.Utils;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
 namespace CoffeeCat {
-    public class Joystick : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler, IBeginDragHandler, IEndDragHandler {
+    public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler {
+        [Title("JoyStick")]
         [SerializeField] private Canvas canvas = null;
-        [SerializeField] private RectTransform canvasRectTr = null;
         [SerializeField] private RectTransform rectTr = null;
-        [SerializeField] private RectTransform pointerRectTr = null;
-        [SerializeField, ReadOnly] private Vector2 joystickMoveableRange = Vector2.zero;
-        [SerializeField] private bool isTouched = false;
+        [SerializeField] private RectTransform stickRectTr = null;
+        [SerializeField] private float stickMoveRangeSqrMagnitude = 4500f;
+        [SerializeField, ReadOnly] private bool isTouched = false;
+        
+        [Title("Frame Images")]
         [SerializeField] private Image[] frameImages = null;
-        private Vector2 directionVec;
+        private Vector2 stickDirection = Vector2.zero;
+        private Vector2 stickInitPos = Vector2.zero;
         private Player player = null;
 
         private void Start() {
-            joystickMoveableRange = new Vector2(rectTr.rect.width * 0.5f, rectTr.rect.height * 0.5f);
-        }
-
-        private void Update() {
-#if UNITY_STANDALONE
-            gameObject.SetActive(false);
-#endif
-            
-            if (isTouched) {
-                /*var anchoredPos = pointerRectTr.anchoredPosition;*/
-                /*directionVec.x = anchoredPos.x switch {
-                    > 0f => 1f,
-                    < 0f => -1f,
-                    _    => 0f
-                };
-                
-                
-                
-                directionVec.y = anchoredPos.y switch {
-                    > 0f => 1f,
-                    < 0f => -1f,
-                    _    => 0f
-                };*/
-
-                directionVec = pointerRectTr.anchoredPosition - Vector2.zero;
-                directionVec.Normalize();
-                UpdateFrame(directionVec);
-                
-                if (!player) {
-                    if (!RogueLiteManager.Instance.SpawnedPlayer)
-                        return;
-                    player = RogueLiteManager.Instance.SpawnedPlayer;
-                }
-                player.Move(directionVec);
-            }
+            stickInitPos = stickRectTr.anchoredPosition;
         }
 
         public void OnDrag(PointerEventData eventData) {
-            pointerRectTr.anchoredPosition = GetJoystickPosition(eventData);
-        }
-
-        public void OnBeginDrag(PointerEventData eventData) {
-            
-        }
-
-        public void OnEndDrag(PointerEventData eventData) {
-            
-        }
-        
-        public void OnPointerEnter(PointerEventData eventData) {
-            
-        }
-
-        public void OnPointerExit(PointerEventData eventData) {
-            
+            if (!isTouched)
+                return;
+            stickRectTr.anchoredPosition = GetJoystickPosition(eventData.position);
+            UpdateFrames();
         }
 
         public void OnPointerDown(PointerEventData eventData) {
             isTouched = true;
-            pointerRectTr.anchoredPosition = GetJoystickPosition(eventData);
+            stickRectTr.anchoredPosition = GetJoystickPosition(eventData.position);
+            UpdateFrames();
         }
 
         public void OnPointerUp(PointerEventData eventData) {
             isTouched = false;
-            pointerRectTr.anchoredPosition = Vector2.zero;
-            directionVec = Vector2.zero;
-            UpdateFrame(directionVec);
-            player?.ClearMove();
+            stickRectTr.anchoredPosition = Vector2.zero;
+            ClearFrames();
         }
         
-        private Vector2 GetJoystickPosition(PointerEventData eventData) {
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTr, eventData.position, canvas.worldCamera, out Vector2 stickPos)) {
+        private Vector2 GetJoystickPosition(Vector2 screenTouchPos) {
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTr, screenTouchPos, canvas.worldCamera, out Vector2 localTouchPos)) {
                 return Vector2.zero;
             }
-
-            // Correct Stick X and Y
-            /*if (stickPos.x > joystickMoveableRange.x) {
-                stickPos.x = joystickMoveableRange.x;
-            }
-            else if (stickPos.x < -joystickMoveableRange.x) {
-                stickPos.x = -joystickMoveableRange.x;
-            }
-            if (stickPos.y > joystickMoveableRange.y) {
-                stickPos.y = joystickMoveableRange.y;
-            }
-            else if (stickPos.y < -joystickMoveableRange.y) {
-                stickPos.y = -joystickMoveableRange.y;
-            }*/
-            
-            stickPos = ClampJoystickPosition(stickPos);
-            return stickPos;
+            var distance = localTouchPos - stickInitPos;
+            return ClampJoystickPosition(distance);
         }
         
-        private Vector2 ClampJoystickPosition(Vector2 stickPos) {
-            var distanceSqr = stickPos.sqrMagnitude;
-            var maxDistanceSqr = 4500f;
-            if (distanceSqr > maxDistanceSqr) {
-                var direction = stickPos.normalized;
-                stickPos = direction * Mathf.Sqrt(maxDistanceSqr);
+        private Vector2 ClampJoystickPosition(Vector2 distance) {
+            var distanceSqr = distance.sqrMagnitude;
+            if (distanceSqr > stickMoveRangeSqrMagnitude) {
+                var direction = distance.normalized;
+                distance = direction * Mathf.Sqrt(stickMoveRangeSqrMagnitude);
             }
-            return stickPos;
+            return distance;
         }
 
-        private void UpdateFrame(Vector2 direction) {
-            switch (direction.x) {
-                case < 0f when direction.y > 0f:
-                    frameImages[0].gameObject.SetActive(true);
-                    frameImages[1].gameObject.SetActive(false);
-                    frameImages[2].gameObject.SetActive(false);
-                    frameImages[3].gameObject.SetActive(false);
-                    break;
-                case > 0f when direction.y > 0f:
-                    frameImages[0].gameObject.SetActive(false);
-                    frameImages[1].gameObject.SetActive(true);
-                    frameImages[2].gameObject.SetActive(false);
-                    frameImages[3].gameObject.SetActive(false);
-                    break;
-                case < 0f when direction.y < 0f:
-                    frameImages[0].gameObject.SetActive(false);
-                    frameImages[1].gameObject.SetActive(false);
-                    frameImages[2].gameObject.SetActive(true);
-                    frameImages[3].gameObject.SetActive(false);
-                    break;
-                case > 0f when direction.y < 0f:
-                    frameImages[0].gameObject.SetActive(false);
-                    frameImages[1].gameObject.SetActive(false);
-                    frameImages[2].gameObject.SetActive(false);
-                    frameImages[3].gameObject.SetActive(true);
-                    break;
-                default:
-                    frameImages[0].gameObject.SetActive(false);
-                    frameImages[1].gameObject.SetActive(false);
-                    frameImages[2].gameObject.SetActive(false);
-                    frameImages[3].gameObject.SetActive(false);
-                    break;
+        private void UpdateFrames() {
+            stickDirection = stickRectTr.anchoredPosition - stickInitPos;
+            stickDirection.Normalize();
+            int index = GetQuadrantIndex(stickDirection);
+            for (int i = 0; i < frameImages.Length; i++) {
+                frameImages[i].gameObject.SetActive(i == index);
+            }
+        }
+
+        private int GetQuadrantIndex(Vector2 direction) {
+            if (direction.x < 0) {
+                return direction.y > 0 ? 0 : 2;
+            }
+
+            return direction.y > 0 ? 1 : 3;
+        }
+
+        private void ClearFrames() {
+            stickDirection = Vector2.zero;
+            for (int i = 0; i < frameImages.Length; i++) {
+                frameImages[i].gameObject.SetActive(false);
             }
         }
     } 
