@@ -17,10 +17,7 @@ namespace CoffeeCat
         protected bool completedLoadResource = false;
 
         // 새로운 스킬 선택
-        protected PlayerSkillEffect()
-        {
-        }
-
+        protected PlayerSkillEffect() { }
         protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
         {
             this.playerTr = playerTr;
@@ -31,6 +28,7 @@ namespace CoffeeCat
                 if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
 
+            CatLog.Log("Player Skill Effect");
             SafeLoader.RequestRegist(playerSkillData.SkillName, onCompleted: completed =>
             {
                 completedLoadResource = completed;

@@ -57,16 +57,6 @@ namespace CoffeeCat
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
         }
 
-        private void Update()
-        {
-            // test
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                // EnableSkillSelect();
-                // UpdateStat();
-            }
-        }
-
         private void LoadResources()
         {
             SafeLoader.RequestRegist(normalAttackProjectile.ToStringEx(), onCompleted: completed =>
