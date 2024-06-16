@@ -8,7 +8,7 @@ namespace CoffeeCat.FrameWork {
     /// Scene Base Scripts
     /// </summary>
     [DisallowMultipleComponent]
-    public class SceneBase : SceneScopedSingleton<SceneBase> {
+    public class SceneBase : SceneSingleton<SceneBase> {
         [Space(5f), Title(title: "SCENE BASE", titleAlignment: TitleAlignments.Centered, horizontalLine: true, bold: true)]
 
         [Title("PRELOAD DATA")]

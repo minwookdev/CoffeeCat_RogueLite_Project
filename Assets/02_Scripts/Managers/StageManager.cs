@@ -24,7 +24,7 @@ namespace CoffeeCat
         ExitRoom,
     }
 
-    public class StageManager : SceneScopedSingleton<StageManager> {
+    public class StageManager : SceneSingleton<StageManager> {
         [Title("StageManager", TitleAlignment = TitleAlignments.Centered)]
         [TabGroup("Requires"), SerializeField] private RandomMapGenerator mapGen;
         [TabGroup("Requires"), ShowInInspector, ReadOnly] public int CurrentRoomMonsterKilledCount { get; private set; } = 0;

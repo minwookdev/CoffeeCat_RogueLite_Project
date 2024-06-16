@@ -10,7 +10,7 @@ using UnityEngine;
 /// NOTE:
 ///
 namespace CoffeeCat.Pathfinding2D {
-	public class PathRequestManager : SceneScopedSingleton<PathRequestManager> {
+	public class PathRequestManager : SceneSingleton<PathRequestManager> {
 		// Components
 		private Pathfinder pathFinder = null;
 	
