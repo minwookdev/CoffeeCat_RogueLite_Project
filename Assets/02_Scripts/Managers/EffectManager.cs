@@ -63,6 +63,11 @@ namespace CoffeeCat.FrameWork {
             }
 
             ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
+                if (!loadedGameObject) {
+                    CatLog.ELog($"EffectObject Load Failed. name: {key}");
+                    return;
+                }
+                
                 if (!loadedGameObject.TryGetComponent(out Effector loadedEffector)) {
                     CatLog.ELog($"this GameObject is Not Exist Effector Component. name: {loadedGameObject.name}");
                     return;

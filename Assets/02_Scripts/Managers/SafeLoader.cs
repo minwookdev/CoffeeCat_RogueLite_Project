@@ -6,7 +6,7 @@ using CoffeeCat.Utils;
 using UnityObject = UnityEngine.Object;
 
 namespace CoffeeCat.FrameWork {
-    public static class SafeRegister {
+    public static class SafeLoader {
         private static readonly Queue<Action> processQueue = new();
         private static bool IsProcessing = false;
         
@@ -59,12 +59,13 @@ namespace CoffeeCat.FrameWork {
             }
         }
 
-        public static void RequestRegist(string key, int spawnCount = PoolInformation.DEFAULT_SPAWN_COUNT, Action<bool> onCompleted = null) {
+        public static void RequestRegist(string key, Action<bool> onCompleted = null, int spawnCount = PoolInformation.DEFAULT_SPAWN_COUNT) {
             processQueue.Enqueue(Request);
             return;
 
             void Request() {
                 if (ObjectPoolManager.Instance.IsExistInPoolDictionary(key)) {
+                    CatLog.WLog($"{key} is Already Containing in Pool Dictionary.");
                     onCompleted?.Invoke(true);
                     return;
                 }
@@ -74,7 +75,7 @@ namespace CoffeeCat.FrameWork {
                         onCompleted?.Invoke(false);
                         return;
                     }
-                    ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(loadedGameObject));
+                    ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(loadedGameObject, initSpawnCount: spawnCount));
                     onCompleted?.Invoke(true);
                 });
             }

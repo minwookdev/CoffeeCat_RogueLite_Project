@@ -50,9 +50,9 @@ namespace CoffeeCat.FrameWork {
                 SoundManager.Instance.RegistAudioClips(AudioClipDictionary);
             }
             
-            SafeRegister.RequestRegist("Explosion");
-            SafeRegister.RequestRegist("Explosion");
-            SafeRegister.RequestRegist("Explosion");
+            SafeLoader.RequestRegist("Explosion");
+            SafeLoader.RequestRegist("Explosion");
+            SafeLoader.RequestRegist("Explosion");
         }
 
         public void Start() {
@@ -93,8 +93,6 @@ namespace CoffeeCat.FrameWork {
                     }#1#
                 })
                 .AddTo(this);*/
-
-            SafeRegister.StartProcess(gameObject);
             
             if (DefaultPoolInformation is { Length: > 0 }) {
                 ObjectPoolManager.Instance.AddToPool(DefaultPoolInformation);
@@ -108,10 +106,12 @@ namespace CoffeeCat.FrameWork {
                     DamageTextManager.Instance.ReleaseSingleton();
                 }
             }
+            
+            SafeLoader.StartProcess(gameObject);
         }
 
         private void OnDisable() {
-            SafeRegister.StopProcess();
+            SafeLoader.StopProcess();
         }
     }
 }

@@ -48,9 +48,13 @@ namespace CoffeeCat {
             // Check DamageText Origin GameObject
             if (damageTextOriginGameObject == null) {
                 // Load DamageText GameObject
-                ResourceManager.Instance.AddressablesAsyncLoad<GameObject>("DamageText", false, (loadedGameObject) => {
-                    damageTextOriginGameObject = loadedGameObject;
-                    spawnKey = loadedGameObject.name;
+                ResourceManager.Instance.AddressablesAsyncLoad<GameObject>("DamageText", false, (loadedObject) => {
+                    if (!loadedObject) {
+                        CatLog.ELog("DamageTextManager Init Failed. DamageText Load Failed.");
+                        return;
+                    }
+                    damageTextOriginGameObject = loadedObject;
+                    spawnKey = loadedObject.name;
                     InitializeObjectPool();
                 });
             }
