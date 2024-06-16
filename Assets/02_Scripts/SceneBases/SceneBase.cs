@@ -35,6 +35,8 @@ namespace CoffeeCat.FrameWork {
             if (isPreloadData) {
                 DataManager.Instance.DataLoad();
             }
+            
+            InputManager.Instance.Create();
         }
 
         public void Start() {

@@ -130,10 +130,12 @@ namespace CoffeeCat
 
         protected override void OnUpdateDeathState()
         {
+            
         }
 
         protected override void OnExitDeathState()
         {
+            
         }
 
         #endregion

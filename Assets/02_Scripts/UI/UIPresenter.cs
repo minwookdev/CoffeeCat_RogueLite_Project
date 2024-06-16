@@ -15,6 +15,9 @@ namespace CoffeeCat.FrameWork {
         [SerializeField] private Button btnNextFloor = null;
         [SerializeField] private Button btnMap = null;
 
+        [Title("Mobile Input")]
+        [SerializeField] private MobileJoyStick joyStick = null;
+
         private void Start() {
             btnNextFloor.onClick.AddListener(() => {
                 StageManager.Instance.RequestGenerateNextFloor();

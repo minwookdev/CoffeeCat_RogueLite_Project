@@ -1,10 +1,12 @@
+using System;
+using CoffeeCat.FrameWork;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
 namespace CoffeeCat {
-    public class Joystick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler {
+    public class MobileJoyStick : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler {
         [Title("JoyStick")]
         [SerializeField] private Canvas canvas = null;
         [SerializeField] private RectTransform rectTr = null;
@@ -16,37 +18,62 @@ namespace CoffeeCat {
         [SerializeField] private Image[] frameImages = null;
         private Vector2 stickDirection = Vector2.zero;
         private Vector2 stickInitPos = Vector2.zero;
-        private Player player = null;
 
         private void Start() {
+            // Set Stick Start Position
             stickInitPos = stickRectTr.anchoredPosition;
+            
+            // Only Enable in Mobile
+#if UNITY_EDITOR || UNITY_ANDROID || UNITY_IOS
+            return;
+#elif UNITY_STANDALONE
+            gameObject.SetActive(false);
+#endif
+        }
+
+        private void OnDisable() {
+            Clear();
         }
 
         public void OnDrag(PointerEventData eventData) {
-            if (!isTouched)
+            if (!isTouched) {
                 return;
-            stickRectTr.anchoredPosition = GetJoystickPosition(eventData.position);
-            UpdateFrames();
+            }
+            
+            UpdateStickPosition(eventData.position);
+            UpdateDirectionFromStickPosition();
+            UpdateFrameDirection();
+            InputManager.InvokeDirectionInputUpdateEvent(stickDirection);
         }
 
         public void OnPointerDown(PointerEventData eventData) {
+            if (isTouched) {
+                return;
+            }
+            
             isTouched = true;
-            stickRectTr.anchoredPosition = GetJoystickPosition(eventData.position);
-            UpdateFrames();
+            UpdateStickPosition(eventData.position);
+            UpdateDirectionFromStickPosition();
+            UpdateFrameDirection();
+            InputManager.InvokeDirectionInputBeginEvent(stickDirection);
         }
 
         public void OnPointerUp(PointerEventData eventData) {
-            isTouched = false;
-            stickRectTr.anchoredPosition = Vector2.zero;
-            ClearFrames();
+            if (!isTouched) {
+                return;
+            }
+            
+            Clear();
+            InputManager.InvokeDirectionInputEndEvent();
         }
         
-        private Vector2 GetJoystickPosition(Vector2 screenTouchPos) {
+        private void UpdateStickPosition(Vector2 screenTouchPos) {
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(rectTr, screenTouchPos, canvas.worldCamera, out Vector2 localTouchPos)) {
-                return Vector2.zero;
+                localTouchPos = Vector2.zero;
             }
             var distance = localTouchPos - stickInitPos;
-            return ClampJoystickPosition(distance);
+            var clampedStickPos =  ClampJoystickPosition(distance);
+            stickRectTr.anchoredPosition = clampedStickPos;
         }
         
         private Vector2 ClampJoystickPosition(Vector2 distance) {
@@ -58,9 +85,12 @@ namespace CoffeeCat {
             return distance;
         }
 
-        private void UpdateFrames() {
+        private void UpdateDirectionFromStickPosition() {
             stickDirection = stickRectTr.anchoredPosition - stickInitPos;
             stickDirection.Normalize();
+        }
+
+        private void UpdateFrameDirection() {
             int index = GetQuadrantIndex(stickDirection);
             for (int i = 0; i < frameImages.Length; i++) {
                 frameImages[i].gameObject.SetActive(i == index);
@@ -74,9 +104,11 @@ namespace CoffeeCat {
 
             return direction.y > 0 ? 1 : 3;
         }
-
-        private void ClearFrames() {
+        
+        private void Clear() {
+            isTouched = false;
             stickDirection = Vector2.zero;
+            stickRectTr.anchoredPosition = Vector2.zero;
             for (int i = 0; i < frameImages.Length; i++) {
                 frameImages[i].gameObject.SetActive(false);
             }

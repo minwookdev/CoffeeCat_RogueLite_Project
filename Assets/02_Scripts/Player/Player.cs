@@ -47,7 +47,6 @@ namespace CoffeeCat
             playerLevelData.Initialize();
             
             LoadResources();
-            Movement();
             SetStat();
             NormalAttack();
             CheckInvincibleTime();
@@ -55,6 +54,18 @@ namespace CoffeeCat
             StageManager.Instance.AddListenerPlayerGetExp(GetExp);
             StageManager.Instance.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
+        }
+
+        private void OnEnable() 
+        {
+            InputManager.BindDirectionInputUpdateEvent(Move);
+            InputManager.BindDirectionInputEndEvent(MoveEnd);
+        }
+
+        private void OnDisable() 
+        {
+            InputManager.ReleaseDirectionInputUpdateEvent(Move);
+            InputManager.ReleaseDirectionInputEndEvent(MoveEnd);
         }
 
         private void LoadResources()
@@ -79,31 +90,8 @@ namespace CoffeeCat
             UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
         }
 
-        private void Movement()
+        private void Move(Vector2 direction) 
         {
-#if UNITY_STANDALONE   
-            this.UpdateAsObservable()
-                .Skip(TimeSpan.Zero)
-                .Where(_ => !isDead)
-                .Subscribe(_ =>
-                {
-                    var hor = Input.GetAxisRaw("Horizontal");
-                    var ver = Input.GetAxisRaw("Vertical");
-
-                    rigid.velocity = new Vector2(hor, ver) * stat.MoveSpeed;
-
-                    if (isPlayerInBattle) return;
-
-                    if (hor != 0 || ver != 0)
-                        SwitchingPlayerDirection(rigid.velocity.x < 0 ? true : false);
-                    
-                }).AddTo(this);
-#endif
-        }
-
-        public void Move(Vector2 direction) 
-        {
-#if UNITY_ANDROID
             if (isDead)
                 return;
             
@@ -116,10 +104,9 @@ namespace CoffeeCat
             {
                 SwitchingPlayerDirection(rigid.velocity.x < 0);    
             }
-#endif
         }
 
-        public void ClearMove()
+        private void MoveEnd() 
         {
             rigid.velocity = Vector2.zero;
         }
