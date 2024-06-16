@@ -1970,71 +1970,6 @@ MonoBehaviour:
     HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 1
-    PoolObject: {fileID: 5181025529943936856, guid: bd45db929725b4f47bacdcf89fa79010, type: 3}
-    ResourcesPath: 
-    AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
-    InitSpawnCount: 1
-    IsStayEnabling: 0
-    HasRootParent: 1
-    CustomRootParent: {fileID: 0}
-  - PoolObjectLoadType: 1
-    PoolObject: {fileID: 7625482163280271912, guid: cced665b94336fa4eb76d10afbbef6e6, type: 3}
-    ResourcesPath: 
-    AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
-    InitSpawnCount: 1
-    IsStayEnabling: 0
-    HasRootParent: 1
-    CustomRootParent: {fileID: 0}
-  - PoolObjectLoadType: 1
-    PoolObject: {fileID: 5619386021293234911, guid: 467d8058db83a4b4f983151c9b0e437e, type: 3}
-    ResourcesPath: 
-    AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
-    InitSpawnCount: 10
-    IsStayEnabling: 0
-    HasRootParent: 1
-    CustomRootParent: {fileID: 0}
-  - PoolObjectLoadType: 1
-    PoolObject: {fileID: 8137269200746841965, guid: 24395c685cdbd2e47b9011b3caddde9d, type: 3}
-    ResourcesPath: 
-    AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
-    InitSpawnCount: 3
-    IsStayEnabling: 0
-    HasRootParent: 1
-    CustomRootParent: {fileID: 0}
-  - PoolObjectLoadType: 1
-    PoolObject: {fileID: 1071699447744752661, guid: b586be43c90681447ab2a360f0581dce, type: 3}
-    ResourcesPath: 
-    AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
-    InitSpawnCount: 3
-    IsStayEnabling: 0
-    HasRootParent: 1
-    CustomRootParent: {fileID: 0}
-  - PoolObjectLoadType: 1
     PoolObject: {fileID: 8331810372402570222, guid: 6c4b11eba4c0b8f4eb59113b0953790b, type: 3}
     ResourcesPath: 
     AddressablesName: 
@@ -7805,7 +7740,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2012120218
 RectTransform:
   m_ObjectHideFlags: 0
