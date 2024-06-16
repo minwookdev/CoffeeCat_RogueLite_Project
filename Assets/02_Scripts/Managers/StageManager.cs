@@ -55,14 +55,14 @@ namespace CoffeeCat
             if (!queue) 
                 return;
             if (queue.IsGrantSkillOnStart) {
-                var player = RogueLiteManager.Instance.SpawnedPlayer;
+                var player = RogueLiteManager.Inst.SpawnedPlayer;
                 player.EnableSkillSelect();
             }
         }
 
         private void Update()
         {
-            if (!RogueLiteManager.Instance.SpawnedPlayer) {
+            if (!RogueLiteManager.Inst.SpawnedPlayer) {
                 return;
             }
             
@@ -71,7 +71,7 @@ namespace CoffeeCat
         }
 
         private void CameraMovementUpdate() {
-            Vector2 playerPos = RogueLiteManager.Instance.SpawnedPlayer.transform.position;
+            Vector2 playerPos = RogueLiteManager.Inst.SpawnedPlayer.transform.position;
             Camera.main.transform.position = new Vector3(playerPos.x, playerPos.y, Camera.main.transform.position.z);
         }
 
@@ -86,7 +86,7 @@ namespace CoffeeCat
                 
                 foreach (var gate in group)
                 {
-                    var spawnedGate = ObjectPoolManager.Instance.Spawn<GateObject>("dungeon_door", Vector3.zero);
+                    var spawnedGate = ObjectPoolManager.Inst.Spawn<GateObject>("dungeon_door", Vector3.zero);
                     spawnedGate.Initialize(gate.Direction, gate.Position, gate.Room);
                     spawnedGateList.Add(spawnedGate);
                 }
@@ -97,7 +97,7 @@ namespace CoffeeCat
         /// <summary>
         /// Despawn All Gates
         /// </summary>
-        public void DespawnGates() => ObjectPoolManager.Instance.DespawnAll("dungeon_door");
+        public void DespawnGates() => ObjectPoolManager.Inst.DespawnAll("dungeon_door");
 
         public void SetPlayer(Field field) {
             // Not Founded Entry Room
@@ -107,7 +107,7 @@ namespace CoffeeCat
             }
             
             // Set RogueLite Player Object
-            RogueLiteManager.Instance.SetPlayerOnEnteredDungeon(result.Rect.center);
+            RogueLiteManager.Inst.SetPlayerOnEnteredDungeon(result.Rect.center);
             playerCurrentRoom = result;
             playerCurrentRoom.RoomData.EnteredPlayer();
         }
@@ -116,7 +116,7 @@ namespace CoffeeCat
         /// Despawn Players
         /// </summary>
         public void DisablePlayer() {
-            RogueLiteManager.Instance.DisablePlayer();
+            RogueLiteManager.Inst.DisablePlayer();
         }
 
         public void SetPlayersRoom(Room enteredRoom) {
@@ -139,19 +139,19 @@ namespace CoffeeCat
         }
 
         public void EnableInput() {
-            RogueLiteManager.Instance.EnableInput();
+            RogueLiteManager.Inst.EnableInput();
         }
         
         public void DisableInput() {
-            RogueLiteManager.Instance.DisableInput();
+            RogueLiteManager.Inst.DisableInput();
         }
         
         public void RestoreTimeScale() {
-            RogueLiteManager.Instance.RestoreTimeScale();
+            RogueLiteManager.Inst.RestoreTimeScale();
         }
         
         public void TimeScaleZero() {
-            RogueLiteManager.Instance.TimeScaleZero();
+            RogueLiteManager.Inst.TimeScaleZero();
         }
 
         public void ClearCurrentRoomKillCount()

@@ -31,7 +31,7 @@ namespace CoffeeCat
                               if (targets == null) return;
 
                               DisplayDamageRange();
-                              var skillObj = ObjectPoolManager.Instance.Spawn(skillData.SkillName, playerTr.position);
+                              var skillObj = ObjectPoolManager.Inst.Spawn(skillData.SkillName, playerTr.position);
                               var projectile = skillObj.GetComponent<PlayerSkillProjectile>();
                               projectile.AreaAttack(playerStat, targets, skillData.SkillBaseDamage,
                                                     skillData.SkillCoefficient);

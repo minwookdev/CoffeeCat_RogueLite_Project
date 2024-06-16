@@ -72,12 +72,12 @@ namespace RandomDungeonWithBluePrint
             
             // Invoke Event Before Dispose Generated Map  
             if (field != null) {
-                StageManager.Instance.InvokeMapDisposeBefore();
+                StageManager.Inst.InvokeMapDisposeBefore();
             }
             
             // Clear And ReGenerate Dungeon Map
             Create(bluePrint);
-            StageManager.Instance.InvokeMapGenerateCompleted(field);
+            StageManager.Inst.InvokeMapGenerateCompleted(field);
             
             // Bake PathFind Grid
             if (isBakePathFindGrid) {
@@ -169,15 +169,15 @@ namespace RandomDungeonWithBluePrint
             
             foreach (var room in field.Rooms) {
                 Vector2 spawnPoint = new Vector2(room.Rect.xMin, room.Rect.yMin);
-                var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_room_type", spawnPoint, Quaternion.identity);
+                var text = ObjectPoolManager.Inst.Spawn<TextMeshPro>("editor_text_room_type", spawnPoint, Quaternion.identity);
                 text.SetText(room.RoomType.ToStringExtended());
             }
         }
 
         private void ClearRoomTypeText() {
-            if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_room_type"))
+            if (!ObjectPoolManager.Inst.IsExistInPoolDictionary("editor_text_room_type"))
                 return;
-            ObjectPoolManager.Instance.DespawnAll("editor_text_room_type");
+            ObjectPoolManager.Inst.DespawnAll("editor_text_room_type");
         }
 
         private void DisplaySectionIndex() {
@@ -190,15 +190,15 @@ namespace RandomDungeonWithBluePrint
             for (int i = 0; i < sections.Count; i++) {
                 var rect = sections[i].Rect;
                 var point = new Vector2(rect.xMin, rect.yMax);
-                var text = ObjectPoolManager.Instance.Spawn<TextMeshPro>("editor_text_section_index", point, Quaternion.identity);
+                var text = ObjectPoolManager.Inst.Spawn<TextMeshPro>("editor_text_section_index", point, Quaternion.identity);
                 text.SetText("< " + sections[i].Index.ToString() + " >");
             }
         }
         
         private void ClearSectionIndexText() {
-            if (!ObjectPoolManager.Instance.IsExistInPoolDictionary("editor_text_section_index"))
+            if (!ObjectPoolManager.Inst.IsExistInPoolDictionary("editor_text_section_index"))
                 return;
-            ObjectPoolManager.Instance.DespawnAll("editor_text_section_index");
+            ObjectPoolManager.Inst.DespawnAll("editor_text_section_index");
         }
         
         private void OnDrawGizmos() {

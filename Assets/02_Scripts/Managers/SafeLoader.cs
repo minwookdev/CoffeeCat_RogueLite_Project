@@ -53,7 +53,7 @@ namespace CoffeeCat.FrameWork {
             return;
 
             void Request() {
-                ResourceManager.Instance.AddressablesAsyncLoad<T>(key, isGlobalResource, (loadedResource) => {
+                ResourceManager.Inst.AddressablesAsyncLoad<T>(key, isGlobalResource, (loadedResource) => {
                     onCompleted?.Invoke(loadedResource);
                 });
             }
@@ -64,18 +64,18 @@ namespace CoffeeCat.FrameWork {
             return;
 
             void Request() {
-                if (ObjectPoolManager.Instance.IsExistInPoolDictionary(key)) {
+                if (ObjectPoolManager.Inst.IsExistInPoolDictionary(key)) {
                     // CatLog.WLog($"{key} is Already Containing in Pool Dictionary.");
                     onCompleted?.Invoke(true);
                     return;
                 }
                 
-                ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
+                ResourceManager.Inst.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
                     if (!loadedGameObject) {
                         onCompleted?.Invoke(false);
                         return;
                     }
-                    ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(loadedGameObject, initSpawnCount: spawnCount));
+                    ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(loadedGameObject, initSpawnCount: spawnCount));
                     onCompleted?.Invoke(true);
                 });
             }

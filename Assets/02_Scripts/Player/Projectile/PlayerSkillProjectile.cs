@@ -35,7 +35,7 @@ namespace CoffeeCat
             Observable.Timer(TimeSpan.FromSeconds(particleDuration))
                       .TakeUntilDisable(gameObject)
                       .Where(_ => gameObject.activeSelf)
-                      .Subscribe(_ => { ObjectPoolManager.Instance.Despawn(gameObject); });
+                      .Subscribe(_ => { ObjectPoolManager.Inst.Despawn(gameObject); });
         }
 
         protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f,

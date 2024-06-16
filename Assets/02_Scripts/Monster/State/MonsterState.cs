@@ -252,7 +252,7 @@ namespace CoffeeCat {
         /// <returns>is Arrival to Player</returns>
         protected bool TrackPlayerToCertainDistance(float sqrDistance, out Vector2 normalizedDirection) {
             // Get Direction to Player Position
-            normalizedDirection = Math2DHelper.GetDirection(tr.position, RogueLiteManager.Instance.SpawnedPlayerPosition);
+            normalizedDirection = Math2DHelper.GetDirection(tr.position, RogueLiteManager.Inst.SpawnedPlayerPosition);
             
             // Get Distance
             var sqrDistanceToPlayer = normalizedDirection.sqrMagnitude;
@@ -311,8 +311,8 @@ namespace CoffeeCat {
         
         public void Despawn() {
             if (ObjectPoolManager.IsExist) {
-                if (ObjectPoolManager.Instance.IsExistInPoolDictionary(gameObject.name)) {
-                    ObjectPoolManager.Instance.Despawn(gameObject);
+                if (ObjectPoolManager.Inst.IsExistInPoolDictionary(gameObject.name)) {
+                    ObjectPoolManager.Inst.Despawn(gameObject);
                     return;
                 }
             }

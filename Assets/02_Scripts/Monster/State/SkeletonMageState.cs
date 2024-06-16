@@ -61,7 +61,7 @@ namespace CoffeeCat
         // ReSharper disable Unity.PerformanceAnalysis
         protected override void OnUpdateIdleState()
         {
-            if (RogueLiteManager.Instance.IsPlayerNotExistOrDeath())
+            if (RogueLiteManager.Inst.IsPlayerNotExistOrDeath())
                 return;
             StateChange(EnumMonsterState.Tracking);
         }
@@ -82,7 +82,7 @@ namespace CoffeeCat
         protected override void OnUpdateTrackingState()
         {
             // Check Player Not Exist Or Death
-            if (!RogueLiteManager.Instance.IsPlayerExistAndAlive())
+            if (!RogueLiteManager.Inst.IsPlayerExistAndAlive())
             {
                 StateChange(EnumMonsterState.Idle);
                 return;
@@ -200,14 +200,14 @@ namespace CoffeeCat
 
             // Spawn Projectile
             var spawnedProjectile =
-                ObjectPoolManager.Instance.Spawn<MonsterProjectile>(projectileKey.ToStringEx(), spawnPoint,
+                ObjectPoolManager.Inst.Spawn<MonsterProjectile>(projectileKey.ToStringEx(), spawnPoint,
                                                                     lookAtTargetRotation);
             spawnedProjectile.Initialize(stat);
         }
 
         private bool IsPlayerInAttackRange(out Vector2 playerPosition)
         {
-            playerPosition = RogueLiteManager.Instance.SpawnedPlayerPosition;
+            playerPosition = RogueLiteManager.Inst.SpawnedPlayerPosition;
             var sqrDistance = Math2DHelper.GetDirection(tr.position, playerPosition).sqrMagnitude;
             return sqrDistance <= (attackAbleSqrDistance * attackAbleDistanceMultiplier);
         }

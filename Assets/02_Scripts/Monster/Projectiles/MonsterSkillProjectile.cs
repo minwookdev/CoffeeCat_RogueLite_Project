@@ -54,7 +54,7 @@ namespace CoffeeCat {
             // Get SkillData in DataManager's Dictionary
             if (skillData != null) 
                 return;
-            if (DataManager.Instance.MonsterSkills.DataDictionary.TryGetValue(skillKey.ToString(), out MonsterSkillStat result) == false) {
+            if (DataManager.Inst.MonsterSkills.DataDictionary.TryGetValue(skillKey.ToString(), out MonsterSkillStat result) == false) {
                 CatLog.ELog($"Not Found Monster Skill Data. Name: {skillKey.ToString()}");
             }
             skillData = result;
@@ -94,7 +94,7 @@ namespace CoffeeCat {
 
             var attackData = DamageData.GetData(statData, player.Stat);
             player.OnDamaged(attackData);
-            ObjectPoolManager.Instance.Despawn(gameObject);
+            ObjectPoolManager.Inst.Despawn(gameObject);
         }
 
         #endregion

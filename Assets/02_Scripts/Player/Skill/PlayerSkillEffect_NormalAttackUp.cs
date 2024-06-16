@@ -33,7 +33,7 @@ namespace CoffeeCat
                 .Take(1)
                 .Subscribe(_ =>
                 {
-                    var spawnObj = ObjectPoolManager.Instance.Spawn(playerSkillData.SkillName, playerTr);
+                    var spawnObj = ObjectPoolManager.Inst.Spawn(playerSkillData.SkillName, playerTr);
                     spawnObj.transform.localPosition = Vector3.zero;
                 });
         }

@@ -32,7 +32,7 @@ namespace CoffeeCat.FrameWork {
                 return;
 
             if (customChannelOrigin == null) {
-                customChannelOrigin = ResourceManager.Instance.ResourcesLoad<GameObject>("Audio/AudioChannel_Custom", false);
+                customChannelOrigin = ResourceManager.Inst.ResourcesLoad<GameObject>("Audio/AudioChannel_Custom", false);
             }
 
             var spawnedCustomChannel = Instantiate(customChannelOrigin, Vector3.zero, Quaternion.identity, AudioGroupTr).GetComponent<AudioSource>();
@@ -91,7 +91,7 @@ namespace CoffeeCat.FrameWork {
             audioClipDictionary = new StringAudioClipDictionary();
             //customChannelDictionary = new StringAudioSourceDictionary();
             AudioCameraTr = Camera.main.GetComponent<Transform>();
-            var resourcesLoadAudioGroup = ResourceManager.Instance.ResourcesLoad<GameObject>("Audio/AudioGroup", false);
+            var resourcesLoadAudioGroup = ResourceManager.Inst.ResourcesLoad<GameObject>("Audio/AudioGroup", false);
             if (resourcesLoadAudioGroup != null) {
                 AudioGroupTr = Instantiate<Transform>(resourcesLoadAudioGroup.transform, Vector3.zero, Quaternion.identity, AudioCameraTr);
 
@@ -107,8 +107,8 @@ namespace CoffeeCat.FrameWork {
 
         private void Start() {
             Tr = GetComponent<Transform>();
-            SceneManager.Instance.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
-            SceneManager.Instance.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
+            SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
+            SceneManager.Inst.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
         }
 
         public void RegistAudioClips(StringAudioClipDictionary sceneExistAudioClipDictionary) {

@@ -22,7 +22,7 @@ namespace CoffeeCat
             monsterStat.OnDamaged(damageData, true, tr.position, 3f);
 
             if (gameObject.activeSelf)
-                ObjectPoolManager.Instance.Despawn(gameObject);
+                ObjectPoolManager.Inst.Despawn(gameObject);
         }
 
         protected override void SetDamageData(PlayerStat playerStat, float skillBaseDamage = 0f, float skillCoefficient = 1f)
@@ -38,7 +38,7 @@ namespace CoffeeCat
               .OnComplete(() =>
               {
                   if (gameObject.activeSelf)
-                      ObjectPoolManager.Instance.Despawn(gameObject);
+                      ObjectPoolManager.Inst.Despawn(gameObject);
               });
         }
 

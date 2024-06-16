@@ -28,7 +28,7 @@ namespace CoffeeCat.UI {
                   damageTmp.color = textColor;
               })
               .OnComplete(() => {
-                  ObjectPoolManager.Instance.Despawn(this.gameObject);
+                  ObjectPoolManager.Inst.Despawn(this.gameObject);
               });
         }
 
@@ -42,7 +42,7 @@ namespace CoffeeCat.UI {
                   damageTmp.color = textColor;
               })
               .OnComplete(() => {
-                  ObjectPoolManager.Instance.Despawn(this.gameObject);
+                  ObjectPoolManager.Inst.Despawn(this.gameObject);
               });
         }
 
@@ -56,7 +56,7 @@ namespace CoffeeCat.UI {
                     damageTmp.color = textColor;
                 })
                 .OnComplete(() => {
-                    ObjectPoolManager.Instance.Despawn(this.gameObject);
+                    ObjectPoolManager.Inst.Despawn(this.gameObject);
                 });
         }
     }

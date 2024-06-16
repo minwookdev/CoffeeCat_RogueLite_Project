@@ -43,7 +43,7 @@ namespace CoffeeCat
         private void Start()
         {
             rigid = GetComponent<Rigidbody2D>();
-            normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
+            normalAttackData = DataManager.Inst.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
             playerLevelData.Initialize();
             
             LoadResources();
@@ -51,9 +51,9 @@ namespace CoffeeCat
             NormalAttack();
             CheckInvincibleTime();
 
-            StageManager.Instance.AddListenerPlayerGetExp(GetExp);
-            StageManager.Instance.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
-            StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
+            StageManager.Inst.AddListenerPlayerGetExp(GetExp);
+            StageManager.Inst.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
+            StageManager.Inst.AddListenerClearedRoomEvent(PlayerClearedRoom);
         }
 
         private void OnEnable() 
@@ -85,9 +85,9 @@ namespace CoffeeCat
 
         private void SetStat()
         {
-            stat = DataManager.Instance.PlayerStats.DataDictionary[playerName.ToStringEx()];
+            stat = DataManager.Inst.PlayerStats.DataDictionary[playerName.ToStringEx()];
             stat.SetCurrentHp();
-            UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
+            UIPresenter.Inst.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
         }
 
         private void Move(Vector2 direction) 
@@ -146,7 +146,7 @@ namespace CoffeeCat
 
                     // 기본 공격 Projectile 스폰 및 발사
                     var spawnObj =
-                        ObjectPoolManager.Instance.Spawn(normalAttackProjectile.ToStringEx(), projectileTr.position);
+                        ObjectPoolManager.Inst.Spawn(normalAttackProjectile.ToStringEx(), projectileTr.position);
                     var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
                     projectile.Fire(stat, normalAttackData, projectileTr.position, targetDirection);
 
@@ -245,7 +245,7 @@ namespace CoffeeCat
             if (!playerLevelData.isReadyLevelUp()) return;
             
             playerLevelData.LevelUp();
-            var levelUpEffect = ObjectPoolManager.Instance.Spawn("LevelUp", tr);
+            var levelUpEffect = ObjectPoolManager.Inst.Spawn("LevelUp", tr);
             levelUpEffect.transform.localPosition = Vector3.zero;
 
             Observable.Timer(TimeSpan.FromSeconds(2.5f))
@@ -301,7 +301,7 @@ namespace CoffeeCat
         public void UpgradeNormalAttack()
         {
             var index = normalAttackData.Index + 1;
-            normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[index];
+            normalAttackData = DataManager.Inst.PlayerActiveSkills.DataDictionary[index];
         }
 
         public void OnDamaged(DamageData damageData)
@@ -311,7 +311,7 @@ namespace CoffeeCat
             
             var calculatedDamage = damageData.CalculatedDamage;
             stat.CurrentHp -= calculatedDamage;
-            DamageTextManager.Instance.OnFloatingText(calculatedDamage, tr.position, true);
+            DamageTextManager.Inst.OnFloatingText(calculatedDamage, tr.position, true);
             isPlayerDamaged = true;
 
             if (stat.CurrentHp <= 0)
@@ -320,7 +320,7 @@ namespace CoffeeCat
                 OnDead();
             }
             
-            UIPresenter.Instance.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
+            UIPresenter.Inst.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
         }
         
         public void AddListenerPlayerDeadEvent(UnityAction action) => OnPlayerDead.AddListener(action);

@@ -25,7 +25,7 @@ namespace CoffeeCat {
         
         protected override void Initialize() {
             base.Initialize();
-            SceneManager.Instance.OnSceneChangeBeforeEvent += Clear;
+            SceneManager.Inst.OnSceneChangeBeforeEvent += Clear;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace CoffeeCat {
             // Check DamageText Origin GameObject
             if (damageTextOriginGameObject == null) {
                 // Load DamageText GameObject
-                ResourceManager.Instance.AddressablesAsyncLoad<GameObject>("DamageText", false, (loadedObject) => {
+                ResourceManager.Inst.AddressablesAsyncLoad<GameObject>("DamageText", false, (loadedObject) => {
                     if (!loadedObject) {
                         CatLog.ELog("DamageTextManager Init Failed. DamageText Load Failed.");
                         return;
@@ -65,7 +65,7 @@ namespace CoffeeCat {
             // ObjectPool Initializing
             void InitializeObjectPool() {
                 PoolInformation poolInformation = PoolInformation.Create(damageTextOriginGameObject, true, poolInitializingCount);
-                ObjectPoolManager.Instance.AddToPool(poolInformation);
+                ObjectPoolManager.Inst.AddToPool(poolInformation);
                 IsSetupCompleted = true;
             }
         }
@@ -88,7 +88,7 @@ namespace CoffeeCat {
 
         public void OnFloatingText(string damageCountStr, Vector2 startPosition, bool isDamagedPlayer) {
             var targetColor = isDamagedPlayer ? playerDamagedColor : monsterDamagedColor;
-            var spawnedDamageText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
+            var spawnedDamageText = ObjectPoolManager.Inst.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
             spawnedDamageText.OnFloating(startPosition, damageCountStr, targetColor);
             /*Vector2 playPosition = UIHelper.WorldPositionToCanvasAnchoredPosition(mainCamera, startPosition, targetCanvas.GetComponent<RectTransform>());*/
         }
@@ -99,7 +99,7 @@ namespace CoffeeCat {
 
         public void OnReflectingText(string damageCountStr, Vector2 startPosition, Vector2 direction, bool isDamagedPlayer) {
             var targetColor = isDamagedPlayer ? playerDamagedColor : monsterDamagedColor;
-            var spawnedDamageText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
+            var spawnedDamageText = ObjectPoolManager.Inst.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
             //Vector2 playPosition = UIHelper.WorldPositionToCanvasAnchoredPosition(mainCamera, startPosition, targetCanvas.GetComponent<RectTransform>());
             spawnedDamageText.OnReflecting(startPosition, direction, damageCountStr, targetColor);
         }
@@ -110,7 +110,7 @@ namespace CoffeeCat {
 
         public void OnTransmittanceText(string damageCountStr, Vector2 startPosition, Vector2 direction, bool isDamagedPlayer) {
             var targetColor = isDamagedPlayer ? playerDamagedColor : monsterDamagedColor;
-            var spawnText = ObjectPoolManager.Instance.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
+            var spawnText = ObjectPoolManager.Inst.Spawn<DamageText>(spawnKey, Vector2.zero, Quaternion.identity);
             spawnText.OnTransmittance(startPosition, direction, damageCountStr, targetColor);
         }
 

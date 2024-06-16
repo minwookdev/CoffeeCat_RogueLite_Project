@@ -18,7 +18,7 @@ namespace CoffeeCat {
         private void Start() {
             // Get Origin Stat Data
             customStatLoadKey = (customStatLoadKey.Equals(string.Empty)) ? gameObject.name : customStatLoadKey;
-            var monsterStatsDataDictionary = DataManager.Instance.MonsterStats.DataDictionary;
+            var monsterStatsDataDictionary = DataManager.Inst.MonsterStats.DataDictionary;
             if (!monsterStatsDataDictionary.TryGetValue(customStatLoadKey, out MonsterStat result)) {
                 CatLog.WLog($"Not Found Monster Stat Data. Key: {customStatLoadKey}");
                 return;
@@ -57,7 +57,7 @@ namespace CoffeeCat {
             float finalCalculatedDamageCount = data.CalculatedDamage;
             float tempHealthPoint = CurrentStat.HP - finalCalculatedDamageCount;
             if (tempHealthPoint <= 0f) {
-                StageManager.Instance.AddCurrentRoomKillCount();
+                StageManager.Inst.AddCurrentRoomKillCount();
                 CurrentStat.HP = 0f;
                 state.OnDeath();
             }
@@ -77,12 +77,12 @@ namespace CoffeeCat {
                 return;
             int floatingCount = Mathf.RoundToInt(finalCalculatedDamageCount);
             if (knockBackDirection != Vector2.zero) {
-                DamageTextManager.Instance.OnReflectingText(floatingCount, collisionPoint, knockBackDirection, false);   
+                DamageTextManager.Inst.OnReflectingText(floatingCount, collisionPoint, knockBackDirection, false);   
             }
             else {
                 Vector2 textStartPos = collisionPoint == default ? transform.position : collisionPoint;
                 textStartPos.y += 1.25f;
-                DamageTextManager.Instance.OnFloatingText(floatingCount, textStartPos, false);
+                DamageTextManager.Inst.OnFloatingText(floatingCount, textStartPos, false);
             }
         }
 

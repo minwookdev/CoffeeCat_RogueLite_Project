@@ -46,7 +46,7 @@ namespace CoffeeCat {
 
 		protected override void OnUpdateIdleState() {
 			// Check Player Alive And Exist
-			if (RogueLiteManager.Instance.IsPlayerNotExistOrDeath()) {
+			if (RogueLiteManager.Inst.IsPlayerNotExistOrDeath()) {
 				return;
 			}
 
@@ -64,7 +64,7 @@ namespace CoffeeCat {
 
 		protected override void OnUpdateTrackingState() {
 			// Check Play Death Or Not Exist
-			if (RogueLiteManager.Instance.IsPlayerNotExistOrDeath()) {
+			if (RogueLiteManager.Inst.IsPlayerNotExistOrDeath()) {
 				StateChange(EnumMonsterState.Idle);
 				return;
 			}
@@ -126,7 +126,7 @@ namespace CoffeeCat {
 		}
 
 		protected override void OnUpdateAttackState() {
-			if (RogueLiteManager.Instance.IsPlayerNotExistOrDeath()) {
+			if (RogueLiteManager.Inst.IsPlayerNotExistOrDeath()) {
 				StateChange(EnumMonsterState.Idle);
 				return;
 			}

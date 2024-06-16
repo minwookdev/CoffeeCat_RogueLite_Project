@@ -51,8 +51,8 @@ namespace CoffeeCat
         private IEnumerator WaitLoadResources(Field field)
         {
             RoadResources();
-            yield return new WaitUntil(() => ObjectPoolManager.Instance.IsExistInPoolDictionary(branchKey));
-            yield return new WaitUntil(() => ObjectPoolManager.Instance.IsExistInPoolDictionary(roomPanelKey));
+            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPoolDictionary(branchKey));
+            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPoolDictionary(roomPanelKey));
             MinimapGenerate(field);
         }
         
@@ -63,7 +63,7 @@ namespace CoffeeCat
             
             foreach (var room in field.Rooms)
             {
-                var roomObj = ObjectPoolManager.Instance.Spawn(roomPanelKey, panelTr);
+                var roomObj = ObjectPoolManager.Inst.Spawn(roomPanelKey, panelTr);
                 var minimapRoom = roomObj.GetComponent<Minimap_Room>();
                 minimapRoom.Initialize(room, minimapRatio);
                 minimapRooms.Add(room.RoomData.RoomIndex, minimapRoom);
@@ -71,7 +71,7 @@ namespace CoffeeCat
 
             foreach (var connection in field.Connections)
             {
-                var spawnBranchObj = ObjectPoolManager.Instance.Spawn(branchKey, branchTr);
+                var spawnBranchObj = ObjectPoolManager.Inst.Spawn(branchKey, branchTr);
                 
                 var rectTransform = spawnBranchObj.GetComponent<RectTransform>();
                 rectTransform.localScale = Vector3.one;
@@ -83,14 +83,14 @@ namespace CoffeeCat
             }
 
             ActivePlayerSpawnRoomPanel();
-            StageManager.Instance.AddListenerRoomEnteringEvent(EnterdRoom);
-            StageManager.Instance.AddListenerRoomLeftEvent(LeftRoom);
-            StageManager.Instance.AddListenerClearedRoomEvent(ClearedRoom);
+            StageManager.Inst.AddListenerRoomEnteringEvent(EnterdRoom);
+            StageManager.Inst.AddListenerRoomLeftEvent(LeftRoom);
+            StageManager.Inst.AddListenerClearedRoomEvent(ClearedRoom);
         }
 
         private void ActivePlayerSpawnRoomPanel()
         {
-            var spawnRoom = StageManager.Instance.PlayerCurrentRoom;
+            var spawnRoom = StageManager.Inst.PlayerCurrentRoom;
             var roomPanel = minimapRooms[spawnRoom.RoomData.RoomIndex];
             roomPanel.EnterdRoom();
         }

@@ -53,7 +53,7 @@ namespace CoffeeCat {
 
             // Despawn 예약
             if (maxLifeTime != -1f) {
-                ObjectPoolManager.Instance.Despawn(this.gameObject, maxLifeTime);
+                ObjectPoolManager.Inst.Despawn(this.gameObject, maxLifeTime);
             }
 
             if (isAutoActive) {
@@ -159,7 +159,7 @@ namespace CoffeeCat {
 
             var attackData = DamageData.GetData(statData, player.Stat);
             player.OnDamaged(attackData);
-            ObjectPoolManager.Instance.Despawn(gameObject);
+            ObjectPoolManager.Inst.Despawn(gameObject);
         }
 
         #endregion

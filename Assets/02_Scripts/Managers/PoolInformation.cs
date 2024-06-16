@@ -109,10 +109,10 @@ namespace CoffeeCat.FrameWork {
                     if (fileExtensionPosition >= 0) { // Remove Paths Extension
                         ResourcesPath = ResourcesPath.Substring(0, fileExtensionPosition);
                     }
-                    PoolObject = ResourceManager.Instance.ResourcesLoad<GameObject>(ResourcesPath, false);
+                    PoolObject = ResourceManager.Inst.ResourcesLoad<GameObject>(ResourcesPath, false);
                     break;
                 case LoadType.Addressables_Key:
-                    ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(AddressablesName, false, loadedObject => {
+                    ResourceManager.Inst.AddressablesAsyncLoad<GameObject>(AddressablesName, false, loadedObject => {
                         if (!loadedObject) {
                             CatLog.ELog("PoolInfo.LoadOriginPrefab() Failed. Addressables Load Failed.");
                             return;

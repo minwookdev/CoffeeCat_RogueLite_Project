@@ -50,7 +50,7 @@ namespace CoffeeCat
                 .Take(1)
                 .Subscribe(_ =>
                 {
-                    var spawnObj = ObjectPoolManager.Instance.Spawn(passiveAddressableKey, playerTr);
+                    var spawnObj = ObjectPoolManager.Inst.Spawn(passiveAddressableKey, playerTr);
                     spawnObj.transform.localPosition = new Vector3(0f, 0.3f, 0f);
                 });
         }

@@ -34,7 +34,7 @@ namespace CoffeeCat.Pathfinding2D {
             // PathFind에 필요한 데이터 요청
             if (!pathFindGrid.TryGetPathFindData(startPos, targetPos, out PathFindData pathFindData)) {
                 // PathFind 데이터 요청 실패 시 RequestManager에 결과 통보
-                PathRequestManager.Instance.FinishedProcessingRequest(Array.Empty<Vector2>(), false);
+                PathRequestManager.Inst.FinishedProcessingRequest(Array.Empty<Vector2>(), false);
                 stopWatch.Stop();
                 yield break;
             }
@@ -113,7 +113,7 @@ namespace CoffeeCat.Pathfinding2D {
             if (isPathFindSuccess) {
                 wayPoints = RetracePath(startNode, targetNode);
             }
-            PathRequestManager.Instance.FinishedProcessingRequest(wayPoints, isPathFindSuccess);
+            PathRequestManager.Inst.FinishedProcessingRequest(wayPoints, isPathFindSuccess);
         }
 
         private Vector2[] RetracePath(Node startNode, Node endNode) {

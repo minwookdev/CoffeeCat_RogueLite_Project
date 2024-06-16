@@ -20,7 +20,7 @@ namespace CoffeeCat.FrameWork {
 
         private void Start() {
             btnNextFloor.onClick.AddListener(() => {
-                StageManager.Instance.RequestGenerateNextFloor();
+                StageManager.Inst.RequestGenerateNextFloor();
                 DisableNextFloorButton();
             });
             

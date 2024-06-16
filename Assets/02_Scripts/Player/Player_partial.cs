@@ -26,8 +26,8 @@ namespace CoffeeCat
             var skillSelectDataList = new List<PlayerSkillSelectData>();
 
             List<PlayerSkill> playerAllSkills = new List<PlayerSkill>();
-            var activeSkills = DataManager.Instance.PlayerActiveSkills;
-            var passiveSkills = DataManager.Instance.PlayerPassiveSkills;
+            var activeSkills = DataManager.Inst.PlayerActiveSkills;
+            var passiveSkills = DataManager.Inst.PlayerPassiveSkills;
 
             playerAllSkills.AddRange(activeSkills.DataDictionary.Values);
             playerAllSkills.AddRange(passiveSkills.DataDictionary.Values);
@@ -125,8 +125,8 @@ namespace CoffeeCat
 
             PlayerSkill getSkill = null;
             getSkill = data.Type == 0
-                ? DataManager.Instance.PlayerActiveSkills.DataDictionary[data.Index]
-                : DataManager.Instance.PlayerPassiveSkills.DataDictionary[data.Index];
+                ? DataManager.Inst.PlayerActiveSkills.DataDictionary[data.Index]
+                : DataManager.Inst.PlayerPassiveSkills.DataDictionary[data.Index];
 
             if (data.IsOwned)
             {
@@ -164,7 +164,7 @@ namespace CoffeeCat
 
         public void EnableSkillSelect()
         {
-            UIPresenter.Instance.OpenSkillSelectPanel(SkillSelector());
+            UIPresenter.Inst.OpenSkillSelectPanel(SkillSelector());
         }
 
         #region Skill Effect

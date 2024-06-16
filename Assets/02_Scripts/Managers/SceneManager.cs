@@ -79,7 +79,7 @@ namespace CoffeeCat.FrameWork {
             // Load Loading Scene and Immidiate Active
             StartCoroutine(LoadSceneAsync(SceneName.LoadingScene, LoadSceneMode.Single, () => {
                 ActiveNextScene(true, false, () => {
-                    LoadingSceneBase.Instance.LoadNextScene(loadTargetScene);
+                    LoadingSceneBase.Inst.LoadNextScene(loadTargetScene);
                 });
             }));
         }

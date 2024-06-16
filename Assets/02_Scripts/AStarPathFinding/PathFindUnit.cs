@@ -38,7 +38,7 @@ namespace CoffeeCat.Pathfinding2D {
 					return;
 				}
 				
-				PathRequestManager.Instance.RequestPathAsync(tr.position, target.position,
+				PathRequestManager.Inst.RequestPathAsync(tr.position, target.position,
 				                                             OnPathFound);
 			}
 		}

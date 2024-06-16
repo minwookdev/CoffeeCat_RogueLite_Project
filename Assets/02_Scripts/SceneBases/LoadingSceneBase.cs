@@ -14,9 +14,9 @@ namespace CoffeeCat {
         [SerializeField] TextMeshProUGUI tmpLoadingPercent = null;
 
         public void LoadNextScene(SceneName loadTargetScene) {
-            SceneManager.Instance.LoadSceneAsync(loadTargetScene, () => {
+            SceneManager.Inst.LoadSceneAsync(loadTargetScene, () => {
                 // Change Scene Immidiately Completed Scene Loading
-                SceneManager.Instance.ActiveNextScene(false, true);
+                SceneManager.Inst.ActiveNextScene(false, true);
             });
 
             SubscribeUpdateLoadingScene();
@@ -25,7 +25,7 @@ namespace CoffeeCat {
         private void SubscribeUpdateLoadingScene() {
             this.UpdateAsObservable()
                 .Skip(System.TimeSpan.Zero)
-                .Select(_ => SceneManager.Instance)
+                .Select(_ => SceneManager.Inst)
                 .TakeWhile(sceneManager => sceneManager.IsNextSceneLoadCompleted == false)
                 .DoOnSubscribe(() => {
                     tmpLoadingState.text = "Now Scene Laoding...";

@@ -27,13 +27,13 @@ namespace CoffeeCat.FrameWork {
 			if (SpawnedPlayer)
 				return;
 			
-			if (!ObjectPoolManager.Instance.IsExistInPoolDictionary(playerKey)) {
+			if (!ObjectPoolManager.Inst.IsExistInPoolDictionary(playerKey)) {
 				// TODO : 안드로이드 빌드 버그 수정 후 주석 해제
 				// var origin = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(playerKey, true);
 				// ObjectPoolManager.Instance.AddToPool(PoolInformation.New(origin, true, 1));
 			}
 
-			SpawnedPlayer = ObjectPoolManager.Instance.Spawn<Player>(playerKey, Vector3.zero);
+			SpawnedPlayer = ObjectPoolManager.Inst.Spawn<Player>(playerKey, Vector3.zero);
 		}
 		
 		public void SetPlayerPosition(Vector2 position) {
@@ -59,7 +59,7 @@ namespace CoffeeCat.FrameWork {
 			if (!SpawnedPlayer) {
 				return;
 			}
-			ObjectPoolManager.Instance.Despawn(SpawnedPlayer.gameObject);
+			ObjectPoolManager.Inst.Despawn(SpawnedPlayer.gameObject);
 		}
 
 		public void DisableInput() {

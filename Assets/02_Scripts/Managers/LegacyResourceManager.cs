@@ -147,7 +147,7 @@ namespace CoffeeCat.Legacy {
         protected override void Initialize() => resourcesDict = new Dictionary<string, ResourceInformation>();
 
         protected void Start() {
-            SceneManager.Instance.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
+            SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
         }
 
         #region RESOURCES LOAD

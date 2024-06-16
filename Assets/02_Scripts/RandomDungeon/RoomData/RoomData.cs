@@ -59,10 +59,10 @@ namespace CoffeeCat.RogueLite {
 			var loomDataStruct = new RoomDataStruct(this);
 			if (!IsPlayerFirstEntered)
 			{
-				StageManager.Instance.InvokeRoomEnteringFirstEvent(loomDataStruct);
+				StageManager.Inst.InvokeRoomEnteringFirstEvent(loomDataStruct);
 				IsPlayerFirstEntered = true;
 			}
-			StageManager.Instance.InvokeRoomEnteringEvent(loomDataStruct);
+			StageManager.Inst.InvokeRoomEnteringEvent(loomDataStruct);
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace CoffeeCat.RogueLite {
 		public virtual void LeavesPlayer() {
 			IsPlayerInside = false;
 			var loomDataStruct = new RoomDataStruct(this);
-			StageManager.Instance.InvokeRoomLeftEvent(loomDataStruct);
+			StageManager.Inst.InvokeRoomLeftEvent(loomDataStruct);
 		}
 
 		protected void SetInteractiveObject(InteractableType type)
@@ -79,7 +79,7 @@ namespace CoffeeCat.RogueLite {
 			if (interactableObject) {
 				return;
 			}
-			interactableObject = ObjectPoolManager.Instance.Spawn<InteractableObject>(type.ToKey(), interactiveObjectSpawnPos);
+			interactableObject = ObjectPoolManager.Inst.Spawn<InteractableObject>(type.ToKey(), interactiveObjectSpawnPos);
 		}
 
 		public virtual void Dispose() {
@@ -87,7 +87,7 @@ namespace CoffeeCat.RogueLite {
 			if (!interactableObject) 
 				return;
 			if (ObjectPoolManager.IsExist) {
-				ObjectPoolManager.Instance.Despawn(interactableObject.gameObject);	
+				ObjectPoolManager.Inst.Despawn(interactableObject.gameObject);	
 			}
 		}
 	}
@@ -151,7 +151,7 @@ namespace CoffeeCat.RogueLite {
 			var roomDataStruct = new RoomDataStruct(this);
 			if (!IsPlayerFirstEntered)
 			{
-				StageManager.Instance.InvokeRoomEnteringFirstEvent(roomDataStruct);
+				StageManager.Inst.InvokeRoomEnteringFirstEvent(roomDataStruct);
 				IsPlayerFirstEntered = true;
 
 				if (!IsCleared)
@@ -164,7 +164,7 @@ namespace CoffeeCat.RogueLite {
 				}
 			}
 			
-			StageManager.Instance.InvokeRoomEnteringEvent(roomDataStruct);
+			StageManager.Inst.InvokeRoomEnteringEvent(roomDataStruct);
 			return;
 
 			void SpawnGroupMonster() {
@@ -172,7 +172,7 @@ namespace CoffeeCat.RogueLite {
 					return;
 				}
 
-				var groupSpawnPoint = ObjectPoolManager.Instance.Spawn<MonsterGroupSpawnPoint>(groupSpawnPositionsKey, roomCenterPos);
+				var groupSpawnPoint = ObjectPoolManager.Inst.Spawn<MonsterGroupSpawnPoint>(groupSpawnPositionsKey, roomCenterPos);
 				var points = groupSpawnPoint.SpawnPositions;
 				foreach (var point in points) {
 					if (groupMonsterSpawnCount >= MaxSpawnCount) {
@@ -181,7 +181,7 @@ namespace CoffeeCat.RogueLite {
 
 					// Spawn Monster Group Spawn Position
 					var key = RaffleSpawnMonster();
-					var spawnedMonster = ObjectPoolManager.Instance.Spawn<MonsterStatus>(key, point);
+					var spawnedMonster = ObjectPoolManager.Inst.Spawn<MonsterStatus>(key, point);
 					spawnedMonsters.Add(spawnedMonster);
 					groupMonsterSpawnCount++;
 				}
@@ -196,7 +196,7 @@ namespace CoffeeCat.RogueLite {
 				// Subscribe Spawn Update Observable
 				Observable.EveryUpdate()
 				          .Skip(TimeSpan.Zero)
-				          .Select(_ => StageManager.Instance.CurrentRoomMonsterKilledCount)
+				          .Select(_ => StageManager.Inst.CurrentRoomMonsterKilledCount)
 				          .TakeWhile(_ => !IsCleared)
 				          .DoOnCompleted(OnCleared)
 				          .Subscribe(currentKillCount => {
@@ -224,7 +224,7 @@ namespace CoffeeCat.RogueLite {
 					if (activatedMonsters >= keepAverageCount)
 						return;
 					
-					var spawnedMonster = ObjectPoolManager.Instance.Spawn<MonsterStatus>(RaffleSpawnMonster(), GetRandomPos());
+					var spawnedMonster = ObjectPoolManager.Inst.Spawn<MonsterStatus>(RaffleSpawnMonster(), GetRandomPos());
 					spawnedMonsters.Add(spawnedMonster);
 					currentSpawnCount++;
 				}
@@ -255,8 +255,8 @@ namespace CoffeeCat.RogueLite {
 			IsLocked = false;
 			OnRoomLocked?.Invoke(IsLocked);
 			var roomDataStruct = new RoomDataStruct(this);
-			StageManager.Instance.InvokeEventClearedRoomEvent(roomDataStruct);
-			StageManager.Instance.ClearCurrentRoomKillCount();
+			StageManager.Inst.InvokeEventClearedRoomEvent(roomDataStruct);
+			StageManager.Inst.ClearCurrentRoomKillCount();
 		}
 
 		Vector2[] GetMonsterSpawnPositions(Room room, float tileRadius = 0.5f) {
@@ -315,7 +315,7 @@ namespace CoffeeCat.RogueLite {
 		public override void Dispose() {
 			base.Dispose();
 			if (ObjectPoolManager.IsExist) {
-				ObjectPoolManager.Instance?.DespawnAll(groupSpawnPositionsKey);
+				ObjectPoolManager.Inst?.DespawnAll(groupSpawnPositionsKey);
 			}
 			IsCleared = true;
 		}

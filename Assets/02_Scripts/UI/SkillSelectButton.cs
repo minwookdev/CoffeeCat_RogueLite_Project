@@ -22,13 +22,13 @@ namespace CoffeeCat.UI {
                 if (!RogueLiteManager.IsExist) {
                     return;
                 }
-                var player = RogueLiteManager.Instance.SpawnedPlayer;
+                var player = RogueLiteManager.Inst.SpawnedPlayer;
                 if (!player) {
                     return;
                 }
 
                 player.UpdateSkill(data);
-                StageManager.Instance.InvokeSkillSelectCompleted();
+                StageManager.Inst.InvokeSkillSelectCompleted();
             });
         }
 

@@ -48,8 +48,8 @@ namespace CoffeeCat.FrameWork {
 
         private void Start() {
             // Scene Change Event Listen
-            SceneManager.Instance.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
-            SceneManager.Instance.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
+            SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
+            SceneManager.Inst.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
 
             SubscribeCheckDuplicatedEffectGameObjectInDictionaryObservable();
         }
@@ -62,7 +62,7 @@ namespace CoffeeCat.FrameWork {
                 return;
             }
 
-            ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
+            ResourceManager.Inst.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
                 if (!loadedGameObject) {
                     CatLog.ELog($"EffectObject Load Failed. name: {key}");
                     return;
@@ -102,7 +102,7 @@ namespace CoffeeCat.FrameWork {
         private void Regist(Effector effector, string key) {
             var newEffectInformation = EffectInfo.New(effector.gameObject.name, effector);
             effectInfoDictionary.Add(key, newEffectInformation);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(effector.gameObject));
+            ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(effector.gameObject));
             newEffectInformation.SetIsReady(true);
         }
 
@@ -226,24 +226,24 @@ namespace CoffeeCat.FrameWork {
         private bool IsPlayable(string key) => effectInfoDictionary.ContainsKey(key) && effectInfoDictionary[key].IsReady;
 
         private Effector EffectSpawnWithPlayGetter(string key, Vector3 position, Quaternion rotation, Transform parent, EffectPlayOptions playOptions) {
-            var effector = ObjectPoolManager.Instance.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation, parent);
+            var effector = ObjectPoolManager.Inst.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation, parent);
             effector?.Play(playOptions);
             return effector;
         }
 
         private Effector EffectSpawnWithPlayGetter(string key, Vector3 position, Quaternion rotation, EffectPlayOptions playOptions) {
-            var effector = ObjectPoolManager.Instance.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation);
+            var effector = ObjectPoolManager.Inst.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation);
             effector?.Play(playOptions);
             return effector;
         }
 
         private void EffectSpawnWithPlay(string key, Vector3 position, Quaternion rotation, Transform parent, EffectPlayOptions playOptions) {
-            var effector = ObjectPoolManager.Instance.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation, parent);
+            var effector = ObjectPoolManager.Inst.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation, parent);
             effector?.Play(playOptions);
         }
 
         private void EffectSpawnWithPlay(string key, Vector3 position, Quaternion rotation, EffectPlayOptions playOptions) {
-            var effector = ObjectPoolManager.Instance.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation);
+            var effector = ObjectPoolManager.Inst.Spawn<Effector>(effectInfoDictionary[key].SpawnKey, position, rotation);
             effector?.Play(playOptions);
         }
 
@@ -268,7 +268,7 @@ namespace CoffeeCat.FrameWork {
         #region STOP
 
         public void StopAll(string key) {
-            var activatedEffects = ObjectPoolManager.Instance.GetActivatedPoolObjects(key);
+            var activatedEffects = ObjectPoolManager.Inst.GetActivatedPoolObjects(key);
             if (activatedEffects == null) {
                 return;
             }
@@ -282,7 +282,7 @@ namespace CoffeeCat.FrameWork {
 
         public void StopAll() {
             foreach (var keyValuePair in effectInfoDictionary) {
-                var activatedEffects = ObjectPoolManager.Instance.GetActivatedPoolObjects(keyValuePair.Value.SpawnKey);
+                var activatedEffects = ObjectPoolManager.Inst.GetActivatedPoolObjects(keyValuePair.Value.SpawnKey);
                 if (activatedEffects == null) {
                     continue;
                 }
@@ -317,7 +317,7 @@ namespace CoffeeCat.FrameWork {
         private void AddToPoolAllEffects() {
             foreach (var keyValuePair in effectInfoDictionary) {
                 var effectInfo = keyValuePair.Value;
-                ObjectPoolManager.Instance.AddToPool(PoolInformation.Create(effectInfo.Effector.gameObject));
+                ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(effectInfo.Effector.gameObject));
                 effectInfo.SetIsReady(true);
             }
         }

@@ -80,7 +80,7 @@ namespace CoffeeCat {
                 });
 
                 if (isDespawnAfterLifeTime) {
-                    ObjectPoolManager.Instance.Despawn(gameObject, defaultLifeTime + options.DespawnDelaySeconds);
+                    ObjectPoolManager.Inst.Despawn(gameObject, defaultLifeTime + options.DespawnDelaySeconds);
                 }
             }
         }

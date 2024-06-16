@@ -23,7 +23,7 @@ namespace CoffeeCat
             this.playerTr = playerTr;
             this.playerSkillData = playerSkillData;
 
-            StageManager.Instance.AddListenerClearedRoomEvent(roomData =>
+            StageManager.Inst.AddListenerClearedRoomEvent(roomData =>
             {
                 if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
@@ -97,7 +97,7 @@ namespace CoffeeCat
 
         protected void DisplayDamageRange()
         {
-            var damageRangeObj = ObjectPoolManager.Instance.Spawn("DamageRange", playerTr.position);
+            var damageRangeObj = ObjectPoolManager.Inst.Spawn("DamageRange", playerTr.position);
             damageRangeObj.transform.localScale = new Vector3(Defines.PLAYER_AREA_SKILL_VECTOR_X,
                                                               Defines.PLAYER_AREA_SKILL_VECTOR_Y, 1f);
             
@@ -107,7 +107,7 @@ namespace CoffeeCat
                   .OnComplete(() =>
                   {
                       sprite.DOFade(0f, 0.5f).SetEase(Ease.Linear);
-                      ObjectPoolManager.Instance.Despawn(damageRangeObj, 0.25f);
+                      ObjectPoolManager.Inst.Despawn(damageRangeObj, 0.25f);
                   });
         }
 

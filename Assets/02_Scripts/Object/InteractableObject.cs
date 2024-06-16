@@ -101,7 +101,7 @@ namespace CoffeeCat {
                 return;
             }
             var signPosition = GetInteractableSignPosition(playerTr.position);
-            interactableSignTr = ObjectPoolManager.Instance.Spawn<Transform>(AddressablesKey.InteractableSign.ToStringEx(), signPosition);
+            interactableSignTr = ObjectPoolManager.Inst.Spawn<Transform>(AddressablesKey.InteractableSign.ToStringEx(), signPosition);
         }
 
         private void UpdateInteractableSign() {
@@ -116,7 +116,7 @@ namespace CoffeeCat {
                 return;
             }
 
-            ObjectPoolManager.Instance.Despawn(interactableSignTr.gameObject);
+            ObjectPoolManager.Inst.Despawn(interactableSignTr.gameObject);
             interactableSignTr = null;
         }
     }

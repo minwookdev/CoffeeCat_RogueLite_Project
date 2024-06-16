@@ -7,7 +7,7 @@ namespace CoffeeCat
     {
         protected override void OnPlayerStay() {
 #if UNITY_ANDROID
-            UIPresenter.Instance.EnableNextFloorButton();
+            UIPresenter.Inst.EnableNextFloorButton();
 #elif UNITY_STANDALONE
             if (!Input.GetKeyDown(KeyCode.Q)) 
                 return;
@@ -18,7 +18,7 @@ namespace CoffeeCat
 
         protected override void OnPlayerExit() {
 #if UNITY_ANDROID
-            UIPresenter.Instance.DisableNextFloorButton();
+            UIPresenter.Inst.DisableNextFloorButton();
 #endif
         }
     }

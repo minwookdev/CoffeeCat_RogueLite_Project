@@ -30,18 +30,18 @@ namespace CoffeeCat.FrameWork {
         protected override void Initialize() {
             // Set Target Frame
             Application.targetFrameRate = TargetFrameRate;
-            SoundManager.Instance.RegistAudioClips(AudioClipDictionary);
+            SoundManager.Inst.RegistAudioClips(AudioClipDictionary);
 
             if (isPreloadData) {
-                DataManager.Instance.DataLoad();
+                DataManager.Inst.DataLoad();
             }
             
-            InputManager.Instance.Create();
+            InputManager.Inst.Create();
         }
 
         public void Start() {
-            ObjectPoolManager.Instance.AddToPool(DefaultPoolInformation);
-            DamageTextManager.Instance.Setup(damageTextCanvas, uiCamera);
+            ObjectPoolManager.Inst.AddToPool(DefaultPoolInformation);
+            DamageTextManager.Inst.Setup(damageTextCanvas, uiCamera);
             SafeLoader.StartProcess(gameObject);
         }
 

@@ -76,7 +76,7 @@ namespace RandomDungeonWithBluePrint {
                     return;
                 }
                 refRoom.RoomData.EnteredPlayer();
-                StageManager.Instance.SetPlayersRoom(refRoom);
+                StageManager.Inst.SetPlayersRoom(refRoom);
             }
             // Leaves Player From Room
             else {
@@ -85,7 +85,7 @@ namespace RandomDungeonWithBluePrint {
                     return;
                 }
                 refRoom.RoomData.LeavesPlayer();
-                StageManager.Instance.ClearPlayersRoom(refRoom);
+                StageManager.Inst.ClearPlayersRoom(refRoom);
             }
         }
     }

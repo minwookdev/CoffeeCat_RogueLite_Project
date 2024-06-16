@@ -8,7 +8,7 @@ namespace CoffeeCat.UI {
         [SerializeField] private SkillSelectButton[] selectButtons = null;
 
         private void Start() {
-            StageManager.Instance.AddEventToSkillSelectCompleted(() => {
+            StageManager.Inst.AddEventToSkillSelectCompleted(() => {
                 gameObject.SetActive(false);
             });
         }
@@ -35,7 +35,7 @@ namespace CoffeeCat.UI {
                 selectButtons[i].Set(data);
             }
             
-            StageManager.Instance.InvokeOpeningSkillSelectPanel();
+            StageManager.Inst.InvokeOpeningSkillSelectPanel();
             gameObject.SetActive(true);
         }
 

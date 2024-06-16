@@ -107,8 +107,8 @@ namespace CoffeeCat.FrameWork {
         }
 
         protected void Start() {
-            SceneManager.Instance.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
-            SceneManager.Instance.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
+            SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
+            SceneManager.Inst.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
 #if UNITY_EDITOR
             CheckDuplicatesInDictionary();
 #endif
