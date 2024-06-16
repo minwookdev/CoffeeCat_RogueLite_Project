@@ -18,7 +18,6 @@ namespace CoffeeCat
         {
             base.Start();
             player = GetComponent<Player_FlowerMagician>();
-            player.AddListenerUpdateSkillCompletedEvent(() => { ChangeState(EnumPlayerState.GetItem);});
         }
 
         #region IDLE
@@ -69,25 +68,6 @@ namespace CoffeeCat
         {
         }
 
-        #endregion
-
-        #region GETITEM
-
-        protected override void Enter_GetItemState()
-        {
-            currentTrack = anim.AnimationState.SetAnimation(0, animGetItem, false);
-        }
-        
-        protected override void Update_GetItemState()
-        {
-            if (currentTrack.IsComplete)
-                ChangeState(player.IsWalking() ? EnumPlayerState.Walk : EnumPlayerState.Idle, 0.3f);
-        }
-
-        protected override void Exit_GetItemState()
-        {
-        }
-        
         #endregion
 
         #region ATTACK

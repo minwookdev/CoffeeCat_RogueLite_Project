@@ -101,7 +101,6 @@ MonoBehaviour:
       width: 20
       height: 20
     minRoomSize: {x: 16, y: 16}
-  isConnectionOnlyExistRoom: 1
   connections:
   - fromIndex: 11
     toIndex: 12
@@ -111,8 +110,6 @@ MonoBehaviour:
     toIndex: 13
   - fromIndex: 12
     toIndex: 22
-  - fromIndex: 13
-    toIndex: 33
   - fromIndex: 21
     toIndex: 22
   - fromIndex: 22
@@ -136,3 +133,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e3fb497c9eab61f40b18d9e8a2726b6b, type: 2}
   - {fileID: 11400000, guid: e3fb497c9eab61f40b18d9e8a2726b6b, type: 2}
   battleRoomEntitiesWeights: 640000006400000064000000
+  IsConnectAllCompletely: 0
+  IsRemoveInvalidConnects: 0

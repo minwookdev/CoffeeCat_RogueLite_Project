@@ -8,8 +8,6 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "Unity.PerformanceCriticalCodeInvocation")]
-    [SuppressMessage("ReSharper", "SwitchStatementHandlesSomeKnownEnumValuesWithDefault")]
     public class PlayerState : MonoBehaviour
     {
         public enum EnumPlayerState
@@ -17,7 +15,6 @@ namespace CoffeeCat
             None,
             Idle,
             Walk,
-            GetItem,
             Attack,
             Hit,
             Dead
@@ -31,7 +28,6 @@ namespace CoffeeCat
 
         protected const string animIdle = "Idle_2";
         protected const string animWalk = "Walk_NoHand";
-        protected const string animGetItem = "Charging_2";
         protected const string animAttack = "Attack_2";
         protected const string animHit = "Hit";
         protected const string animDead = "Die_2";
@@ -60,9 +56,6 @@ namespace CoffeeCat
                     break;
                 case EnumPlayerState.Walk:
                     Update_WalkState();
-                    break;
-                case EnumPlayerState.GetItem:
-                    Update_GetItemState();
                     break;
                 case EnumPlayerState.Attack:
                     Update_AttackState();
@@ -103,9 +96,6 @@ namespace CoffeeCat
                     case EnumPlayerState.Walk:
                         Exit_WalkState();
                         break;
-                    case EnumPlayerState.GetItem:
-                        Exit_GetItemState();
-                        break;
                     case EnumPlayerState.Attack:
                         Exit_AttackState();
                         break;
@@ -128,9 +118,6 @@ namespace CoffeeCat
                         break;
                     case EnumPlayerState.Walk:
                         Enter_WalkState();
-                        break;
-                    case EnumPlayerState.GetItem:
-                        Enter_GetItemState();
                         break;
                     case EnumPlayerState.Attack:
                         Enter_AttackState();
@@ -192,22 +179,6 @@ namespace CoffeeCat
         }
 
         protected virtual void Exit_WalkState()
-        {
-        }
-
-        #endregion
-
-        #region GETITEM
-
-        protected virtual void Enter_GetItemState()
-        {
-        }
-
-        protected virtual void Update_GetItemState()
-        {
-        }
-
-        protected virtual void Exit_GetItemState()
         {
         }
 
