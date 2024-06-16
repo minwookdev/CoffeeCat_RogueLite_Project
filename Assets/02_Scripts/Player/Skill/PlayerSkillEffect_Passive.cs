@@ -60,7 +60,7 @@ namespace CoffeeCat
             this.playerTr = playerTr;
             this.playerSkillData = playerSkillData;
 
-            SafeRegister.RequestRegist(passiveAddressableKey, spawnCount:5, onCompleted: completed =>
+            SafeLoader.RequestRegist(passiveAddressableKey, spawnCount:5, onCompleted: completed =>
             {
                 completedLoadResource = completed;
                 

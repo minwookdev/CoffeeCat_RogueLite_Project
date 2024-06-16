@@ -31,7 +31,7 @@ namespace CoffeeCat
                 if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
 
-            SafeRegister.RequestRegist(playerSkillData.SkillName, onCompleted: completed =>
+            SafeLoader.RequestRegist(playerSkillData.SkillName, onCompleted: completed =>
             {
                 completedLoadResource = completed;
                 if (!completed)
