@@ -113,6 +113,10 @@ namespace CoffeeCat.FrameWork {
                     break;
                 case LoadType.Addressables_Key:
                     ResourceManager.Instance.AddressablesAsyncLoad<GameObject>(AddressablesName, false, loadedObject => {
+                        if (!loadedObject) {
+                            CatLog.ELog("PoolInfo.LoadOriginPrefab() Failed. Addressables Load Failed.");
+                            return;
+                        }
                         PoolObject = loadedObject;
                         onComplete?.Invoke(this);
                     });
@@ -127,7 +131,7 @@ namespace CoffeeCat.FrameWork {
             }
 
             if (!PoolObject) {
-                CatLog.ELog("Failed Load Origin Prefab.");
+                CatLog.ELog("Origin Prefab is Null.");
                 return;
             }
             

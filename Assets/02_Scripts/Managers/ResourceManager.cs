@@ -166,6 +166,7 @@ namespace CoffeeCat.FrameWork {
         /// <param name="isGlobalResource"></param>
         /// <param name="onCompleted"></param>
         public void AddressablesAsyncLoad<T>(AssetReference assetRef, bool isGlobalResource, Action<T> onCompleted) where T : UnityObject {
+            throw new NotImplementedException();
             /*var key = assetRef.ToString();
             if (string.IsNullOrEmpty(key)) { // assetReference.RuntimeKey is GUID
                 CatLog.ELog($"Invalid Asset Reference Key: {key}");
@@ -183,7 +184,7 @@ namespace CoffeeCat.FrameWork {
         /// <param name="onCompleted"></param>
         public void AddressablesAsyncLoad<T>(string key, bool isGlobalResource, Action<T> onCompleted) where T : UnityObject {
             // Dictionary에 이미 로드되거나 요청된 Resource가 존재한다면
-            if (TryGetResource(key, onCompleted)) {
+            if (TryGetResourceAsync(key, onCompleted)) {
                 return;
             }
 
@@ -243,7 +244,7 @@ namespace CoffeeCat.FrameWork {
         /// <param name="key"></param>
         /// <param name="resource"></param>
         /// <returns></returns>
-        private bool TryGetResource<T>(string key, Action<T> onCompleted) where T : UnityObject {
+        private bool TryGetResourceAsync<T>(string key, Action<T> onCompleted) where T : UnityObject {
             var result = resourcesDict.TryGetValue(key, out ResourceInfo info);
             if (!result) { // Target Resource is Not Requested
                 return false;
@@ -290,7 +291,8 @@ namespace CoffeeCat.FrameWork {
                 yield return null;
             }
 
-            if (info.Status != ResourceInfo.ASSETLOADSTATUS.SUCCESS) {
+            if (info.Status == ResourceInfo.ASSETLOADSTATUS.FAILED) {
+                onCompleted?.Invoke(null);
                 CatLog.ELog($"Resource Load Failed. Target: {key}");
                 yield break;
             }

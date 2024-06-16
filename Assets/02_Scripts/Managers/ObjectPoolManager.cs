@@ -46,57 +46,57 @@ namespace CoffeeCat.FrameWork
 
         #region ADD TO POOL
 
-        public void AddToPool(PoolInformation newInfo) {
+        public void AddToPool(PoolInformation info) {
             // Load Origin PoolObject is Only Sync
-            newInfo?.LoadOriginPrefab(AddToObjectPoolDictionary);
+            info?.LoadOriginPrefab(AddToObjectPoolDictionary);
         }
 
-        public void AddToPool(params PoolInformation[] newInfos) {
-            foreach (var information in newInfos) {
+        public void AddToPool(params PoolInformation[] infos) {
+            foreach (var information in infos) {
                 AddToPool(information);
             }
         }
 
-        private void AddToObjectPoolDictionary(PoolInformation information) {
+        private void AddToObjectPoolDictionary(PoolInformation info) {
+            if (poolStackDict.ContainsKey(info.PoolObject.name)) {
+                CatLog.WLog($"{info.PoolObject.name} is Already Containing in Pool Dictionary.");
+                return;
+            }
+            
             // Spawn PoolObjects Root Parent
             if (!rootParentTr) {
                 SetPoolObjectsRootParent();   
             }
-            
-            if (poolStackDict.ContainsKey(information.PoolObject.name)) {
-                // CatLog.Log($"{information.PoolObject.name} is Already Containing Object Pool Dictionary.");
-                return;
-            }
 
             // Add Origin Information Dictionary
-            originInformationDict.Add(information.PoolObject.name, information);
+            originInformationDict.Add(info.PoolObject.name, info);
 
             // Get Parent Data
             Transform parent = null;
-            if (information.HasRootParent) {
-                if (!information.HasCustomRootParent) {
-                    string rootParentName = information.PoolObject.name + "_Root";
+            if (info.HasRootParent) {
+                if (!info.HasCustomRootParent) {
+                    string rootParentName = info.PoolObject.name + "_Root";
                     parent = new GameObject(rootParentName).GetComponent<Transform>();
                     parent.SetParent(rootParentTr);
                 }
                 else {
-                    parent = information.CustomRootParent;
+                    parent = info.CustomRootParent;
                 }
 
-                rootParentDict.Add(information.PoolObject.name, parent);
+                rootParentDict.Add(info.PoolObject.name, parent);
             }
 
             // Add Pool Dictionary
-            Stack<GameObject> poolStack = new Stack<GameObject>(information.InitSpawnCount);
-            for (int i = 0; i < information.InitSpawnCount; i++) {
-                var clone = Instantiate(information.PoolObject, parent);
-                clone.SetActive(information.IsStayEnabling);
-                clone.name = information.PoolObject.name;
+            Stack<GameObject> poolStack = new Stack<GameObject>(info.InitSpawnCount);
+            for (int i = 0; i < info.InitSpawnCount; i++) {
+                var clone = Instantiate(info.PoolObject, parent);
+                clone.SetActive(info.IsStayEnabling);
+                clone.name = info.PoolObject.name;
                 poolStack.Push(clone);
             }
 
-            poolStackDict.Add(information.PoolObject.name, poolStack);
-            originPoolStackDictionary.Add(information.PoolObject.name, new Stack<GameObject>(poolStack));
+            poolStackDict.Add(info.PoolObject.name, poolStack);
+            originPoolStackDictionary.Add(info.PoolObject.name, new Stack<GameObject>(poolStack));
         }
 
         #endregion
