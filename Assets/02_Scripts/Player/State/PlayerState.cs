@@ -51,11 +51,6 @@ namespace CoffeeCat
 
         private void UpdateState()
         {
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                OnPlayerInvincivle();
-            }
-
             switch (State)
             {
                 case EnumPlayerState.None:
@@ -152,14 +147,12 @@ namespace CoffeeCat
 
         protected void OnPlayerInvincivle()
         {
-            var origin = anim.Skeleton.GetColor();
+            Tweener tween = null;
+            var originColor = anim.Skeleton.GetColor();
             var hitColor = new Color(1f, 0.7f, 0.7f, 0.5f);
             var invincibleTime = player.Stat.InvincibleTime;
 
-            Tweener tween = null;
-
-            tween = DOTween.To(() => origin, color =>
-                                   anim.Skeleton.SetColor(color), hitColor, 0.1f)
+            tween = DOTween.To(() => originColor, color => anim.Skeleton.SetColor(color), hitColor, 0.1f)
                            .SetLoops(-1, LoopType.Yoyo);
 
             Observable.Timer(TimeSpan.FromSeconds(invincibleTime))
@@ -167,7 +160,7 @@ namespace CoffeeCat
                       .Subscribe(_ =>
                       {
                           tween.Kill();
-                          anim.Skeleton.SetColor(origin);
+                          anim.Skeleton.SetColor(originColor);
                       })
                       .AddTo(this);
         }

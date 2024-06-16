@@ -15,9 +15,7 @@ namespace CoffeeCat
         public override void UpdateSkillData(PlayerSkill updateSkillData)
         {
             player.UpgradeNormalAttack();
-            
-            var spawnObj = ObjectPoolManager.Instance.Spawn(playerSkillData.SkillName, playerTr);
-            spawnObj.transform.localPosition = Vector3.zero;
+            SpawnSkillEffect();
         }
 
         public PlayerSkillEffect_NormalAttackUp(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
@@ -25,9 +23,19 @@ namespace CoffeeCat
             this.playerTr = playerTr;
             player = playerTr.GetComponent<Player>();
             player.UpgradeNormalAttack();
-            
-            var spawnObj = ObjectPoolManager.Instance.Spawn(playerSkillData.SkillName, playerTr);
-            spawnObj.transform.localPosition = Vector3.zero;
+            SpawnSkillEffect();
+        }
+
+        private void SpawnSkillEffect()
+        {
+            this.ObserveEveryValueChanged(_ => completedLoadResource)
+                .Where(_ => completedLoadResource)
+                .Take(1)
+                .Subscribe(_ =>
+                {
+                    var spawnObj = ObjectPoolManager.Instance.Spawn(playerSkillData.SkillName, playerTr);
+                    spawnObj.transform.localPosition = Vector3.zero;
+                });
         }
     }
 }

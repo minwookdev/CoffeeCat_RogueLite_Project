@@ -25,6 +25,7 @@ namespace CoffeeCat
                 Observable.EveryUpdate()
                           .Select(_ => currentCoolTime += Time.deltaTime)
                           .Where(_ => currentCoolTime >= skillData.SkillCoolTime)
+                          .Where(_ => completedLoadResource)
                           .Subscribe(_ =>
                           {
                               var target = FindAroundMonster(skillData.AttackCount, skillData.SkillRange);

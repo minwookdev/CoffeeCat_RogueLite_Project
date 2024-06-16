@@ -23,7 +23,18 @@ namespace CoffeeCat
         
         private void Awake()
         {
-            StageManager.Instance.AddEventToMapGenerateCompleted(MinimapGenerate);
+            StageManager.Instance.AddEventToMapGenerateCompleted(RoadResources);
+        }
+
+        private void RoadResources(Field field)
+        {
+            SafeLoader.RequestRegist(roomPanelKey, spawnCount: 15, onCompleted: complete =>
+            {
+                if (complete)
+                    MinimapGenerate(field);
+                else
+                    CatLog.WLog("Minimap : RoomPanel Load Failed");
+            });
         }
 
         private void Start() {

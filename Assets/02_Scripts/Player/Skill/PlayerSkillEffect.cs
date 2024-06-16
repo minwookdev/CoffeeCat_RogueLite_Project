@@ -1,26 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoffeeCat.FrameWork;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using UnityEngine;
 using DG.Tweening;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "Unity.PreferNonAllocApi")]
     public class PlayerSkillEffect
     {
         protected Transform playerTr = null;
         protected PlayerSkill playerSkillData = null;
         protected IDisposable updateDisposable = null;
+        protected bool completedLoadResource = false;
 
         // 새로운 스킬 선택
-        protected PlayerSkillEffect()
-        {
-        }
-
+        protected PlayerSkillEffect() { }
         protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
         {
             this.playerTr = playerTr;
@@ -31,10 +28,13 @@ namespace CoffeeCat
                 if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
 
-            // TODO : 안드로이드 빌드 버그 수정 후 주석 해제
-            // var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>
-            //     (playerSkillData.SkillName, true);
-            // ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));
+            CatLog.Log("Player Skill Effect");
+            SafeLoader.RequestRegist(playerSkillData.SkillName, onCompleted: completed =>
+            {
+                completedLoadResource = completed;
+                if (!completed)
+                    CatLog.WLog("PlayerSkillEffect : Load Resource Failed");
+            });
         }
 
         // 스킬 효과

@@ -46,7 +46,7 @@ namespace CoffeeCat
             normalAttackData = DataManager.Instance.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
             playerLevelData.Initialize();
             
-            // LoadResources();
+            LoadResources();
             Movement();
             SetStat();
             NormalAttack();
@@ -57,26 +57,19 @@ namespace CoffeeCat
             StageManager.Instance.AddListenerClearedRoomEvent(PlayerClearedRoom);
         }
 
-        private void Update()
-        {
-            // test
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                // EnableSkillSelect();
-                // UpdateStat();
-            }
-        }
-
         private void LoadResources()
         {
-            // TODO: Use AddressablesAsyncLoad Method !
+            SafeLoader.RequestRegist(normalAttackProjectile.ToStringEx(), onCompleted: completed =>
+            {
+                if (!completed)
+                    CatLog.WLog($"{normalAttackProjectile.ToStringEx()} Load Failed");
+            });
             
-            /*var obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(normalAttackProjectile.ToStringEx(), true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj));*/
-
-            // LevelUp Effect : 임시
-            /*obj = ResourceManager.Instance.AddressablesSyncLoad<GameObject>("LevelUp", true);
-            ObjectPoolManager.Instance.AddToPool(PoolInformation.New(obj, initSpawnCount: 1));*/
+            SafeLoader.RequestRegist("LevelUp", onCompleted: completed =>
+            {
+                if (!completed)
+                    CatLog.WLog($"{normalAttackProjectile.ToStringEx()} Load Failed");
+            });
         }
 
         private void SetStat()
