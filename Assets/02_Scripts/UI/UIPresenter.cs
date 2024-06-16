@@ -7,7 +7,7 @@ using RandomDungeonWithBluePrint;
 using UnityEngine.UI;
 
 namespace CoffeeCat.FrameWork {
-    public class UIPresenter : SceneScopedSingleton<UIPresenter> {
+    public class UIPresenter : SceneSingleton<UIPresenter> {
         [Title("UI")]
         [SerializeField] private SkillSelectPanel skillSelector = null;
         [SerializeField] private Minimap minimap = null;
