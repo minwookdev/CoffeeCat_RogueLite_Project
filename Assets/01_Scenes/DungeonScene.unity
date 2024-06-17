@@ -444,8 +444,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1006,7 +1006,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -0.000030517578, y: -262.07}
-  m_SizeDelta: {x: 314, y: 165}
+  m_SizeDelta: {x: 350, y: 165}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &218239811
 MonoBehaviour:
@@ -1034,10 +1034,6 @@ MonoBehaviour:
 
     DESCRIPTION
 
-    DESCRIPTION
-
-    DESCRIPTION
-
     DESCRIPTION'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: eb10057ab06a08d46bec33473f255f36, type: 2}
@@ -1047,8 +1043,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1065,12 +1061,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.15
+  m_fontSize: 34.85
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 24
+  m_fontSizeMin: 32
+  m_fontSizeMax: 42
   m_fontStyle: 6
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -1604,8 +1600,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 196.73596, y: -220}
-  m_SizeDelta: {x: 393.4719, y: 440}
+  m_AnchoredPosition: {x: 196.70123, y: -220}
+  m_SizeDelta: {x: 393.40247, y: 440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &324196464
 MonoBehaviour:
@@ -1779,8 +1775,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1950,144 +1946,67 @@ MonoBehaviour:
     PoolObject: {fileID: 1305159281282759402, guid: 1862ee16f9005d542a8920b99b84fcde, type: 3}
     ResourcesPath: 
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 1
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 2
     PoolObject: {fileID: 0}
     ResourcesPath: EditorOnly/editor_direction_debug.prefab
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 5
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 2
     PoolObject: {fileID: 0}
     ResourcesPath: EditorOnly/editor_text_room_type.prefab
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 10
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 2
     PoolObject: {fileID: 0}
     ResourcesPath: EditorOnly/editor_circle_sprite.prefab
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 10
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 1
     PoolObject: {fileID: 997730592658443979, guid: 972bc7de820a78b47a7664d9d3367d4a, type: 3}
     ResourcesPath: 
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 10
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 2
     PoolObject: {fileID: 0}
     ResourcesPath: EditorOnly/editor_text_section_index.prefab
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 10
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 1
     PoolObject: {fileID: 8746214350282650541, guid: 886616a4c9aa5c04084c8034996e865c, type: 3}
     ResourcesPath: 
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 1
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 1
     PoolObject: {fileID: 1644551496165326224, guid: 12333dd06064aa9478998e4715a15333, type: 3}
     ResourcesPath: 
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 1
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 1
     PoolObject: {fileID: 4039474240312527659, guid: eeee623be74beab4c9c71729da7b712a, type: 3}
     ResourcesPath: 
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 1
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 1
     PoolObject: {fileID: 5563347316961125086, guid: ab0caf6c3507bb8419d30c7bde5965f9, type: 3}
     ResourcesPath: 
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 1
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   - PoolObjectLoadType: 1
     PoolObject: {fileID: 8968045974909707754, guid: bc5e6d58c42523b4a836bc978604ea51, type: 3}
     ResourcesPath: 
     AddressablesName: 
-    AssetRef:
-      m_AssetGUID: 
-      m_SubObjectName: 
-      m_SubObjectType: 
-      m_EditorAssetChanged: 0
     InitSpawnCount: 5
-    IsStayEnabling: 0
-    HasRootParent: 1
     CustomRootParent: {fileID: 0}
   AudioClipDictionary:
     keyData: []
@@ -2208,8 +2127,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2311,7 +2230,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -0.000030517578, y: -262.07}
-  m_SizeDelta: {x: 314, y: 165}
+  m_SizeDelta: {x: 350, y: 165}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &554299992
 CanvasRenderer:
@@ -2347,10 +2266,6 @@ MonoBehaviour:
 
     DESCRIPTION
 
-    DESCRIPTION
-
-    DESCRIPTION
-
     DESCRIPTION'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: eb10057ab06a08d46bec33473f255f36, type: 2}
@@ -2360,8 +2275,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2378,12 +2293,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.15
+  m_fontSize: 34.85
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 24
+  m_fontSizeMin: 32
+  m_fontSizeMax: 42
   m_fontStyle: 6
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -3309,8 +3224,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4111,8 +4026,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5057,8 +4972,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1023.6797, y: -220}
-  m_SizeDelta: {x: 393.4719, y: 440}
+  m_AnchoredPosition: {x: 1023.50616, y: -220}
+  m_SizeDelta: {x: 393.40247, y: 440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1270814329
 MonoBehaviour:
@@ -5527,8 +5442,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6056,8 +5971,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 610.2078, y: -220}
-  m_SizeDelta: {x: 393.4719, y: 440}
+  m_AnchoredPosition: {x: 610.1037, y: -220}
+  m_SizeDelta: {x: 393.40247, y: 440}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1635640888
 MonoBehaviour:
@@ -7022,8 +6937,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7117,7 +7032,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -0.000030517578, y: -262.07}
-  m_SizeDelta: {x: 314, y: 165}
+  m_SizeDelta: {x: 350, y: 165}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1801426236
 MonoBehaviour:
@@ -7145,10 +7060,6 @@ MonoBehaviour:
 
     DESCRIPTION
 
-    DESCRIPTION
-
-    DESCRIPTION
-
     DESCRIPTION'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: eb10057ab06a08d46bec33473f255f36, type: 2}
@@ -7158,8 +7069,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7176,12 +7087,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.15
+  m_fontSize: 34.85
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
-  m_fontSizeMax: 24
+  m_fontSizeMin: 32
+  m_fontSizeMax: 42
   m_fontStyle: 6
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -7292,8 +7203,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -7518,8 +7429,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4280690214
-  m_fontColor: {r: 0.14901961, g: 0.14901961, b: 0.14901961, a: 1}
+    rgba: 4294967295
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -8332,6 +8243,7 @@ MonoBehaviour:
   hpSliderImage: {fileID: 1580386923}
   btnNextFloor: {fileID: 575946865}
   btnMap: {fileID: 188443804}
+  joyStick: {fileID: 0}
 --- !u!4 &2053058988
 Transform:
   m_ObjectHideFlags: 0
