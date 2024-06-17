@@ -7,7 +7,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace CoffeeCat.FrameWork {
     public static class SafeLoader {
-        private static readonly Queue<Action> processQueue = new();
+        private static readonly Queue<Action> requestQueue = new();
         private static bool IsProcessing = false;
         
         /// <summary>
@@ -18,6 +18,8 @@ namespace CoffeeCat.FrameWork {
             if (IsProcessing) {
                 return;
             }
+            
+            // TODO: 한번에 처리되는 작업의 양 지정
 
             // Main Process Observable Start
             IsProcessing = true;
@@ -25,8 +27,8 @@ namespace CoffeeCat.FrameWork {
                       .Skip(TimeSpan.Zero)
                       .TakeWhile(_ => IsProcessing)
                       //.TakeUntilDestroy(bindingObject)
-                      .Where(_ => processQueue.Count > 0)
-                      .Select(_ => processQueue.Dequeue())
+                      .Where(_ => requestQueue.Count > 0)
+                      .Select(_ => requestQueue.Dequeue())
                       .Subscribe(request => {
                           // ~ per 1 Frame
                           request.Invoke();
@@ -40,16 +42,15 @@ namespace CoffeeCat.FrameWork {
         /// <param name="key"></param>
         public static void StopProcess() {
             IsProcessing = false;
-            int processLeft = processQueue.Count;
+            int processLeft = requestQueue.Count;
             if (processLeft > 0) {
                 CatLog.WLog($"Count Of UnProcessed: {processLeft.ToString()}");
             }
-            processQueue.Clear();
-            // requestDictionary.Clear();
+            requestQueue.Clear();
         }
 
         public static void RequestLoad<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T: UnityObject {
-            processQueue.Enqueue(Request);
+            requestQueue.Enqueue(Request);
             return;
 
             void Request() {
@@ -60,7 +61,7 @@ namespace CoffeeCat.FrameWork {
         }
 
         public static void RequestRegist(string key, Action<bool> onCompleted = null, int spawnCount = PoolInformation.DEFAULT_SPAWN_COUNT) {
-            processQueue.Enqueue(Request);
+            requestQueue.Enqueue(Request);
             return;
 
             void Request() {

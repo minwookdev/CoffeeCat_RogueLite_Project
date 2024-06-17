@@ -15,7 +15,6 @@ namespace CoffeeCat.FrameWork {
             Caching,
             Resource_Load,
             Addressables_Key,
-            Addressables_AssetRef,
             Custom,
         }
 
@@ -33,23 +32,18 @@ namespace CoffeeCat.FrameWork {
         [BoxGroup("Pool Object"), ShowIf(nameof(PoolObjectLoadType), LoadType.Addressables_Key)] 
         public string AddressablesName = string.Empty;
 
-        [BoxGroup("Pool Object"), ShowIf(nameof(PoolObjectLoadType), LoadType.Addressables_AssetRef)] 
-        public AssetReference AssetRef = null;
-
         // Object Spawn Options
         [BoxGroup("Spawn Option")] 
         public int InitSpawnCount = DEFAULT_SPAWN_COUNT;
 
-        [BoxGroup("Spawn Option"), ReadOnly] 
-        public bool IsStayEnabling = false;
-
-        [BoxGroup("Spawn Option")] 
-        public bool HasRootParent = true;
-
-        [BoxGroup("Spawn Option"), ShowIf(nameof(HasRootParent), true)]
+        [BoxGroup("Spawn Option")]
         public Transform CustomRootParent = null;
 
-        public bool HasCustomRootParent { get => CustomRootParent != null; }
+        public bool HasCustomRootParent => !CustomRootParent;
+
+        public bool HasRootParent { get; private set; } = false;
+
+        public bool IsStayEnabling { get; private set; } = false;
 
         #region INSPECTOR BUTTONS
         
@@ -61,41 +55,32 @@ namespace CoffeeCat.FrameWork {
         }
 
         [ButtonGroup("PoolObject/Buttons", ButtonHeight = 25), HideInPlayMode]
-        private void ResourcesLoad()
+        private void Resources()
         {
             PoolObjectLoadType = LoadType.Resource_Load;
             Clear();
         }
 
         [ButtonGroup("PoolObject/Buttons", ButtonHeight = 25), HideInPlayMode]
-        private void AddressablesKey()
+        private void Addressables()
         {
             PoolObjectLoadType = LoadType.Addressables_Key;
-            Clear();
-        }
-
-        [ButtonGroup("PoolObject/Buttons", ButtonHeight = 25), HideInPlayMode]
-        private void AssetReference()
-        {
-            PoolObjectLoadType = LoadType.Addressables_AssetRef;
             Clear();
         }
 
         #endregion
 
         private void Clear() {
-            AssetRef = null;
             AddressablesName = string.Empty;
             ResourcesPath = string.Empty;
             PoolObject = null;
             CustomRootParent = null;
         }
 
-        public static PoolInformation Create(GameObject poolObject, bool hasRootParent = true, int initSpawnCount = DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
+        public static PoolInformation Create(GameObject poolObject, int initSpawnCount = DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
             return new PoolInformation() {
                 PoolObject = poolObject,
                 InitSpawnCount = initSpawnCount,
-                HasRootParent = hasRootParent,
                 CustomRootParent = customRootParent,
                 PoolObjectLoadType = LoadType.Custom
             };
@@ -125,7 +110,6 @@ namespace CoffeeCat.FrameWork {
                 case LoadType.Custom:
                 case LoadType.None:
                     break;
-                case LoadType.Addressables_AssetRef:
                 default: 
                     throw new NotImplementedException();
             }
