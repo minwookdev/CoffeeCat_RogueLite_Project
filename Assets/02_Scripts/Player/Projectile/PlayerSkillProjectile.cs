@@ -12,8 +12,6 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "HeapView.ClosureAllocation")]
-    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
     public class PlayerSkillProjectile : PlayerProjectile
     {
         private void OnEnable()

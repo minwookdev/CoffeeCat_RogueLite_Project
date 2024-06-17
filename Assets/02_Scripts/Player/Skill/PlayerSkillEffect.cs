@@ -28,7 +28,6 @@ namespace CoffeeCat
                 if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });
 
-            CatLog.Log("Player Skill Effect");
             SafeLoader.RequestRegist(playerSkillData.SkillName, onCompleted: completed =>
             {
                 completedLoadResource = completed;

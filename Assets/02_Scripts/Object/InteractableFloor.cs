@@ -12,7 +12,7 @@ namespace CoffeeCat
             if (!Input.GetKeyDown(KeyCode.Q)) 
                 return;
             DisposeInteractableSign();
-            StageManager.Instance.RequestGenerateNextFloor();
+            StageManager.Inst.RequestGenerateNextFloor();
 #endif
         }
 

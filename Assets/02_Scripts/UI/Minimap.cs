@@ -15,6 +15,7 @@ namespace CoffeeCat
     public class Minimap : MonoBehaviour
     {
         private readonly Dictionary<int, Minimap_Room> minimapRooms = new Dictionary<int, Minimap_Room>();
+        private List<Minimap_Branch> minimapBranches = new List<Minimap_Branch>();
         private const float minimapRatio = 10f;
         private const string roomPanelKey = "RoomPanel";
         private const string branchKey = "MinimapBranch";
@@ -59,6 +60,7 @@ namespace CoffeeCat
         private void MinimapGenerate(Field field)
         {
             minimapRooms.Clear();
+            minimapBranches.Clear();
             panelTr.sizeDelta = new Vector2(field.Size.x, field.Size.y) * minimapRatio;
             
             foreach (var room in field.Rooms)
@@ -71,15 +73,14 @@ namespace CoffeeCat
 
             foreach (var connection in field.Connections)
             {
-                var spawnBranchObj = ObjectPoolManager.Inst.Spawn(branchKey, branchTr);
+                var spawnObj = ObjectPoolManager.Inst.Spawn(branchKey, branchTr);
+                var minimapBranch = spawnObj.GetComponent<Minimap_Branch>();
+                var fromSection = field.GetSection(connection.From);
+                var toSection = field.GetSection(connection.To);
                 
-                var rectTransform = spawnBranchObj.GetComponent<RectTransform>();
-                rectTransform.localScale = Vector3.one;
-                rectTransform.anchoredPosition = Vector2.zero;
-                
-                var line = spawnBranchObj.GetComponent<LineRenderer>();
-                line.SetPosition(0, field.GetSection(connection.From).Rect.center * minimapRatio);
-                line.SetPosition(1, field.GetSection(connection.To).Rect.center * minimapRatio);
+                minimapBranch.SetBranch(fromSection, toSection, minimapRatio);
+                minimapBranch.gameObject.SetActive(false);
+                minimapBranches.Add(minimapBranch);
             }
 
             ActivePlayerSpawnRoomPanel();
@@ -93,12 +94,24 @@ namespace CoffeeCat
             var spawnRoom = StageManager.Inst.PlayerCurrentRoom;
             var roomPanel = minimapRooms[spawnRoom.RoomData.RoomIndex];
             roomPanel.EnterdRoom();
+            
+            foreach (var branch in minimapBranches)
+            {
+                branch.EnterdRoom(spawnRoom.RoomData.RoomIndex);
+                branch.CheckConnectSection();
+            }
         }
 
         private void EnterdRoom(RoomDataStruct roomData)
         {
             var roomPanel = minimapRooms[roomData.RoomIndex];
             roomPanel.EnterdRoom();
+            
+            foreach (var branch in minimapBranches)
+            {
+                branch.EnterdRoom(roomData.RoomIndex);
+                branch.CheckConnectSection();
+            }
         }
         
         private void LeftRoom(RoomDataStruct roomData)
