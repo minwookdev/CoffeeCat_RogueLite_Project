@@ -6124,7 +6124,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1513e7e7a1f9540969ed96d593aa6124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 0
   fieldView: {fileID: 1940253223}
   bluePrintQueue: {fileID: 11400000, guid: cbafbd23e756af448b6f5455ea96d718, type: 2}
   TestBluePrint: {fileID: 0}

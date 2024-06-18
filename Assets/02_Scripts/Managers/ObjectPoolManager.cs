@@ -47,18 +47,73 @@ namespace CoffeeCat.FrameWork
 
         #region ADD TO POOL
 
-        public void AddToPool(PoolInfo info) {
-            // Load Origin PoolObject is Only Sync
-            info?.LoadOriginPrefab(AddToObjectPoolDictionary);
-        }
-
-        public void AddToPool(params PoolInfo[] infos) {
-            foreach (var information in infos) {
-                AddToPool(information);
+        public void AddToPool(PoolInfo[] infos)
+        {
+            for (int i = 0; i < infos.Length; i++) {
+                var info = infos[i];
+                if (!info) {
+                    CatLog.ELog("Failed to Add PoolObject. PoolInfo is Null.");
+                    continue;
+                }
+                AddToPool(info);
             }
         }
 
-        private void AddToObjectPoolDictionary(PoolInfo info) {
+        public void AddToPool(PoolInfo info) {
+            if (!info) {
+                CatLog.ELog("Failed to Add PoolObject. PoolInfo is Null or PoolObject is Null.");
+                return;
+            }
+
+            var loadType = info.PoolObjectLoadType;
+            switch (loadType)
+            {
+                // Resources
+                case PoolInfo.LoadType.Resources:
+                    // Check Path Included Extensions
+                    int fileExtensionPosition = info.ResourcesPath.LastIndexOf(".", StringComparison.Ordinal);
+                    if (fileExtensionPosition >= 0) { // Remove Paths Extension
+                        info.ResourcesPath = info.ResourcesPath.Substring(0, fileExtensionPosition);
+                    }
+                    info.PoolObject = ResourceManager.Inst.ResourcesLoad<GameObject>(info.ResourcesPath);
+                    break;
+                // Addressables
+                case PoolInfo.LoadType.Addressables:
+                    ResourceManager.Inst.AddressablesAsyncLoad<GameObject>(info.AddressablesName, false, loadedObject => {
+                        if (!loadedObject) {
+                            CatLog.ELog("AddToPool Failed. Addressables Load Failed.");
+                            return;
+                        }
+                        // Add To Pool Dictionary   
+                        info.PoolObject = loadedObject;
+                        AddToDictionary(info);
+                    });
+                    return;
+                // Caching / Custom
+                case PoolInfo.LoadType.Custom:
+                case PoolInfo.LoadType.Caching:
+                    break;
+                default: throw new NotImplementedException();
+            }
+            
+            // Add To Pool Dictionary   
+            if (!info.PoolObject) {
+                CatLog.ELog("Origin Prefab is Null.");
+                return;
+            }
+                
+            AddToDictionary(info);
+        }
+
+        private void AddToDictionary(PoolInfo info) {
+            // Check PoolInfo is Valid
+            if (info == null || !info.PoolObject)
+            {
+                CatLog.ELog("Invalid PoolInfo or PoolObject is Null.");
+                return;
+            }
+            
+            // Ignore Already Containing PoolObject
             if (poolStackDict.ContainsKey(info.PoolObject.name)) {
                 // CatLog.WLog($"{info.PoolObject.name} is Already Containing in Pool Dictionary.");
                 return;

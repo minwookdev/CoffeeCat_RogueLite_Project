@@ -156,6 +156,11 @@ namespace CoffeeCat.FrameWork {
         public T ResourcesLoad<T>(string loadPath, bool isGlobal = false) where T : UnityObject {
             // Check Already Loaded Resources
             string fileName = GetFileName(loadPath);
+            if (string.IsNullOrEmpty(fileName))
+            {
+                CatLog.ELog("Invalid Resources Load Path.");
+                return null;
+            }
             if (TryGetResourceSync(fileName, out T result)) {
                 return result;
             }
@@ -192,6 +197,12 @@ namespace CoffeeCat.FrameWork {
         /// <param name="isGlobalResource"></param>
         /// <param name="onCompleted"></param>
         public void AddressablesAsyncLoad<T>(string key, bool isGlobalResource, Action<T> onCompleted) where T : UnityObject {
+            if (string.IsNullOrEmpty(key))
+            {
+                CatLog.ELog("Invalid Key. Key is Null or Empty.");
+                return;
+            }
+            
             // Dictionary에 이미 로드되거나 요청된 Resource가 존재한다면
             if (TryGetResourceAsync(key, onCompleted)) {
                 return;
