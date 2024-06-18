@@ -56,10 +56,9 @@ namespace CoffeeCat {
             // Damage Process
             float finalCalculatedDamageCount = data.CalculatedDamage;
             float tempHealthPoint = CurrentStat.HP - finalCalculatedDamageCount;
-            if (tempHealthPoint <= 0f) {
-                StageManager.Inst.AddCurrentRoomKillCount();
-                CurrentStat.HP = 0f;
-                state.OnDeath();
+            if (tempHealthPoint <= 0f)
+            {
+                Death();
             }
             else {
                 // Decrease Monster Health Point
@@ -86,19 +85,31 @@ namespace CoffeeCat {
             }
         }
 
-        public void ForcedKillMonster() {
-            if (!IsAlive)
-                return;
-            
-            CurrentStat.HP = 0f;
-            state.OnDeath();
-        }
-
         public Transform GetCenterTr() {
             if (state != null && state.CenterPointTr) 
                 return state.CenterPointTr;
             CatLog.ELog("Monster State or Center Point Transform is Null");
             return null;
+        }
+
+        private void Death()
+        {
+            // Invoke Battle Events
+            StageManager.Inst.AddCurrentRoomKillCount();
+            StageManager.Inst.InvokePlayerGetExp(CurrentStat.ExpAmount);
+                
+            // Send to Death State
+            CurrentStat.HP = 0f;
+            state.OnDeath();
+        }
+        
+        public void ForcedDeath() {
+            if (!IsAlive)
+                return;
+            
+            // Send to Death State
+            CurrentStat.HP = 0f;
+            state.OnDeath();
         }
     }
 }

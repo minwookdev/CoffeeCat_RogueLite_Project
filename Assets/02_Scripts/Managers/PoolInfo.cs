@@ -37,9 +37,9 @@ namespace CoffeeCat.FrameWork {
         [BoxGroup("Requires")]
         public Transform CustomRootParent = null;
 
-        public bool HasCustomRootParent => !CustomRootParent;
+        public bool HasCustomRootParent => CustomRootParent;
 
-        public bool HasRootParent { get; private set; } = false;
+        public bool HasRootParent { get; private set; } = true;
 
         public bool IsStayEnabling { get; private set; } = false;
 

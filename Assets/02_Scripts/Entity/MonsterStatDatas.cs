@@ -30,6 +30,11 @@ namespace CoffeeCat.Datas {
 
     [Serializable]
     public class MonsterStat {
+        // =============================================================================================================
+        // 1. Add required stat variables and excel data (match names)
+        // 2. Applies to DeepCopy and Copy methods
+        // =============================================================================================================
+        
         // private fields (Show in Inspector)
         // [Required: SerializeField Attributes]
         // [Optional: public Property]
@@ -58,6 +63,7 @@ namespace CoffeeCat.Datas {
         public float Defence = default;
         public float CriticalResist = default;
         public float Penetration = default;
+        public float ExpAmount = default;
 
         public MonsterStat DeepCopyMonsterStat() {
             var newStat = new MonsterStat();
@@ -72,6 +78,7 @@ namespace CoffeeCat.Datas {
             newStat.Defence = this.Defence;
             newStat.CriticalResist = this.CriticalResist;
             newStat.Penetration = this.Penetration;
+            newStat.ExpAmount = this.ExpAmount;
             return newStat;
         }
 
@@ -87,6 +94,7 @@ namespace CoffeeCat.Datas {
             this.Defence = originStat.Defence;
             this.CriticalResist = originStat.CriticalResist;
             this.Penetration = originStat.Penetration;
+            this.ExpAmount = originStat.ExpAmount;
         }
     }
 }

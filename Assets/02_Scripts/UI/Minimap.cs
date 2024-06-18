@@ -7,6 +7,7 @@ using CoffeeCat.Utils;
 using RandomDungeonWithBluePrint;
 using Sirenix.OdinInspector;
 using Spine.Unity.Editor;
+using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,7 +20,7 @@ namespace CoffeeCat
         private const float minimapRatio = 10f;
         private const string roomPanelKey = "RoomPanel";
         private const string branchKey = "MinimapBranch";
-        
+
         [SerializeField] private RectTransform panelTr = null;
         [SerializeField] private RectTransform branchTr = null;
         [SerializeField] private Button btnClose = null;
@@ -31,7 +32,38 @@ namespace CoffeeCat
 
         public void Initialize(Field field)
         {
-            StartCoroutine(WaitLoadResources(field));
+            // StartCoroutine(WaitLoadResources(field));
+
+            bool request1 = false;
+            SafeLoader.Request(branchKey, spawnCount: 15, onCompleted: _ =>
+            {
+                request1 = true;
+            });
+            
+            bool request2 = false;
+            SafeLoader.Request(roomPanelKey, spawnCount: 15, onCompleted: _ =>
+            {
+                request2 = true;
+            });
+
+            // Wait Until All Resources Completed
+            Observable.EveryUpdate()
+                      .Where(_ => request1 && request2)
+                      .Take(1)
+                      .TakeUntilDestroy(gameObject)
+                      .Subscribe(_ =>
+                      {
+                          var request1Success = ObjectPoolManager.Inst.IsExistInPool(branchKey);
+                          var request2Success = ObjectPoolManager.Inst.IsExistInPool(roomPanelKey);
+                          if (!request1Success || !request2Success)
+                          {
+                              CatLog.WLog("Minimap Generating Failed !");
+                              return;
+                          }
+
+                          MinimapGenerate(field);
+                      })
+                      .AddTo(this);
         }
         
         private void RoadResources()
@@ -128,12 +160,12 @@ namespace CoffeeCat
 
         public void Open() 
         {
-            panelTr.gameObject.SetActive(true);
+            gameObject.SetActive(true);
         }
         
         private void Close()
         {
-            panelTr.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 }

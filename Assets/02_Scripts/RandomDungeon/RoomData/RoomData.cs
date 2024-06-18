@@ -246,7 +246,7 @@ namespace CoffeeCat.RogueLite {
 			// Despawn All Alive Monsters
 			var aliveMonsters = spawnedMonsters.Where(monster => monster.IsAlive);
 			foreach (var monster in aliveMonsters) {
-				monster.ForcedKillMonster();
+				monster.ForcedDeath();
 			}
 			spawnedMonsters.Clear();
 			spawnedMonsters = null;

@@ -36,6 +36,7 @@ namespace CoffeeCat
         public RandomMapGenerator MapGen => mapGen;
         public bool IsPlayerInsideRoom => playerCurrentRoom != null;
         
+        // TODO: Clean Up Many Events
         [Title("Events", TitleAlignment = TitleAlignments.Centered)]
         [TabGroup("Events"), SerializeField] private UnityEvent<Field> onMapGenerateCompleted = null;
         [TabGroup("Events"), SerializeField] private UnityEvent onMapDisposeBefore = null;
@@ -47,7 +48,7 @@ namespace CoffeeCat
         [TabGroup("Events"), SerializeField] private UnityEvent OnPlayerKilled = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
         [TabGroup("Events"), SerializeField] private UnityEvent OnSkillSelectCompleted = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<float> OnPlayerGetExp = null;
+        [TabGroup("Events"), SerializeField] private UnityEvent<float> OnPlayerGainExp = null;
 
         private void Start() {
             mapGen.GenerateNextFloor(CurrentFloor);
@@ -215,9 +216,11 @@ namespace CoffeeCat
         
         public void InvokeSkillSelectCompleted() => OnSkillSelectCompleted?.Invoke();
         
-        public void AddListenerPlayerGetExp(UnityAction<float> action) => OnPlayerGetExp.AddListener(action);
+        public void AddListenerPlayerGetExp(UnityAction<float> action) => OnPlayerGainExp.AddListener(action);
         
-        public void InvokePlayerGetExp(float exp) => OnPlayerGetExp?.Invoke(exp);
+        public void InvokePlayerGetExp(float exp) => OnPlayerGainExp?.Invoke(exp);
+        
+        public void RemoveListenerPlayerGetExp(UnityAction<float> action) => OnPlayerGainExp.RemoveListener(action);
         
         #endregion
     }

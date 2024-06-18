@@ -1,10 +1,7 @@
-using System;
 using UnityEngine;
-using Sirenix.OdinInspector;
-using CoffeeCat.FrameWork;
-using CoffeeCat.UI;
-using RandomDungeonWithBluePrint;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
+using CoffeeCat.UI;
 
 namespace CoffeeCat.FrameWork {
     public class UIPresenter : SceneSingleton<UIPresenter> {

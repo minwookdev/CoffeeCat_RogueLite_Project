@@ -300,6 +300,7 @@ namespace CoffeeCat {
         }
         
         protected void DespawnOnDeathAnimationCompleted() {
+            // TODO: Optimization
             if (IsDespawnOnDeathAnimationCompleted) {
                 Observable.Timer(TimeSpan.FromSeconds(deathAnimDuration))
                           .Skip(0)
