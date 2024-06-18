@@ -70,13 +70,13 @@ namespace CoffeeCat
 
         private void LoadResources()
         {
-            SafeLoader.RequestRegist(normalAttackProjectile.ToStringEx(), onCompleted: completed =>
+            SafeLoader.Request(normalAttackProjectile.ToStringEx(), onCompleted: completed =>
             {
                 if (!completed)
                     CatLog.WLog($"{normalAttackProjectile.ToStringEx()} Load Failed");
             });
             
-            SafeLoader.RequestRegist("LevelUp", onCompleted: completed =>
+            SafeLoader.Request("LevelUp", onCompleted: completed =>
             {
                 if (!completed)
                     CatLog.WLog($"{normalAttackProjectile.ToStringEx()} Load Failed");

@@ -72,26 +72,24 @@ namespace CoffeeCat.FrameWork {
                 Status = ASSETLOADSTATUS.FAILED;
             }
             
-            public bool SetResource<T>(T resource) where T : UnityObject {
+            public void SetResource<T>(T resource) where T : UnityObject {
                 if (Status != ASSETLOADSTATUS.LOADING || Resource) {
                     CatLog.ELog("Status has already yielded results.");
-                    return false;
+                    return;
                 }
 
                 if (!resource) {
-                    Status = ASSETLOADSTATUS.FAILED;
                     CatLog.ELog("Failed To Set Resource. Resource is Null.");
-                    return false;
+                    return;
                 }
 
                 Resource = resource;
                 Status = ASSETLOADSTATUS.SUCCESS;
-                return true;
             }
 
             public T GetResource<T>() where T : UnityObject {
                 if (Status != ASSETLOADSTATUS.SUCCESS || !Resource) {
-                    CatLog.ELog("Resource is Not Prepared Yet.");
+                    CatLog.ELog("Reosurce Get Failed. Resource is Null or Status is Not Success.");
                     return null;
                 }
                 var casting = Resource as T;

@@ -175,7 +175,7 @@ namespace RandomDungeonWithBluePrint
         }
 
         private void ClearRoomTypeText() {
-            if (!ObjectPoolManager.Inst.IsExistInPoolDictionary("editor_text_room_type"))
+            if (!ObjectPoolManager.Inst.IsExistInPool("editor_text_room_type"))
                 return;
             ObjectPoolManager.Inst.DespawnAll("editor_text_room_type");
         }
@@ -196,7 +196,7 @@ namespace RandomDungeonWithBluePrint
         }
         
         private void ClearSectionIndexText() {
-            if (!ObjectPoolManager.Inst.IsExistInPoolDictionary("editor_text_section_index"))
+            if (!ObjectPoolManager.Inst.IsExistInPool("editor_text_section_index"))
                 return;
             ObjectPoolManager.Inst.DespawnAll("editor_text_section_index");
         }

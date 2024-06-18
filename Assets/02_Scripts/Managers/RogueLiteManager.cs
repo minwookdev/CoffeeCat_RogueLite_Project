@@ -27,7 +27,7 @@ namespace CoffeeCat.FrameWork {
 			if (SpawnedPlayer)
 				return;
 			
-			if (!ObjectPoolManager.Inst.IsExistInPoolDictionary(playerKey)) {
+			if (!ObjectPoolManager.Inst.IsExistInPool(playerKey)) {
 				// TODO : 안드로이드 빌드 버그 수정 후 주석 해제
 				// var origin = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(playerKey, true);
 				// ObjectPoolManager.Instance.AddToPool(PoolInformation.New(origin, true, 1));

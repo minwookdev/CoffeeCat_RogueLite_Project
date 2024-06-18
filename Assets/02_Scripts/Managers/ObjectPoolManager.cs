@@ -285,7 +285,7 @@ namespace CoffeeCat.FrameWork
             return poolStack.ToArray();
         }
 
-        public bool IsExistInPoolDictionary(string key) {
+        public bool IsExistInPool(string key) {
             return poolStackDict.ContainsKey(key);
         }
 

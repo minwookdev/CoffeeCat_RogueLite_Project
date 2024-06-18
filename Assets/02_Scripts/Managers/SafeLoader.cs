@@ -7,8 +7,9 @@ using UnityObject = UnityEngine.Object;
 
 namespace CoffeeCat.FrameWork {
     public static class SafeLoader {
-        private static readonly Queue<Action> requestQueue = new();
+        private static readonly Queue<Action> processQueue = new();
         private static bool IsProcessing = false;
+        private const int maxProcessPerFrame = 5;
         
         /// <summary>
         /// Use Only SceneBase Component
@@ -18,20 +19,24 @@ namespace CoffeeCat.FrameWork {
             if (IsProcessing) {
                 return;
             }
-            
-            // TODO: 한번에 처리되는 작업의 양 지정
-
             // Main Process Observable Start
+            int processPerFrame = 0;
             IsProcessing = true;
             Observable.EveryUpdate()
+                      //.TakeUntilDestroy(bindingObject)
                       .Skip(TimeSpan.Zero)
                       .TakeWhile(_ => IsProcessing)
-                      //.TakeUntilDestroy(bindingObject)
-                      .Where(_ => requestQueue.Count > 0)
-                      .Select(_ => requestQueue.Dequeue())
-                      .Subscribe(request => {
-                          // ~ per 1 Frame
-                          request.Invoke();
+                      .Select(_ => processQueue)
+                      .Where(queue => queue.Count > 0)
+                      .Subscribe(queue => {
+                          while (queue.Count > 0 && processPerFrame < maxProcessPerFrame)
+                          {
+                              var process = queue.Dequeue();
+                              process.Invoke();
+                              processPerFrame++;
+                          }
+                          // Clear Processed Count
+                          processPerFrame = 0;
                       })
                       .AddTo(bindingObject);
         }
@@ -42,44 +47,44 @@ namespace CoffeeCat.FrameWork {
         /// <param name="key"></param>
         public static void StopProcess() {
             IsProcessing = false;
-            int processLeft = requestQueue.Count;
+            int processLeft = processQueue.Count;
             if (processLeft > 0) {
                 CatLog.WLog($"Count Of UnProcessed: {processLeft.ToString()}");
             }
-            requestQueue.Clear();
+
+            processQueue.Clear();
         }
 
-        public static void RequestLoad<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T: UnityObject {
-            requestQueue.Enqueue(Request);
-            return;
+        public static void Request<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T: UnityObject {
+            processQueue.Enqueue(() => RequestLoad(key, isGlobalResource, onCompleted));
+        }
 
-            void Request() {
-                ResourceManager.Inst.AddressablesAsyncLoad<T>(key, isGlobalResource, (loadedResource) => {
-                    onCompleted?.Invoke(loadedResource);
-                });
+        public static void Request(string key, Action<bool> onCompleted = null, int spawnCount = PoolInformation.DEFAULT_SPAWN_COUNT) {
+            processQueue.Enqueue(() => RequestLoadWithRegist(key, spawnCount, onCompleted));
+        }
+        
+        private static void RequestLoad<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T : UnityObject {
+            ResourceManager.Inst.AddressablesAsyncLoad<T>(key, isGlobalResource, (loadedResource) => {
+                onCompleted?.Invoke(loadedResource);
+            });
+        }
+
+        private static void RequestLoadWithRegist(string key, int spawnCount, Action<bool> onCompleted = null) {
+            if (ObjectPoolManager.Inst.IsExistInPool(key)) {
+                // CatLog.WLog($"{key} is Already Containing in Pool Dictionary.");
+                onCompleted?.Invoke(true);
+                return;
             }
-        }
 
-        public static void RequestRegist(string key, Action<bool> onCompleted = null, int spawnCount = PoolInformation.DEFAULT_SPAWN_COUNT) {
-            requestQueue.Enqueue(Request);
-            return;
-
-            void Request() {
-                if (ObjectPoolManager.Inst.IsExistInPoolDictionary(key)) {
-                    // CatLog.WLog($"{key} is Already Containing in Pool Dictionary.");
-                    onCompleted?.Invoke(true);
+            ResourceManager.Inst.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
+                if (!loadedGameObject) {
+                    onCompleted?.Invoke(false);
                     return;
                 }
-                
-                ResourceManager.Inst.AddressablesAsyncLoad<GameObject>(key, false, (loadedGameObject) => {
-                    if (!loadedGameObject) {
-                        onCompleted?.Invoke(false);
-                        return;
-                    }
-                    ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(loadedGameObject, initSpawnCount: spawnCount));
-                    onCompleted?.Invoke(true);
-                });
-            }
+
+                ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(loadedGameObject, initSpawnCount: spawnCount));
+                onCompleted?.Invoke(true);
+            });
         }
     }
 }

@@ -36,13 +36,13 @@ namespace CoffeeCat
         
         private void RoadResources()
         {
-            SafeLoader.RequestRegist(branchKey, spawnCount: 15, onCompleted: complete =>
+            SafeLoader.Request(branchKey, spawnCount: 15, onCompleted: complete =>
             {
                 if (!complete)
                     CatLog.WLog("Minimap : MinimapBranch Load Failed");
             });
             
-            SafeLoader.RequestRegist(roomPanelKey, spawnCount: 15, onCompleted: complete =>
+            SafeLoader.Request(roomPanelKey, spawnCount: 15, onCompleted: complete =>
             {
                 if (!complete)
                     CatLog.WLog("Minimap : RoomPanel Load Failed");
@@ -52,8 +52,8 @@ namespace CoffeeCat
         private IEnumerator WaitLoadResources(Field field)
         {
             RoadResources();
-            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPoolDictionary(branchKey));
-            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPoolDictionary(roomPanelKey));
+            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPool(branchKey));
+            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPool(roomPanelKey));
             MinimapGenerate(field);
         }
         
