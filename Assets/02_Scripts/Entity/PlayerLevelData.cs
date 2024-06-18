@@ -22,7 +22,7 @@ namespace CoffeeCat
             currentExp = 0;
         }
         
-        private float GetExpToNextLevel()
+        public float GetExpToNextLevel()
         {
             return levelToExp[currentLevel];
         }

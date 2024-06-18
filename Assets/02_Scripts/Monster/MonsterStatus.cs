@@ -58,7 +58,7 @@ namespace CoffeeCat {
             float tempHealthPoint = CurrentStat.HP - finalCalculatedDamageCount;
             if (tempHealthPoint <= 0f)
             {
-                Death();
+                Kill();
             }
             else {
                 // Decrease Monster Health Point
@@ -92,18 +92,18 @@ namespace CoffeeCat {
             return null;
         }
 
-        private void Death()
+        private void Kill()
         {
             // Invoke Battle Events
             StageManager.Inst.AddCurrentRoomKillCount();
-            StageManager.Inst.InvokePlayerGetExp(CurrentStat.ExpAmount);
+            StageManager.Inst.InvokeMonsterKilledByPlayer(CurrentStat.ExpAmount);
                 
             // Send to Death State
             CurrentStat.HP = 0f;
             state.OnDeath();
         }
         
-        public void ForcedDeath() {
+        public void ForceKill() {
             if (!IsAlive)
                 return;
             

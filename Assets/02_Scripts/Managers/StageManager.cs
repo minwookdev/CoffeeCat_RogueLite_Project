@@ -37,19 +37,26 @@ namespace CoffeeCat
         public bool IsPlayerInsideRoom => playerCurrentRoom != null;
         
         // TODO: Clean Up Many Events
-        [Title("Events", TitleAlignment = TitleAlignments.Centered)]
-        [TabGroup("Events"), SerializeField] private UnityEvent<Field> onMapGenerateCompleted = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent onMapDisposeBefore = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomEntering = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomLeft = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomFirstEntering = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<RoomDataStruct> OnClearedRoom = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent OnMonsterKilled = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent OnPlayerKilled = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent OnSkillSelectCompleted = null;
-        [TabGroup("Events"), SerializeField] private UnityEvent<float> OnPlayerGainExp = null;
+        [Title("Events Map", TitleAlignment = TitleAlignments.Centered)]
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<Field> onMapGenerateCompleted = new();
+        [TabGroup("Events Map"), SerializeField] private UnityEvent onMapDisposeBefore = new();
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomEntering = new();
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomLeft = new();
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomFirstEntering = new();
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnClearedRoom = null;
+        
+        [Title("Events Player", TitleAlignment = TitleAlignments.Centered)]
+        [TabGroup("Events Player"), SerializeField] private UnityEvent OnPlayerKilled = new();
+        [TabGroup("Events Player"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = new();
+        [TabGroup("Events Player"), SerializeField] private UnityEvent<float, float> OnIncreasePlayerExp = new();
+        [TabGroup("Events Player"), SerializeField] private UnityEvent<float, float> OnIncreasePlayerHP = new();
+        [TabGroup("Events Player"), SerializeField] private UnityEvent<float, float> OnDecreasePlayerHP = new();
+        [TabGroup("Events Player"), SerializeField] private UnityEvent OnSkillSelectCompleted = new();
+        [TabGroup("Events Player"), SerializeField] private UnityEvent OnPlayerLevelUp = new();
 
+        [Title("Events Monster", TitleAlignment = TitleAlignments.Centered)]
+        [TabGroup("Events Monster"), SerializeField] private UnityEvent<float> OnMonsterKilledByPlayer = new();
+        
         private void Start() {
             mapGen.GenerateNextFloor(CurrentFloor);
             var queue = mapGen.BluePrintQueue;
@@ -176,17 +183,21 @@ namespace CoffeeCat
         
         #region Events
         
-        public void InvokeEventMonsterKilledEvent(MonsterStatus key) => OnMonsterKilled?.Invoke();
-
-        public void InvokeEventPlayerKilledEvent(Player key) => OnPlayerKilled?.Invoke();
-
-        public void InvokeEventClearedRoomEvent(RoomDataStruct roomType) => OnClearedRoom?.Invoke(roomType);
+        public void InvokeMonsterKilledByPlayer(float exp) => OnMonsterKilledByPlayer.Invoke(exp);
         
-        public void InvokeRoomEnteringEvent(RoomDataStruct roomType) => OnRoomEntering?.Invoke(roomType);
+        public void AddListenerMonsterKilledByPlayer(UnityAction<float> action) => OnMonsterKilledByPlayer.AddListener(action);
+        
+        public void RemoveListenerMonsterKilledByPlayer(UnityAction<float> action) => OnMonsterKilledByPlayer.RemoveListener(action);
 
-        public void InvokeRoomEnteringFirstEvent(RoomDataStruct roomType) => OnRoomFirstEntering?.Invoke(roomType);
+        public void InvokeEventPlayerKilledEvent(Player key) => OnPlayerKilled.Invoke();
 
-        public void InvokeRoomLeftEvent(RoomDataStruct roomType) => OnRoomLeft?.Invoke(roomType);
+        public void InvokeEventClearedRoomEvent(RoomDataStruct roomType) => OnClearedRoom.Invoke(roomType);
+        
+        public void InvokeRoomEnteringEvent(RoomDataStruct roomType) => OnRoomEntering.Invoke(roomType);
+
+        public void InvokeRoomEnteringFirstEvent(RoomDataStruct roomType) => OnRoomFirstEntering.Invoke(roomType);
+
+        public void InvokeRoomLeftEvent(RoomDataStruct roomType) => OnRoomLeft.Invoke(roomType);
         
         public void AddListenerRoomEnteringEvent(UnityAction<RoomDataStruct> action) => OnRoomEntering.AddListener(action);
 
@@ -202,25 +213,45 @@ namespace CoffeeCat
         
         public void AddEventToMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.AddListener(action);
         
-        public void InvokeMapGenerateCompleted(Field field) => onMapGenerateCompleted?.Invoke(field);
+        public void InvokeMapGenerateCompleted(Field field) => onMapGenerateCompleted.Invoke(field);
         
         public void RemoveEventToMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.RemoveListener(action);
         
         public void AddEventToMapDisposeBefore(UnityAction action) => onMapDisposeBefore.AddListener(action);
         
-        public void InvokeMapDisposeBefore() => onMapDisposeBefore?.Invoke();
+        public void InvokeMapDisposeBefore() => onMapDisposeBefore.Invoke();
         
         public void RemoveEventToMapDisposeBefore(UnityAction action) => onMapDisposeBefore.RemoveListener(action);
 
-        public void InvokeOpeningSkillSelectPanel() => OnOpeningSkillSelectPanel?.Invoke();
+        public void InvokeOpeningSkillSelectPanel() => OnOpeningSkillSelectPanel.Invoke();
         
-        public void InvokeSkillSelectCompleted() => OnSkillSelectCompleted?.Invoke();
+        public void InvokeSkillSelectCompleted() => OnSkillSelectCompleted.Invoke();
         
-        public void AddListenerPlayerGetExp(UnityAction<float> action) => OnPlayerGainExp.AddListener(action);
+        // Player Events
         
-        public void InvokePlayerGetExp(float exp) => OnPlayerGainExp?.Invoke(exp);
+        public void AddListenerIncreasePlayerExp(UnityAction<float, float> action) => OnIncreasePlayerExp.AddListener(action);
         
-        public void RemoveListenerPlayerGetExp(UnityAction<float> action) => OnPlayerGainExp.RemoveListener(action);
+        public void InvokeIncreasePlayerExp(float currentExp, float maxExp) => OnIncreasePlayerExp?.Invoke(currentExp, maxExp);
+        
+        public void RemoveListenerIncreasePlayerExp(UnityAction<float, float> action) => OnIncreasePlayerExp.RemoveListener(action);
+        
+        public void AddListenerIncreasePlayerHP(UnityAction<float, float> action) => OnIncreasePlayerHP.AddListener(action);
+        
+        public void InvokeIncreasePlayerHP(float hp, float maxHp) => OnIncreasePlayerHP.Invoke(hp, maxHp);
+        
+        public void RemoveListenerIncreasePlayerHP(UnityAction<float, float> action) => OnIncreasePlayerHP.RemoveListener(action);
+        
+        public void AddListenerDecreasePlayerHP(UnityAction<float, float> action) => OnDecreasePlayerHP.AddListener(action);
+        
+        public void InvokeDecreasePlayerHP(float hp, float maxHp) => OnDecreasePlayerHP.Invoke(hp, maxHp);
+        
+        public void RemoveListenerDecreasePlayerHP(UnityAction<float, float> action) => OnDecreasePlayerHP.RemoveListener(action);
+        
+        public void AddListenerPlayerLevelUp(UnityAction action) => OnPlayerLevelUp.AddListener(action);
+        
+        public void InvokePlayerLevelUp() => OnPlayerLevelUp.Invoke();
+        
+        public void RemoveListenerPlayerLevelUp(UnityAction action) => OnPlayerLevelUp.RemoveListener(action);
         
         #endregion
     }
