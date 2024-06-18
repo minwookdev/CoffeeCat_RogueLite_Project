@@ -15,7 +15,7 @@ namespace CoffeeCat.FrameWork {
         public bool isPreloadData = true;
 
         [Title("OBJECT POOL"), ListDrawerSettings(NumberOfItemsPerPage = 3, Expanded = false)]
-        public PoolInformation[] DefaultPoolInformation = null;
+        public PoolInfo[] DefaultPoolInformation = null;
 
         [Title("AUDIO CLIPS")]
         public StringAudioClipDictionary AudioClipDictionary = null;

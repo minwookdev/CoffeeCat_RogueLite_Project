@@ -6,7 +6,7 @@ using CoffeeCat.Utils;
 
 namespace CoffeeCat.FrameWork {
     [Serializable]
-    public class PoolInformation {
+    public class PoolInfo {
         // Staic Default Init Spawn Count
         public const int DEFAULT_SPAWN_COUNT = 10;
 
@@ -77,8 +77,8 @@ namespace CoffeeCat.FrameWork {
             CustomRootParent = null;
         }
 
-        public static PoolInformation Create(GameObject poolObject, int initSpawnCount = DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
-            return new PoolInformation() {
+        public static PoolInfo Create(GameObject poolObject, int initSpawnCount = DEFAULT_SPAWN_COUNT, Transform customRootParent = null) {
+            return new PoolInfo() {
                 PoolObject = poolObject,
                 InitSpawnCount = initSpawnCount,
                 CustomRootParent = customRootParent,
@@ -86,7 +86,7 @@ namespace CoffeeCat.FrameWork {
             };
         }
 
-        public void LoadOriginPrefab(Action<PoolInformation> onComplete = null) {
+        public void LoadOriginPrefab(Action<PoolInfo> onComplete = null) {
             switch (PoolObjectLoadType) {
                 case LoadType.Resource_Load:
                     // Check Path Included Extensions
@@ -127,13 +127,13 @@ namespace CoffeeCat.FrameWork {
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public static implicit operator bool(PoolInformation info) => info != null;
+        public static implicit operator bool(PoolInfo info) => info != null;
 
         #region CONSTRUCTOR
         /// <summary>
         /// Not allowed public Constructor. using PoolInformation.New() static function.
         /// </summary>
-        private PoolInformation() {}
+        private PoolInfo() {}
         #endregion
     }
 }

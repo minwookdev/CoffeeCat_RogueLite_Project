@@ -28,7 +28,7 @@ namespace CoffeeCat.Utils.SerializedDictionaries {
     }
 
     // MANAGERS INFORMATION DICTIONARIES
-    [Serializable] public class StringPoolInformationDictionary : UnitySerializedDictionary<string, PoolInformation> { }
+    [Serializable] public class StringPoolInformationDictionary : UnitySerializedDictionary<string, PoolInfo> { }
     [Serializable] public class StringTransformDictionary : UnitySerializedDictionary<string, Transform> { }
     [Serializable] public class StringGameObjectStackDictionary : UnitySerializedDictionary<string, Stack<GameObject>> { }
     [Serializable] public class StringIntDictionary : UnitySerializedDictionary<string, int> { }

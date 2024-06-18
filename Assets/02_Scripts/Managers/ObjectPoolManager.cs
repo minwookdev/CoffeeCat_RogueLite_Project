@@ -47,18 +47,18 @@ namespace CoffeeCat.FrameWork
 
         #region ADD TO POOL
 
-        public void AddToPool(PoolInformation info) {
+        public void AddToPool(PoolInfo info) {
             // Load Origin PoolObject is Only Sync
             info?.LoadOriginPrefab(AddToObjectPoolDictionary);
         }
 
-        public void AddToPool(params PoolInformation[] infos) {
+        public void AddToPool(params PoolInfo[] infos) {
             foreach (var information in infos) {
                 AddToPool(information);
             }
         }
 
-        private void AddToObjectPoolDictionary(PoolInformation info) {
+        private void AddToObjectPoolDictionary(PoolInfo info) {
             if (poolStackDict.ContainsKey(info.PoolObject.name)) {
                 // CatLog.WLog($"{info.PoolObject.name} is Already Containing in Pool Dictionary.");
                 return;

@@ -64,8 +64,8 @@ namespace CoffeeCat {
 
             // ObjectPool Initializing
             void InitializeObjectPool() {
-                PoolInformation poolInformation = PoolInformation.Create(damageTextOriginGameObject, poolInitializingCount);
-                ObjectPoolManager.Inst.AddToPool(poolInformation);
+                PoolInfo poolInfo = PoolInfo.Create(damageTextOriginGameObject, poolInitializingCount);
+                ObjectPoolManager.Inst.AddToPool(poolInfo);
                 IsSetupCompleted = true;
             }
         }

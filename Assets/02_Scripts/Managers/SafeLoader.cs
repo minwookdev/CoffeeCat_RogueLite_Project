@@ -59,7 +59,7 @@ namespace CoffeeCat.FrameWork {
             processQueue.Enqueue(() => RequestLoad(key, isGlobalResource, onCompleted));
         }
 
-        public static void Request(string key, Action<bool> onCompleted = null, int spawnCount = PoolInformation.DEFAULT_SPAWN_COUNT) {
+        public static void Request(string key, Action<bool> onCompleted = null, int spawnCount = PoolInfo.DEFAULT_SPAWN_COUNT) {
             processQueue.Enqueue(() => RequestLoadWithRegist(key, spawnCount, onCompleted));
         }
         
@@ -82,7 +82,7 @@ namespace CoffeeCat.FrameWork {
                     return;
                 }
 
-                ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(loadedGameObject, initSpawnCount: spawnCount));
+                ObjectPoolManager.Inst.AddToPool(PoolInfo.Create(loadedGameObject, initSpawnCount: spawnCount));
                 onCompleted?.Invoke(true);
             });
         }

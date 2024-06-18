@@ -102,7 +102,7 @@ namespace CoffeeCat.FrameWork {
         private void Regist(Effector effector, string key) {
             var newEffectInformation = EffectInfo.New(effector.gameObject.name, effector);
             effectInfoDictionary.Add(key, newEffectInformation);
-            ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(effector.gameObject));
+            ObjectPoolManager.Inst.AddToPool(PoolInfo.Create(effector.gameObject));
             newEffectInformation.SetIsReady(true);
         }
 
@@ -317,7 +317,7 @@ namespace CoffeeCat.FrameWork {
         private void AddToPoolAllEffects() {
             foreach (var keyValuePair in effectInfoDictionary) {
                 var effectInfo = keyValuePair.Value;
-                ObjectPoolManager.Inst.AddToPool(PoolInformation.Create(effectInfo.Effector.gameObject));
+                ObjectPoolManager.Inst.AddToPool(PoolInfo.Create(effectInfo.Effector.gameObject));
                 effectInfo.SetIsReady(true);
             }
         }
