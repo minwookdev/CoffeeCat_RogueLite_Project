@@ -51,7 +51,7 @@ namespace CoffeeCat
             NormalAttack();
             CheckInvincibleTime();
 
-            StageManager.Inst.AddListenerPlayerGetExp(GetExp);
+            StageManager.Inst.AddListenerMonsterKilledByPlayer(GetExp);
             StageManager.Inst.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
             StageManager.Inst.AddListenerClearedRoomEvent(PlayerClearedRoom);
         }
@@ -87,7 +87,8 @@ namespace CoffeeCat
         {
             stat = DataManager.Inst.PlayerStats.DataDictionary[playerName.ToStringEx()];
             stat.SetCurrentHp();
-            UIPresenter.Inst.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
+            
+            StageManager.Inst.InvokeIncreasePlayerHP(stat.CurrentHp, stat.MaxHp);
         }
 
         private void Move(Vector2 direction) 
@@ -238,11 +239,11 @@ namespace CoffeeCat
             }
         }
 
-        private void GetExp(float exp)
+        private void GetExp(float exp) 
         {
             playerLevelData.AddExp(exp);
-
-            if (!playerLevelData.isReadyLevelUp()) return;
+            if (!playerLevelData.isReadyLevelUp()) 
+                return;
             
             playerLevelData.LevelUp();
             var levelUpEffect = ObjectPoolManager.Inst.Spawn("LevelUp", tr);
@@ -250,6 +251,8 @@ namespace CoffeeCat
 
             Observable.Timer(TimeSpan.FromSeconds(2.5f))
                       .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
+            
+            StageManager.Inst.InvokeIncreasePlayerExp(playerLevelData.GetCurrentExp(), playerLevelData.GetExpToNextLevel());
         }
 
         #region Public Methods
@@ -320,7 +323,7 @@ namespace CoffeeCat
                 OnDead();
             }
             
-            UIPresenter.Inst.UpdatePlayerHPSlider(stat.CurrentHp, stat.MaxHp);
+            StageManager.Inst.InvokeDecreasePlayerHP(stat.CurrentHp, stat.MaxHp);
         }
         
         public void AddListenerPlayerDeadEvent(UnityAction action) => OnPlayerDead.AddListener(action);
