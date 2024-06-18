@@ -29,6 +29,7 @@ namespace CoffeeCat.FrameWork
 
         // Original Pool Dictionary
         private StringGameObjectStackDictionary originPoolStackDictionary = null;
+        private readonly List<GameObject> resultList = new();
 
         #region TEMP COLLECTIONS
         private List<GameObject> tempResultList = null;
@@ -194,7 +195,7 @@ namespace CoffeeCat.FrameWork
         }
 
         public void DespawnAll(string key) {
-            foreach (var poolObject in GetActivatedPoolObjects(key)) {
+            foreach (var poolObject in GetActiveObjectsOrEmptyFromKey(key)) {
                 Despawn(poolObject);
             }
         }
@@ -250,25 +251,13 @@ namespace CoffeeCat.FrameWork
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public GameObject[] GetActivatedPoolObjects(string key) {
-            if (!originPoolStackDictionary.TryGetValue(key, out Stack<GameObject> poolStack)) {
-                CatLog.WLog($"Pool Dictionary Key Not Found. Null return. key: {key}");
-                return Array.Empty<GameObject>();
+        public GameObject[] GetActiveObjectsOrEmptyFromKey(string key) {
+            resultList.Clear();
+            if (originPoolStackDictionary.TryGetValue(key, out Stack<GameObject> poolStack)) {
+                var result = poolStack.Where(poolObject => poolObject.activeSelf);
+                resultList.AddRange(result);
             }
-
-            //tempResultList.Clear();
-            //tempResultList.AddRange(poolStack);
-            //for (int i = tempResultList.Count - 1; i >= 0; i--) {
-            //    if (!tempResultList[i].activeSelf) {
-            //        tempResultList.Remove(tempResultList[i]);
-            //    }
-            //}
-            //
-            //var activatePoolObjects = poolStack.Where(go => go.activeSelf).ToArray();
-
-            //return tempResultList.ToArray();
-            
-            return poolStack.Where(poolObject => poolObject.activeSelf).ToArray();
+            return resultList.ToArray();
         }
 
         /// <summary>
@@ -276,13 +265,44 @@ namespace CoffeeCat.FrameWork
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public GameObject[] GetAllPoolObjects(string key) {
-            if (!originPoolStackDictionary.TryGetValue(key, out Stack<GameObject> poolStack)) {
-                CatLog.ELog($"Pool Dictionary Key Not Found. Null return. key: {key}");
-                return null;
+        public GameObject[] GetAllObjectsOrEmptyFromKey(string key) {
+            resultList.Clear();
+            if (originPoolStackDictionary.TryGetValue(key, out Stack<GameObject> poolStack)) {
+                resultList.AddRange(poolStack);
             }
-            
-            return poolStack.ToArray();
+            return resultList.ToArray();
+        }
+
+        public GameObject[] GetAllObjectsOrEmptyFromTag(string gameObjectTag)
+        {
+            resultList.Clear();
+            foreach (var pair in originPoolStackDictionary)
+            {
+                var first = pair.Value.FirstOrDefault();
+                if (!first || !first.CompareTag(gameObjectTag)) {
+                    continue;
+                }
+                resultList.AddRange(pair.Value);
+            }
+
+            return resultList.ToArray();
+        }
+        
+        public GameObject[] GetActiveObjectsOrEmptyFromTag(string gameObjectTag)
+        {
+            resultList.Clear();
+            foreach (var pair in originPoolStackDictionary)
+            {
+                var first = pair.Value.FirstOrDefault();
+                if (!first || !first.CompareTag(gameObjectTag)) {
+                    continue;
+                }
+
+                var result = pair.Value.Where(poolObject => poolObject.activeSelf);
+                resultList.AddRange(result);
+            }
+
+            return resultList.ToArray();
         }
 
         public bool IsExistInPool(string key) {
@@ -292,10 +312,10 @@ namespace CoffeeCat.FrameWork
         #endregion
 
         private void OnSceneChangeBeforeEvent(SceneName sceneName) {
-            ClearPoolDictionary();
+            Clear();
         }
 
-        private void ClearPoolDictionary() {
+        private void Clear() {
             originInformationDict.Clear();
             originPoolStackDictionary.Clear();
             poolStackDict.Clear();
@@ -304,6 +324,7 @@ namespace CoffeeCat.FrameWork
                 Destroy(rootParentTr.gameObject);
             }
             rootParentTr = null;
+            resultList.Clear();
         }
 
         private void SetPoolObjectsRootParent() {

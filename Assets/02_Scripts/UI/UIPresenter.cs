@@ -42,5 +42,9 @@ namespace CoffeeCat.FrameWork {
         public void DisableNextFloorButton() {
             btnNextFloor.gameObject.SetActive(false);
         }
+
+        public void HideJoyStick() => joyStick.gameObject.SetActive(false);
+
+        public void ShowJoyStick() => joyStick.gameObject.SetActive(true);
     }
 }

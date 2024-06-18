@@ -9,10 +9,10 @@ using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat.FrameWork {
     // 
-    // !µ¿ÀÏÇÑ ¾À¿¡¼­ Effect Release ÈÄ ´Ù½Ã Regist ÇßÀ» ¶§ ¹®Á¦°¡ ¾ø´ÂÁö Ã¼Å©
-    // !Play ¸Ş¼­µå¿Í PlayAsync¸Ş¼­µå °áÇÕ
-    // !ÇÑ ÀÌÆåÆ®¸¦ ¿©·¯ »ç¿ëÀÚ°¡ °®°ÔµÉ °æ¿ì °ü¸® ¹æ¾È ¸¶·Ã
-    // !ResourceManager¿Í ºĞ¸®ÇÏ±â
+    // !ë™ì¼í•œ ì”¬ì—ì„œ Effect Release í›„ ë‹¤ì‹œ Regist í–ˆì„ ë•Œ ë¬¸ì œê°€ ì—†ëŠ”ì§€ ì²´í¬
+    // !Play ë©”ì„œë“œì™€ PlayAsyncë©”ì„œë“œ ê²°í•©
+    // !í•œ ì´í™íŠ¸ë¥¼ ì—¬ëŸ¬ ì‚¬ìš©ìê°€ ê°–ê²Œë  ê²½ìš° ê´€ë¦¬ ë°©ì•ˆ ë§ˆë ¨
+    // !ResourceManagerì™€ ë¶„ë¦¬í•˜ê¸°
 
     public class EffectManager : DynamicSingleton<EffectManager> {
         [SerializeField, ReadOnly] StringEffectInformationDictionary effectInfoDictionary = null;
@@ -268,7 +268,7 @@ namespace CoffeeCat.FrameWork {
         #region STOP
 
         public void StopAll(string key) {
-            var activatedEffects = ObjectPoolManager.Inst.GetActivatedPoolObjects(key);
+            var activatedEffects = ObjectPoolManager.Inst.GetActiveObjectsOrEmptyFromKey(key);
             if (activatedEffects == null) {
                 return;
             }
@@ -282,7 +282,7 @@ namespace CoffeeCat.FrameWork {
 
         public void StopAll() {
             foreach (var keyValuePair in effectInfoDictionary) {
-                var activatedEffects = ObjectPoolManager.Inst.GetActivatedPoolObjects(keyValuePair.Value.SpawnKey);
+                var activatedEffects = ObjectPoolManager.Inst.GetActiveObjectsOrEmptyFromKey(keyValuePair.Value.SpawnKey);
                 if (activatedEffects == null) {
                     continue;
                 }

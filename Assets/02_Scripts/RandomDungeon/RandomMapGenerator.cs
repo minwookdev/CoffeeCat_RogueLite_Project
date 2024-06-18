@@ -22,7 +22,7 @@ namespace RandomDungeonWithBluePrint
         }
         
         [Title("Generate Options")]
-        [SerializeField] private int seed = default;
+        [ShowInInspector, ReadOnly] private int seed = default;
         [SerializeField] private FieldView fieldView = null;
         [SerializeField] public BluePrintQueue bluePrintQueue = null;
         [SerializeField] private FieldBluePrint TestBluePrint = null; // 확정 생성 BluePrint
@@ -43,10 +43,14 @@ namespace RandomDungeonWithBluePrint
         public Color RoomDrawerColor = Color.green;
         public Color SectionDrawerColor = Color.white;
 
-        /*private void Awake() {
+        private void Awake()
+        {
+            // assign random seed
+            seed = UnityRandom.Range(int.MinValue, int.MaxValue);
+            
             // Init Random Seed
-            UnityRandom.InitState(seed);
-        }*/
+            // UnityRandom.InitState(seed);
+        }
 
         public void GenerateNextFloor(int currentFloor) {
             var normalMapBluePrints = bluePrintQueue.NormalMapBluePrints;
