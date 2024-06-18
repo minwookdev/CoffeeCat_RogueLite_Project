@@ -143,7 +143,6 @@ namespace CoffeeCat
                            .SetLoops(-1, LoopType.Yoyo);
 
             Observable.Timer(TimeSpan.FromSeconds(invincibleTime))
-                      .Skip(TimeSpan.Zero)
                       .Subscribe(_ =>
                       {
                           tween.Kill();

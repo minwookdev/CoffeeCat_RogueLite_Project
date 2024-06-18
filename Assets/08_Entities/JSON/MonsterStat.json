@@ -10,7 +10,8 @@
     "CriticalMultiplier": "1.25",
     "Defence": "0",
     "CriticalResist": "0",
-    "Penetration": "0"
+    "Penetration": "0",
+    "ExpAmount": "15"
   },
   {
     "Name": "Skeleton_Mage",
@@ -23,7 +24,8 @@
     "CriticalMultiplier": "1.25",
     "Defence": "0",
     "CriticalResist": "0",
-    "Penetration": "0"
+    "Penetration": "0",
+    "ExpAmount": "25"
   },
   {
     "Name": "Skeleton_Warrior",
@@ -36,6 +38,7 @@
     "CriticalMultiplier": "1.25",
     "Defence": "2",
     "CriticalResist": "0",
-    "Penetration": "0"
+    "Penetration": "0",
+    "ExpAmount": "40"
   }
 ]

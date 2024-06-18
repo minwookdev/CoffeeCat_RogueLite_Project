@@ -11,6 +11,11 @@ namespace CoffeeCat.FrameWork
         [ShowInInspector, ReadOnly] public MonsterStatDatas MonsterStats { get; private set; } = null;
         [ShowInInspector, ReadOnly] public MonsterSkillDatas MonsterSkills { get; private set; } = null;
         [ShowInInspector, ReadOnly] public PlayerStatDatas PlayerStats { get; private set; } = null;
+        [ShowInInspector, ReadOnly] public PlayerMainSkillDatas PlayerMainSkills { get; private set; } = null;
+        [ShowInInspector, ReadOnly] public PlayerSubAttackSkillDatas PlayerSubAttackSkills { get; private set; } = null;
+        [ShowInInspector, ReadOnly] public PlayerSubStatSkillDatas PlayerSubStatSkills { get; private set; } = null;
+        
+        // 임시
         [ShowInInspector, ReadOnly] public PlayerActiveSkillDatas PlayerActiveSkills { get; private set; } = null;
         [ShowInInspector, ReadOnly] public PlayerPassiveSkillDatas PlayerPassiveSkills { get; private set; } = null;
         
@@ -47,6 +52,11 @@ namespace CoffeeCat.FrameWork
             MonsterStats.Initialize(/*jsonParser*/);
             MonsterSkills.Initialize(/*jsonParser*/);
             PlayerStats.Initialize();
+            PlayerMainSkills.Initialize();
+            PlayerSubAttackSkills.Initialize();
+            PlayerSubStatSkills.Initialize();
+            
+            // 임시
             PlayerActiveSkills.Initialize();
             PlayerPassiveSkills.Initialize();
         }

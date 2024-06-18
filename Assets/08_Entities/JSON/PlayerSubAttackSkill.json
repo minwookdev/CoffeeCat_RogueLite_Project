@@ -1,0 +1,173 @@
+[
+  {
+    "Index": "0",
+    "SkillName": "Lock",
+    "SkillLevel": "-1",
+    "TriggerChance": "-1",
+    "Damage": "-1",
+    "Duration": "-1",
+    "Description": "잠금"
+  },
+  {
+    "Index": "1",
+    "SkillName": "Poison",
+    "SkillLevel": "1",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "독"
+  },
+  {
+    "Index": "2",
+    "SkillName": "Poison",
+    "SkillLevel": "2",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "독"
+  },
+  {
+    "Index": "3",
+    "SkillName": "Poison",
+    "SkillLevel": "3",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "독"
+  },
+  {
+    "Index": "4",
+    "SkillName": "Bleeding",
+    "SkillLevel": "1",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "출혈"
+  },
+  {
+    "Index": "5",
+    "SkillName": "Bleeding",
+    "SkillLevel": "2",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "출혈"
+  },
+  {
+    "Index": "6",
+    "SkillName": "Bleeding",
+    "SkillLevel": "3",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "출혈"
+  },
+  {
+    "Index": "7",
+    "SkillName": "LifeDrain",
+    "SkillLevel": "1",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "흡혈"
+  },
+  {
+    "Index": "8",
+    "SkillName": "LifeDrain",
+    "SkillLevel": "2",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "흡혈"
+  },
+  {
+    "Index": "9",
+    "SkillName": "LifeDrain",
+    "SkillLevel": "3",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "흡혈"
+  },
+  {
+    "Index": "10",
+    "SkillName": "KnockBack",
+    "SkillLevel": "1",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "넉백"
+  },
+  {
+    "Index": "11",
+    "SkillName": "KnockBack",
+    "SkillLevel": "2",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "넉백"
+  },
+  {
+    "Index": "12",
+    "SkillName": "KnockBack",
+    "SkillLevel": "3",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "넉백"
+  },
+  {
+    "Index": "13",
+    "SkillName": "InstantKill",
+    "SkillLevel": "1",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "즉사"
+  },
+  {
+    "Index": "14",
+    "SkillName": "InstantKill",
+    "SkillLevel": "2",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "즉사"
+  },
+  {
+    "Index": "15",
+    "SkillName": "InstantKill",
+    "SkillLevel": "3",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "-1",
+    "Description": "즉사"
+  },
+  {
+    "Index": "16",
+    "SkillName": "Stun",
+    "SkillLevel": "1",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "기절"
+  },
+  {
+    "Index": "17",
+    "SkillName": "Stun",
+    "SkillLevel": "2",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "기절"
+  },
+  {
+    "Index": "18",
+    "SkillName": "Stun",
+    "SkillLevel": "3",
+    "TriggerChance": "0",
+    "Damage": "1",
+    "Duration": "1",
+    "Description": "기절"
+  }
+]

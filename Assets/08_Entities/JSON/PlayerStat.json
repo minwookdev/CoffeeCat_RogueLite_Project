@@ -5,7 +5,7 @@
     "MaxHp": "100",
     "Defense": "1",
     "MoveSpeed": "5",
-    "InvincibleTime": "0.5",
+    "InvincibleTime": "1",
     "AttackPower": "20",
     "CriticalChance": "0.03",
     "CriticalResistance": "0",

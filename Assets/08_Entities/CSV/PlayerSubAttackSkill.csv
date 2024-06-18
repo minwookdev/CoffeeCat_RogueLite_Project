@@ -1,0 +1,22 @@
+;Index;SkillName;SkillLevel;TriggerChance;Damage;Duration;Description
+;int;string;int;float;float;float;string
+;인덱스;스킬 이름;스킬 레벨;발동 확률;대미지;지속 시간;스킬 설명
+;0;Lock;-1;-1;-1;-1;잠금
+;1;Poison;1;0;1;1;독
+;2;Poison;2;0;1;1;독
+;3;Poison;3;0;1;1;독
+;4;Bleeding;1;0;1;1;출혈
+;5;Bleeding;2;0;1;1;출혈
+;6;Bleeding;3;0;1;1;출혈
+;7;LifeDrain;1;0;1;-1;흡혈
+;8;LifeDrain;2;0;1;-1;흡혈
+;9;LifeDrain;3;0;1;-1;흡혈
+;10;KnockBack;1;0;1;-1;넉백
+;11;KnockBack;2;0;1;-1;넉백
+;12;KnockBack;3;0;1;-1;넉백
+;13;InstantKill;1;0;1;-1;즉사
+;14;InstantKill;2;0;1;-1;즉사
+;15;InstantKill;3;0;1;-1;즉사
+;16;Stun;1;0;1;1;기절
+;17;Stun;2;0;1;1;기절
+;18;Stun;3;0;1;1;기절
