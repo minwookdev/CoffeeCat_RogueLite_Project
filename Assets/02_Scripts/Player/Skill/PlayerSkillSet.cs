@@ -1,23 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using CoffeeCat.FrameWork;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace CoffeeCat
 {
     public class PlayerSkillSet
     {
-        private int skillSlotIndex = 0;
-        private PlayerMainSkill mainSkill = null;           // Main Skill Data
-        private PlayerSkillEffect mainSkillEffect = null;   // Main Skill Effect
-        private PlayerSubAttackSkill subAttackSkill = null;
-        private PlayerSubStatSkill subStatSkill_1 = null;
-        private PlayerSubStatSkill subStatSkill_2 = null;
+        [ShowInInspector, ReadOnly] public int skillSetIndex { get; private set; } = 0;
+
+        [Title("MainSkill")]
+        [ShowInInspector, ReadOnly] private PlayerMainSkill mainSkill = null;   // Main Skill Data
+        private PlayerSkillEffect mainSkillEffect = null;                       // Main Skill Effect
+        
+        [Title("SubSkill")]
+        [ShowInInspector, ReadOnly] private PlayerSubAttackSkill subAttackSkill = null;
+        [ShowInInspector, ReadOnly] private PlayerSubStatSkill subStatSkill_2 = null;
+        [ShowInInspector, ReadOnly] private PlayerSubStatSkill subStatSkill_1 = null;
 
         public PlayerSkillSet(PlayerMainSkill skill, int index)
         {
             mainSkill = skill;
-            skillSlotIndex = index;
+            skillSetIndex = index;
             subStatSkill_2 = DataManager.Inst.PlayerSubStatSkills.DataDictionary[0]; // 0 : skill Slot locked
         }
 

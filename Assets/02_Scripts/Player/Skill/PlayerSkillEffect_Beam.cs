@@ -7,11 +7,9 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "HeapView.ClosureAllocation")]
-    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
     public class PlayerSkillEffect_Beam : PlayerSkillEffect
     {
-        protected override void SkillEffect(PlayerStat playerStat)
+        public override void SkillEffect(PlayerStat playerStat)
         {
             if (playerSkillData is not PlayerActiveSkill skillData)
             {

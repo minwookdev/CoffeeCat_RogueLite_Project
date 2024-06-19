@@ -27,7 +27,6 @@ namespace CoffeeCat
         [SerializeField] protected Transform tr = null;
         [SerializeField] protected Transform projectileTr = null;
 
-        private UnityEvent OnPlayerDead = new UnityEvent();
         private PlayerActiveSkill normalAttackData = null;
         private Rigidbody2D rigid = null;
         private bool isPlayerInBattle = false;
@@ -38,6 +37,7 @@ namespace CoffeeCat
 
         // Property
         public Transform Tr => tr;
+        public Transform ProjectileTr => projectileTr;
         public PlayerStat Stat => stat;
 
         private void Start()
@@ -48,8 +48,10 @@ namespace CoffeeCat
             
             LoadResources();
             SetStat();
-            NormalAttack();
+            // NormalAttack();
             CheckInvincibleTime();
+            
+            
 
             StageManager.Inst.AddListenerMonsterKilledByPlayer(GetExp);
             StageManager.Inst.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
@@ -187,11 +189,27 @@ namespace CoffeeCat
                               .Subscribe(__ => isInvincible = false);
                 }).AddTo(this);
         }
+        
+        private void GetExp(float exp) 
+        {
+            playerLevelData.AddExp(exp);
+            if (!playerLevelData.isReadyLevelUp()) 
+                return;
+            
+            playerLevelData.LevelUp();
+            var levelUpEffect = ObjectPoolManager.Inst.Spawn("LevelUp", tr);
+            levelUpEffect.transform.localPosition = Vector3.zero;
+
+            Observable.Timer(TimeSpan.FromSeconds(2.5f))
+                      .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
+            
+            StageManager.Inst.InvokeIncreasePlayerExp(playerLevelData.GetCurrentExp(), playerLevelData.GetExpToNextLevel());
+        }
 
         private void OnDead()
         {
             rigid.velocity = Vector2.zero;
-            OnPlayerDead.Invoke();
+            StageManager.Inst.OnPlayerKilled.Invoke();
             isDead = true;
         }
 
@@ -239,53 +257,21 @@ namespace CoffeeCat
             }
         }
 
-        private void GetExp(float exp) 
-        {
-            playerLevelData.AddExp(exp);
-            if (!playerLevelData.isReadyLevelUp()) 
-                return;
-            
-            playerLevelData.LevelUp();
-            var levelUpEffect = ObjectPoolManager.Inst.Spawn("LevelUp", tr);
-            levelUpEffect.transform.localPosition = Vector3.zero;
-
-            Observable.Timer(TimeSpan.FromSeconds(2.5f))
-                      .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
-            
-            StageManager.Inst.InvokeIncreasePlayerExp(playerLevelData.GetCurrentExp(), playerLevelData.GetExpToNextLevel());
-        }
-
         #region Public Methods
 
-        public bool IsWalking()
-        {
-            return rigid.velocity.x != 0 || rigid.velocity.y != 0;
-        }
+        public bool IsWalking() => rigid.velocity.x != 0 || rigid.velocity.y != 0;
 
-        public bool IsAttacking()
-        {
-            return hasFiredProjectile;
-        }
+        public void StartAttack() => hasFiredProjectile = true;
 
-        public void FinishAttackAnimation()
-        {
-            hasFiredProjectile = false;
-        }
+        public bool IsAttacking() => hasFiredProjectile;
 
-        public bool IsDamaged()
-        {
-            return isPlayerDamaged;
-        }
+        public void FinishAttackAnimation() => hasFiredProjectile = false;
 
-        public void FinishHitAnimation()
-        {
-            isPlayerDamaged = false;
-        }
+        public bool IsDamaged() => isPlayerDamaged;
 
-        public bool IsDead()
-        {
-            return isDead;
-        }
+        public void FinishHitAnimation() => isPlayerDamaged = false;
+
+        public bool IsDead() => isDead;
 
         public void UpdateStat()
         {
@@ -299,12 +285,6 @@ namespace CoffeeCat
 
             var enhanceData = PlayerEnhanceData.GetEnhanceData();
             stat.StatEnhancement(enhanceData);
-        }
-
-        public void UpgradeNormalAttack()
-        {
-            var index = normalAttackData.Index + 1;
-            normalAttackData = DataManager.Inst.PlayerActiveSkills.DataDictionary[index];
         }
 
         public void OnDamaged(DamageData damageData)
@@ -325,10 +305,6 @@ namespace CoffeeCat
             
             StageManager.Inst.InvokeDecreasePlayerHP(stat.CurrentHp, stat.MaxHp);
         }
-        
-        public void AddListenerPlayerDeadEvent(UnityAction action) => OnPlayerDead.AddListener(action);
-        
-        public void AddListenerUpdateSkillCompletedEvent(UnityAction action) => OnUpdateSkillCompleted.AddListener(action);
         
         #endregion
     }

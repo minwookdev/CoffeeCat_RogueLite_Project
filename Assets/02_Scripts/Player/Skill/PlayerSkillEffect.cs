@@ -36,14 +36,11 @@ namespace CoffeeCat
             });
         }
 
-        // 스킬 효과
-        protected virtual void SkillEffect(PlayerStat playerStat) { }
-
-        // 보유한 스킬 선택 (등급 업)
-        public virtual void UpdateSkillData(PlayerSkill updateSkillData) => playerSkillData = updateSkillData;
-
         // 스킬 효과 활성화
-        public void ActivateSkillEffect(PlayerStat playerStat) => SkillEffect(playerStat);
+        public virtual void SkillEffect(PlayerStat playerStat) { }
+
+        // 보유한 스킬 등급 업데이트
+        public virtual void UpdateSkillData(PlayerSkill updateSkillData) => playerSkillData = updateSkillData;
 
         // 스킬 효과 비활성화
         public void OnDispose() => updateDisposable?.Dispose();

@@ -10,7 +10,7 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect_Bubble : PlayerSkillEffect
     {
-        protected override void SkillEffect(PlayerStat playerStat)
+        public override void SkillEffect(PlayerStat playerStat)
         {
             if (playerSkillData is not PlayerActiveSkill skillData)
             {

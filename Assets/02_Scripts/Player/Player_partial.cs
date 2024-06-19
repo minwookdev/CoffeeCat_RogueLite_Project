@@ -103,9 +103,6 @@ namespace CoffeeCat
                 case "Bubble":
                     Bubble(skillData);
                     break;
-                case "NormalAttackUp":
-                    NormalAttackUp(skillData);
-                    break;
                 default:
                     PassiveSkill(skillData);
                     break;
@@ -116,7 +113,7 @@ namespace CoffeeCat
         {
             this.ObserveEveryValueChanged(_ => isPlayerInBattle)
                 .Where(_ => isPlayerInBattle)
-                .Subscribe(_ => { skillEffect.ActivateSkillEffect(stat); });
+                .Subscribe(_ => { skillEffect.SkillEffect(stat); });
         }
 
         public void UpdateSkill(PlayerSkillSelectData data)
@@ -171,16 +168,16 @@ namespace CoffeeCat
 
         private void Explosion(PlayerSkill skillData)
         {
-            var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData); // 스킬 효과 객체 생성
-            skillEffects.Add(skillData.SkillName, skillEffect);               // 스킬 효과 딕셔너리에 추가 (Key : 스킬 이름)
-            OnPlayerDead.AddListener(skillEffect.OnDispose);                  // 플레이어가 죽으면 스킬 효과 비활성화
-            ActivateSkill(skillEffect);                                       // 스킬 효과 활성화
+            var skillEffect = new PlayerSkillEffect_Explosion(tr, skillData);    // 스킬 효과 객체 생성
+            skillEffects.Add(skillData.SkillName, skillEffect);                  // 스킬 효과 딕셔너리에 추가 (Key : 스킬 이름)
+            StageManager.Inst.OnPlayerKilled.AddListener(skillEffect.OnDispose); // 플레이어가 죽으면 스킬 효과 비활성화
+            ActivateSkill(skillEffect);                                          // 스킬 효과 활성화
         }
 
         private void Beam(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Beam(tr, skillData);
-            OnPlayerDead.AddListener(skillEffect.OnDispose);
+            StageManager.Inst.OnPlayerKilled.AddListener(skillEffect.OnDispose);
             skillEffects.Add(skillData.SkillName, skillEffect);
             ActivateSkill(skillEffect);
         }
@@ -188,14 +185,7 @@ namespace CoffeeCat
         private void Bubble(PlayerSkill skillData)
         {
             var skillEffect = new PlayerSkillEffect_Bubble(tr, skillData);
-            OnPlayerDead.AddListener(skillEffect.OnDispose);
-            skillEffects.Add(skillData.SkillName, skillEffect);
-            ActivateSkill(skillEffect);
-        }
-
-        private void NormalAttackUp(PlayerSkill skillData)
-        {
-            var skillEffect = new PlayerSkillEffect_NormalAttackUp(tr, skillData);
+            StageManager.Inst.OnPlayerKilled.AddListener(skillEffect.OnDispose);
             skillEffects.Add(skillData.SkillName, skillEffect);
             ActivateSkill(skillEffect);
         }
@@ -204,7 +194,7 @@ namespace CoffeeCat
         {
             var skillEffect = new PlayerSkillEffect_Passive(tr, skillData);
             skillEffects.Add(skillData.SkillName, skillEffect);
-            skillEffect.ActivateSkillEffect(stat);
+            skillEffect.SkillEffect(stat);
         }
 
         // Skill을 업데이트 한 시점의 ownedSkillsList의 마지막 아이템은 언제나 업데이트된 Skill

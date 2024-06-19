@@ -46,7 +46,7 @@ namespace CoffeeCat
         [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnClearedRoom = null;
         
         [Title("Events Player", TitleAlignment = TitleAlignments.Centered)]
-        [TabGroup("Events Player"), SerializeField] private UnityEvent OnPlayerKilled = new();
+        [TabGroup("Events Player"), SerializeField] public UnityEvent OnPlayerKilled = new();
         [TabGroup("Events Player"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = new();
         [TabGroup("Events Player"), SerializeField] private UnityEvent<float, float> OnIncreasePlayerExp = new();
         [TabGroup("Events Player"), SerializeField] private UnityEvent<float, float> OnIncreasePlayerHP = new();

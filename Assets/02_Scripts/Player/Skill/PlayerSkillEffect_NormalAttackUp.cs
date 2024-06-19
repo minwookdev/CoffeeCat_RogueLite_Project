@@ -8,34 +8,47 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    public class PlayerSkillEffect_NormalAttackUp : PlayerSkillEffect
+    public class PlayerSkillEffect_NormalAttack : PlayerSkillEffect
     {
         private readonly Player player = null;
 
-        public override void UpdateSkillData(PlayerSkill updateSkillData)
+        public override void SkillEffect(PlayerStat playerStat)
         {
-            player.UpgradeNormalAttack();
-            SpawnSkillEffect();
+            if (playerSkillData is not PlayerActiveSkill skillData)
+            {
+                CatLog.WLog("PlayerSkillEffect_NormalAttack : skillData is null");
+                return;
+            }
+
+            var currentCoolTime = skillData.SkillCoolTime;
+            updateDisposable =
+                Observable.EveryUpdate()
+                          .Select(_ => currentCoolTime += Time.deltaTime)
+                          .Where(_ => currentCoolTime >= skillData.SkillCoolTime)
+                          .Where(_ => completedLoadResource)
+                          .Subscribe(_ =>
+                          {
+                              var targetMonster = FindAroundMonster(skillData.AttackCount, skillData.SkillRange);
+
+                              if (targetMonster == null) return;
+
+                              var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
+                              var targetDirection = targetMonsterStatus.GetCenterTr().position - player.ProjectileTr.position;
+                              targetDirection = targetDirection.normalized;
+
+                              var spawnObj =
+                                  ObjectPoolManager.Inst.Spawn(skillData.SkillName, player.ProjectileTr.position);
+                              var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
+                              projectile.Fire(playerStat, skillData, player.ProjectileTr.position, targetDirection);
+
+                              currentCoolTime = 0;
+                              player.StartAttack();
+                          });
         }
 
-        public PlayerSkillEffect_NormalAttackUp(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
+        public PlayerSkillEffect_NormalAttack(Transform playerTr, Player player, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
         {
-            this.playerTr = playerTr;
-            player = playerTr.GetComponent<Player>();
-            player.UpgradeNormalAttack();
-            SpawnSkillEffect();
-        }
-
-        private void SpawnSkillEffect()
-        {
-            this.ObserveEveryValueChanged(_ => completedLoadResource)
-                .Where(_ => completedLoadResource)
-                .Take(1)
-                .Subscribe(_ =>
-                {
-                    var spawnObj = ObjectPoolManager.Inst.Spawn(playerSkillData.SkillName, playerTr);
-                    spawnObj.transform.localPosition = Vector3.zero;
-                });
+            this.player = player;
         }
     }
 }

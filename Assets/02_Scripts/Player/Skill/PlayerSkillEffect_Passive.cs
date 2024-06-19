@@ -13,7 +13,7 @@ namespace CoffeeCat
     {
         private const string passiveAddressableKey = "Passive";
 
-        protected override void SkillEffect(PlayerStat playerStat)
+        public override void SkillEffect(PlayerStat playerStat)
         {
             if (playerSkillData is not PlayerPassiveSkill skillData)
             {

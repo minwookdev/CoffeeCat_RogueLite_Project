@@ -7,6 +7,35 @@ namespace CoffeeCat.FrameWork
 {
     public class SkillEffectManager : DynamicSingleton<SkillEffectManager>
     {
+        #region MainSkillEffect
+
+        private void NormalAttack(PlayerMainSkill skillData)
+        {
+            
+        }
+        
+        private void Explosion(PlayerSkill skillData)
+        {
+            var playerTr = RogueLiteManager.Inst.SpawnedPlayer.transform;
+            var skillEffect = new PlayerSkillEffect_Explosion(playerTr, skillData);
+            StageManager.Inst.OnPlayerKilled.AddListener(skillEffect.OnDispose);
+        }
+
+        private void Beam(PlayerSkill skillData)
+        {
+            var playerTr = RogueLiteManager.Inst.SpawnedPlayer.transform;
+            var skillEffect = new PlayerSkillEffect_Beam(playerTr, skillData);
+            StageManager.Inst.OnPlayerKilled.AddListener(skillEffect.OnDispose);
+        }
+
+        private void Bubble(PlayerSkill skillData)
+        {
+            var playerTr = RogueLiteManager.Inst.SpawnedPlayer.transform;
+            var skillEffect = new PlayerSkillEffect_Bubble(playerTr, skillData);
+            StageManager.Inst.OnPlayerKilled.AddListener(skillEffect.OnDispose);
+        }
+        #endregion
+        
         #region SubAttackSkillEffect
 
         public void Poison(PlayerSubAttackSkill subAttackSkill)
@@ -61,7 +90,9 @@ namespace CoffeeCat.FrameWork
         }
 
         #endregion
-        
+
+        #region SubStatSkillEffect
+
         public void UpdateSubStatSkillEffect(PlayerMainSkill mainSkill, PlayerSubStatSkill subStatSkill)
         {
             switch (subStatSkill.SkillName)
@@ -77,5 +108,8 @@ namespace CoffeeCat.FrameWork
                     break;
             }
         }
+
+        #endregion
+        
     }
 }
