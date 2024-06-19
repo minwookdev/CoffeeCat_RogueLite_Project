@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UniRx;
 using CoffeeCat.Utils;
@@ -23,20 +24,20 @@ namespace CoffeeCat.FrameWork {
             int processPerFrame = 0;
             IsProcessing = true;
             Observable.EveryUpdate()
-                      //.TakeUntilDestroy(bindingObject)
+                      .TakeUntilDestroy(bindingObject)
                       .Skip(TimeSpan.Zero)
                       .TakeWhile(_ => IsProcessing)
                       .Select(_ => processQueue)
                       .Where(queue => queue.Count > 0)
                       .Subscribe(queue => {
+                          // Clear Processed Count
+                          processPerFrame = 0;
                           while (queue.Count > 0 && processPerFrame < maxProcessPerFrame)
                           {
                               var process = queue.Dequeue();
                               process.Invoke();
                               processPerFrame++;
                           }
-                          // Clear Processed Count
-                          processPerFrame = 0;
                       })
                       .AddTo(bindingObject);
         }
@@ -68,7 +69,47 @@ namespace CoffeeCat.FrameWork {
                 onCompleted?.Invoke(loadedResource);
             });
         }
+        
+        public static void RegistAll(Action<bool> onAllCompleted, params Req[] requests) {
+            bool isSended = false; // OnAllCompleted Callback Is Sended
+            object lockObject = new object();
+            
+            processQueue.Enqueue(() => {
+                foreach (var req in requests) {
+                    RequestLoadWithRegist(req.Key, req.SpawnCount, (onCompleted) => {
+                        req.IsCompleted = onCompleted;
 
+                        lock (lockObject) {
+                            if (isSended) {
+                                CatLog.ELog("There is a callback that completes before any request is executed.");
+                                return;
+                            }
+
+                            // If Request Is Failed, Send OnCompleted(Failed) Callback
+                            if (!req.IsCompleted) {
+                                onAllCompleted?.Invoke(false);
+                                isSended = true;
+                                return;
+                            }
+
+                            // Wait Other Request Completed
+                            if (!requests.All(r => r.IsCompleted)) {
+                                return;
+                            }
+                        
+                            // Send OnCompleted Callback
+                            onAllCompleted?.Invoke(true);
+                            isSended = true;
+                        }
+                    });
+                }
+            });
+        }
+        
+        public static void RequestAll() {
+            
+        }
+        
         private static void RequestLoadWithRegist(string key, int spawnCount, Action<bool> onCompleted = null) {
             if (ObjectPoolManager.Inst.IsExistInPool(key)) {
                 // CatLog.WLog($"{key} is Already Containing in Pool Dictionary.");
@@ -85,6 +126,13 @@ namespace CoffeeCat.FrameWork {
                 ObjectPoolManager.Inst.AddToPool(PoolInfo.Create(loadedGameObject, spawnCount: spawnCount));
                 onCompleted?.Invoke(true);
             });
+        }
+        
+        public class Req {
+            public string Key = string.Empty;
+            public int SpawnCount = PoolInfo.DEFAULT_COUNT;
+            public bool IsCompleted = false;
+            public bool IsGlobalResource = false;
         }
     }
 }
