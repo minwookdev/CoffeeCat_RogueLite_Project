@@ -136,13 +136,13 @@ namespace CoffeeCat.RogueLite {
 			
 			// Preload Monsters
 			for (int i = 0; i < spawnDataList.Count; i++) {
-				SafeLoader.Request(spawnDataList[i].Key.ToStringEx());
+				SafeLoader.Regist(spawnDataList[i].Key.ToStringEx());
 			}
 			// Preload Group Monsters Positions
 			if (entity.GroupSpawnPointKey == AddressablesKey.NONE)
 				return;
 			groupSpawnPositionsKey = entity.GroupSpawnPointKey.ToStringEx();
-			SafeLoader.Request(groupSpawnPositionsKey);
+			SafeLoader.Regist(groupSpawnPositionsKey);
 		}
 
 		public override void EnteredPlayer()

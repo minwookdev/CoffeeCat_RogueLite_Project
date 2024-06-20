@@ -56,29 +56,29 @@ namespace CoffeeCat.FrameWork {
             processQueue.Clear();
         }
 
-        public static void Request<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T: UnityObject {
+        public static void Load<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T: UnityObject {
             processQueue.Enqueue(() => RequestLoad(key, isGlobalResource, onCompleted));
         }
 
-        public static void Request(string key, Action<bool> onCompleted = null, int spawnCount = PoolInfo.DEFAULT_COUNT) {
+        public static void Regist(string key, Action<bool> onCompleted = null, int spawnCount = PoolInfo.DEFAULT_COUNT) {
             processQueue.Enqueue(() => RequestLoadWithRegist(key, spawnCount, onCompleted));
         }
         
-        private static void RequestLoad<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T : UnityObject {
-            ResourceManager.Inst.AddressablesAsyncLoad<T>(key, isGlobalResource, (loadedResource) => {
-                onCompleted?.Invoke(loadedResource);
-            });
-        }
-        
-        public static void RegistAll(Action<bool> onAllCompleted, params Req[] requests) {
+        public static void LoadAll(Req[] requests, Action<bool> onAllCompleted) {
+            if (requests == null || requests.Length == 0) {
+                onAllCompleted?.Invoke(false);
+                return;
+            }
+            
             bool isSended = false; // OnAllCompleted Callback Is Sended
             object lockObject = new object();
             
             processQueue.Enqueue(() => {
                 foreach (var req in requests) {
-                    RequestLoadWithRegist(req.Key, req.SpawnCount, (onCompleted) => {
-                        req.IsCompleted = onCompleted;
-
+                    RequestLoad<UnityObject>(req.Key, req.IsGlobalResource, (onCompleted) => {
+                        req.IsCompleted = true;
+                        req.IsRequestSuccessed = onCompleted;
+                        
                         lock (lockObject) {
                             if (isSended) {
                                 CatLog.ELog("There is a callback that completes before any request is executed.");
@@ -86,7 +86,7 @@ namespace CoffeeCat.FrameWork {
                             }
 
                             // If Request Is Failed, Send OnCompleted(Failed) Callback
-                            if (!req.IsCompleted) {
+                            if (!req.IsRequestSuccessed) {
                                 onAllCompleted?.Invoke(false);
                                 isSended = true;
                                 return;
@@ -106,8 +106,52 @@ namespace CoffeeCat.FrameWork {
             });
         }
         
-        public static void RequestAll() {
+        public static void RegistAll(Req[] requests, Action<bool> onAllCompleted) {
+            if (requests == null || requests.Length == 0) {
+                onAllCompleted?.Invoke(false);
+                return;
+            }
             
+            bool isSended = false; // OnAllCompleted Callback Is Sended
+            object lockObject = new object();
+            
+            processQueue.Enqueue(() => {
+                foreach (var req in requests) {
+                    RequestLoadWithRegist(req.Key, req.SpawnCount, (onCompleted) => {
+                        req.IsCompleted = true;
+                        req.IsRequestSuccessed = onCompleted;
+
+                        lock (lockObject) {
+                            if (isSended) {
+                                CatLog.ELog("There is a callback that completes before any request is executed.");
+                                return;
+                            }
+
+                            // If Request Is Failed, Send OnCompleted(Failed) Callback
+                            if (!req.IsRequestSuccessed) {
+                                onAllCompleted?.Invoke(false);
+                                isSended = true;
+                                return;
+                            }
+
+                            // Wait Other Request Completed
+                            if (!requests.All(r => r.IsCompleted)) {
+                                return;
+                            }
+                        
+                            // Send OnCompleted Callback
+                            onAllCompleted?.Invoke(true);
+                            isSended = true;
+                        }
+                    });
+                }
+            });
+        }
+        
+        private static void RequestLoad<T>(string key, bool isGlobalResource = false, Action<T> onCompleted = null) where T : UnityObject {
+            ResourceManager.Inst.AddressablesAsyncLoad<T>(key, isGlobalResource, (loadedResource) => {
+                onCompleted?.Invoke(loadedResource);
+            });
         }
         
         private static void RequestLoadWithRegist(string key, int spawnCount, Action<bool> onCompleted = null) {
@@ -132,6 +176,7 @@ namespace CoffeeCat.FrameWork {
             public string Key = string.Empty;
             public int SpawnCount = PoolInfo.DEFAULT_COUNT;
             public bool IsCompleted = false;
+            public bool IsRequestSuccessed = false;
             public bool IsGlobalResource = false;
         }
     }
