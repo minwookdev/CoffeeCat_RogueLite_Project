@@ -44,7 +44,7 @@ namespace CoffeeCat
         {
             base.Initialize();
 
-            SafeLoader.Request(projectileKey.ToStringEx(), onCompleted => {
+            SafeLoader.Regist(projectileKey.ToStringEx(), onCompleted => {
                 
             });
         }

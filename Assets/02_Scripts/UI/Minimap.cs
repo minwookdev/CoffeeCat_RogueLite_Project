@@ -34,14 +34,14 @@ namespace CoffeeCat
         {
             // StartCoroutine(WaitLoadResources(field));
 
-            bool request1 = false;
-            SafeLoader.Request(branchKey, spawnCount: 15, onCompleted: _ =>
+            /*bool request1 = false;
+            SafeLoader.Regist(branchKey, spawnCount: 15, onCompleted: _ =>
             {
                 request1 = true;
             });
             
             bool request2 = false;
-            SafeLoader.Request(roomPanelKey, spawnCount: 15, onCompleted: _ =>
+            SafeLoader.Regist(roomPanelKey, spawnCount: 15, onCompleted: _ =>
             {
                 request2 = true;
             });
@@ -63,18 +63,38 @@ namespace CoffeeCat
 
                           MinimapGenerate(field);
                       })
-                      .AddTo(this);
+                      .AddTo(this);*/
+
+            var requests = new SafeLoader.Req[] {
+                new() {
+                    Key = branchKey,
+                    SpawnCount = 15
+                },
+                new() {
+                    Key = roomPanelKey,
+                    SpawnCount = 15
+                }
+            };
+
+            SafeLoader.RegistAll(requests, success => {
+                if (!success) {
+                    CatLog.ELog("Minimap Generating Failed !");
+                    return;
+                }
+
+                MinimapGenerate(field);
+            });
         }
         
         private void RoadResources()
         {
-            SafeLoader.Request(branchKey, spawnCount: 15, onCompleted: complete =>
+            SafeLoader.Regist(branchKey, spawnCount: 15, onCompleted: complete =>
             {
                 if (!complete)
                     CatLog.WLog("Minimap : MinimapBranch Load Failed");
             });
             
-            SafeLoader.Request(roomPanelKey, spawnCount: 15, onCompleted: complete =>
+            SafeLoader.Regist(roomPanelKey, spawnCount: 15, onCompleted: complete =>
             {
                 if (!complete)
                     CatLog.WLog("Minimap : RoomPanel Load Failed");

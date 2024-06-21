@@ -258,7 +258,7 @@ namespace CoffeeCat.FrameWork {
 
         #region Find in Resource Dictionary
         
-        private bool TryGetResourceSync<T>(string key, out T result) where T :UnityObject {
+        private bool TryGetResourceSync<T>(string key, out T result) where T : UnityObject {
             var isExist = resourcesDict.TryGetValue(key, out ResourceInfo info);
             if (!isExist) {
                 result = null;
@@ -340,100 +340,6 @@ namespace CoffeeCat.FrameWork {
 #endif
         }
 
-        #endregion
-        
-        #region Obsolete
-        
-        /// <summary>
-        /// Addressables AssetLoadSync By Addressables Name
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key">Default: AddressablesName</param>
-        /// <param name="isMultipleSceenAllowedResources"></param>
-        /// <returns></returns>
-        [Obsolete("This Mehod is Not Support Wait Asset Loading Status. Use AddressablesAsyncLoad Method.", true)]
-        public T AddressablesSyncLoad<T>(string key, bool isMultipleSceenAllowedResources) where T : UnityObject {
-            /*// Dictionary이미 로드된 Resource를 반환
-            if (TryGetResourceInDictionarySync<T>(key, out T resource)) {
-                return resource;
-            }
-
-            // Addressables를 통한 에셋 로드 요청
-            resourcesDict.Add(key, ResourceInfo.Create(isMultipleSceenAllowedResources, true));
-            var resourceInfo = resourcesDict[key];
-            var asyncOperationHandle = Addressables.LoadAssetAsync<T>(key);
-            T result = asyncOperationHandle.WaitForCompletion(); // 결과를 받을 때 까지 동기방식으로 대기
-            if (asyncOperationHandle.Status != AsyncOperationStatus.Succeeded) {
-                resourceInfo.SetFailed();
-                CatLog.ELog("Addressables AssetSyncLoad Failed.");
-                return null;
-            }
-
-            /*Addressables.Release(asyncOperationHandle); // Release Handle#1#
-            return resourceInfo.SetResource<T>(result);*/
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
-        /// Addressables AssetLoadAsync By AssetReference
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="assetRef"></param>
-        /// <param name="isMultipleSceenAllowedResources"></param>
-        /// <returns></returns>
-        [Obsolete("This Mehod is Not Support Wait Asset Loading Status. Use AddressablesAsyncLoad Method.", true)]
-        public T AddressablesSyncLoad<T>(AssetReference assetRef, bool isMultipleSceenAllowedResources) where T : UnityObject {
-            // return AddressablesSyncLoad<T>((string)assetRef.RuntimeKey, isMultipleSceenAllowedResources);
-            throw new NotImplementedException();
-        }
-        
-        /// <summary>
-        /// Resource Dictionary에서 로드된 리소스를 찾고 결과를 반환. (Sync전용)
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="resource"></param>
-        /// <returns></returns>
-        [Obsolete("This Mehod is Not Support Wait Asset Loading Status. Use AddressablesAsyncLoad Method.")]
-        private bool TryGetResourceInDictionarySync<T>(string key, out T resource) where T : UnityObject {
-            /*resource = null;
-            var result = resourcesDict.TryGetValue(key, out ResourceInfo information);
-            if (result) {
-                switch (information.Status) {
-                    case ResourceManager.ResourceInfo.ASSETLOADSTATUS.SUCCESS:
-                        resource = information.GetResource<T>();
-                        break;
-                    case ResourceManager.ResourceInfo.ASSETLOADSTATUS.LOADING:
-                        CatLog.ELog("TryGetDictionarySync is Not Support Wait Asset Loading Status.");
-                        break;
-                    case ResourceManager.ResourceInfo.ASSETLOADSTATUS.FAILED:
-                        CatLog.ELog("this Resource is Load Failed.");
-                        break;
-                }
-            }
-
-            return result;*/
-            
-            throw new NotImplementedException();
-        }
-        
-        /// <summary>
-        /// Addressables AssetLoadAsync By AssetReference
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="assetRef"></param>
-        /// <param name="isGlobalResource"></param>
-        /// <param name="onCompleted"></param>
-        public void AddressablesAsyncLoad<T>(AssetReference assetRef, bool isGlobalResource, Action<T> onCompleted) where T : UnityObject {
-            /*var key = assetRef.ToString();
-            if (string.IsNullOrEmpty(key)) { // assetReference.RuntimeKey is GUID
-                CatLog.ELog($"Invalid Asset Reference Key: {key}");
-                return;
-            }
-            AddressablesAsyncLoad<T>(key, isGlobalResource, onCompleted); */
-            throw new NotImplementedException();
-        }
-        
         #endregion
     }
 }
