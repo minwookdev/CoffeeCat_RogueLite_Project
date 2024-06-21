@@ -32,39 +32,6 @@ namespace CoffeeCat
 
         public void Initialize(Field field)
         {
-            // StartCoroutine(WaitLoadResources(field));
-
-            /*bool request1 = false;
-            SafeLoader.Regist(branchKey, spawnCount: 15, onCompleted: _ =>
-            {
-                request1 = true;
-            });
-            
-            bool request2 = false;
-            SafeLoader.Regist(roomPanelKey, spawnCount: 15, onCompleted: _ =>
-            {
-                request2 = true;
-            });
-
-            // Wait Until All Resources Completed
-            Observable.EveryUpdate()
-                      .Where(_ => request1 && request2)
-                      .Take(1)
-                      .TakeUntilDestroy(gameObject)
-                      .Subscribe(_ =>
-                      {
-                          var request1Success = ObjectPoolManager.Inst.IsExistInPool(branchKey);
-                          var request2Success = ObjectPoolManager.Inst.IsExistInPool(roomPanelKey);
-                          if (!request1Success || !request2Success)
-                          {
-                              CatLog.WLog("Minimap Generating Failed !");
-                              return;
-                          }
-
-                          MinimapGenerate(field);
-                      })
-                      .AddTo(this);*/
-
             var requests = new SafeLoader.Req[] {
                 new() {
                     Key = branchKey,
@@ -84,29 +51,6 @@ namespace CoffeeCat
 
                 MinimapGenerate(field);
             });
-        }
-        
-        private void RoadResources()
-        {
-            SafeLoader.Regist(branchKey, spawnCount: 15, onCompleted: complete =>
-            {
-                if (!complete)
-                    CatLog.WLog("Minimap : MinimapBranch Load Failed");
-            });
-            
-            SafeLoader.Regist(roomPanelKey, spawnCount: 15, onCompleted: complete =>
-            {
-                if (!complete)
-                    CatLog.WLog("Minimap : RoomPanel Load Failed");
-            });
-        }
-        
-        private IEnumerator WaitLoadResources(Field field)
-        {
-            RoadResources();
-            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPool(branchKey));
-            yield return new WaitUntil(() => ObjectPoolManager.Inst.IsExistInPool(roomPanelKey));
-            MinimapGenerate(field);
         }
         
         private void MinimapGenerate(Field field)

@@ -79,7 +79,7 @@ namespace CoffeeCat
 
         private void LoadResources()
         {
-            SafeLoader.Request("LevelUp", onCompleted: completed =>
+            SafeLoader.Regist("LevelUp", onCompleted: completed =>
             {
                 if (!completed)
                     CatLog.WLog("LevelUp Load Failed");

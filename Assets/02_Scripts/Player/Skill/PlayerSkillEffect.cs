@@ -21,7 +21,7 @@ namespace CoffeeCat
         {
             this.playerTr = playerTr;
 
-            SafeLoader.Request(skillName, onCompleted: completed =>
+            SafeLoader.Regist(skillName, onCompleted: completed =>
             {
                 completedLoadResource = completed;
                 if (!completed)
