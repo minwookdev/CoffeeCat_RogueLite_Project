@@ -1,5 +1,6 @@
 using System;
 using CoffeeCat.Utils.SerializedDictionaries;
+using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ namespace CoffeeCat
         {
             var textAsset = Resources.Load<TextAsset>("Entity/Json/PlayerSubStatSkill");
             var decText = Cryptor.Decrypt2(textAsset.text);
-            var datas = JsonUtility.FromJson<PlayerSubStatSkill[]>(decText);
+            var datas = JsonConvert.DeserializeObject<PlayerSubStatSkill[]>(decText);
 
             DataDictionary = new IntPlayerSubStatSkillDictionary();
             for (int i = 0; i < datas.Length; i++)

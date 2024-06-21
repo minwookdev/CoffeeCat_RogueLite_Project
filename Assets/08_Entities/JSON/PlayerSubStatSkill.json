@@ -11,63 +11,63 @@
     "SkillName": "SpeedUp",
     "SkillLevel": "1",
     "Delta": "2",
-    "Description": "이동속도 증가 1단계"
+    "Description": "이동속도 증가"
   },
   {
     "Index": "2",
     "SkillName": "SpeedUp",
     "SkillLevel": "2",
     "Delta": "4",
-    "Description": "이동속도 증가 2단계"
+    "Description": "이동속도 증가"
   },
   {
     "Index": "3",
     "SkillName": "SpeedUp",
     "SkillLevel": "3",
     "Delta": "6",
-    "Description": "이동속도 증가 3단계"
+    "Description": "이동속도 증가"
   },
   {
     "Index": "4",
     "SkillName": "CoolTimeReduce",
     "SkillLevel": "1",
     "Delta": "0.9",
-    "Description": "모든 스킬 쿨타임 감소 1단계"
+    "Description": "모든 스킬 쿨타임 감소"
   },
   {
     "Index": "5",
     "SkillName": "CoolTimeReduce",
     "SkillLevel": "2",
     "Delta": "0.9",
-    "Description": "모든 스킬 쿨타임 감소 2단계"
+    "Description": "모든 스킬 쿨타임 감소"
   },
   {
     "Index": "6",
     "SkillName": "CoolTimeReduce",
     "SkillLevel": "3",
     "Delta": "0.9",
-    "Description": "모든 스킬 쿨타임 감소 3단계"
+    "Description": "모든 스킬 쿨타임 감소"
   },
   {
     "Index": "7",
     "SkillName": "DamageIncrease",
     "SkillLevel": "1",
     "Delta": "5",
-    "Description": "공격력 증가 1단계"
+    "Description": "공격력 증가"
   },
   {
     "Index": "8",
     "SkillName": "DamageIncrease",
     "SkillLevel": "2",
     "Delta": "10",
-    "Description": "공격력 증가 2단계"
+    "Description": "공격력 증가"
   },
   {
     "Index": "9",
     "SkillName": "DamageIncrease",
     "SkillLevel": "3",
     "Delta": "15",
-    "Description": "공격력 증가 3단계"
+    "Description": "공격력 증가"
   },
   {
     "Index": "10",

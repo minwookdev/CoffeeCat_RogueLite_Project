@@ -19,7 +19,6 @@ namespace CoffeeCat
     {
         [Title("Status")]
         [SerializeField] protected PlayerAddressablesKey playerName = PlayerAddressablesKey.NONE;
-        [SerializeField] protected PlayerAddressablesKey normalAttackProjectile = PlayerAddressablesKey.NONE;
         [SerializeField] protected PlayerLevelData playerLevelData = null;
         [ShowInInspector, ReadOnly] protected PlayerStat stat;
 
@@ -27,7 +26,6 @@ namespace CoffeeCat
         [SerializeField] protected Transform tr = null;
         [SerializeField] protected Transform projectileTr = null;
 
-        private PlayerActiveSkill normalAttackData = null;
         private Rigidbody2D rigid = null;
         private bool isPlayerInBattle = false;
         private bool hasFiredProjectile = false;
@@ -43,19 +41,28 @@ namespace CoffeeCat
         private void Start()
         {
             rigid = GetComponent<Rigidbody2D>();
-            normalAttackData = DataManager.Inst.PlayerActiveSkills.DataDictionary[(int)normalAttackProjectile];
             playerLevelData.Initialize();
             
             LoadResources();
             SetStat();
-            // NormalAttack();
+            SetNormalAttack();
             CheckInvincibleTime();
-            
-            
 
             StageManager.Inst.AddListenerMonsterKilledByPlayer(GetExp);
             StageManager.Inst.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
             StageManager.Inst.AddListenerClearedRoomEvent(PlayerClearedRoom);
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                // var subSkill = DataManager.Inst.PlayerSubStatSkills.DataDictionary[4];
+                // skillSets[0].UpdateSubStatSkill(subSkill, 1);
+                // ActivateSkill(skillSets[0]);
+
+                EnableSkillSelect();
+            }
         }
 
         private void OnEnable() 
@@ -72,16 +79,10 @@ namespace CoffeeCat
 
         private void LoadResources()
         {
-            SafeLoader.Request(normalAttackProjectile.ToStringEx(), onCompleted: completed =>
-            {
-                if (!completed)
-                    CatLog.WLog($"{normalAttackProjectile.ToStringEx()} Load Failed");
-            });
-            
             SafeLoader.Request("LevelUp", onCompleted: completed =>
             {
                 if (!completed)
-                    CatLog.WLog($"{normalAttackProjectile.ToStringEx()} Load Failed");
+                    CatLog.WLog("LevelUp Load Failed");
             });
         }
 
@@ -91,6 +92,14 @@ namespace CoffeeCat
             stat.SetCurrentHp();
             
             StageManager.Inst.InvokeIncreasePlayerHP(stat.CurrentHp, stat.MaxHp);
+        }
+
+        private void SetNormalAttack()
+        {
+            var skillData = DataManager.Inst.PlayerMainSkills.DataDictionary[1];
+            var skillSet = new PlayerSkillSet(skillData, skillSets.Count);
+            skillSets.Add(skillSet);
+            ActivateSkill(skillSet);
         }
 
         private void Move(Vector2 direction) 
@@ -124,57 +133,6 @@ namespace CoffeeCat
                 true  => new Vector3(-2f, lossyScale.y, lossyScale.z),
                 false => new Vector3(2f, lossyScale.y, lossyScale.z)
             };
-        }
-
-        private void NormalAttack()
-        {
-            var currentCoolTime = normalAttackData.SkillCoolTime;
-
-            this.UpdateAsObservable()
-                .Skip(TimeSpan.Zero)
-                .Where(_ => isPlayerInBattle && !isDead)
-                .Select(_ => currentCoolTime += Time.deltaTime)
-                .Where(_ => currentCoolTime >= normalAttackData.SkillCoolTime)
-                .Subscribe(_ =>
-                {
-                    var targetMonster = FindNearestMonster();
-
-                    if (targetMonster == null) return;
-
-                    // Battle 중에는 Player의 방향을 기본공격의 타겟 방향으로 전환
-                    var targetMonsterStatus = targetMonster.GetComponent<MonsterStatus>();
-                    var targetDirection = targetMonsterStatus.GetCenterTr().position - projectileTr.position;
-                    targetDirection = targetDirection.normalized;
-                    SwitchingPlayerDirection(targetDirection.x < 0 ? true : false);
-
-                    // 기본 공격 Projectile 스폰 및 발사
-                    var spawnObj =
-                        ObjectPoolManager.Inst.Spawn(normalAttackProjectile.ToStringEx(), projectileTr.position);
-                    var projectile = spawnObj.GetComponent<PlayerNormalProjectile>();
-                    projectile.Fire(stat, normalAttackData, projectileTr.position, targetDirection);
-
-                    // 쿨타임 초기화 및 발사 여부
-                    currentCoolTime = 0;
-                    hasFiredProjectile = true;
-                }).AddTo(this);
-
-            Transform FindNearestMonster()
-            {
-                Collider2D[] result = new Collider2D[Defines.SPAWN_MONSTER_MAX_COUNT];
-                var count = Physics2D.OverlapCircleNonAlloc
-                    (Tr.position, normalAttackData.SkillRange, result, 1 << LayerMask.NameToLayer("Monster"));
-
-                if (count <= 0) return null;
-
-                var target = result.Where(Collider2D => Collider2D != null)
-                                   .Select(Collider2D => Collider2D.GetComponent<MonsterStatus>())
-                                   .Where(monster => monster.IsAlive)
-                                   .OrderBy(monster => Vector2.Distance(projectileTr.position,
-                                                                        monster.GetCenterTr().position))
-                                   .FirstOrDefault();
-
-                return target == null ? null : target.transform;
-            }
         }
 
         private void CheckInvincibleTime()

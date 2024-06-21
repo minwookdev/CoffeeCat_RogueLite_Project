@@ -44,8 +44,4 @@ namespace CoffeeCat.Utils.SerializedDictionaries {
     [Serializable] public class IntPlayerMainSkillDictionary : UnitySerializedDictionary<int, PlayerMainSkill> { }
     [Serializable] public class IntPlayerSubAttackSkillDictionary : UnitySerializedDictionary<int, PlayerSubAttackSkill> { }
     [Serializable] public class IntPlayerSubStatSkillDictionary : UnitySerializedDictionary<int, PlayerSubStatSkill> { }
-    
-    // 임시
-    [Serializable] public class IntPlayerActiveSkillDictionary : UnitySerializedDictionary<int, PlayerActiveSkill> { }
-    [Serializable] public class IntPlayerPassiveSkillDictionary : UnitySerializedDictionary<int, PlayerPassiveSkill> { }
 }

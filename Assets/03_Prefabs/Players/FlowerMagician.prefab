@@ -84,8 +84,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a4c283ca63dae4aa378ff67290986a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerName: 2
-  normalAttackProjectile: 1
+  playerName: 1
   playerLevelData: {fileID: 11400000, guid: d9c22ae8167c93e41ab97829f662e1c3, type: 2}
   tr: {fileID: 1305159281282759405}
   projectileTr: {fileID: 1303632491375746209}

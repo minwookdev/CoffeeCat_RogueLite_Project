@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1605916673081281649}
   - component: {fileID: 9070647098036679845}
   m_Layer: 0
-  m_Name: NormalAttack_01
+  m_Name: NormalAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

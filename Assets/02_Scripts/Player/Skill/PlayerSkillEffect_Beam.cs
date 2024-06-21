@@ -9,14 +9,8 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect_Beam : PlayerSkillEffect
     {
-        public override void SkillEffect(PlayerStat playerStat)
+        public override void SkillEffect(PlayerStat playerStat, PlayerMainSkill skillData)
         {
-            if (playerSkillData is not PlayerActiveSkill skillData)
-            {
-                CatLog.WLog("PlayerSkillEffect_Explosion : skillData is null");
-                return;
-            }
-
             var currentCoolTime = skillData.SkillCoolTime;
             
             updateDisposable =
@@ -40,9 +34,7 @@ namespace CoffeeCat
                               currentCoolTime = 0;
                           });
         }
-
-        public PlayerSkillEffect_Beam(Transform playerTr, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
-        {
-        }
+        
+        public PlayerSkillEffect_Beam(Transform playerTr, string skillName) : base(playerTr, skillName) { }
     }
 }

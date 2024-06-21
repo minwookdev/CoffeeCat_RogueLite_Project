@@ -41,11 +41,22 @@ namespace CoffeeCat.UI {
         public void Set(PlayerSkillSelectData recievedData) {
             tmpName.SetText(recievedData.Name);
             tmpDesc.SetText(recievedData.Desc);
-            tmpType.SetText(recievedData.Type == 0 ? "<< Passive >>" : "<< Active >>");
+            tmpType.SetText(TypeText((SkillType)recievedData.Type));
             if (recievedData.Icon) {
                 imgIcon.sprite = recievedData.Icon;   
             }
             data = recievedData;
+
+            string TypeText(SkillType type)
+            {
+                return type switch
+                {
+                    SkillType.Main      => "<< Main >>",
+                    SkillType.SubAttack => "<< SubAttack >>",
+                    SkillType.SubStat   => "<< SubStat >>",
+                    _                   => "type is not defined"
+                };
+            }
         }
 
         public void Clear() {

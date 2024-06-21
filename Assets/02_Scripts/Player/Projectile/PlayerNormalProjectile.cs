@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    [SuppressMessage("ReSharper", "HeapView.DelegateAllocation")]
     public class PlayerNormalProjectile : PlayerProjectile
     {
         private const float maxDistance = 20f;
@@ -42,7 +41,7 @@ namespace CoffeeCat
               });
         }
 
-        public void Fire(PlayerStat playerStat, PlayerActiveSkill skillData, Vector3 startPos, Vector3 direction)
+        public void Fire(PlayerStat playerStat, PlayerMainSkill skillData, Vector3 startPos, Vector3 direction)
         {
             SetDamageData(playerStat, skillData.SkillBaseDamage, skillData.SkillCoefficient);
             ProjectilePath(skillData.ProjectileSpeed, startPos, direction);

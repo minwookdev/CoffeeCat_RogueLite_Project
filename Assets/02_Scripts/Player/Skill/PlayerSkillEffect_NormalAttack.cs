@@ -12,14 +12,8 @@ namespace CoffeeCat
     {
         private readonly Player player = null;
 
-        public override void SkillEffect(PlayerStat playerStat)
+        public override void SkillEffect(PlayerStat playerStat, PlayerMainSkill skillData)
         {
-            if (playerSkillData is not PlayerActiveSkill skillData)
-            {
-                CatLog.WLog("PlayerSkillEffect_NormalAttack : skillData is null");
-                return;
-            }
-
             var currentCoolTime = skillData.SkillCoolTime;
             updateDisposable =
                 Observable.EveryUpdate()
@@ -46,7 +40,7 @@ namespace CoffeeCat
                           });
         }
 
-        public PlayerSkillEffect_NormalAttack(Transform playerTr, Player player, PlayerSkill playerSkillData) : base(playerTr, playerSkillData)
+        public PlayerSkillEffect_NormalAttack(Transform playerTr, string skillName, Player player) : base(playerTr, skillName)
         {
             this.player = player;
         }

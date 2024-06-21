@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using CoffeeCat.Utils.SerializedDictionaries;
+using Newtonsoft.Json;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ namespace CoffeeCat
         {
             var textAsset = Resources.Load<TextAsset>("Entity/Json/PlayerSubAttackSkill");
             var decText = Cryptor.Decrypt2(textAsset.text);
-            var datas = JsonUtility.FromJson<PlayerSubAttackSkill[]>(decText);
+            var datas = JsonConvert.DeserializeObject<PlayerSubAttackSkill[]>(decText);
 
             DataDictionary = new IntPlayerSubAttackSkillDictionary();
             for (int i = 0; i < datas.Length; i++)
@@ -35,6 +34,6 @@ namespace CoffeeCat
         public float TriggerChance = default;
         public float Damage = default;
         public float Duration = default;
-        public float Description = default;
+        public string Description = default;
     }
 }

@@ -2,15 +2,15 @@
 ;int;string;int;float;string
 ;인덱스;스킬 이름;스킬 레벨;증감 값;스킬 설명
 ;0;Lock;-1;-1;잠금
-;1;SpeedUp;1;2;이동속도 증가 1단계
-;2;SpeedUp;2;4;이동속도 증가 2단계
-;3;SpeedUp;3;6;이동속도 증가 3단계
-;4;CoolTimeReduce;1;0.9;모든 스킬 쿨타임 감소 1단계
-;5;CoolTimeReduce;2;0.9;모든 스킬 쿨타임 감소 2단계
-;6;CoolTimeReduce;3;0.9;모든 스킬 쿨타임 감소 3단계
-;7;DamageIncrease;1;5;공격력 증가 1단계
-;8;DamageIncrease;2;10;공격력 증가 2단계
-;9;DamageIncrease;3;15;공격력 증가 3단계
+;1;SpeedUp;1;2;이동속도 증가
+;2;SpeedUp;2;4;이동속도 증가
+;3;SpeedUp;3;6;이동속도 증가
+;4;CoolTimeReduce;1;0.9;모든 스킬 쿨타임 감소
+;5;CoolTimeReduce;2;0.9;모든 스킬 쿨타임 감소
+;6;CoolTimeReduce;3;0.9;모든 스킬 쿨타임 감소
+;7;DamageIncrease;1;5;공격력 증가
+;8;DamageIncrease;2;10;공격력 증가
+;9;DamageIncrease;3;15;공격력 증가
 ;10;Add Projectile;1;1;발사체 추가
 ;11;Add Projectile;2;1;발사체 추가
 ;12;Add Projectile;3;1;발사체 추가

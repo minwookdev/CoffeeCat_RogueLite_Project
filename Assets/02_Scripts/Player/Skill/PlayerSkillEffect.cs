@@ -12,35 +12,31 @@ namespace CoffeeCat
     public class PlayerSkillEffect
     {
         protected Transform playerTr = null;
-        protected PlayerSkill playerSkillData = null;
         protected IDisposable updateDisposable = null;
         protected bool completedLoadResource = false;
 
         // 새로운 스킬 선택
         protected PlayerSkillEffect() { }
-        protected PlayerSkillEffect(Transform playerTr, PlayerSkill playerSkillData)
+        protected PlayerSkillEffect(Transform playerTr, string skillName)
         {
             this.playerTr = playerTr;
-            this.playerSkillData = playerSkillData;
 
-            StageManager.Inst.AddListenerClearedRoomEvent(roomData =>
-            {
-                if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
-            });
-
-            SafeLoader.Request(playerSkillData.SkillName, onCompleted: completed =>
+            SafeLoader.Request(skillName, onCompleted: completed =>
             {
                 completedLoadResource = completed;
                 if (!completed)
                     CatLog.WLog("PlayerSkillEffect : Load Resource Failed");
             });
+            
+            StageManager.Inst.OnPlayerKilled.AddListener(OnDispose);
+            StageManager.Inst.AddListenerClearedRoomEvent(roomData =>
+            {
+                if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
+            });
         }
 
         // 스킬 효과 활성화
-        public virtual void SkillEffect(PlayerStat playerStat) { }
-
-        // 보유한 스킬 등급 업데이트
-        public virtual void UpdateSkillData(PlayerSkill updateSkillData) => playerSkillData = updateSkillData;
+        public virtual void SkillEffect(PlayerStat playerStat, PlayerMainSkill skillData) { }
 
         // 스킬 효과 비활성화
         public void OnDispose() => updateDisposable?.Dispose();
@@ -89,6 +85,24 @@ namespace CoffeeCat
                    .Where(collider2D => collider2D)
                    .Select(collider2D => collider2D.GetComponent<MonsterStatus>())
                    .FirstOrDefault();
+        }
+        
+        protected Transform FindNearestMonster(int attackCount, float skillRange, Transform baseTr)
+        {
+            Collider2D[] result = new Collider2D[Defines.SPAWN_MONSTER_MAX_COUNT];
+            var count = Physics2D.OverlapCircleNonAlloc
+                (playerTr.position, skillRange, result, 1 << LayerMask.NameToLayer("Monster"));
+
+            if (count <= 0) return null;
+
+            var target = result.Where(Collider2D => Collider2D != null)
+                               .Select(Collider2D => Collider2D.GetComponent<MonsterStatus>())
+                               .Where(monster => monster.IsAlive)
+                               .OrderBy(monster => Vector2.Distance(baseTr.position,
+                                                                    monster.GetCenterTr().position))
+                               .FirstOrDefault();
+
+            return target == null ? null : target.transform;
         }
 
         protected void DisplayDamageRange()

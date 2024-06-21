@@ -15,10 +15,6 @@ namespace CoffeeCat.FrameWork
         [ShowInInspector, ReadOnly] public PlayerSubAttackSkillDatas PlayerSubAttackSkills { get; private set; } = null;
         [ShowInInspector, ReadOnly] public PlayerSubStatSkillDatas PlayerSubStatSkills { get; private set; } = null;
         
-        // 임시
-        [ShowInInspector, ReadOnly] public PlayerActiveSkillDatas PlayerActiveSkills { get; private set; } = null;
-        [ShowInInspector, ReadOnly] public PlayerPassiveSkillDatas PlayerPassiveSkills { get; private set; } = null;
-        
         public bool IsDataLoaded { get; private set; } = false;
 
         protected override void Initialize()
@@ -26,8 +22,9 @@ namespace CoffeeCat.FrameWork
             MonsterStats = new MonsterStatDatas();
             MonsterSkills = new MonsterSkillDatas();
             PlayerStats = new PlayerStatDatas();
-            PlayerActiveSkills = new PlayerActiveSkillDatas();
-            PlayerPassiveSkills = new PlayerPassiveSkillDatas();
+            PlayerMainSkills = new PlayerMainSkillDatas();
+            PlayerSubAttackSkills = new PlayerSubAttackSkillDatas();
+            PlayerSubStatSkills = new PlayerSubStatSkillDatas();
         }
 
         public void DataLoad()
@@ -55,10 +52,6 @@ namespace CoffeeCat.FrameWork
             PlayerMainSkills.Initialize();
             PlayerSubAttackSkills.Initialize();
             PlayerSubStatSkills.Initialize();
-            
-            // 임시
-            PlayerActiveSkills.Initialize();
-            PlayerPassiveSkills.Initialize();
         }
     }
 }
@@ -71,15 +64,13 @@ public class PlayerSkillSelectData
     public Sprite Icon;
     public int Index;
     public int Type; // 0: Passive, 1: Active
-    public bool IsOwned;
 
-    public PlayerSkillSelectData(string name, string desc, int index, int type, bool isOwned)
+    public PlayerSkillSelectData(string name, string desc, int index, int type)
     {
         Name = name;
         Desc = desc;
         Index = index;
         Type = type;
-        IsOwned = isOwned;
         /*Icon = icon;*/
     }
 }

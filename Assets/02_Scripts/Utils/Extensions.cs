@@ -42,7 +42,6 @@ namespace CoffeeCat
             return key switch
             {
                 PlayerAddressablesKey.NONE            => "",
-                PlayerAddressablesKey.NormalAttack_01 => "NormalAttack_01",
                 PlayerAddressablesKey.FlowerMagician  => "FlowerMagician",
                 _                                     => throw new ArgumentOutOfRangeException(nameof(key), key, null)
             };
