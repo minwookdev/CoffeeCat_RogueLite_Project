@@ -1,6 +1,7 @@
 using System;
 using Sirenix.OdinInspector;
 using CoffeeCat.Datas;
+using CoffeeCat.FrameWork;
 using CoffeeCat.Utils.JsonParser;
 using UnityEngine;
 
@@ -63,9 +64,9 @@ public class PlayerSkillSelectData
     public string Desc;
     public Sprite Icon;
     public int Index;
-    public int Type; // 0: Passive, 1: Active
+    public SkillType Type;
 
-    public PlayerSkillSelectData(string name, string desc, int index, int type)
+    public PlayerSkillSelectData(string name, string desc, int index, SkillType type)
     {
         Name = name;
         Desc = desc;

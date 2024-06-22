@@ -27,8 +27,7 @@ namespace CoffeeCat.UI {
                     return;
                 }
 
-                player.UpdateSkill(data);
-                StageManager.Inst.InvokeSkillSelectCompleted();
+                player.SelectedSkill(data);
             });
         }
 
@@ -41,7 +40,7 @@ namespace CoffeeCat.UI {
         public void Set(PlayerSkillSelectData recievedData) {
             tmpName.SetText(recievedData.Name);
             tmpDesc.SetText(recievedData.Desc);
-            tmpType.SetText(TypeText((SkillType)recievedData.Type));
+            tmpType.SetText(TypeText(recievedData.Type));
             if (recievedData.Icon) {
                 imgIcon.sprite = recievedData.Icon;   
             }

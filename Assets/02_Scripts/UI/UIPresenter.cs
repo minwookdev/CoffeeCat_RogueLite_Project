@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
@@ -7,6 +8,7 @@ namespace CoffeeCat.FrameWork {
     public class UIPresenter : SceneSingleton<UIPresenter> {
         [Title("UI")]
         [SerializeField] private SkillSelectPanel skillSelector = null;
+        [SerializeField] private PlayerSkillsPanel playerSkillsPanel = null;
         [SerializeField] private Minimap minimap = null;
         [SerializeField] private Image hpSliderImage = null;
         [SerializeField] private Image expSliderImage = null;
@@ -34,6 +36,26 @@ namespace CoffeeCat.FrameWork {
 
         public void OpenSkillSelectPanel(PlayerSkillSelectData[] datas) {
             skillSelector.Open(datas);
+        }
+
+        public void InitializePlayerSkillsPanel(List<PlayerSkillSet> skillSets)
+        {
+            playerSkillsPanel.Initialize(skillSets);
+        }
+        
+        public void RefreshPlayerSkillsPanel(List<PlayerSkillSet> skillSets)
+        {
+            playerSkillsPanel.RefreshPlayerSkillsPanel(skillSets);
+        }
+
+        public void SkillsPanelOpenForSkillSelect(PlayerSkillSelectData data)
+        {
+            playerSkillsPanel.OpenForSlotSelect(data);
+        }
+        
+        public void OpenPlayerSkillsPanel()
+        {
+            playerSkillsPanel.Open();
         }
 
         private void UpdatePlayerHPSlider(float current, float max) {

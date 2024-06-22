@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using CoffeeCat.Datas;
@@ -45,7 +46,7 @@ namespace CoffeeCat
             
             LoadResources();
             SetStat();
-            SetNormalAttack();
+            InitializeSkillSet();
             CheckInvincibleTime();
 
             StageManager.Inst.AddListenerMonsterKilledByPlayer(GetExp);
@@ -57,11 +58,13 @@ namespace CoffeeCat
         {
             if (Input.GetKeyDown(KeyCode.O))
             {
-                // var subSkill = DataManager.Inst.PlayerSubStatSkills.DataDictionary[4];
-                // skillSets[0].UpdateSubStatSkill(subSkill, 1);
-                // ActivateSkill(skillSets[0]);
-
+                // EnableSkillSelect();
+                // UIPresenter.Inst.OpenPlayerSkillsPanel();
                 EnableSkillSelect();
+            }
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                UIPresenter.Inst.OpenPlayerSkillsPanel();
             }
         }
 
@@ -93,13 +96,15 @@ namespace CoffeeCat
             
             StageManager.Inst.InvokeIncreasePlayerHP(stat.CurrentHp, stat.MaxHp);
         }
-
-        private void SetNormalAttack()
+        
+        private void InitializeSkillSet()
         {
-            var skillData = DataManager.Inst.PlayerMainSkills.DataDictionary[1];
-            var skillSet = new PlayerSkillSet(skillData, skillSets.Count);
-            skillSets.Add(skillSet);
-            ActivateSkill(skillSet);
+            // 기본 공격 스킬 추가
+            var normalAttack = DataManager.Inst.PlayerMainSkills.DataDictionary[1];
+            GetNewMainSkill(normalAttack);
+            
+            // 플레이어 스킬창 초기화
+            UIPresenter.Inst.InitializePlayerSkillsPanel(skillSets);
         }
 
         private void Move(Vector2 direction) 

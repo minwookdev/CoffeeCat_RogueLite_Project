@@ -19,6 +19,12 @@ namespace CoffeeCat
         [ShowInInspector, ReadOnly] private PlayerSubAttackSkill subAttackSkill = null;
         [ShowInInspector, ReadOnly] private PlayerSubStatSkill subStatSkill_1 = null;
         [ShowInInspector, ReadOnly] private PlayerSubStatSkill subStatSkill_2 = DataManager.Inst.PlayerSubStatSkills.DataDictionary[0];
+        
+        public int SkillSetIndex => skillSetIndex;
+        public PlayerMainSkill MainSkillData => mainSkillData;
+        public PlayerSubAttackSkill SubAttackSkill => subAttackSkill;
+        public PlayerSubStatSkill SubStatSkill_1 => subStatSkill_1;
+        public PlayerSubStatSkill SubStatSkill_2 => subStatSkill_2;
 
         public PlayerSkillSet(PlayerMainSkill mainSkill, int index)
         {
@@ -56,21 +62,6 @@ namespace CoffeeCat
                     SkillEffectManager.Inst.UpdateSubStatSkillEffect(mainSkillData, skill);
                     break;
             }
-        }
-        
-        public string GetMainSkill()
-        {
-            return mainSkillData.SkillName;
-        }
-
-        public string GetSubAttackSkill()
-        {
-            return subAttackSkill.SkillName;
-        }
-        
-        public string GetSubStatSkill_1()
-        {
-            return subStatSkill_1.SkillName;
         }
         
         public bool IsEmptySubAttackSkill()
