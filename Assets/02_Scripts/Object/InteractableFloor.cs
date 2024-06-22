@@ -1,25 +1,17 @@
 using CoffeeCat.FrameWork;
+using CoffeeCat.Utils.Defines;
 using UnityEngine;
 
 namespace CoffeeCat 
 {
     public class InteractableFloor : InteractableObject 
     {
-        protected override void OnPlayerStay() {
-#if UNITY_ANDROID
-            UIPresenter.Inst.EnableNextFloorButton();
-#elif UNITY_STANDALONE
-            if (!Input.GetKeyDown(KeyCode.Q)) 
-                return;
-            DisposeInteractableSign();
-            StageManager.Inst.RequestGenerateNextFloor();
-#endif
+        protected override void OnPlayerEnter() {
+            
         }
 
         protected override void OnPlayerExit() {
-#if UNITY_ANDROID
-            UIPresenter.Inst.DisableNextFloorButton();
-#endif
+            
         }
     }
 }

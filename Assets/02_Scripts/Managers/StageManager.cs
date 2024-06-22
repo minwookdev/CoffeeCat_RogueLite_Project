@@ -101,11 +101,13 @@ namespace CoffeeCat
                 room.SetGateObjects(spawnedGateList.ToArray());
             }
         }
-        
+
         /// <summary>
         /// Despawn All Gates
         /// </summary>
-        public void DespawnGates() => ObjectPoolManager.Inst.DespawnAll("dungeon_door");
+        public void DespawnGates() {
+            ObjectPoolManager.Inst.DespawnAll("dungeon_door");
+        }
 
         public void SetPlayer(Field field) {
             // Not Founded Entry Room

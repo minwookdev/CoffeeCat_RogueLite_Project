@@ -44,7 +44,7 @@ namespace CoffeeCat
         {
             base.Initialize();
 
-            SafeLoader.Regist(projectileKey.ToStringEx(), onCompleted => {
+            SafeLoader.Regist(projectileKey.ToKey(), onCompleted => {
                 
             });
         }
@@ -200,7 +200,7 @@ namespace CoffeeCat
 
             // Spawn Projectile
             var spawnedProjectile =
-                ObjectPoolManager.Inst.Spawn<MonsterProjectile>(projectileKey.ToStringEx(), spawnPoint,
+                ObjectPoolManager.Inst.Spawn<MonsterProjectile>(projectileKey.ToKey(), spawnPoint,
                                                                     lookAtTargetRotation);
             spawnedProjectile.Initialize(stat);
         }

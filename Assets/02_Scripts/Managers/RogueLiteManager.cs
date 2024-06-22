@@ -1,7 +1,9 @@
 /// CODER	      :		
 /// MODIFIED DATE : 
 /// IMPLEMENTATION: 
+using System;
 using CoffeeCat.Utils;
+using CoffeeCat.Utils.Defines;
 using UnityEngine;
 
 namespace CoffeeCat.FrameWork {
@@ -12,9 +14,13 @@ namespace CoffeeCat.FrameWork {
 
 		// Fields
 		private const string playerKey = "FlowerMagician";
+		
+		public InteractableObject Interactable { get; private set; } = null;
 
 		protected override void Initialize() {
 			base.Initialize();
+			
+			InputManager.BindInteractInput(OnInteractAction);
 		}
 
 		public void SetPlayerOnEnteredDungeon(Vector2 playerSpawnPosition) {
@@ -23,27 +29,21 @@ namespace CoffeeCat.FrameWork {
 			ActivePlayer();
 		}
 
-		public void SpawnPlayer() {
+		private void SpawnPlayer() {
 			if (SpawnedPlayer)
 				return;
 			
-			if (!ObjectPoolManager.Inst.IsExistInPool(playerKey)) {
-				// TODO : 안드로이드 빌드 버그 수정 후 주석 해제
-				// var origin = ResourceManager.Instance.AddressablesSyncLoad<GameObject>(playerKey, true);
-				// ObjectPoolManager.Instance.AddToPool(PoolInformation.New(origin, true, 1));
-			}
-
 			SpawnedPlayer = ObjectPoolManager.Inst.Spawn<Player>(playerKey, Vector3.zero);
 		}
-		
-		public void SetPlayerPosition(Vector2 position) {
+
+		private void SetPlayerPosition(Vector2 position) {
 			if (!SpawnedPlayer) {
 				return;
 			}
 			SpawnedPlayer.Tr.position = position;
 		}
 
-		public void ActivePlayer() {
+		private void ActivePlayer() {
 			if (!SpawnedPlayer)
 				return;
 			SpawnedPlayer.gameObject.SetActive(true);
@@ -81,5 +81,47 @@ namespace CoffeeCat.FrameWork {
 		public bool IsPlayerExistAndAlive() => SpawnedPlayer && !SpawnedPlayer.IsDead();
 
 		public bool IsPlayerNotExistOrDeath() => !SpawnedPlayer || SpawnedPlayer.IsDead();
+
+		private void OnInteractAction() {
+			if (!Interactable) {
+				return;
+			}
+			
+			var type = Interactable.InteractType;
+			switch (type) {
+				case InteractableType.None:
+					break;
+				case InteractableType.Floor:
+					CatLog.Log("Floor");
+					StageManager.Inst.RequestGenerateNextFloor();
+					ReleaseInteractable();
+					break;
+				case InteractableType.Shop:
+					CatLog.Log("Shop");
+					break;
+				case InteractableType.Reward:
+					CatLog.Log("Reward");
+					break;
+				case InteractableType.Boss:
+					CatLog.Log("Boss");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		}
+        
+		public void SetInteractable(InteractableObject interactable) {
+			Interactable = interactable;
+			if (InputManager.IsExist) {
+				InputManager.Inst.EnableInteractable(interactable.InteractType);
+			}
+		}
+		
+		public void ReleaseInteractable() {
+			Interactable = null;
+			if (InputManager.IsExist) {
+				InputManager.Inst.DisableInteractable();
+			}
+		}
 	}
 }

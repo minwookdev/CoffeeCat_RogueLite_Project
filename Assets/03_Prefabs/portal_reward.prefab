@@ -46,9 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89651b0e8c7f90741bc5aa4850d70d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isShowInteractableSign: 1
+  <InteractType>k__BackingField: 3
   ps: {fileID: 2263425227441167519}
-  interactableSignTr: {fileID: 0}
 --- !u!61 &1114683268955235076
 BoxCollider2D:
   m_ObjectHideFlags: 0

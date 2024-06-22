@@ -10,6 +10,7 @@ namespace CoffeeCat.Utils.Defines
         public const float PLAYER_AREA_SKILL_VECTOR_X = 10;
         public const float PLAYER_AREA_SKILL_VECTOR_Y = 7;
         public const string PLAYER_ENHANCE_DATA_KEY = "PlayerEnhanceData";
+        public const string TAG_UICAM = "UICamera";
         
         // Encrypt/Decrypt
         public static readonly string ENC_KEY = "m71a12x28";
@@ -41,6 +42,7 @@ namespace CoffeeCat.Utils.Defines
         Skeleton_Mage_Projectile_Skill,
         GroupSpawnPositions,
         InteractableSign,
+        InputCanvas,
     }
 
     public enum PlayerAddressablesKey
@@ -77,7 +79,8 @@ namespace CoffeeCat.Utils.Defines
         None,
         Floor,
         Shop,
-        Reward
+        Reward,
+        Boss,
     }
     
     #endregion

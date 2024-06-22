@@ -136,12 +136,12 @@ namespace CoffeeCat.RogueLite {
 			
 			// Preload Monsters
 			for (int i = 0; i < spawnDataList.Count; i++) {
-				SafeLoader.Regist(spawnDataList[i].Key.ToStringEx());
+				SafeLoader.Regist(spawnDataList[i].Key.ToKey());
 			}
 			// Preload Group Monsters Positions
 			if (entity.GroupSpawnPointKey == AddressablesKey.NONE)
 				return;
-			groupSpawnPositionsKey = entity.GroupSpawnPointKey.ToStringEx();
+			groupSpawnPositionsKey = entity.GroupSpawnPointKey.ToKey();
 			SafeLoader.Regist(groupSpawnPositionsKey);
 		}
 
@@ -304,7 +304,7 @@ namespace CoffeeCat.RogueLite {
 					randomPoint -= spawnDataList[i].Weight;
 				}
 			}
-			return spawnDataList[index].Key.ToStringEx();
+			return spawnDataList[index].Key.ToKey();
 		}
 
 		private Vector2 GetRandomPos() {

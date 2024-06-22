@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 using CoffeeCat.UI;
+using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat.FrameWork {
     public class UIPresenter : SceneSingleton<UIPresenter> {
@@ -10,18 +11,9 @@ namespace CoffeeCat.FrameWork {
         [SerializeField] private Minimap minimap = null;
         [SerializeField] private Image hpSliderImage = null;
         [SerializeField] private Image expSliderImage = null;
-        [SerializeField] private Button btnNextFloor = null;
         [SerializeField] private Button btnMap = null;
 
-        [Title("Mobile Input")]
-        [SerializeField] private MobileJoyStick joyStick = null;
-
         private void Start() {
-            btnNextFloor.onClick.AddListener(() => {
-                StageManager.Inst.RequestGenerateNextFloor();
-                DisableNextFloorButton();
-            });
-            
             btnMap.onClick.AddListener(minimap.Open);
             
             StageManager.Inst.AddListenerIncreasePlayerHP(UpdatePlayerHPSlider);
@@ -43,17 +35,5 @@ namespace CoffeeCat.FrameWork {
         private void UpdatePlayerExpSlider(float current, float max) {
             expSliderImage.fillAmount = current / max;
         }
-
-        public void EnableNextFloorButton() {
-            btnNextFloor.gameObject.SetActive(true);
-        }
-
-        public void DisableNextFloorButton() {
-            btnNextFloor.gameObject.SetActive(false);
-        }
-
-        public void HideJoyStick() => joyStick.gameObject.SetActive(false);
-
-        public void ShowJoyStick() => joyStick.gameObject.SetActive(true);
     }
 }
