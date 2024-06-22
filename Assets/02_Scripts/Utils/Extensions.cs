@@ -18,7 +18,7 @@ namespace CoffeeCat
             };
         }
 
-        public static string ToStringEx(this AddressablesKey key)
+        public static string ToKey(this AddressablesKey key)
         {
             return key switch
             {
@@ -33,11 +33,12 @@ namespace CoffeeCat
                 AddressablesKey.Monster_Skeleton_Mage            => "Skeleton_Mage",
                 AddressablesKey.GroupSpawnPositions              => "GroupSpawnPositions",
                 AddressablesKey.InteractableSign                 => "InteractableIcon",
+                AddressablesKey.InputCanvas                      => "Canvas_Input",
                 _                                                => throw new ArgumentOutOfRangeException(nameof(key), key, null)
             };
         }
 
-        public static string ToStringEx(this PlayerAddressablesKey key)
+        public static string ToKey(this PlayerAddressablesKey key)
         {
             return key switch
             {

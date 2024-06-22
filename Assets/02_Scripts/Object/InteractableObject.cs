@@ -9,49 +9,57 @@ using UniRx.Triggers;
 
 namespace CoffeeCat {
     public class InteractableObject : MonoBehaviour {
-        [SerializeField] protected bool isShowInteractableSign = true;
-        [SerializeField] private ParticleSystem ps = null;
-        [SerializeField, ReadOnly] private Transform interactableSignTr = null;
+        [field: SerializeField] public InteractableType InteractType { get; protected set; } = InteractableType.None;
         [ShowInInspector, ReadOnly] public bool IsEnteredPlayer { get; private set; } = false;
-        private Transform playerTr = null;
-        private readonly Vector3 interactableSignOffset = new(0, 1.25f, 0);
+        [SerializeField] private ParticleSystem ps = null;
 
         protected void Start()
         {
-            Collider2D lastCollider = null;
-            
-            this.OnTriggerStay2DAsObservable()
-                .Skip(0)
+            this.OnTriggerEnter2DAsObservable()
                 .TakeUntilDestroy(this)
                 .Where(other => other.gameObject.layer == Defines.GetPlayerLayer())
-                .Subscribe(playerCollider =>
-                {
-                    if (IsEnteredPlayer) {
+                .Subscribe(playerCollider => {
+                    // Ignore Not Triggered Collider
+                    if (!playerCollider.isTrigger)
                         return;
-                    }
-
-                    lastCollider = playerCollider;
-                    if (isShowInteractableSign) {
-                        SpawnInteractableSign(playerCollider.gameObject);
-                    }
-                    OnPlayerEnter();
                     
+                    OnPlayerEnter();
                     IsEnteredPlayer = true;
+                    
+                    RogueLiteManager.Inst.SetInteractable(this);
+                })
+                .AddTo(this);
+            
+            this.OnTriggerStay2DAsObservable()
+                .TakeUntilDestroy(this)
+                .Where(other => other.gameObject.layer == Defines.GetPlayerLayer())
+                .Subscribe(playerCollider => {
+                    // Ignore Not Triggered Collider
+                    if (!playerCollider.isTrigger)
+                        return;
+                    
+                    var currentInteractable = RogueLiteManager.Inst.Interactable;
+                    if (currentInteractable || currentInteractable == this) 
+                        return;
+                    RogueLiteManager.Inst.SetInteractable(this);
                 })
                 .AddTo(this);
 
             this.OnTriggerExit2DAsObservable()
-                .Skip(0)
                 .TakeUntilDestroy(this)
                 .Where(other => other.gameObject.layer == Defines.GetPlayerLayer())
-                .Subscribe(playerCollider =>
-                {
-                    if (!IsEnteredPlayer || lastCollider != playerCollider)
+                .Subscribe(playerCollider => {
+                    // Ignore Not Triggered Collider
+                    if (!playerCollider.isTrigger)
                         return;
-                    IsEnteredPlayer = false;
-                    lastCollider = null;
+                    
                     OnPlayerExit();
-                    DisposeInteractableSign();
+                    IsEnteredPlayer = false;
+                    
+                    var currentInteractable = RogueLiteManager.Inst.Interactable;
+                    if (currentInteractable != this) 
+                        return;
+                    RogueLiteManager.Inst.ReleaseInteractable();
                 })
                 .AddTo(this);
         }
@@ -59,13 +67,11 @@ namespace CoffeeCat {
         private void Update() {
             if (!IsEnteredPlayer) 
                 return;
-            UpdateInteractableSign();
             OnPlayerStay();
         }
 
         private void OnDisable() {
             IsEnteredPlayer = false;
-            DisposeInteractableSign();
         }
 
         public virtual void PlayParticle() {
@@ -86,38 +92,6 @@ namespace CoffeeCat {
 
         protected virtual void OnPlayerExit() {
             
-        }
-        
-        private Vector3 GetInteractableSignPosition(Vector3 playerPos) {
-            return playerPos + interactableSignOffset;
-        }
-
-        private void SpawnInteractableSign(GameObject collisionGameObject) {
-            if (!playerTr) {
-                playerTr = collisionGameObject.GetComponent<Transform>();
-            }
-
-            if (interactableSignTr) {
-                return;
-            }
-            var signPosition = GetInteractableSignPosition(playerTr.position);
-            interactableSignTr = ObjectPoolManager.Inst.Spawn<Transform>(AddressablesKey.InteractableSign.ToStringEx(), signPosition);
-        }
-
-        private void UpdateInteractableSign() {
-            if (!interactableSignTr) 
-                return;
-            var signPosition = GetInteractableSignPosition(playerTr.position);
-            interactableSignTr.position = signPosition;
-        }
-
-        protected void DisposeInteractableSign() {
-            if (!interactableSignTr) {
-                return;
-            }
-
-            ObjectPoolManager.Inst.Despawn(interactableSignTr.gameObject);
-            interactableSignTr = null;
         }
     }
 }

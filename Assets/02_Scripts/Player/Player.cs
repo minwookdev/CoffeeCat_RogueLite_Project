@@ -91,7 +91,7 @@ namespace CoffeeCat
 
         private void SetStat()
         {
-            stat = DataManager.Inst.PlayerStats.DataDictionary[playerName.ToStringEx()];
+            stat = DataManager.Inst.PlayerStats.DataDictionary[playerName.ToKey()];
             stat.SetCurrentHp();
             
             StageManager.Inst.InvokeIncreasePlayerHP(stat.CurrentHp, stat.MaxHp);

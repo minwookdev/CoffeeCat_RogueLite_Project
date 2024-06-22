@@ -57,8 +57,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ab0caf6c3507bb8419d30c7bde5965f9
-    m_Address: InteractableIcon
+  - m_GUID: 52e6b71ffcde61a4998cab1a57fc62c6
+    m_Address: RoomPanel
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d43511da498b8f14b9e603f392213bc2
+    m_Address: MinimapBranch
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7345a45ade2ff94438f6d6f45f19bdca
+    m_Address: Canvas_Input
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
