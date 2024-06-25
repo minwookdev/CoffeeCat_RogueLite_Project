@@ -44,6 +44,11 @@ namespace CoffeeCat.UI
                 subStatIcon_1.gameObject.SetActive(true);
         }
 
+        public void ClearBtnSlotEvent()
+        {
+            btnSlot.onClick.RemoveAllListeners();
+        }
+
         public void AddListenerBtnSlot(PlayerSkillSelectData data)
         {
             var player = RogueLiteManager.Inst.SpawnedPlayer;
@@ -56,7 +61,7 @@ namespace CoffeeCat.UI
                 }
                 else
                 {
-                    CatLog.WLog("Slot is not selectable");
+                    UIPresenter.Inst.OpenNotSelectablePanel();
                 }
             });
         }

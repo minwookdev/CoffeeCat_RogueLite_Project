@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace CoffeeCat.UI
 {
     public class PlayerSkillsPanel : MonoBehaviour
     {
         [SerializeField] private RectTransform skillSetPanelTr = null;
+        [SerializeField] private GameObject notSelectablePanel = null;
+        [SerializeField] private Button notSlectableBtn = null;
+        [SerializeField] private Button btnClose = null;
         private List<SkillSetPanel> skillSetPanels = new List<SkillSetPanel>();
         private const string skillSetAddressablekey = "SkillSet";
 
@@ -24,6 +28,8 @@ namespace CoffeeCat.UI
                 }
             });
             
+            btnClose.onClick.AddListener(Close);
+            notSlectableBtn.onClick.AddListener(SelectablePanelClose);
             StageManager.Inst.AddEventToSkillSelectCompleted(() => gameObject.SetActive(false));
         }
 
@@ -35,6 +41,21 @@ namespace CoffeeCat.UI
                 skillSetObj.Initialize(skillSets[i], i);
                 skillSetPanels.Add(skillSetObj);
             }
+        }
+
+        private void Close()
+        {
+            gameObject.SetActive(false);
+        }
+        
+        public void OpenNotSelectablePanel()
+        {
+            notSelectablePanel.SetActive(true);
+        }
+
+        private void SelectablePanelClose()
+        {
+            notSelectablePanel.SetActive(false);
         }
 
         public void Open()
@@ -52,6 +73,7 @@ namespace CoffeeCat.UI
             foreach (var panel in skillSetPanels)
             {
                 panel.EnableButton();
+                panel.ClearBtnSlotEvent();
                 panel.AddListenerBtnSlot(data);
             }
         }

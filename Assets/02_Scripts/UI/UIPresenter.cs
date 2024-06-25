@@ -45,6 +45,11 @@ namespace CoffeeCat.FrameWork {
             playerSkillsPanel.OpenForSlotSelect(data);
         }
         
+        public void OpenNotSelectablePanel()
+        {
+            playerSkillsPanel.OpenNotSelectablePanel();
+        }
+        
         public void OpenPlayerSkillsPanel()
         {
             playerSkillsPanel.Open();

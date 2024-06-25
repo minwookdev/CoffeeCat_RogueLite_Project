@@ -17,16 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: f829f74514bbe4946af1a669bfbca50b
   m_SerializeEntries:
-  - m_GUID: 52e6b71ffcde61a4998cab1a57fc62c6
-    m_Address: RoomPanel
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d43511da498b8f14b9e603f392213bc2
-    m_Address: MinimapBranch
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bd681d492aacdc84eb781ed2a1e3cbfb
     m_Address: SkillSet
     m_ReadOnly: 0
