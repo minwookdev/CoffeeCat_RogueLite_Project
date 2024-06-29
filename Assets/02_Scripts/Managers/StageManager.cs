@@ -65,7 +65,7 @@ namespace CoffeeCat
                 return;
             if (queue.IsGrantSkillOnStart) {
                 var player = RogueLiteManager.Inst.SpawnedPlayer;
-                // player.EnableSkillSelect();
+                player.EnableSkillSelect();
             }
             
             // Debug
