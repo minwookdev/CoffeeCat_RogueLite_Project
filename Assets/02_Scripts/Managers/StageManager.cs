@@ -66,6 +66,9 @@ namespace CoffeeCat
                 var player = RogueLiteManager.Inst.SpawnedPlayer;
                 // player.EnableSkillSelect();
             }
+            
+            // Debug
+            InputManager.BindEvasionInput(RequestGenerateNextFloor);
         }
 
         private void Update()

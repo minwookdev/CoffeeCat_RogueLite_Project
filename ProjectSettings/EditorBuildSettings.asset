@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/01_Scenes/DungeonScene.unity
     guid: 8b48a84a707075e4687506026e8ea092
+  - enabled: 1
+    path: Assets/01_Scenes/BossScene_Mine.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/01_Scenes/TownScene.unity
+    guid: 039f95137c3253b45a606ee8f701f6d4
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: a57f73b1e72eda741a98e6041d7337f7, type: 2}

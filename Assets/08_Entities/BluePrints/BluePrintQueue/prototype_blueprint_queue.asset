@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54ca0db03cf50844c96c677b9f238e07, type: 3}
-  m_Name: BluePrint_Queue_Mine
+  m_Name: prototype_blueprint_queue
   m_EditorClassIdentifier: 
   <NormalMapBluePrints>k__BackingField:
   - {fileID: 11400000, guid: 11514046847cb46438bb39f8f656cf44, type: 2}
   - {fileID: 11400000, guid: 11514046847cb46438bb39f8f656cf44, type: 2}
   - {fileID: 11400000, guid: 11514046847cb46438bb39f8f656cf44, type: 2}
   <HiddenMapBluePrints>k__BackingField: []
-  <EventMapSceneKey>k__BackingField: 
-  <BossMapSceneKey>k__BackingField: 
+  <EventMapSceneKey>k__BackingField: 0
+  <BossMapSceneKey>k__BackingField: 4
   <IsGrantSkillOnStart>k__BackingField: 1

@@ -47,5 +47,20 @@ namespace CoffeeCat
                 _                                     => throw new ArgumentOutOfRangeException(nameof(key), key, null)
             };
         }
+        
+        public static string ToKey(this SceneName key)
+        {
+            return key switch
+            {
+                SceneName.DungeonScene   => "DungeonScene",
+                SceneName.TownScene      => "TownScene",
+                SceneName.LoadingScene   => "LoadingScene",
+                SceneName.BossScene_T1_E => "BossScene_Mine",
+                SceneName.BossScene_T1_N => "BossScene_Mine",
+                SceneName.BossScene_T1_H => "BossScene_Mine",
+                SceneName.NONE           => throw new ArgumentOutOfRangeException(nameof(key), key, null),
+                _                        => throw new ArgumentOutOfRangeException(nameof(key), key, null)
+            };
+        }
     }
 }

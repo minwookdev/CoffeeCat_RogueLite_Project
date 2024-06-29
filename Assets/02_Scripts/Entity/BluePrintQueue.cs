@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using CoffeeCat.Utils.Defines;
 
 namespace RandomDungeonWithBluePrint
 {
@@ -10,8 +10,8 @@ namespace RandomDungeonWithBluePrint
         [Title("BluePrint Queue Options", TitleAlignment = TitleAlignments.Centered)]
         [field: SerializeField] public FieldBluePrint[] NormalMapBluePrints { get; private set; } = null;
         [field: SerializeField] public FieldBluePrint[] HiddenMapBluePrints { get; private set; } = null;
-        [field: SerializeField] public string EventMapSceneKey { get; private set; } = "";
-        [field: SerializeField] public string BossMapSceneKey { get; private set; } = "";
+        [field: SerializeField] public SceneName EventMapSceneKey { get; private set; } = SceneName.NONE;
+        [field: SerializeField] public SceneName BossMapSceneKey { get; private set; } = SceneName.NONE;
         [field: SerializeField] public bool IsGrantSkillOnStart { get; private set; } = true;
     }
 }

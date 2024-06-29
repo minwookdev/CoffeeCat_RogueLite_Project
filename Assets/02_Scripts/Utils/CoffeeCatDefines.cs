@@ -27,6 +27,10 @@ namespace CoffeeCat.Utils.Defines
         NONE,
         LoadingScene,
         DungeonScene,
+        TownScene,
+        BossScene_T1_E,
+        BossScene_T1_N,
+        BossScene_T1_H,
     }
 
     public enum AddressablesKey

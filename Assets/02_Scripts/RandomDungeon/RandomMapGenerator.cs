@@ -6,6 +6,7 @@ using TMPro;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
+using CoffeeCat.Utils.Defines;
 using UniRx;
 using UnityRandom = UnityEngine.Random;
 using PathFindGrid = CoffeeCat.Pathfinding2D.Grid;
@@ -54,8 +55,10 @@ namespace RandomDungeonWithBluePrint
 
         public void GenerateNextFloor(int currentFloor) {
             var normalMapBluePrints = bluePrintQueue.NormalMapBluePrints;
+            // Reached The Maximum Floor: Load Boss Map Scene
             if (normalMapBluePrints.Length <= currentFloor) {
-                CatLog.Log("Reached The Maximum Floor.");
+                CatLog.Log("Load Boss Map Scene");
+                SceneManager.Inst.LoadSceneAdditiveAsync(bluePrintQueue.BossMapSceneKey);
                 return;
             }
             
