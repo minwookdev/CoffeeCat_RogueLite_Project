@@ -28,6 +28,14 @@ namespace CoffeeCat
             IsNotExistRoom(fromSection, toSection);
         }
 
+        public void ClearBranch()
+        {
+            fromIndex = 0;
+            toIndex = 0;
+            enterdFrom = false;
+            enterdTo = false;
+        }
+
         private void IsNotExistRoom(Section fromSection, Section toSection)
         {
             if (!fromSection.ExistRoom)enterdFrom = true;

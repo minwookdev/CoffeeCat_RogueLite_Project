@@ -3,6 +3,7 @@ using CoffeeCat.FrameWork;
 using CoffeeCat.RogueLite;
 using CoffeeCat.Utils;
 using RandomDungeonWithBluePrint;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ namespace CoffeeCat
     public class Minimap : MonoBehaviour
     {
         private readonly Dictionary<int, Minimap_Room> minimapRooms = new Dictionary<int, Minimap_Room>();
-        private List<Minimap_Branch> minimapBranches = new List<Minimap_Branch>();
+        [ShowInInspector] private List<Minimap_Branch> minimapBranches = new List<Minimap_Branch>();
         private const float minimapRatio = 10f;
         private const string roomPanelKey = "RoomPanel";
         private const string branchKey = "MinimapBranch";
@@ -50,8 +51,7 @@ namespace CoffeeCat
         
         private void MinimapGenerate(Field field)
         {
-            minimapRooms.Clear();
-            minimapBranches.Clear();
+            ClearMinimap();
             panelTr.sizeDelta = new Vector2(field.Size.x, field.Size.y) * minimapRatio;
             
             foreach (var room in field.Rooms)
@@ -69,15 +69,34 @@ namespace CoffeeCat
                 var fromSection = field.GetSection(connection.From);
                 var toSection = field.GetSection(connection.To);
                 
+                minimapBranches.Add(minimapBranch);
                 minimapBranch.SetBranch(fromSection, toSection, minimapRatio);
                 minimapBranch.gameObject.SetActive(false);
-                minimapBranches.Add(minimapBranch);
             }
 
             ActivePlayerSpawnRoomPanel();
-            StageManager.Inst.AddListenerRoomEnteringEvent(EnterdRoom);
-            StageManager.Inst.AddListenerRoomLeftEvent(LeftRoom);
-            StageManager.Inst.AddListenerClearedRoomEvent(ClearedRoom);
+            StageManager.Inst.OnRoomEntering.AddListener(EnterdRoom);
+            StageManager.Inst.OnRoomLeft.AddListener(LeftRoom);
+            StageManager.Inst.OnClearedRoom.AddListener(ClearedRoom);
+        }
+
+        private void ClearMinimap()
+        {
+            StageManager.Inst.OnRoomEntering.RemoveListener(EnterdRoom);
+            StageManager.Inst.OnRoomLeft.RemoveListener(LeftRoom);
+            StageManager.Inst.OnClearedRoom.RemoveListener(ClearedRoom);
+            
+            foreach (var room in minimapRooms.Values)
+                ObjectPoolManager.Inst.Despawn(room.gameObject);
+
+            foreach (var branch in minimapBranches)
+            {
+                branch.ClearBranch();
+                ObjectPoolManager.Inst.Despawn(branch.gameObject);
+            }
+            
+            minimapRooms.Clear();
+            minimapBranches.Clear();
         }
 
         private void ActivePlayerSpawnRoomPanel()

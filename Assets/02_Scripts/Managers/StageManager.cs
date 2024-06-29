@@ -40,10 +40,10 @@ namespace CoffeeCat
         [Title("Events Map", TitleAlignment = TitleAlignments.Centered)]
         [TabGroup("Events Map"), SerializeField] private UnityEvent<Field> onMapGenerateCompleted = new();
         [TabGroup("Events Map"), SerializeField] private UnityEvent onMapDisposeBefore = new();
-        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomEntering = new();
-        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomLeft = new();
+        [TabGroup("Events Map"), SerializeField] public UnityEvent<RoomDataStruct> OnRoomEntering = new();
+        [TabGroup("Events Map"), SerializeField] public UnityEvent<RoomDataStruct> OnRoomLeft = new();
         [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomFirstEntering = new();
-        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnClearedRoom = null;
+        [TabGroup("Events Map"), SerializeField] public UnityEvent<RoomDataStruct> OnClearedRoom = null;
         
         [Title("Events Player", TitleAlignment = TitleAlignments.Centered)]
         [TabGroup("Events Player"), SerializeField] public UnityEvent OnPlayerKilled = new();
