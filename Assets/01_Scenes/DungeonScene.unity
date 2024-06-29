@@ -2287,6 +2287,12 @@ MonoBehaviour:
     AddressablesName: 
     InitSpawnCount: 5
     CustomRootParent: {fileID: 0}
+  - PoolObjectLoadType: 3
+    PoolObject: {fileID: 0}
+    ResourcesPath: 
+    AddressablesName: portal_town
+    InitSpawnCount: 1
+    CustomRootParent: {fileID: 0}
   AudioClipDictionary:
     keyData: []
     valueData: []

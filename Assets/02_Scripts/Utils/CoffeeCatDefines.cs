@@ -85,6 +85,7 @@ namespace CoffeeCat.Utils.Defines
         Shop,
         Reward,
         Boss,
+        Town,
     }
     
     #endregion

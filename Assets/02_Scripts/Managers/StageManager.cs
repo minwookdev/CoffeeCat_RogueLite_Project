@@ -6,6 +6,7 @@ using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.RogueLite;
 using CoffeeCat.Utils;
+using CoffeeCat.Utils.Defines;
 using RandomDungeonWithBluePrint;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -184,6 +185,13 @@ namespace CoffeeCat
             
             // Increase Current Floor After Generatr Next Map Successed 
             CurrentFloor = nextFloor;
+        }
+
+        public void RequestToTownScene() {
+            InvokeMapDisposeBefore();
+            mapGen.ClearMap();
+            
+            SceneManager.Inst.LoadSceneSingle(SceneName.TownScene, true, false);
         }
         
         #region Events

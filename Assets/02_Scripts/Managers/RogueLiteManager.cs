@@ -91,19 +91,21 @@ namespace CoffeeCat.FrameWork {
 			switch (type) {
 				case InteractableType.None:
 					break;
+				case InteractableType.Boss:
 				case InteractableType.Floor:
-					CatLog.Log("Floor");
 					StageManager.Inst.RequestGenerateNextFloor();
 					ReleaseInteractable();
+					break;
+				case InteractableType.Town:
+					StageManager.Inst.RequestToTownScene();
+					ReleaseInteractable();
+					CatLog.Log("Town");
 					break;
 				case InteractableType.Shop:
 					CatLog.Log("Shop");
 					break;
 				case InteractableType.Reward:
 					CatLog.Log("Reward");
-					break;
-				case InteractableType.Boss:
-					CatLog.Log("Boss");
 					break;
 				default:
 					throw new ArgumentOutOfRangeException();

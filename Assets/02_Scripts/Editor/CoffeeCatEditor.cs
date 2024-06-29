@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using CoffeeCat.Utils;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,12 +15,12 @@ namespace CoffeeCat.Editor {
         public static void Capture1XScreenShot() {
             CaptureGameView(1);
         }
-        
+
         [MenuItem("CoffeeCat/Captrue GameView/2X")]
         public static void Capture2XScreenShot() {
             CaptureGameView(2);
         }
-        
+
         [MenuItem("CoffeeCat/Captrue GameView/3X")]
         public static void Capture3XScreenShot() {
             CaptureGameView(3);
@@ -34,24 +36,24 @@ namespace CoffeeCat.Editor {
             ScreenCapture.CaptureScreenshot((Application.dataPath + "/" + imgName), size);
             AssetDatabase.Refresh(ImportAssetOptions.ForceUpdate);
         }
-        
+
         [MenuItem("CONTEXT/Component/Move To Top", priority = 2)]
-        private static void MoveToTop(MenuCommand menuCommand)
-        {
+        private static void MoveToTop(MenuCommand menuCommand) {
             Component component = menuCommand.context as Component;
             if (component == null) return;
             // Move the component to the top of the list
-            for (int i = component.gameObject.GetComponents<Component>().Length - 1; i >= 0; i--)
-            {
+            for (int i = component.gameObject.GetComponents<Component>().Length - 1; i >= 0; i--) {
                 UnityEditorInternal.ComponentUtility.MoveComponentUp(component);
             }
         }
 
         [MenuItem("Window/Toggle Inspector Lock %q")] // %q is Meaning 'Ctrl + Q'
-        private static void ToggleLock()
-        {
+        private static void ToggleLock() {
             ActiveEditorTracker.sharedTracker.isLocked = !ActiveEditorTracker.sharedTracker.isLocked;
             ActiveEditorTracker.sharedTracker.ForceRebuild();
+            
+            // Ensure the Inspector is updated to reflect the lock state change
+            EditorWindow.focusedWindow.Repaint();
         }
     }
 }

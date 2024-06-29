@@ -50,7 +50,7 @@ namespace RandomDungeonWithBluePrint
             }
         }
 
-        private void AllTilemapClear()
+        public void AllTilemapClear()
         {
             for (int i = 0; i < transform.childCount; i++)
             {

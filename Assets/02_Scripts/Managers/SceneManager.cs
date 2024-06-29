@@ -6,49 +6,23 @@ using UnitySceneManager = UnityEngine.SceneManagement.SceneManager;
 using Sirenix.OdinInspector;
 using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
+using Cysharp.Threading.Tasks;
 
 namespace CoffeeCat.FrameWork {
     public class SceneManager : DynamicSingleton<SceneManager> {
-        public const float SCENELOAD_CORRECTION_MINTIME = 3f;
-
-        [Title("SCENE MANAGER FIELDS")]
+        [Title("SceneManager")]
         [ShowInInspector, ReadOnly] public float SceneLoadAsyncProgress { get; private set; } = 0f; // 0f ~ 1f
         [ShowInInspector, ReadOnly] public SceneName CurrentScene { get; private set; } = SceneName.NONE;
         [ShowInInspector, ReadOnly] public SceneName NextScene { get; private set; } = SceneName.NONE;
         [ShowInInspector, ReadOnly] public bool IsNextSceneLoadCompleted { get; private set; } = false;
-        private AsyncOperation sceneLoadAsyncOperation = null;
+        private AsyncOperation asyncOperation = null;
 
         public delegate void OnSceneChangeEvent(SceneName sceneName);
         public event OnSceneChangeEvent OnSceneChangeBeforeEvent = delegate { };
         public event OnSceneChangeEvent OnSceneChangeAfterEvent = delegate { };
 
-        //
-        // !씬 이벤트 관리 방식 변경
-        //
-        //private void ActiveSceneChanger() {
-        //    //CatLog.Log($"First Scene Name: {UnitySceneManager.GetSceneAt(0).name}");
-        //    //CatLog.Log($"Seconds Scene Name: {UnitySceneManager.GetSceneAt(1).name}");
-        //    //UnitySceneManager.SetActiveScene(UnitySceneManager.GetSceneAt(0));
-        //}
-        //
-        //private void SceneOrderChanger() {
-        //    
-        //}
-        //
-        //private void MergeScene() {
-        //    UnitySceneManager.MergeScenes();
-        //}
-        //
-        //private void AddListnerToSceneLoadedEvent() {
-        //    UnitySceneManager.sceneLoaded += SceneChangeCallback;
-        //    
-        //    void SceneChangeCallback(Scene scene, LoadSceneMode loadSceneMode) {
-        //        if (scene.name.Equals(Tags.Scene.SampleScene.ToString())) {
-        //
-        //        }
-        //    }
-        //}
-
+        private const float MIN_LOAD_SECONDS = 3f;
+        
         protected override void Initialize() {
             // Get Current Scene
             string currentSceneName = UnitySceneManager.GetActiveScene().name;
@@ -61,49 +35,36 @@ namespace CoffeeCat.FrameWork {
             }
         }
 
-        #region LOAD SCENE SYNC (UNITY DEFAULT)
-
-        public void LoadSceneUnityDefault(SceneName loadTargetScene) {
-            UnitySceneManager.LoadScene(loadTargetScene.ToString(), LoadSceneMode.Single);
-        }
-
-        public void LoadSceneAdditiveUnityDefault(SceneName loadTargetScene) {
-            UnitySceneManager.LoadScene(loadTargetScene.ToString(), LoadSceneMode.Additive);
-        }
-
-        #endregion
-
         #region LOAD SCENE ASYNC
 
-        public void LoadSceneAsyncAfterLoadingScene(SceneName loadTargetScene) {
-            // Load Loading Scene and Immidiate Active
-            StartCoroutine(LoadSceneAsync(SceneName.LoadingScene, LoadSceneMode.Single, () => {
-                ActiveNextScene(true, false, () => {
-                    LoadingSceneBase.Inst.LoadNextScene(loadTargetScene);
-                });
-            }));
+        public void LoadSceneAdditive(SceneName key, Action onCompleted = null) {
+            LoadSceneAsyncUniTask(key, LoadSceneMode.Additive, true, false, false, false, onCompleted).Forget();
         }
 
-        public void LoadSceneAsync(SceneName loadTargetSceneType, Action onNextSceneLoadCompletedAction = null) {
-            StartCoroutine(LoadSceneSingleAsyncMinTimeCorrection(loadTargetSceneType, onNextSceneLoadCompletedAction));
+        public void LoadSceneSingle(SceneName key, bool activeDirectly, bool useFakeTime, Action onCompleted = null) {
+            LoadSceneAsyncUniTask(key, LoadSceneMode.Single, activeDirectly, useFakeTime, true, true, onCompleted).Forget();
         }
 
-        public void LoadSceneAdditiveAsync(SceneName loadTargetSceneType, Action onNextSceneLoadCompletedAction = null) {
-            StartCoroutine(LoadSceneAsync(loadTargetSceneType, LoadSceneMode.Additive, onNextSceneLoadCompletedAction));
+        public void LoadSceneAsync(SceneName loadTargetSceneType, Action onLoadCompleted = null) {
+            StartCoroutine(LoadSceneSingleAsyncMinTimeCorrection(loadTargetSceneType, onLoadCompleted));
+        }
+
+        public void LoadSceneAdditiveAsync(SceneName loadTargetSceneType, Action onLoadCompleted = null) {
+            StartCoroutine(LoadSceneAsync(loadTargetSceneType, LoadSceneMode.Additive, onLoadCompleted));
         }
 
         private IEnumerator LoadSceneAsync(SceneName loadTargetSceneType, LoadSceneMode loadSceneMode, Action onNextSceneLoadCompleted = null) {
             NextScene = loadTargetSceneType;
-            sceneLoadAsyncOperation = UnitySceneManager.LoadSceneAsync(NextScene.ToString(), loadSceneMode);
-            sceneLoadAsyncOperation.allowSceneActivation = false;
+            asyncOperation = UnitySceneManager.LoadSceneAsync(NextScene.ToKey(), loadSceneMode);
+            asyncOperation.allowSceneActivation = false;
 
-            while (sceneLoadAsyncOperation.isDone == false) { 
+            while (asyncOperation.isDone == false) { 
                 // (allowSceneActivation이 false인 동안에는 progress가 0.9f 까지만 증가)
-                if (sceneLoadAsyncOperation.progress >= 0.9f) {
+                if (asyncOperation.progress >= 0.9f) {
                     break;
                 }
                 
-                SceneLoadAsyncProgress = sceneLoadAsyncOperation.progress;
+                SceneLoadAsyncProgress = asyncOperation.progress;
                 yield return null;
             }
 
@@ -113,22 +74,22 @@ namespace CoffeeCat.FrameWork {
         }
 
         private IEnumerator LoadSceneSingleAsyncMinTimeCorrection(SceneName loadTargetSceneType, Action onNextSceneLoadCompleted = null,
-            float minLoadDuration = SceneManager.SCENELOAD_CORRECTION_MINTIME) {
+            float minLoadDuration = SceneManager.MIN_LOAD_SECONDS) {
             NextScene = loadTargetSceneType;
-            sceneLoadAsyncOperation = UnitySceneManager.LoadSceneAsync(NextScene.ToString(), LoadSceneMode.Single);
-            sceneLoadAsyncOperation.allowSceneActivation = false;
+            asyncOperation = UnitySceneManager.LoadSceneAsync(NextScene.ToKey(), LoadSceneMode.Single);
+            asyncOperation.allowSceneActivation = false;
 
             // Fake Loading Variables
             float fakeLoadTime = 0f;
             float fakeLoadRatio = 0f;
             SceneLoadAsyncProgress = 0f;
 
-            while (sceneLoadAsyncOperation.isDone == false) {
+            while (asyncOperation.isDone == false) {
                 // Calculate Fake Loading Time
                 fakeLoadTime += Time.deltaTime;
                 fakeLoadRatio = fakeLoadTime / minLoadDuration;
 
-                SceneLoadAsyncProgress = Mathf.Min(sceneLoadAsyncOperation.progress + 0.1f, fakeLoadRatio);
+                SceneLoadAsyncProgress = Mathf.Min(asyncOperation.progress + 0.1f, fakeLoadRatio);
                 if (SceneLoadAsyncProgress >= 1f) {
                     break;
                 }
@@ -142,39 +103,106 @@ namespace CoffeeCat.FrameWork {
             onNextSceneLoadCompleted?.Invoke();
         }
 
-        public void ActiveNextScene(bool isInvokeSceneChangeBeforeEvent = false, bool isInvokeSceneChangeAfterEvent = false, Action onNextSceneActiveCompletedAction = null) {
+        public void ActiveNextScene(bool invokeAfterEvent = false, bool isInvokeBeforeEvent = false, Action onActivated = null) {
             if (!IsNextSceneLoadCompleted) {
                 CatLog.WLog("Scene Not Load Completed !");
                 return;
             }
 
-            OnSceneChangeBeforeEvent.Invoke(CurrentScene);
+            if (isInvokeBeforeEvent) {
+                OnSceneChangeBeforeEvent.Invoke(CurrentScene);
+            }
             
-            sceneLoadAsyncOperation.completed += (asyncOperation) => {
+            asyncOperation.completed += (asyncOperation) => {
                 IsNextSceneLoadCompleted = false;
                 SceneLoadAsyncProgress = 0f;
-                sceneLoadAsyncOperation = null;
-                onNextSceneActiveCompletedAction?.Invoke();
-                OnSceneChangeAfterEvent.Invoke(NextScene);
+                this.asyncOperation = null;
+                onActivated?.Invoke();
+                if (invokeAfterEvent) {
+                    OnSceneChangeAfterEvent.Invoke(NextScene);
+                }
                 CurrentScene = NextScene;
                 NextScene = SceneName.NONE;
             };
-            sceneLoadAsyncOperation.allowSceneActivation = true;
-            sceneLoadAsyncOperation = null;
+            asyncOperation.allowSceneActivation = true;
+            asyncOperation = null;
         }
 
-        #endregion
+        private async UniTaskVoid LoadSceneAsyncUniTask(SceneName key, LoadSceneMode mode, bool activeDirectly, bool useFakeTime, bool after, bool before, Action onCompleted) {
+            // Clear Variables
+            SceneLoadAsyncProgress = 0f;
+            IsNextSceneLoadCompleted = false;
+            
+            // Request LoadAsync AsyncOperation
+            asyncOperation = UnitySceneManager.LoadSceneAsync(key.ToKey(), mode);
+            if (asyncOperation == null)
+                return;
+            
+            // Add Completed Event To AsyncOperation
+            asyncOperation.allowSceneActivation = false;
+            asyncOperation.completed += (operation) => {
+                IsNextSceneLoadCompleted = false;
+                SceneLoadAsyncProgress = 0f;
+                asyncOperation = null;
+                onCompleted?.Invoke();
+                if (after) {
+                    OnSceneChangeAfterEvent.Invoke(key);
+                }
+                CurrentScene = key;
+                NextScene = SceneName.NONE;
+            };
+            
+            if (before) {
+                OnSceneChangeBeforeEvent.Invoke(key);
+            }
+            
+            // Wait Operation progress Completed With Update Load Progress
+            if (useFakeTime) {
+                // Fake Loading Variables
+                float fakeLoadTime = 0f;
+                while (asyncOperation.isDone == false) {
+                    // Calculate Fake Loading Time
+                    fakeLoadTime += Time.deltaTime;
+                    var fakeLoadRatio = fakeLoadTime / MIN_LOAD_SECONDS;
+                    SceneLoadAsyncProgress = Mathf.Min(asyncOperation.progress + 0.1f, fakeLoadRatio);
+                    // Only increases to 0.9 while allowSceneActivation is false
+                    if (asyncOperation.progress >= 0.9f) {
+                        break;
+                    }
+                    await UniTask.Yield(PlayerLoopTiming.Update, gameObject.GetCancellationTokenOnDestroy());
+                }
+            }
+            else {
+                while (asyncOperation.isDone == false) {
+                    SceneLoadAsyncProgress = asyncOperation.progress + 0.1f;
+                    // Only increases to 0.9 while allowSceneActivation is false
+                    if (asyncOperation.progress >= 0.9f) {
+                        break;
+                    }
+                    await UniTask.Yield(PlayerLoopTiming.Update, gameObject.GetCancellationTokenOnDestroy());
+                }
+            }
+            
+            // Set Max Value Scene Load Progress Value
+            SceneLoadAsyncProgress = 1f;
+            IsNextSceneLoadCompleted = true;
 
-        #region ADDRESSABLES LOAD SCENE ASYNC
-
-        public void AddressablesLoadSceneAsync()
-        {
-            return;
+            if (activeDirectly == false)
+                return;
+            
+            // Active Directly Next Scene
+            ActiveNextScene();
         }
 
-        public void AddressablesLoadSceneAdditiveAsync()
-        {
-            return;
+        private void ActiveNextScene() {
+            if (!IsNextSceneLoadCompleted || asyncOperation == null) {
+                CatLog.Log("Active NextScene Failed !");
+                return;
+            }
+            
+            asyncOperation.allowSceneActivation = true;
+            asyncOperation = null;
+            IsNextSceneLoadCompleted = false;
         }
 
         #endregion

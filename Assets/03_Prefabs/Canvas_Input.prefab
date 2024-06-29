@@ -285,6 +285,7 @@ MonoBehaviour:
   bossSprite: {fileID: 21300000, guid: de58412a210eadd4e90573beece9edaa, type: 3}
   rewardSprite: {fileID: 21300000, guid: 9ac53ff4e8e11e349a51b67bc7d801a8, type: 3}
   shopSprite: {fileID: 21300000, guid: e8e9c02b2e7b2e947afd754c410f0c7d, type: 3}
+  homeSprite: {fileID: 21300000, guid: 9761572ea88fccb4b85f3475821776f4, type: 3}
 --- !u!222 &1778310262596949565
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1284,6 +1285,7 @@ MonoBehaviour:
   bossImg: {fileID: 1013942808145858044}
   rewardImg: {fileID: 3123907903500429095}
   shopImg: {fileID: 4838519905643247156}
+  homeImg: {fileID: 3640484697484517175}
 --- !u!222 &3580151916648559610
 CanvasRenderer:
   m_ObjectHideFlags: 0

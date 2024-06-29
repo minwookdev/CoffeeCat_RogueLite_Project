@@ -13,6 +13,7 @@ namespace CoffeeCat {
         [SerializeField] private Sprite bossSprite = null;
         [SerializeField] private Sprite rewardSprite = null;
         [SerializeField] private Sprite shopSprite = null;
+        [SerializeField] private Sprite homeSprite = null;
         
         public void Enable(InteractableType type) {
             var sprite = GetIconSprite(type);
@@ -34,6 +35,7 @@ namespace CoffeeCat {
                 InteractableType.Boss   => bossSprite,
                 InteractableType.Reward => rewardSprite,
                 InteractableType.Shop   => shopSprite,
+                InteractableType.Town   => homeSprite,
                 InteractableType.None   => throw new System.NotImplementedException(),
                 _                       => throw new System.NotImplementedException()
             };

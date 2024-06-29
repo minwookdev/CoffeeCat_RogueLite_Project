@@ -13,6 +13,7 @@ namespace CoffeeCat {
         [SerializeField] private Image bossImg = null;
         [SerializeField] private Image rewardImg = null;
         [SerializeField] private Image shopImg = null;
+        [SerializeField] private Image homeImg = null;
 
         private void Start() {
             btn.onClick.AddListener(InteractableButtonEvent);
@@ -43,6 +44,7 @@ namespace CoffeeCat {
                 InteractableType.Boss   => bossImg,
                 InteractableType.Reward => rewardImg,
                 InteractableType.Shop   => shopImg,
+                InteractableType.Town   => homeImg,
                 InteractableType.None   => throw new NotImplementedException(),
                 _                       => throw new NotImplementedException()
             };

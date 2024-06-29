@@ -35,6 +35,8 @@ namespace RandomDungeonWithBluePrint
         [SerializeField, ReadOnly] private bool isBakePathFindGrid = false;
         [SerializeField, ReadOnly] private PathFindGrid pathFindGrid;
         
+        #region DEBUG
+#if UNITY_EDITOR || DEBUG_MODE
         [Title("Debugging Options", TitleAlignment = TitleAlignments.Centered)]
         public bool IsDisplayRoomType = false;
         public bool IsDisplaySectionRectDrawer = false;
@@ -43,6 +45,8 @@ namespace RandomDungeonWithBluePrint
         private bool initializedDebugObservable = false;
         public Color RoomDrawerColor = Color.green;
         public Color SectionDrawerColor = Color.white;
+#endif
+        #endregion
 
         private void Awake()
         {
@@ -57,8 +61,7 @@ namespace RandomDungeonWithBluePrint
             var normalMapBluePrints = bluePrintQueue.NormalMapBluePrints;
             // Reached The Maximum Floor: Load Boss Map Scene
             if (normalMapBluePrints.Length <= currentFloor) {
-                CatLog.Log("Load Boss Map Scene");
-                SceneManager.Inst.LoadSceneAdditiveAsync(bluePrintQueue.BossMapSceneKey);
+                EnteringBossRoom();
                 return;
             }
             
@@ -95,13 +98,24 @@ namespace RandomDungeonWithBluePrint
         }
         
         private void Create(BluePrintWithWeight bluePrintWeight) {
+            ClearMap();
             Create(bluePrintWeight.BluePrint);
         }
 
         private void Create(FieldBluePrint bluePrint) {
-            field?.Dispose();
+            ClearMap();
             field = FieldBuilder.Build(bluePrint);
             fieldView.DrawDungeon(field);
+        }
+
+        private void EnteringBossRoom() {
+            CatLog.Log("Load Boss Map Scene");
+            StageManager.Inst.InvokeMapDisposeBefore();
+            ClearMap();
+            var key = bluePrintQueue.BossMapSceneKey;
+            SceneManager.Inst.LoadSceneAdditiveAsync(key, () => {
+                SceneManager.Inst.ActiveNextScene();
+            });
         }
 
         private BluePrintWithWeight Raffle()
@@ -123,9 +137,17 @@ namespace RandomDungeonWithBluePrint
             return candidate[pick];
         }
 
+        public void ClearMap() {
+            ClearDebug();
+            field?.Dispose();
+            field = null;
+            fieldView.AllTilemapClear();
+        }
+
         #region Debug_Drawer
         
         private void InitDebugs() {
+#if UNITY_EDITOR || DEBUG_MODE
             if (IsDisplayRoomType) {
                 DisplayRoomType();
             }
@@ -166,12 +188,21 @@ namespace RandomDungeonWithBluePrint
                 .AddTo(this);
             
             initializedDebugObservable = true;
+#endif
+        }
+
+        private void ClearDebug() {
+#if UNITY_EDITOR || DEBUG_MODE
+            ClearRoomTypeText();
+            ClearSectionIndexText();
+#endif
         }
         
         /// <summary>
         /// RoomType을 표시
         /// </summary>
         private void DisplayRoomType() {
+#if UNITY_EDITOR || DEBUG_MODE
             ClearRoomTypeText();
             
             foreach (var room in field.Rooms) {
@@ -179,15 +210,19 @@ namespace RandomDungeonWithBluePrint
                 var text = ObjectPoolManager.Inst.Spawn<TextMeshPro>("editor_text_room_type", spawnPoint, Quaternion.identity);
                 text.SetText(room.RoomType.ToStringExtended());
             }
+#endif
         }
 
         private void ClearRoomTypeText() {
+#if UNITY_EDITOR || DEBUG_MODE
             if (!ObjectPoolManager.Inst.IsExistInPool("editor_text_room_type"))
                 return;
             ObjectPoolManager.Inst.DespawnAll("editor_text_room_type");
+#endif
         }
 
         private void DisplaySectionIndex() {
+#if UNITY_EDITOR || DEBUG_MODE
             ClearSectionIndexText();
             
             var sections = field?.Sections;
@@ -200,16 +235,19 @@ namespace RandomDungeonWithBluePrint
                 var text = ObjectPoolManager.Inst.Spawn<TextMeshPro>("editor_text_section_index", point, Quaternion.identity);
                 text.SetText("< " + sections[i].Index.ToString() + " >");
             }
+#endif
         }
         
         private void ClearSectionIndexText() {
+#if UNITY_EDITOR || DEBUG_MODE
             if (!ObjectPoolManager.Inst.IsExistInPool("editor_text_section_index"))
                 return;
             ObjectPoolManager.Inst.DespawnAll("editor_text_section_index");
+#endif
         }
         
         private void OnDrawGizmos() {
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEBUG_MODE
             if (field == null) {
                 return;
             }
@@ -253,7 +291,6 @@ namespace RandomDungeonWithBluePrint
             Gizmos.color = Color.white;
 #endif
         }
-        
         #endregion
     }
 }

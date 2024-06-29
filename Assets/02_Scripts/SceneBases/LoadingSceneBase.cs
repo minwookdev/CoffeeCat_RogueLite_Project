@@ -16,7 +16,7 @@ namespace CoffeeCat {
         public void LoadNextScene(SceneName loadTargetScene) {
             SceneManager.Inst.LoadSceneAsync(loadTargetScene, () => {
                 // Change Scene Immidiately Completed Scene Loading
-                SceneManager.Inst.ActiveNextScene(false, true);
+                SceneManager.Inst.ActiveNextScene(true);
             });
 
             SubscribeUpdateLoadingScene();

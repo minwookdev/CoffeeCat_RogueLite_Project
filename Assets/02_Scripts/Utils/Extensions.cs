@@ -13,6 +13,8 @@ namespace CoffeeCat
                 InteractableType.Floor  => "portal_floor",
                 InteractableType.Shop   => "portal_reward",
                 InteractableType.Reward => "portal_shop",
+                InteractableType.Boss   => "portal_boss",
+                InteractableType.Town   => "portal_town",
                 InteractableType.None   => throw new ArgumentOutOfRangeException(nameof(type), type, null),
                 _                       => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };

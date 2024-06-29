@@ -53,6 +53,9 @@ namespace CoffeeCat.FrameWork {
             
             public void Dispose() {
                 if (!isAddressablesAsset) {
+                    // avoid UnloadAsset Error
+                    if (Resource is GameObject or Component)
+                        return;
                     Resources.UnloadAsset(Resource);
                 }
                 else {
@@ -238,20 +241,29 @@ namespace CoffeeCat.FrameWork {
             resourcesDict.Remove(key);
         }
 
-        private void ReleaseAll(bool disposeGloalResources = false) {
-            if (disposeGloalResources) {
+        private void ReleaseAll(bool includeGlobalResources = false) {
+            if (includeGlobalResources) {
                 foreach (var keyValuePair in resourcesDict) {
                     keyValuePair.Value.Dispose();
                 }
                 resourcesDict.Clear();
             }
             else {
-                var transientResources = resourcesDict.Where(pair => !pair.Value.isGlobalResource);
-                foreach (var pair in transientResources) {
+                foreach (var pair in resourcesDict) {
+                    if (pair.Value.isGlobalResource) {
+                        continue;
+                    }
                     pair.Value.Dispose();
-                    resourcesDict.Remove(pair.Key);
+                }
+
+                // TODO: To Weight
+                var keys = resourcesDict.Keys.ToArray();
+                foreach (var key in keys) {
+                    resourcesDict.Remove(key);
                 }
             }
+
+            Resources.UnloadUnusedAssets();
         }
 
         #endregion
