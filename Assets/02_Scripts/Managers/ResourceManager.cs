@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -127,8 +126,8 @@ namespace CoffeeCat.FrameWork {
         }
         
         // Loaded Resources Dictioanry
-        [SerializeField, Title("Loaded Resources Dictionary")]
-        private StringResourceInformationDictionary resourcesDict = null;
+        [Title("Loaded Resources Dictionary")]
+        [SerializeField] private StringResourceInformationDictionary resourcesDict = null;
         
         protected override void Initialize() {
             resourcesDict = new StringResourceInformationDictionary();
@@ -137,9 +136,6 @@ namespace CoffeeCat.FrameWork {
         protected void Start() {
             SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
             SceneManager.Inst.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
-#if UNITY_EDITOR
-            CheckDuplicatesInDictionary();
-#endif
         }
 
         #region Events
@@ -241,8 +237,8 @@ namespace CoffeeCat.FrameWork {
             resourcesDict.Remove(key);
         }
 
-        private void ReleaseAll(bool includeGlobalResources = false) {
-            if (includeGlobalResources) {
+        private void ReleaseAll(bool isRemoveGlobal = false) {
+            if (isRemoveGlobal) {
                 foreach (var keyValuePair in resourcesDict) {
                     keyValuePair.Value.Dispose();
                 }
@@ -255,20 +251,13 @@ namespace CoffeeCat.FrameWork {
                     }
                     pair.Value.Dispose();
                 }
-
-                // TODO: To Weight
-                var keys = resourcesDict.Keys.ToArray();
-                foreach (var key in keys) {
-                    resourcesDict.Remove(key);
-                }
             }
-
             Resources.UnloadUnusedAssets();
         }
 
         #endregion
 
-        #region Find in Resource Dictionary
+        #region Find
         
         private bool TryGetResourceSync<T>(string key, out T result) where T : UnityObject {
             var isExist = resourcesDict.TryGetValue(key, out ResourceInfo info);
@@ -311,47 +300,6 @@ namespace CoffeeCat.FrameWork {
             return true;
         }
         
-        #endregion
-
-        #region CHECK_DUPLICATES
-
-        /// <summary>
-        /// 마지막 Resource Dictionary추가 이후 n초간 대기 후 더 이상 추가되는 요소가 없다면 Dictionary내부 중복 요소 검사
-        /// </summary>
-        private void CheckDuplicatesInDictionary() {
-            // TODO: Make Simple !
-#if UNITY_EDITOR
-            int previousCheckedDictioanryCount = 0;
-            bool isExistDuplicateResourceInDictionary = false;
-            this.UpdateAsObservable()
-                .Skip(TimeSpan.Zero)
-                .Select(_ => resourcesDict)
-                .Where(dict => dict.Count != previousCheckedDictioanryCount)
-                .TakeUntilDestroy(this)
-                .Subscribe(dict => {
-                    // Resource Dictionary에 요소가 추가된 경우 (총 요소가 1개 이상)
-                    if (previousCheckedDictioanryCount < dict.Count && dict.Count > 1) {
-                        this.UpdateAsObservable()
-                        .Skip(TimeSpan.Zero)
-                        .Select(_ => dict.Values.Where(info => info.Resource == null).Count())
-                        .Where(resourceNullInfosCount => resourceNullInfosCount == 0)
-                        .First()
-                        .TakeUntilDestroy(this)
-                        .Subscribe(_ => {
-                            isExistDuplicateResourceInDictionary = dict.Values.GroupBy(x => x.ResourceName).Any(g => g.Count() > 1);
-                            if (isExistDuplicateResourceInDictionary) {
-                                CatLog.ELog($"Checked Duplicate Loaded Resources. Dictionary.Count({dict.Count})");
-                            }
-                        })
-                        .AddTo(this);
-                    }
-
-                    previousCheckedDictioanryCount = dict.Count;
-                })
-                .AddTo(this);
-#endif
-        }
-
         #endregion
     }
 }
