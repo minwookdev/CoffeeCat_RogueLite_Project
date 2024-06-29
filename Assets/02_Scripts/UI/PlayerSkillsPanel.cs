@@ -60,6 +60,8 @@ namespace CoffeeCat.UI
 
         public void Open()
         {
+            btnClose.gameObject.SetActive(true);
+            
             foreach (var panel in skillSetPanels)
                 panel.DisableButton();
 
@@ -68,7 +70,7 @@ namespace CoffeeCat.UI
 
         public void OpenForSlotSelect(PlayerSkillSelectData data)
         {
-            gameObject.SetActive(true);
+            btnClose.gameObject.SetActive(false);
             
             foreach (var panel in skillSetPanels)
             {
@@ -76,6 +78,8 @@ namespace CoffeeCat.UI
                 panel.ClearBtnSlotEvent();
                 panel.AddListenerBtnSlot(data);
             }
+            
+            gameObject.SetActive(true);
         }
 
         public void RefreshPlayerSkillsPanel(List<PlayerSkillSet> skillSets)

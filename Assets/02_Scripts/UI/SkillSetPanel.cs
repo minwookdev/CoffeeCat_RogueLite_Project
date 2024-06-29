@@ -1,24 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using CoffeeCat.FrameWork;
 using CoffeeCat.Utils;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace CoffeeCat.UI
 {
     public class SkillSetPanel : MonoBehaviour
     {
+        [Title("Main")]
         [SerializeField] private TextMeshProUGUI slotIndex = null;
         [SerializeField] private Image mainSkillIcon = null;
         [SerializeField] private TextMeshProUGUI mainSkillLevel = null;
         [SerializeField] private TextMeshProUGUI mainSkillName = null;
-        [SerializeField] private Image subAttackIcon = null;
-        [SerializeField] private Image subStatIcon_1 = null;
-        [SerializeField] private Image subStatIcon_2 = null;
         [SerializeField] private TextMeshProUGUI description = null;
         [SerializeField] private Button btnSlot = null;
+        [Title("SubAttack")]
+        [SerializeField] private Image subAttackIcon = null;
+        [SerializeField] private SubSkillPanel subAttackDesc = null;
+        [Title("SubStat")]
+        [SerializeField] private Image subStatIcon_1 = null;
+        [SerializeField] private SubSkillPanel subStatDesc = null;
+        [SerializeField] private Image subStatIcon_2 = null;
+
         private int index = 0;
 
         public void Initialize(PlayerSkillSet skillSet, int index)
@@ -38,10 +44,16 @@ namespace CoffeeCat.UI
 
             // 임시
             if (!skillSet.IsEmptySubAttackSkill())
+            {
                 subAttackIcon.gameObject.SetActive(true);
+                subAttackDesc.SetSkillInfo(skillSet.SubAttackSkill);
+            }
 
             if (!skillSet.IsEmptySubStatSkill())
+            {
                 subStatIcon_1.gameObject.SetActive(true);
+                subStatDesc.SetSkillInfo(skillSet.SubStatSkill_1);
+            }
         }
 
         public void ClearBtnSlotEvent()

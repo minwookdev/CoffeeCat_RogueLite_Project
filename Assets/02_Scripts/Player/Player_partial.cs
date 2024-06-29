@@ -160,7 +160,7 @@ namespace CoffeeCat
                                                                           subAttackSkill.Description,
                                                                           subAttackSkill.Index,
                                                                           SkillType.SubAttack);
-                                subAttackSkills.Remove(subAttackSkill);
+                                pickableSubAttackSkills.Remove(subAttackSkill);
                             }
 
                             break;
@@ -172,7 +172,7 @@ namespace CoffeeCat
                                 selectData[i] = new PlayerSkillSelectData(subStatSkill.SkillName,
                                                                           subStatSkill.Description,
                                                                           subStatSkill.Index, SkillType.SubStat);
-                                subStatSkills.Remove(subStatSkill);
+                                pickableSubStatSkills.Remove(subStatSkill);
                             }
 
                             break;
@@ -240,7 +240,7 @@ namespace CoffeeCat
                     var newSkill = DataManager.Inst.PlayerMainSkills.DataDictionary[data.Index];
                     GetNewMainSkill(newSkill);
                 }
-                
+
                 UIPresenter.Inst.RefreshPlayerSkillsPanel(skillSets);
                 StageManager.Inst.InvokeSkillSelectCompleted();
             }
@@ -296,7 +296,7 @@ namespace CoffeeCat
                             return false;
                         }
                     }
-                default: 
+                default:
                     return false;
             }
         }
@@ -317,6 +317,7 @@ namespace CoffeeCat
                         var newSkill = DataManager.Inst.PlayerSubAttackSkills.DataDictionary[newSkillIndex];
                         skillSets[SkillSetIndex].UpdateSubAttackSkill(newSkill);
                     }
+
                     break;
                 case SkillType.SubStat:
                     if (skillSets[SkillSetIndex].IsEmptySubStatSkill())
@@ -330,9 +331,10 @@ namespace CoffeeCat
                         var newSkill = DataManager.Inst.PlayerSubStatSkills.DataDictionary[newSkillIndex];
                         skillSets[SkillSetIndex].UpdateSubStatSkill(newSkill, 1);
                     }
+
                     break;
             }
-            
+
             StageManager.Inst.InvokeSkillSelectCompleted();
             UIPresenter.Inst.RefreshPlayerSkillsPanel(skillSets);
         }
