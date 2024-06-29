@@ -10,7 +10,7 @@ namespace CoffeeCat
 {
     public class PlayerSkillEffect_NormalAttack : PlayerSkillEffect
     {
-        private readonly Player player = null;
+        private readonly Player_Dungeon player = null;
 
         public override void SkillEffect(PlayerStat playerStat, PlayerMainSkill skillData)
         {
@@ -40,7 +40,7 @@ namespace CoffeeCat
                           });
         }
 
-        public PlayerSkillEffect_NormalAttack(Transform playerTr, string skillName, Player player) : base(playerTr, skillName)
+        public PlayerSkillEffect_NormalAttack(Transform playerTr, string skillName, Player_Dungeon player) : base(playerTr, skillName)
         {
             this.player = player;
         }

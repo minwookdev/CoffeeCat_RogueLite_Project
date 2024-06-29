@@ -6,7 +6,7 @@ namespace CoffeeCat
 {
     public class CameraController : MonoBehaviour
     {
-        private Player player;
+        private Player_Dungeon player;
         [SerializeField] private float test;
 
         private void Start()

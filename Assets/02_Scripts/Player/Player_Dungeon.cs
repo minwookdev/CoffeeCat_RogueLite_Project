@@ -16,7 +16,7 @@ using ResourceManager = CoffeeCat.FrameWork.ResourceManager;
 
 namespace CoffeeCat
 {
-    public partial class Player : MonoBehaviour
+    public partial class Player_Dungeon : MonoBehaviour
     {
         [Title("Status")]
         [SerializeField] protected PlayerAddressablesKey playerName = PlayerAddressablesKey.NONE;

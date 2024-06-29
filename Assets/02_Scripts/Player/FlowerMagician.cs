@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace CoffeeCat
 {
-    public class Player_FlowerMagician : Player
+    public class FlowerMagician : Player_Dungeon
     {
         
     }

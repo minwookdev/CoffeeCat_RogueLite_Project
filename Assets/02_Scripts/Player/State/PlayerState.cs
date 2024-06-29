@@ -24,7 +24,7 @@ namespace CoffeeCat
 
         protected Transform tr = null;
         protected SkeletonAnimation anim = null;
-        protected Player player = null;
+        protected Player_Dungeon player = null;
 
         protected const string animIdle = "Idle_2";
         protected const string animWalk = "Walk_NoHand";
