@@ -21,7 +21,7 @@ namespace CoffeeCat.FrameWork
         protected override void Initialize()
         {
             MonsterStats = new MonsterStatDatas();
-            MonsterSkills = new MonsterSkillDatas();
+            MonsterSkills = new MonsterSkillDatas(); 
             PlayerStats = new PlayerStatDatas();
             PlayerMainSkills = new PlayerMainSkillDatas();
             PlayerSubAttackSkills = new PlayerSubAttackSkillDatas();

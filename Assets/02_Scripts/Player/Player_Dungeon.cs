@@ -54,20 +54,6 @@ namespace CoffeeCat
             StageManager.Inst.AddEventClearedRoomEvent(PlayerClearedRoom);
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                // EnableSkillSelect();
-                // UIPresenter.Inst.OpenPlayerSkillsPanel();
-                EnableSkillSelect();
-            }
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                DungeonUIPresenter.Inst.OpenPlayerSkillsPanel();
-            }
-        }
-
         private void OnEnable() 
         {
             InputManager.BindDirectionInputUpdateEvent(Move);
