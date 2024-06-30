@@ -131,7 +131,7 @@ namespace CoffeeCat {
             }*/
 
             // TODO: Fix it
-            if (playerCollider.transform.parent.TryGetComponent(out Player player) == false) {
+            if (playerCollider.transform.parent.TryGetComponent(out Player_Dungeon player) == false) {
                 return;
             }
 
@@ -151,7 +151,7 @@ namespace CoffeeCat {
 
         #region DAMAGING
 
-        protected virtual void DamageToPlayer(Player player, Vector2 collisionPoint, Vector2 collisionDirection) {
+        protected virtual void DamageToPlayer(Player_Dungeon player, Vector2 collisionPoint, Vector2 collisionDirection) {
             if (statData == null) {
                 CatLog.ELog("Monster Stat Data is Null.");
                 return;

@@ -17,7 +17,7 @@ namespace CoffeeCat
         protected override void Start()
         {
             base.Start();
-            player = GetComponent<Player_FlowerMagician>();
+            player = GetComponent<FlowerMagician>();
         }
 
         #region IDLE

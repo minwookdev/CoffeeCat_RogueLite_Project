@@ -9,7 +9,7 @@ using UnityEngine;
 namespace CoffeeCat.FrameWork {
 	public class RogueLiteManager : DynamicSingleton<RogueLiteManager> {
 		// Properties
-		public Player SpawnedPlayer { get; private set; } = null;
+		public Player_Dungeon SpawnedPlayer { get; private set; } = null;
 		public Vector3 SpawnedPlayerPosition => SpawnedPlayer.Tr.position;
 
 		// Fields
@@ -33,7 +33,7 @@ namespace CoffeeCat.FrameWork {
 			if (SpawnedPlayer)
 				return;
 			
-			SpawnedPlayer = ObjectPoolManager.Inst.Spawn<Player>(playerKey, Vector3.zero);
+			SpawnedPlayer = ObjectPoolManager.Inst.Spawn<Player_Dungeon>(playerKey, Vector3.zero);
 		}
 
 		private void SetPlayerPosition(Vector2 position) {

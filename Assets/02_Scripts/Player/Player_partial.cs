@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 
 namespace CoffeeCat
 {
-    public partial class Player
+    public partial class Player_Dungeon
     {
         [Title("Skill")]
         [ShowInInspector] private List<PlayerSkillSet> skillSets = new List<PlayerSkillSet>();

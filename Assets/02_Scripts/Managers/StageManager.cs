@@ -200,7 +200,7 @@ namespace CoffeeCat
         
         public void RemoveListenerMonsterKilledByPlayer(UnityAction<float> action) => OnMonsterKilledByPlayer.RemoveListener(action);
 
-        public void InvokeEventPlayerKilledEvent(Player key) => OnPlayerKilled.Invoke();
+        public void InvokeEventPlayerKilledEvent(Player_Dungeon key) => OnPlayerKilled.Invoke();
 
         public void InvokeEventClearedRoomEvent(RoomDataStruct roomType) => OnClearedRoom.Invoke(roomType);
         

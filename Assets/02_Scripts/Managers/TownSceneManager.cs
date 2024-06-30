@@ -10,7 +10,7 @@ namespace CoffeeCat {
 
         private void Start() {
             // Spawn New Player
-            ResourceManager.Inst.AddressablesAsyncLoad<GameObject>(PlayerAddressablesKey.FlowerMagician.ToKey(), false, (player) => {
+            ResourceManager.Inst.AddressablesAsyncLoad<GameObject>("Player_Town", false, (player) => {
                 var playerObj = Instantiate(player, PlayerSpawnTr.position, Quaternion.identity);
             });
         }
