@@ -59,10 +59,10 @@ namespace CoffeeCat.RogueLite {
 			var loomDataStruct = new RoomDataStruct(this);
 			if (!IsPlayerFirstEntered)
 			{
-				StageManager.Inst.InvokeRoomEnteringFirstEvent(loomDataStruct);
+				StageManager.Inst.InvokeEventRoomEnteringFirst(loomDataStruct);
 				IsPlayerFirstEntered = true;
 			}
-			StageManager.Inst.InvokeRoomEnteringEvent(loomDataStruct);
+			StageManager.Inst.InvokeEventRoomEntering(loomDataStruct);
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace CoffeeCat.RogueLite {
 		public virtual void LeavesPlayer() {
 			IsPlayerInside = false;
 			var loomDataStruct = new RoomDataStruct(this);
-			StageManager.Inst.InvokeRoomLeftEvent(loomDataStruct);
+			StageManager.Inst.InvokeEventRoomLeft(loomDataStruct);
 		}
 
 		protected void SetInteractiveObject(InteractableType type)
@@ -151,7 +151,7 @@ namespace CoffeeCat.RogueLite {
 			var roomDataStruct = new RoomDataStruct(this);
 			if (!IsPlayerFirstEntered)
 			{
-				StageManager.Inst.InvokeRoomEnteringFirstEvent(roomDataStruct);
+				StageManager.Inst.InvokeEventRoomEnteringFirst(roomDataStruct);
 				IsPlayerFirstEntered = true;
 
 				if (!IsCleared)
@@ -164,7 +164,7 @@ namespace CoffeeCat.RogueLite {
 				}
 			}
 			
-			StageManager.Inst.InvokeRoomEnteringEvent(roomDataStruct);
+			StageManager.Inst.InvokeEventRoomEntering(roomDataStruct);
 			return;
 
 			void SpawnGroupMonster() {
@@ -255,7 +255,7 @@ namespace CoffeeCat.RogueLite {
 			IsLocked = false;
 			OnRoomLocked?.Invoke(IsLocked);
 			var roomDataStruct = new RoomDataStruct(this);
-			StageManager.Inst.InvokeEventClearedRoomEvent(roomDataStruct);
+			StageManager.Inst.InvokeEventClearedRoom(roomDataStruct);
 			StageManager.Inst.ClearCurrentRoomKillCount();
 		}
 

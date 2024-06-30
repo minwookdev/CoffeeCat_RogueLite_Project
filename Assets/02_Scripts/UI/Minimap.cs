@@ -75,16 +75,16 @@ namespace CoffeeCat
             }
 
             ActivePlayerSpawnRoomPanel();
-            StageManager.Inst.OnRoomEntering.AddListener(EnterdRoom);
-            StageManager.Inst.OnRoomLeft.AddListener(LeftRoom);
-            StageManager.Inst.OnClearedRoom.AddListener(ClearedRoom);
+            StageManager.Inst.AddEventRoomEnteringEvent(EnterdRoom);
+            StageManager.Inst.AddEventRoomLeftEvent(LeftRoom);
+            StageManager.Inst.AddEventClearedRoomEvent(ClearedRoom);
         }
 
         private void ClearMinimap()
         {
-            StageManager.Inst.OnRoomEntering.RemoveListener(EnterdRoom);
-            StageManager.Inst.OnRoomLeft.RemoveListener(LeftRoom);
-            StageManager.Inst.OnClearedRoom.RemoveListener(ClearedRoom);
+            StageManager.Inst.RemoveEventRoomEntering(EnterdRoom);
+            StageManager.Inst.RemoveEventRoomLeft(LeftRoom);
+            StageManager.Inst.RemoveEventClearedRoom(ClearedRoom);
             
             foreach (var room in minimapRooms.Values)
                 ObjectPoolManager.Inst.Despawn(room.gameObject);

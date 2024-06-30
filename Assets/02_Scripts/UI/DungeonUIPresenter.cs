@@ -3,10 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
 using CoffeeCat.UI;
-using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat.FrameWork {
-    public class UIPresenter : SceneSingleton<UIPresenter> {
+    public class DungeonUIPresenter : SceneSingleton<DungeonUIPresenter> {
         [Title("UI")]
         [SerializeField] private SkillSelectPanel skillSelector = null;
         [SerializeField] private PlayerSkillsPanel playerSkillsPanel = null;
@@ -18,9 +17,9 @@ namespace CoffeeCat.FrameWork {
         private void Start() {
             btnMap.onClick.AddListener(minimap.Open);
             
-            StageManager.Inst.AddListenerIncreasePlayerHP(UpdatePlayerHPSlider);
-            StageManager.Inst.AddListenerDecreasePlayerHP(UpdatePlayerHPSlider);
-            StageManager.Inst.AddListenerIncreasePlayerExp(UpdatePlayerExpSlider);
+            StageManager.Inst.AddvEventIncreasePlayerHP(UpdatePlayerHPSlider);
+            StageManager.Inst.AddEventDecreasePlayerHP(UpdatePlayerHPSlider);
+            StageManager.Inst.AddEventIncreasePlayerExp(UpdatePlayerExpSlider);
             /*StageManager.Inst.AddEventToSkillSelectCompleted(() => {
                 UpdatePlayerExpSlider(0f, 1f);
             });*/

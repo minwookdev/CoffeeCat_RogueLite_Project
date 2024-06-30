@@ -1,7 +1,6 @@
-using System;
-using CoffeeCat.Utils;
 using UnityEngine;
 using UnityEngine.Events;
+using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 
 namespace CoffeeCat.FrameWork {
@@ -34,12 +33,12 @@ namespace CoffeeCat.FrameWork {
 
 #if UNITY_EDITOR || UNITY_STANDALONE
         private void Update() {
-            UpdateDirectionInputStandalone();
+            StandaloneInputUpdate();
             UpdateEvasionInputStandalone();
             UpdateInteractInputStandalone();
         }
         
-        private void UpdateDirectionInputStandalone() {
+        private void StandaloneInputUpdate() {
             var hor = Input.GetAxisRaw(axisRowKey);
             var ver = Input.GetAxisRaw(axisColKey);
             if (hor == 0 && ver == 0) {

@@ -49,9 +49,9 @@ namespace CoffeeCat
             InitializeSkillSet();
             CheckInvincibleTime();
 
-            StageManager.Inst.AddListenerMonsterKilledByPlayer(GetExp);
-            StageManager.Inst.AddListenerRoomFirstEnteringEvent(PlayerEnteredRoom);
-            StageManager.Inst.AddListenerClearedRoomEvent(PlayerClearedRoom);
+            StageManager.Inst.AddEventMonsterKilledByPlayer(GetExp);
+            StageManager.Inst.AddEventRoomFirstEnteringEvent(PlayerEnteredRoom);
+            StageManager.Inst.AddEventClearedRoomEvent(PlayerClearedRoom);
         }
 
         private void Update()
@@ -64,7 +64,7 @@ namespace CoffeeCat
             }
             if (Input.GetKeyDown(KeyCode.P))
             {
-                UIPresenter.Inst.OpenPlayerSkillsPanel();
+                DungeonUIPresenter.Inst.OpenPlayerSkillsPanel();
             }
         }
 
@@ -94,7 +94,7 @@ namespace CoffeeCat
             stat = DataManager.Inst.PlayerStats.DataDictionary[playerName.ToKey()];
             stat.SetCurrentHp();
             
-            StageManager.Inst.InvokeIncreasePlayerHP(stat.CurrentHp, stat.MaxHp);
+            StageManager.Inst.InvokeEventIncreasePlayerHP(stat.CurrentHp, stat.MaxHp);
         }
         
         private void InitializeSkillSet()
@@ -104,7 +104,7 @@ namespace CoffeeCat
             GetNewMainSkill(normalAttack);
             
             // 플레이어 스킬창 초기화
-            UIPresenter.Inst.InitializePlayerSkillsPanel(skillSets);
+            DungeonUIPresenter.Inst.InitializePlayerSkillsPanel(skillSets);
         }
 
         private void Move(Vector2 direction) 
@@ -166,13 +166,13 @@ namespace CoffeeCat
             Observable.Timer(TimeSpan.FromSeconds(2.5f))
                       .Subscribe(_ => { EnableSkillSelect(); }).AddTo(this);
             
-            StageManager.Inst.InvokeIncreasePlayerExp(playerLevelData.GetCurrentExp(), playerLevelData.GetExpToNextLevel());
+            StageManager.Inst.InvokeEventIncreasePlayerExp(playerLevelData.GetCurrentExp(), playerLevelData.GetExpToNextLevel());
         }
 
         private void OnDead()
         {
             rigid.velocity = Vector2.zero;
-            StageManager.Inst.OnPlayerKilled.Invoke();
+            StageManager.Inst.InvokeEventPlayerKilled();
             isDead = true;
         }
 
@@ -266,7 +266,7 @@ namespace CoffeeCat
                 OnDead();
             }
             
-            StageManager.Inst.InvokeDecreasePlayerHP(stat.CurrentHp, stat.MaxHp);
+            StageManager.Inst.InvokeEventDecreasePlayerHP(stat.CurrentHp, stat.MaxHp);
         }
         
         #endregion

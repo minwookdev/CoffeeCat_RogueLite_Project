@@ -216,7 +216,7 @@ namespace CoffeeCat
                     UpdateMainSkill();
                     break;
                 default:
-                    UIPresenter.Inst.SkillsPanelOpenForSkillSelect(data);
+                    DungeonUIPresenter.Inst.SkillsPanelOpenForSkillSelect(data);
                     break;
             }
 
@@ -241,8 +241,8 @@ namespace CoffeeCat
                     GetNewMainSkill(newSkill);
                 }
 
-                UIPresenter.Inst.RefreshPlayerSkillsPanel(skillSets);
-                StageManager.Inst.InvokeSkillSelectCompleted();
+                DungeonUIPresenter.Inst.RefreshPlayerSkillsPanel(skillSets);
+                StageManager.Inst.InvokeEventSkillSelectCompleted();
             }
         }
 
@@ -335,13 +335,13 @@ namespace CoffeeCat
                     break;
             }
 
-            StageManager.Inst.InvokeSkillSelectCompleted();
-            UIPresenter.Inst.RefreshPlayerSkillsPanel(skillSets);
+            StageManager.Inst.InvokeEventSkillSelectCompleted();
+            DungeonUIPresenter.Inst.RefreshPlayerSkillsPanel(skillSets);
         }
 
         public void EnableSkillSelect()
         {
-            UIPresenter.Inst.OpenSkillSelectPanel(SkillSelector());
+            DungeonUIPresenter.Inst.OpenSkillSelectPanel(SkillSelector());
         }
     }
 }

@@ -82,12 +82,12 @@ namespace RandomDungeonWithBluePrint
             
             // Invoke Event Before Dispose Generated Map  
             if (field != null) {
-                StageManager.Inst.InvokeMapDisposeBefore();
+                StageManager.Inst.InvokeEventMapDisposeBefore();
             }
             
             // Clear And ReGenerate Dungeon Map
             Create(bluePrint);
-            StageManager.Inst.InvokeMapGenerateCompleted(field);
+            StageManager.Inst.InvokeEventMapGenerateCompleted(field);
             
             // Bake PathFind Grid
             if (isBakePathFindGrid) {
@@ -110,7 +110,7 @@ namespace RandomDungeonWithBluePrint
 
         private void EnteringBossRoom() {
             CatLog.Log("Load Boss Map Scene");
-            StageManager.Inst.InvokeMapDisposeBefore();
+            StageManager.Inst.InvokeEventMapDisposeBefore();
             ClearMap();
             var key = bluePrintQueue.BossMapSceneKey;
             SceneManager.Inst.LoadSceneAdditive(key);

@@ -96,7 +96,7 @@ namespace CoffeeCat {
         {
             // Invoke Battle Events
             StageManager.Inst.AddCurrentRoomKillCount();
-            StageManager.Inst.InvokeMonsterKilledByPlayer(CurrentStat.ExpAmount);
+            StageManager.Inst.InvokeEventMonsterKilledByPlayer(CurrentStat.ExpAmount);
                 
             // Send to Death State
             CurrentStat.HP = 0f;

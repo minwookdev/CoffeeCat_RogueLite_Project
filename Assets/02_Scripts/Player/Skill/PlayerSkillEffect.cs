@@ -28,8 +28,8 @@ namespace CoffeeCat
                     CatLog.WLog("PlayerSkillEffect : Load Resource Failed");
             });
             
-            StageManager.Inst.OnPlayerKilled.AddListener(OnDispose);
-            StageManager.Inst.AddListenerClearedRoomEvent(roomData =>
+            StageManager.Inst.AddEventOnPlayerKilled(OnDispose);
+            StageManager.Inst.AddEventClearedRoomEvent(roomData =>
             {
                 if (roomData.RoomType == RoomType.MonsterSpawnRoom) OnDispose();
             });

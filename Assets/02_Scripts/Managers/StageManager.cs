@@ -1,14 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using Sirenix.OdinInspector;
 using CoffeeCat.FrameWork;
 using CoffeeCat.RogueLite;
 using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using RandomDungeonWithBluePrint;
-using UnityEngine.Events;
 
 namespace CoffeeCat
 {
@@ -39,13 +38,13 @@ namespace CoffeeCat
         [Title("Events Map", TitleAlignment = TitleAlignments.Centered)]
         [TabGroup("Events Map"), SerializeField] private UnityEvent<Field> onMapGenerateCompleted = new();
         [TabGroup("Events Map"), SerializeField] private UnityEvent onMapDisposeBefore = new();
-        [TabGroup("Events Map"), SerializeField] public UnityEvent<RoomDataStruct> OnRoomEntering = new();
-        [TabGroup("Events Map"), SerializeField] public UnityEvent<RoomDataStruct> OnRoomLeft = new();
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomEntering = new();
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomLeft = new();
         [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnRoomFirstEntering = new();
-        [TabGroup("Events Map"), SerializeField] public UnityEvent<RoomDataStruct> OnClearedRoom = null;
+        [TabGroup("Events Map"), SerializeField] private UnityEvent<RoomDataStruct> OnClearedRoom = null;
         
         [Title("Events Player", TitleAlignment = TitleAlignments.Centered)]
-        [TabGroup("Events Player"), SerializeField] public UnityEvent OnPlayerKilled = new();
+        [TabGroup("Events Player"), SerializeField] private UnityEvent OnPlayerKilled = new();
         [TabGroup("Events Player"), SerializeField] private UnityEvent OnOpeningSkillSelectPanel = new();
         [TabGroup("Events Player"), SerializeField] private UnityEvent<float, float> OnIncreasePlayerExp = new();
         [TabGroup("Events Player"), SerializeField] private UnityEvent<float, float> OnIncreasePlayerHP = new();
@@ -186,83 +185,123 @@ namespace CoffeeCat
         }
 
         public void RequestToTownScene() {
-            InvokeMapDisposeBefore();
+            InvokeEventMapDisposeBefore();
             mapGen.ClearMap();
             
             SceneManager.Inst.LoadSceneSingle(SceneName.TownScene, true, false);
         }
         
-        #region Events
+        #region Stage Events
         
-        public void InvokeMonsterKilledByPlayer(float exp) => OnMonsterKilledByPlayer.Invoke(exp);
+        // Add Event ===================================================================================================
         
-        public void AddListenerMonsterKilledByPlayer(UnityAction<float> action) => OnMonsterKilledByPlayer.AddListener(action);
+        public void AddEventRoomFirstEnteringEvent(UnityAction<RoomDataStruct> action) => OnRoomFirstEntering.AddListener(action);
         
-        public void RemoveListenerMonsterKilledByPlayer(UnityAction<float> action) => OnMonsterKilledByPlayer.RemoveListener(action);
+        public void AddEventRoomEnteringEvent(UnityAction<RoomDataStruct> action) => OnRoomEntering.AddListener(action);
 
-        public void InvokeEventPlayerKilledEvent(Player_Dungeon key) => OnPlayerKilled.Invoke();
+        public void AddEventRoomLeftEvent(UnityAction<RoomDataStruct> action) => OnRoomLeft.AddListener(action);
+        
+        public void AddEventClearedRoomEvent(UnityAction<RoomDataStruct> action) => OnClearedRoom.AddListener(action);
+        
+        public void AddEventMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.AddListener(action);
+        
+        public void AddEventMapDisposeBefore(UnityAction action) => onMapDisposeBefore.AddListener(action);
+        
+        // Remove Envet ================================================================================================
+        
+        public void RemoveEventMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.RemoveListener(action);
+        
+        public void RemoveEventMapDisposeBefore(UnityAction action) => onMapDisposeBefore.RemoveListener(action);
+        
+        public void RemoveEventRoomEntering(UnityAction<RoomDataStruct> action) => OnRoomEntering.RemoveListener(action);
+        
+        public void RemoveEventRoomLeft(UnityAction<RoomDataStruct> action) => OnRoomLeft.RemoveListener(action);
+        
+        public void RemoveEventRoomFirstEntering(UnityAction<RoomDataStruct> action) => OnRoomFirstEntering.RemoveListener(action);
+        
+        public void RemoveEventClearedRoom(UnityAction<RoomDataStruct> action) => OnClearedRoom.RemoveListener(action);
+        
+        // Invoke Event ================================================================================================
+        
+        public void InvokeEventRoomEnteringFirst(RoomDataStruct roomType) => OnRoomFirstEntering.Invoke(roomType);
+        
+        public void InvokeEventRoomEntering(RoomDataStruct roomType) => OnRoomEntering.Invoke(roomType);
+        
+        public void InvokeEventRoomLeft(RoomDataStruct roomType) => OnRoomLeft.Invoke(roomType);
+        
+        public void InvokeEventClearedRoom(RoomDataStruct roomType) => OnClearedRoom.Invoke(roomType);
+        
+        public void InvokeEventMapGenerateCompleted(Field field) => onMapGenerateCompleted.Invoke(field);
 
-        public void InvokeEventClearedRoomEvent(RoomDataStruct roomType) => OnClearedRoom.Invoke(roomType);
+        public void InvokeEventMapDisposeBefore() => onMapDisposeBefore.Invoke();
         
-        public void InvokeRoomEnteringEvent(RoomDataStruct roomType) => OnRoomEntering.Invoke(roomType);
-
-        public void InvokeRoomEnteringFirstEvent(RoomDataStruct roomType) => OnRoomFirstEntering.Invoke(roomType);
-
-        public void InvokeRoomLeftEvent(RoomDataStruct roomType) => OnRoomLeft.Invoke(roomType);
+        // =============================================================================================================
         
-        public void AddListenerRoomEnteringEvent(UnityAction<RoomDataStruct> action) => OnRoomEntering.AddListener(action);
-
-        public void AddListenerRoomFirstEnteringEvent(UnityAction<RoomDataStruct> action) => OnRoomFirstEntering.AddListener(action);
-
-        public void AddListenerRoomLeftEvent(UnityAction<RoomDataStruct> action) => OnRoomLeft.AddListener(action);
+        #endregion
         
-        public void AddListenerClearedRoomEvent(UnityAction<RoomDataStruct> action) => OnClearedRoom.AddListener(action);
+        #region Player Events
         
-        public void AddEventToOpeningSkillSelectPanel(UnityAction action) => OnOpeningSkillSelectPanel.AddListener(action);
+        // Add Event ===================================================================================================  
         
-        public void AddEventToSkillSelectCompleted(UnityAction action) => OnSkillSelectCompleted.AddListener(action);
+        public void AddEventIncreasePlayerExp(UnityAction<float, float> action) => OnIncreasePlayerExp.AddListener(action);
         
-        public void AddEventToMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.AddListener(action);
+        public void AddvEventIncreasePlayerHP(UnityAction<float, float> action) => OnIncreasePlayerHP.AddListener(action);
         
-        public void InvokeMapGenerateCompleted(Field field) => onMapGenerateCompleted.Invoke(field);
+        public void AddEventDecreasePlayerHP(UnityAction<float, float> action) => OnDecreasePlayerHP.AddListener(action);
         
-        public void RemoveEventToMapGenerateCompleted(UnityAction<Field> action) => onMapGenerateCompleted.RemoveListener(action);
+        public void AddEventPlayerLevelUp(UnityAction action) => OnPlayerLevelUp.AddListener(action);
         
-        public void AddEventToMapDisposeBefore(UnityAction action) => onMapDisposeBefore.AddListener(action);
+        public void AddEventSkillSelectCompleted(UnityAction action) => OnSkillSelectCompleted.AddListener(action);
         
-        public void InvokeMapDisposeBefore() => onMapDisposeBefore.Invoke();
+        public void AddEventOpeningSkillSelectPanel(UnityAction action) => OnOpeningSkillSelectPanel.AddListener(action);
         
-        public void RemoveEventToMapDisposeBefore(UnityAction action) => onMapDisposeBefore.RemoveListener(action);
-
-        public void InvokeOpeningSkillSelectPanel() => OnOpeningSkillSelectPanel.Invoke();
+        public void AddEventOnPlayerKilled(UnityAction action) => OnPlayerKilled.AddListener(action);
         
-        public void InvokeSkillSelectCompleted() => OnSkillSelectCompleted.Invoke();
+        // Remove Envet ================================================================================================
         
-        // Player Events
+        public void RemoveEventIncreasePlayerExp(UnityAction<float, float> action) => OnIncreasePlayerExp.RemoveListener(action);
         
-        public void AddListenerIncreasePlayerExp(UnityAction<float, float> action) => OnIncreasePlayerExp.AddListener(action);
+        public void RemoveEventIncreasePlayerHP(UnityAction<float, float> action) => OnIncreasePlayerHP.RemoveListener(action);
         
-        public void InvokeIncreasePlayerExp(float currentExp, float maxExp) => OnIncreasePlayerExp?.Invoke(currentExp, maxExp);
+        public void RemoveEventDecreasePlayerHP(UnityAction<float, float> action) => OnDecreasePlayerHP.RemoveListener(action);
         
-        public void RemoveListenerIncreasePlayerExp(UnityAction<float, float> action) => OnIncreasePlayerExp.RemoveListener(action);
+        public void RemoveEventPlayerLevelUp(UnityAction action) => OnPlayerLevelUp.RemoveListener(action);
         
-        public void AddListenerIncreasePlayerHP(UnityAction<float, float> action) => OnIncreasePlayerHP.AddListener(action);
+        // Invoke Event ================================================================================================
         
-        public void InvokeIncreasePlayerHP(float hp, float maxHp) => OnIncreasePlayerHP.Invoke(hp, maxHp);
+        public void InvokeEventIncreasePlayerExp(float currentExp, float maxExp) => OnIncreasePlayerExp?.Invoke(currentExp, maxExp);
         
-        public void RemoveListenerIncreasePlayerHP(UnityAction<float, float> action) => OnIncreasePlayerHP.RemoveListener(action);
+        public void InvokeEventIncreasePlayerHP(float hp, float maxHp) => OnIncreasePlayerHP.Invoke(hp, maxHp);
         
-        public void AddListenerDecreasePlayerHP(UnityAction<float, float> action) => OnDecreasePlayerHP.AddListener(action);
+        public void InvokeEventDecreasePlayerHP(float hp, float maxHp) => OnDecreasePlayerHP.Invoke(hp, maxHp);
         
-        public void InvokeDecreasePlayerHP(float hp, float maxHp) => OnDecreasePlayerHP.Invoke(hp, maxHp);
+        public void InvokeEventPlayerLevelUp() => OnPlayerLevelUp.Invoke();
         
-        public void RemoveListenerDecreasePlayerHP(UnityAction<float, float> action) => OnDecreasePlayerHP.RemoveListener(action);
+        public void InvokeEventSkillSelectCompleted() => OnSkillSelectCompleted.Invoke();
         
-        public void AddListenerPlayerLevelUp(UnityAction action) => OnPlayerLevelUp.AddListener(action);
+        public void InvokeEventOpeningSkillSelectPanel() => OnOpeningSkillSelectPanel.Invoke();
         
-        public void InvokePlayerLevelUp() => OnPlayerLevelUp.Invoke();
+        public void InvokeEventPlayerKilled() => OnPlayerKilled.Invoke();
         
-        public void RemoveListenerPlayerLevelUp(UnityAction action) => OnPlayerLevelUp.RemoveListener(action);
+        // =============================================================================================================
+        
+        #endregion
+        
+        #region Monster Events
+        
+        // Add Event ===================================================================================================  
+        
+        public void AddEventMonsterKilledByPlayer(UnityAction<float> action) => OnMonsterKilledByPlayer.AddListener(action);
+        
+        // Remove Envet ================================================================================================
+        
+        public void RemoveEventMonsterKilledByPlayer(UnityAction<float> action) => OnMonsterKilledByPlayer.RemoveListener(action);
+        
+        // Invoke Event ================================================================================================
+        
+        public void InvokeEventMonsterKilledByPlayer(float exp) => OnMonsterKilledByPlayer.Invoke(exp);
+        
+        // =============================================================================================================
         
         #endregion
     }

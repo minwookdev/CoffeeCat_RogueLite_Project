@@ -30,7 +30,7 @@ namespace CoffeeCat.UI
             
             btnClose.onClick.AddListener(Close);
             notSlectableBtn.onClick.AddListener(SelectablePanelClose);
-            StageManager.Inst.AddEventToSkillSelectCompleted(() => gameObject.SetActive(false));
+            StageManager.Inst.AddEventSkillSelectCompleted(() => gameObject.SetActive(false));
         }
 
         private void InitializeSkillSetPanel(List<PlayerSkillSet> skillSets)

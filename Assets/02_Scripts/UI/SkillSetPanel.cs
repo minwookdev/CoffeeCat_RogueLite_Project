@@ -73,7 +73,7 @@ namespace CoffeeCat.UI
                 }
                 else
                 {
-                    UIPresenter.Inst.OpenNotSelectablePanel();
+                    DungeonUIPresenter.Inst.OpenNotSelectablePanel();
                 }
             });
         }
