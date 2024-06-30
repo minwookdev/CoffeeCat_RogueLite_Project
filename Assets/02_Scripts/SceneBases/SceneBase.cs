@@ -32,10 +32,7 @@ namespace CoffeeCat.FrameWork {
             Application.targetFrameRate = TargetFrameRate;
             SoundManager.Inst.RegistAudioClips(AudioClipDictionary);
 
-            if (isPreloadData) {
-                DataManager.Inst.DataLoad();
-            }
-            
+            DataManager.Inst.Create();
             InputManager.Inst.Create();
         }
 
@@ -48,5 +45,7 @@ namespace CoffeeCat.FrameWork {
         private void OnDisable() {
             SafeLoader.StopProcess();
         }
+        
+        
     }
 }
