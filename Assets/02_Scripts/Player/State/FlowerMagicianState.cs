@@ -12,7 +12,6 @@ namespace CoffeeCat
 {
     public class FlowerMagicianState : PlayerState
     {
-        private TrackEntry currentTrack = null;
 
         protected override void Start()
         {

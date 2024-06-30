@@ -7,6 +7,13 @@ namespace CoffeeCat {
         [field: SerializeField] public Transform PlayerSpawnTr { get; private set; } = null;
         [field: SerializeField] public Transform DungeonEntranceTr { get; private set; } = null;
         [field: SerializeField] public Transform StatEnhancementTr { get; private set; } = null;
+        
+        protected override void Initialize()
+        {
+            base.Initialize();
+            DataManager.Inst.Create();
+            InputManager.Inst.Create();
+        }
 
         private void Start() {
             // Spawn New Player

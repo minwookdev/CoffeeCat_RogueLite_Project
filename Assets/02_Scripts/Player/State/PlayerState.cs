@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using CoffeeCat.Utils;
 using DG.Tweening;
+using Spine;
 using Spine.Unity;
 using UniRx;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace CoffeeCat
 
         protected Transform tr = null;
         protected SkeletonAnimation anim = null;
+        protected TrackEntry currentTrack = null;
         protected Player_Dungeon player = null;
 
         protected const string animIdle = "Idle_2";

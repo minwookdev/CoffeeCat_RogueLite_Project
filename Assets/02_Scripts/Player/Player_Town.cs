@@ -59,5 +59,7 @@ namespace CoffeeCat
                 false => new Vector3(2f, lossyScale.y, lossyScale.z)
             };
         }
+        
+        public bool IsWalking() => rigid.velocity.x != 0 || rigid.velocity.y != 0;
     }
 }

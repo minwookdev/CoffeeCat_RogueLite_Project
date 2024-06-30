@@ -26,6 +26,7 @@ namespace CoffeeCat.FrameWork
             PlayerMainSkills = new PlayerMainSkillDatas();
             PlayerSubAttackSkills = new PlayerSubAttackSkillDatas();
             PlayerSubStatSkills = new PlayerSubStatSkillDatas();
+            DataLoad();
         }
 
         public void DataLoad()
