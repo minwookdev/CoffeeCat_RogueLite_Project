@@ -35,7 +35,7 @@ namespace CoffeeCat.FrameWork
         private List<GameObject> tempResultList = null;
         #endregion
 
-        private void Start() => SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
+        private void Start() => SceneManager.Inst.ChangeBeforeEvent += OnSceneChangeBeforeEvent;
 
         protected override void Initialize() {
             originInformationDict = new StringPoolInformationDictionary();

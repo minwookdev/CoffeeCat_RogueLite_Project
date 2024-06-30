@@ -1,10 +1,7 @@
 using System;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
-using UniRx;
-using UniRx.Triggers;
 using Sirenix.OdinInspector;
 using CoffeeCat.Utils.SerializedDictionaries;
 using CoffeeCat.Utils;
@@ -13,118 +10,6 @@ using UnityObject = UnityEngine.Object;
 
 namespace CoffeeCat.FrameWork {
     public class ResourceManager : DynamicSingleton<ResourceManager> {
-        [Serializable]
-        public class ResourceInfo {
-            public enum ASSETLOADSTATUS {
-                LOADING,
-                FAILED,
-                SUCCESS
-            }
-
-            [ShowInInspector, ReadOnly] public UnityObject Resource { get; private set; } = null;
-            [ShowInInspector, ReadOnly] public bool isGlobalResource { get; private set; } = false;
-            [ShowInInspector, ReadOnly] public ASSETLOADSTATUS Status { get; private set; } = ASSETLOADSTATUS.LOADING;
-            private Action onCompleted = null;
-            private bool isAddressablesAsset = false;
-            private AsyncOperationHandle handle;
-            public string ResourceName => Resource ? Resource.name : "NOT_LOADED";
-
-            public static ResourceInfo Create(bool isGlobal) {
-                var info = new ResourceInfo {
-                    isGlobalResource = isGlobal,
-                    isAddressablesAsset = false
-                };
-                return info;
-            }
-
-            public static ResourceInfo Create<T>(bool isGlobal, Action<T> onComplete = null) where T : UnityObject {
-                var info = new ResourceInfo {
-                    isGlobalResource = isGlobal,
-                    isAddressablesAsset = true
-                };
-                info.onCompleted = Wrapped;
-                return info;
-
-                void Wrapped() {
-                    onComplete?.Invoke(info.GetResource<T>());
-                }
-            }
-            
-            public void Dispose() {
-                if (!isAddressablesAsset) {
-                    // avoid UnloadAsset Error
-                    if (Resource is GameObject or Component)
-                        return;
-                    Resources.UnloadAsset(Resource);
-                }
-                else {
-                    Addressables.Release(Resource);
-                    if (handle.IsValid()) {
-                        Addressables.Release(handle);
-                    }
-                }
-                Resource = null;
-            }
-            
-            public void SetFailed() {
-                if (Status != ASSETLOADSTATUS.LOADING || Resource) {
-                    return;
-                }
-
-                Status = ASSETLOADSTATUS.FAILED;
-            }
-            
-            public void SetResource<T>(T resource) where T : UnityObject {
-                if (Status != ASSETLOADSTATUS.LOADING || Resource) {
-                    CatLog.ELog("Status has already yielded results.");
-                    return;
-                }
-
-                if (!resource) {
-                    CatLog.ELog("Failed To Set Resource. Resource is Null.");
-                    return;
-                }
-
-                Resource = resource;
-                Status = ASSETLOADSTATUS.SUCCESS;
-            }
-
-            public T GetResource<T>() where T : UnityObject {
-                if (Status != ASSETLOADSTATUS.SUCCESS || !Resource) {
-                    CatLog.ELog("Reosurce Get Failed. Resource is Null or Status is Not Success.");
-                    return null;
-                }
-                var casting = Resource as T;
-                if (casting) {
-                    return casting;
-                }
-                CatLog.ELog($"Resource Casting Failed. Target: {ResourceName}, Type: {nameof(T)}");
-                return null;
-            }
-
-            public void SetHandle(AsyncOperationHandle asyncOperationHandle) {
-                if (!isAddressablesAsset) {
-                    CatLog.ELog("Invalid Operation: This Information is Not Allowed Setting The Handle.");
-                    return;
-                }
-                handle = asyncOperationHandle;
-            }
-
-            public void AddCallback<T>(Action<T> callback) where T : UnityObject {
-                onCompleted += Wrapped;
-                return;
-
-                void Wrapped() {
-                    callback?.Invoke(GetResource<T>());
-                }
-            }
-
-            public void TriggerCallback() {
-                onCompleted?.Invoke();
-                onCompleted = null;
-            }
-        }
-        
         // Loaded Resources Dictioanry
         [Title("Loaded Resources Dictionary")]
         [SerializeField] private StringResourceInformationDictionary resourcesDict = null;
@@ -134,21 +19,9 @@ namespace CoffeeCat.FrameWork {
         }
 
         protected void Start() {
-            SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
-            SceneManager.Inst.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
+            SceneManager.Inst.ChangeBeforeEvent += ChangeBeforeEvent;
+            SceneManager.Inst.ChangeAfterEvent += ChangeAfterEvent;
         }
-
-        #region Events
-
-        private void OnSceneChangeBeforeEvent(SceneName sceneName) {
-            ReleaseAll();
-        }
-
-        private void OnSceneChangeAfterEvent(SceneName sceneName) {
-            Resources.UnloadUnusedAssets();
-        }
-
-        #endregion
 
         #region Resources
 
@@ -183,25 +56,24 @@ namespace CoffeeCat.FrameWork {
         }
 
         private static string GetFileName(string resourcesLoadPath) => resourcesLoadPath.Substring(resourcesLoadPath.LastIndexOf('/') + 1);
-
+        
         #endregion
-
+        
         #region Addressables
-
+        
         /// <summary>
         /// Addressables AssetLoadAsync by Addressables Name
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key">Default: Addressables Name</param>
+        /// <param name="key"></param>
         /// <param name="isGlobalResource"></param>
         /// <param name="onCompleted"></param>
+        /// <typeparam name="T"></typeparam>
         public void AddressablesAsyncLoad<T>(string key, bool isGlobalResource, Action<T> onCompleted) where T : UnityObject {
-            if (string.IsNullOrEmpty(key))
-            {
+            if (string.IsNullOrEmpty(key)) {
                 CatLog.ELog("Invalid Key. Key is Null or Empty.");
                 return;
             }
-            
+
             // Dictionary에 이미 로드되거나 요청된 Resource가 존재한다면
             if (TryGetResourceAsync(key, onCompleted)) {
                 return;
@@ -226,7 +98,7 @@ namespace CoffeeCat.FrameWork {
         }
         
         #endregion
-
+        
         #region Release
 
         public void Release(string key) {
@@ -252,12 +124,11 @@ namespace CoffeeCat.FrameWork {
                     pair.Value.Dispose();
                 }
             }
-            Resources.UnloadUnusedAssets();
         }
 
         #endregion
 
-        #region Find
+        #region Find Loaded Request
         
         private bool TryGetResourceSync<T>(string key, out T result) where T : UnityObject {
             var isExist = resourcesDict.TryGetValue(key, out ResourceInfo info);
@@ -298,6 +169,134 @@ namespace CoffeeCat.FrameWork {
                     throw new NotImplementedException();
             }
             return true;
+        }
+        
+        #endregion
+        
+        #region Events
+
+        private void ChangeBeforeEvent(SceneName sceneName) => ReleaseAll();
+
+        private void ChangeAfterEvent(SceneName sceneName) => Resources.UnloadUnusedAssets();
+
+        #endregion
+
+        #region Inner Class
+        
+        [Serializable]
+        public class ResourceInfo {
+            public enum ASSETLOADSTATUS {
+                LOADING,
+                FAILED,
+                SUCCESS
+            }
+
+            [ShowInInspector, ReadOnly] public UnityObject Resource { get; private set; } = null;
+            [ShowInInspector, ReadOnly] public bool isGlobalResource { get; private set; } = false;
+            [ShowInInspector, ReadOnly] public ASSETLOADSTATUS Status { get; private set; } = ASSETLOADSTATUS.LOADING;
+            private Action onCompleted = null;
+            private bool isAddressablesAsset = false;
+            private AsyncOperationHandle handle;
+            public string ResourceName => Resource ? Resource.name : "NOT_LOADED";
+
+            public static ResourceInfo Create(bool isGlobal) {
+                var info = new ResourceInfo {
+                    isGlobalResource = isGlobal,
+                    isAddressablesAsset = false
+                };
+                return info;
+            }
+
+            public static ResourceInfo Create<T>(bool isGlobal, Action<T> onComplete = null) where T : UnityObject {
+                var info = new ResourceInfo {
+                    isGlobalResource = isGlobal,
+                    isAddressablesAsset = true
+                };
+                info.onCompleted = Wrapped;
+                return info;
+
+                void Wrapped() {
+                    onComplete?.Invoke(info.GetResource<T>());
+                }
+            }
+
+            public void Dispose() {
+                if (!isAddressablesAsset) {
+                    // avoid UnloadAsset Error
+                    if (Resource is GameObject or Component)
+                        return;
+                    Resources.UnloadAsset(Resource);
+                }
+                else {
+                    Addressables.Release(Resource);
+                    if (handle.IsValid()) {
+                        Addressables.Release(handle);
+                    }
+                }
+
+                Resource = null;
+            }
+
+            public void SetFailed() {
+                if (Status != ASSETLOADSTATUS.LOADING || Resource) {
+                    return;
+                }
+
+                Status = ASSETLOADSTATUS.FAILED;
+            }
+
+            public void SetResource<T>(T resource) where T : UnityObject {
+                if (Status != ASSETLOADSTATUS.LOADING || Resource) {
+                    CatLog.ELog("Status has already yielded results.");
+                    return;
+                }
+
+                if (!resource) {
+                    CatLog.ELog("Failed To Set Resource. Resource is Null.");
+                    return;
+                }
+
+                Resource = resource;
+                Status = ASSETLOADSTATUS.SUCCESS;
+            }
+
+            public T GetResource<T>() where T : UnityObject {
+                if (Status != ASSETLOADSTATUS.SUCCESS || !Resource) {
+                    CatLog.ELog("Reosurce Get Failed. Resource is Null or Status is Not Success.");
+                    return null;
+                }
+
+                var casting = Resource as T;
+                if (casting) {
+                    return casting;
+                }
+
+                CatLog.ELog($"Resource Casting Failed. Target: {ResourceName}, Type: {nameof(T)}");
+                return null;
+            }
+
+            public void SetHandle(AsyncOperationHandle asyncOperationHandle) {
+                if (!isAddressablesAsset) {
+                    CatLog.ELog("Invalid Operation: This Information is Not Allowed Setting The Handle.");
+                    return;
+                }
+
+                handle = asyncOperationHandle;
+            }
+
+            public void AddCallback<T>(Action<T> callback) where T : UnityObject {
+                onCompleted += Wrapped;
+                return;
+
+                void Wrapped() {
+                    callback?.Invoke(GetResource<T>());
+                }
+            }
+
+            public void TriggerCallback() {
+                onCompleted?.Invoke();
+                onCompleted = null;
+            }
         }
         
         #endregion

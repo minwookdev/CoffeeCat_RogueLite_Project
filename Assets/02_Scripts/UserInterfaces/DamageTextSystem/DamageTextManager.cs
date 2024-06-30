@@ -25,7 +25,7 @@ namespace CoffeeCat {
         
         protected override void Initialize() {
             base.Initialize();
-            SceneManager.Inst.OnSceneChangeBeforeEvent += Clear;
+            SceneManager.Inst.ChangeBeforeEvent += Clear;
         }
 
         /// <summary>

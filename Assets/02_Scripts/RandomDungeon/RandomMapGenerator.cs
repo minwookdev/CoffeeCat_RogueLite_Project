@@ -113,9 +113,7 @@ namespace RandomDungeonWithBluePrint
             StageManager.Inst.InvokeMapDisposeBefore();
             ClearMap();
             var key = bluePrintQueue.BossMapSceneKey;
-            SceneManager.Inst.LoadSceneAdditiveAsync(key, () => {
-                SceneManager.Inst.ActiveNextScene();
-            });
+            SceneManager.Inst.LoadSceneAdditive(key);
         }
 
         private BluePrintWithWeight Raffle()

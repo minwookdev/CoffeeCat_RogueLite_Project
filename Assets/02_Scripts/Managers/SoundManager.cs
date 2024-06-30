@@ -107,8 +107,8 @@ namespace CoffeeCat.FrameWork {
 
         private void Start() {
             Tr = GetComponent<Transform>();
-            SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
-            SceneManager.Inst.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
+            SceneManager.Inst.ChangeBeforeEvent += ChangeBeforeEvent;
+            SceneManager.Inst.ChangeAfterEvent += ChangeAfterEvent;
         }
 
         public void RegistAudioClips(StringAudioClipDictionary sceneExistAudioClipDictionary) {
@@ -204,12 +204,12 @@ namespace CoffeeCat.FrameWork {
 
         #endregion
 
-        private void OnSceneChangeBeforeEvent(SceneName sceneName) {
+        private void ChangeBeforeEvent(SceneName sceneName) {
             ClearAudioClipDictionary();
             ReleaseParentAudioGroup();
         }
 
-        private void OnSceneChangeAfterEvent(SceneName sceneName) {
+        private void ChangeAfterEvent(SceneName sceneName) {
             SetParentAudioGroupToMainCamera();
         }
 

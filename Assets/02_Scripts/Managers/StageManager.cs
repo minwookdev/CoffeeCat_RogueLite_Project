@@ -9,8 +9,6 @@ using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using RandomDungeonWithBluePrint;
 using UnityEngine.Events;
-using UnityEngine.Serialization;
-using Grid = UnityEngine.Grid;
 
 namespace CoffeeCat
 {

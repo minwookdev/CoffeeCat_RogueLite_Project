@@ -48,8 +48,8 @@ namespace CoffeeCat.FrameWork {
 
         private void Start() {
             // Scene Change Event Listen
-            SceneManager.Inst.OnSceneChangeBeforeEvent += OnSceneChangeBeforeEvent;
-            SceneManager.Inst.OnSceneChangeAfterEvent += OnSceneChangeAfterEvent;
+            SceneManager.Inst.ChangeBeforeEvent += ChangeBeforeEvent;
+            SceneManager.Inst.ChangeAfterEvent += ChangeAfterEvent;
 
             SubscribeCheckDuplicatedEffectGameObjectInDictionaryObservable();
         }
@@ -297,11 +297,11 @@ namespace CoffeeCat.FrameWork {
 
         #endregion
 
-        private void OnSceneChangeBeforeEvent(SceneName currentScene) {
+        private void ChangeBeforeEvent(SceneName currentScene) {
             this.BlockUsingAllEffects();
         }
 
-        private void OnSceneChangeAfterEvent(SceneName nextScene) {
+        private void ChangeAfterEvent(SceneName nextScene) {
             if (nextScene.Equals(SceneName.LoadingScene))
                 return;
 
