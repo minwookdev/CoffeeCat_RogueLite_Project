@@ -13,13 +13,17 @@ namespace CoffeeCat
 
         [Title("MainSkill")]
         [ShowInInspector, ReadOnly] private PlayerMainSkill mainSkillData = null;
+
         private readonly PlayerSkillEffect mainSkillEffect = null;
 
         [Title("SubSkill")]
         [ShowInInspector, ReadOnly] private PlayerSubAttackSkill subAttackSkill = null;
+
         [ShowInInspector, ReadOnly] private PlayerSubStatSkill subStatSkill_1 = null;
-        [ShowInInspector, ReadOnly] private PlayerSubStatSkill subStatSkill_2 = DataManager.Inst.PlayerSubStatSkills.DataDictionary[0];
-        
+
+        [ShowInInspector, ReadOnly]
+        private PlayerSubStatSkill subStatSkill_2 = DataManager.Inst.PlayerSubStatSkills.DataDictionary[0];
+
         public int SkillSetIndex => skillSetIndex;
         public PlayerMainSkill MainSkillData => mainSkillData;
         public PlayerSubAttackSkill SubAttackSkill => subAttackSkill;
@@ -46,7 +50,18 @@ namespace CoffeeCat
 
         public void UpdateSubAttackSkill(PlayerSubAttackSkill skill)
         {
+            // data update
             subAttackSkill = skill;
+            // effect update
+            mainSkillEffect.AddListenerSubAttackEffect(PoisonEffect);
+            
+            void PoisonEffect(MonsterStatus target)
+            {
+                if (Random.Range(0, 100) < subAttackSkill.TriggerChance)
+                {
+                    // target.onDamaged(subAttackSkill);
+                }
+            }
         }
 
         public void UpdateSubStatSkill(PlayerSubStatSkill skill, int slotNum)
@@ -63,7 +78,7 @@ namespace CoffeeCat
                     break;
             }
         }
-        
+
         public bool IsEmptySubAttackSkill()
         {
             return subAttackSkill == null;
@@ -73,17 +88,17 @@ namespace CoffeeCat
         {
             return mainSkillData.SkillLevel == 3;
         }
-        
+
         public bool IsMaxLevelSubAttackSkill()
         {
             return subAttackSkill.SkillLevel == 3;
         }
-        
+
         public bool IsEmptySubStatSkill()
         {
             return subStatSkill_1 == null;
         }
-        
+
         public bool IsMaxLevelSubStatSkill()
         {
             return subStatSkill_1.SkillLevel == 3;

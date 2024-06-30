@@ -61,13 +61,34 @@ namespace CoffeeCat.FrameWork
         
         #region SubAttackSkillEffect
 
+        public void SubAttackSkillEffect(PlayerSubAttackSkill subAttackSkill)
+        {
+            switch (subAttackSkill.SkillName)
+            {
+                case "Poison":
+                    Poison(subAttackSkill);
+                    break;
+                case "Bleed":
+                    Bleed(subAttackSkill);
+                    break;
+                case "LifeDrain":
+                    LifeDrain(subAttackSkill);
+                    break;
+                case "KnockBack":
+                    KnockBack(subAttackSkill);
+                    break;
+                case "InstantKill":
+                    InstantKill(subAttackSkill);
+                    break;
+                case "Stun":
+                    Stun(subAttackSkill);
+                    break;
+            }
+        }
+        
         public void Poison(PlayerSubAttackSkill subAttackSkill)
         {
-            if (subAttackSkill.SkillName != "Poison")
-                CatLog.WLog("Skill Name is not Poison");
-
-            // Monster Hp Decrease
-            // Sprite Color Change
+            
         }
         
         public void Bleed(PlayerSubAttackSkill subAttackSkill)

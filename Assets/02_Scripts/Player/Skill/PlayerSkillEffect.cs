@@ -6,6 +6,7 @@ using CoffeeCat.Utils;
 using CoffeeCat.Utils.Defines;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Events;
 
 namespace CoffeeCat
 {
@@ -13,6 +14,7 @@ namespace CoffeeCat
     {
         protected Transform playerTr = null;
         protected IDisposable updateDisposable = null;
+        protected UnityEvent<MonsterStatus> onSubAttackEvent = new UnityEvent<MonsterStatus>();
         protected bool completedLoadResource = false;
 
         // 새로운 스킬 선택
@@ -35,6 +37,8 @@ namespace CoffeeCat
             });
         }
 
+        public void AddListenerSubAttackEffect(UnityAction<MonsterStatus> action) => onSubAttackEvent.AddListener(action);
+        
         // 스킬 효과 활성화
         public virtual void SkillEffect(PlayerStat playerStat, PlayerMainSkill skillData) { }
 
